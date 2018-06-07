@@ -76,6 +76,7 @@ q-layout.u-layout.q-layout-wallet(view='lHh Lpr lFf')
 
   // main layout custom style.
 
+background-color $grey-11
   // transition rule for layout pages.
 div, main
   &.q-layout-page.u-page

@@ -1,51 +1,19 @@
-u-layout-page.u-page-index
-
-  template(slot="meta")
-    q-collapsible.u-filters(:opened="$q.platform.is.desktop", icon="mdi-filter" label="Filters")
-      div.row.row-filters
-
-        div.col-md-12
-
-            q-field.field-order(label="Sort by", orientation="vertical")
-              q-btn-dropdown(:label='sortBy', flat, dense, no-ripple)
-                // dropdown content
-                q-list(link='')
-                  q-item(v-for="option in sortOptions", :key="option.value", :to="{ name: 'posts.' + option.value, params: { category }  }")
-                    q-item-main
-                      q-item-tile(label='') {{ option.label }}
-
-
-
-      div.row.row-filters
-        div.col-md-12
-          q-field(label="Categories", orientation="vertical")
-
-            q-list.full-width.categories-list(no-border, multiline)
-
-
-              q-item(:to="{ name: ('posts.' + sortBy), params: { category: 'utopian-io' } }", :exact="true")
-                q-item-side(style="min-width: 20px")
-                  q-icon.ut-utopian
-                q-item-main
-                  .q-item-label All
-              template(v-for="category in categoryOptions", separator)
-                q-item(:to="{ name: ('posts.' + sortBy), params: { category: category.value } }")
-                  q-item-side(style="min-width: 20px")
-                    q-icon(:class="'ut-' + category.value")
-
-                  q-item-main
-                    .q-item-label
-                      | {{ $t('utopian.categories.' + category.value) }}
-
-
+u-layout-page.u-page-index(:meta="false")
   template(slot="main")
-    q-infinite-scroll(:handler="loadPostsScroll", ref="infiniteScroll")
-      q-list.flex.posts-list(padding, separator, sparse, no-border, multiline)
-        template(v-for="item in visiblePosts", v-if="item.parent_permlink === 'utopian-io' && item._category")
-          u-post-preview(:post="item")
+    div.row
+      div.col-md-10.offset-md-1.subheader.q-subheading
+        router-link(:to="{ name: 'home' }") PROJECTS
+        router-link(:to="{ name: 'contributions' }") CONTRIBUTIONS
+        router-link(:to="{ name: 'home' }") WALLET
+        router-link(:to="{ name: 'home' }") SPONSORS
+        router-link(:to="{ name: 'home' }") MODERATORS
+      div.col-md-10.offset-md-1.projects-slider
+        q-carousel.shadow-2(color="white", height="380px")
+          q-carousel-slide(v-for="project in projects", :img-src="project.image", :key="project.name")
 
-      // spinner for infinite scroll loading.
-      q-spinner-dots(slot="message", :size="40", style="margin: 0 auto")
+          // spinner for infinite scroll loading.
+          q-spinner-dots(slot="message", :size="40", style="margin: 0 auto")
+        div.project-info.shadow-8
 
 
 

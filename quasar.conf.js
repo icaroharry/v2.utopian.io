@@ -110,7 +110,10 @@ module.exports = function (ctx) {
         'QCollapsible',
         'QItemMain',
         'QItemSide',
-        'QBtnToggle'
+        'QBtnToggle',
+        'QCarousel',
+        'QCarouselSlide',
+        'QCarouselControl'
       ],
       directives: [
         'Ripple',

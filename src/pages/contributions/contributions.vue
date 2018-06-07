@@ -7,7 +7,7 @@ import { categories, categoryOptions } from 'src/services/utopian/categories'
 import { map, concat, get, last, filter, attempt, debounce } from 'lodash-es'
 
 export default {
-  name: 'PageIndex',
+  name: 'PageContributions',
   components: {
     UPostPreview,
     ULayoutPage
@@ -22,12 +22,7 @@ export default {
       loading: false,
       category: 'utopian-io',
       posts: [],
-      search: '',
-      projects: [
-        {name: 'eSteem', description: 'lorem ipsum', image: 'https://placeimg.com/577/380/any/grayscale'},
-        {name: 'd.tube', description: 'lorem ipsum', image: 'https://placeimg.com/577/380/any/grayscale'},
-        {name: 'busy', description: 'lorem ipsum', image: 'https://placeimg.com/577/380/any/grayscale'}
-      ]
+      search: ''
     }
   },
   filters: {
@@ -94,6 +89,6 @@ export default {
 }
 </script>
 
-<style lang="stylus" src="./index.styl"></style>
+<style lang="stylus" src="./contributions.styl"></style>
 
-<template lang="pug" src="./index.pug"></template>
+<template lang="pug" src="./contributions.pug"></template>
