@@ -113,7 +113,12 @@ module.exports = function (ctx) {
         'QBtnToggle',
         'QCarousel',
         'QCarouselSlide',
-        'QCarouselControl'
+        'QCarouselControl',
+        'QCard',
+        'QCardTitle',
+        'QCardMain',
+        'QCardSeparator',
+        'QCardActions'
       ],
       directives: [
         'Ripple',

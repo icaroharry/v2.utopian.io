@@ -1,95 +1,50 @@
 <script>
-import { byOrder } from 'src/services/steem/posts'
-import moment from 'moment'
 import UPostPreview from 'src/components/post-preview/post-preview'
 import ULayoutPage from 'src/layouts/parts/page/page'
-import { categories, categoryOptions } from 'src/services/utopian/categories'
-import { map, concat, get, last, filter, attempt, debounce } from 'lodash-es'
+import { QCarousel } from 'quasar'
 
 export default {
   name: 'PageIndex',
   components: {
     UPostPreview,
-    ULayoutPage
+    ULayoutPage,
+    QCarousel
   },
   data () {
     return {
-      sortBy: 'trending',
-      sortOptions: [
-        { label: 'Trending', value: 'trending' },
-        { label: 'New', value: 'new' }
-      ],
-      loading: false,
-      category: 'utopian-io',
-      posts: [],
-      search: '',
       projects: [
-        {name: 'eSteem', description: 'lorem ipsum', image: 'https://placeimg.com/577/380/any/grayscale'},
-        {name: 'd.tube', description: 'lorem ipsum', image: 'https://placeimg.com/577/380/any/grayscale'},
-        {name: 'busy', description: 'lorem ipsum', image: 'https://placeimg.com/577/380/any/grayscale'}
-      ]
+        {name: 'eSteem', owner: '@peter', description: 'ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum', image: 'https://placeimg.com/577/380/nature/grayscale'},
+        {name: 'd.tube', owner: '@paodebatata', description: 'lorem ipsum', image: 'https://placeimg.com/577/380/tech/grayscale'},
+        {name: 'busy', owner: '@calzone', description: 'lorem ipsum', image: 'https://placeimg.com/577/380/people/grayscale'}
+      ],
+      isMounted: false
     }
   },
   filters: {
-    timeAgo (isoDateString) {
-      return moment.utc(isoDateString).fromNow()
-    }
   },
   methods: {
-    loadInitial () {
-      this.loading = true
-      return this.loadPosts().then((result) => {
-        this.loading = false
-        return result
-      })
+    carouselNext () {
+      this.$refs.mainCarousel.next()
+      this.$refs.infoCarousel.next()
     },
-    loadPostsScroll: debounce(function (index, done) {
-      return this.loadPosts(done)
-    }, 3000),
-    loadPosts (done) {
-      const order = get(this.$route, 'meta.order', 'trending')
-      const tag = get(this.$route, 'params.category', 'utopian-io')
-      return byOrder(order, { tag, limit: 40 }, last(this.posts))
-        .then((result) => {
-          this.posts = concat(this.posts, result)
-          if (result.length < 40) {
-            attempt(done)
-            this.$refs.infiniteScroll.stop()
-          } else {
-            attempt(done)
-          }
-          return result
-        })
+    carouselPrevious () {
+      this.$refs.mainCarousel.previous()
+      this.$refs.infoCarousel.previous()
     }
   },
   computed: {
-    categories () {
-      return categories
+    carouselCanGoToNext () {
+      return this.isMounted ? this.$refs.mainCarousel.canGoToNext : false
     },
-    categoryOptions () {
-      return map(categoryOptions, (option) => {
-        option.label = option.label.toUpperCase()
-        return option
-      })
-    },
-    currentCategory () {
-      return get(this.$route, 'params.category', null)
-    },
-    visiblePosts () {
-      return filter(this.posts, (post) => ((post['parent_permlink'] === 'utopian-io')))
+    carouselCanGoToPrevious () {
+      return this.isMounted ? this.$refs.mainCarousel.canGoToPrevious : false
     }
   },
   mounted () {
-    this.sortBy = get(this.$route, 'meta.order', 'trending')
-    this.category = get(this.$route, 'params.category', 'utopian-io')
-
-    this.loadInitial()
-    return true
+    this.isMounted = true
   },
   watch: {
-    currentCategory () {
-      this.loadInitial()
-    }
+
   }
 }
 </script>

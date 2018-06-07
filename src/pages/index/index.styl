@@ -20,12 +20,30 @@ div.q-layout-page.u-page.u-page-index, main.q-layout-page.u-page.u-page-index {
   .projects-slider {
     display flex 
     .project-info {
+      .project-card {
+        height 100%
+        width 100%
+        .q-card-title {
+          font-size 26px !important
+        }
+      }
+      .q-carousel-slide {
+        padding 0 !important
+      }
       margin-top 50px
       margin-left -100px
       height 273px
       width 341px
       background-color #fff
       z-index 2
+    }
+  }
+  .carousel-arrows {
+    margin-top 120px
+    display flex
+    flex-direction column
+    padding-left 25px
+    .carousel-arrow {
     }
   }
 }

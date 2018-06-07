@@ -8,12 +8,41 @@ u-layout-page.u-page-index(:meta="false")
         router-link(:to="{ name: 'home' }") SPONSORS
         router-link(:to="{ name: 'home' }") MODERATORS
       div.col-md-10.offset-md-1.projects-slider
-        q-carousel.shadow-2(color="white", height="380px")
+        q-carousel.shadow-2(color="white", height="380px", ref="mainCarousel")
           q-carousel-slide(v-for="project in projects", :img-src="project.image", :key="project.name")
-
-          // spinner for infinite scroll loading.
-          q-spinner-dots(slot="message", :size="40", style="margin: 0 auto")
-        div.project-info.shadow-8
+        q-carousel.project-info.shadow-8(color="white", ref="infoCarousel")
+          q-carousel-slide(v-for="project in projects", :key="project.name")
+            q-card.project-card
+              q-card-title
+                | {{ project.name }}
+                span(slot="subtitle")
+                  | by 
+                  span.text-dark.q-subheading {{ project.owner }}
+              q-card-main.q-title.text-weight-light
+                | {{ project.description }}
+              q-card-actions(align="center")
+                q-btn(label="Contribute to this project", color="primary")
+      div.col-md-1.carousel-arrows
+        q-btn.carousel-arrow(
+          flat,
+          round,
+          icon="mdi-arrow-up",
+          color="blue-grey-6",
+          size="24px",
+          dense,
+          @click="carouselPrevious"
+          :disable="!carouselCanGoToPrevious"
+        )
+        q-btn.carousel-arrow(
+          flat,
+          round,
+          icon="mdi-arrow-down",
+          color="blue-grey-6",
+          size="24px",
+          dense,
+          @click="carouselNext"
+          :disable="!carouselCanGoToNext"          
+        )
 
 
 
