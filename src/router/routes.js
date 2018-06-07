@@ -3,9 +3,15 @@
 export default [
   {
     path: '/',
+    component: () => import('src/layouts/blankpage'),
+    children: [
+      {path: '', name: 'home', component: () => import('src/pages/index/index'), meta: {weight: 10}}
+    ]
+  },
+  {
+    path: '/',
     component: () => import('src/layouts/main'),
     children: [
-      {path: '', name: 'home', component: () => import('src/pages/index/index'), meta: {weight: 10}},
       {path: 'contributions', name: 'contributions', component: () => import('src/pages/contributions/contributions'), meta: {weight: 10}},
       {path: 'posts', name: 'posts', component: () => import('src/pages/index/index'), meta: {weight: 10, order: 'trending'}},
       {

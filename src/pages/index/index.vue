@@ -1,13 +1,13 @@
 <script>
 import UPostPreview from 'src/components/post-preview/post-preview'
-import ULayoutPage from 'src/layouts/parts/page/page'
+import ULayoutHomepage from 'src/layouts/parts/homepage/homepage'
 import { QCarousel } from 'quasar'
 
 export default {
   name: 'PageIndex',
   components: {
     UPostPreview,
-    ULayoutPage,
+    ULayoutHomepage,
     QCarousel
   },
   data () {

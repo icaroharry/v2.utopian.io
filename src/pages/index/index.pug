@@ -1,5 +1,6 @@
-u-layout-page.u-page-index(:meta="false")
-  template(slot="main")
+u-layout-homepage
+
+  template(slot="jumbotron")
     div.row
       div.col-md-10.offset-md-1.subheader.q-subheading
         router-link(:to="{ name: 'home' }") PROJECTS
@@ -10,7 +11,7 @@ u-layout-page.u-page-index(:meta="false")
       div.col-md-10.offset-md-1.projects-slider
         q-carousel.shadow-2(color="white", height="380px", ref="mainCarousel")
           q-carousel-slide(v-for="project in projects", :img-src="project.image", :key="project.name")
-        q-carousel.project-info.shadow-8(color="white", ref="infoCarousel")
+        q-carousel.project-info.shadow-8(color="white", ref="infoCarousel", no-swipe)
           q-carousel-slide(v-for="project in projects", :key="project.name")
             q-card.project-card
               q-card-title
@@ -18,7 +19,7 @@ u-layout-page.u-page-index(:meta="false")
                 span(slot="subtitle")
                   | by 
                   span.text-dark.q-subheading {{ project.owner }}
-              q-card-main.q-title.text-weight-light
+              q-card-main.q-title.text-weight-light.text-dusk
                 | {{ project.description }}
               q-card-actions(align="center")
                 q-btn(label="Contribute to this project", color="primary")
@@ -43,9 +44,16 @@ u-layout-page.u-page-index(:meta="false")
           @click="carouselNext"
           :disable="!carouselCanGoToNext"          
         )
-
-
-
+  template(slot="main")
+    div.container
+      div.row
+        q-card(v-for="n in 3")
+          q-card-title
+            | BLABLABLABL
+            span(slot="subtitle")
+              | by asdasdasd
+          q-card-main.q-title.text-weight-light.text-dusk
+            | uashduashduasdhasud
 
 
 
