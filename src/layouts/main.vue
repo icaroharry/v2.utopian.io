@@ -71,15 +71,17 @@ q-layout.u-layout.q-layout-wallet(view='lHh Lpr lFf')
 // default variable import.
 @import "~variables"
 
+body
+  background-color: $grey-1
+
 // app wrapper.
-.u-app#q-app
-  background-color $grey-1
+  .u-app#q-app
 
   // transition rule for layout pages.
-div, main
-  &.q-layout-page.u-page
-    padding: 24px 24px
-    transition: left 0.5s ease;
+  div, main
+    &.q-layout-page.u-page
+      padding: 24px 24px
+      transition: left 0.5s ease;
 
 //.container.container-page
 //  max-width 98%

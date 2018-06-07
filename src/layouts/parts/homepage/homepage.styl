@@ -12,23 +12,32 @@
   border-bottom 2px solid $grey-11
 }
 
+.fit-60 {
+  max-height calc(60vh - 60px) !important
+}
+
+.container-large {
+  height auto !important
+}
+
+.custom-padding {
+  padding-top 15px !important
+}
+
 .u-homepage {
   .u-homepage {
-    height 100vh
+    height auto
     overflow auto
   }
 
-  .u-brand {
-
-    margin-bottom 30px
-    img {
-      margin 0
-    }
+  .u-homepage-main {
+    min-height auto
   }
 
-  .u-homepage-main {
+  .u-homepage-jumbotron {
+    overflow auto
     .q-layout-page {
-      padding: 18px 0
+      padding 18px 0
     }
   }
 }
