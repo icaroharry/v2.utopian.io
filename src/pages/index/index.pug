@@ -2,7 +2,7 @@ u-layout-homepage
 
   template(slot="jumbotron")
     div.row
-      div.col-md-10.offset-md-1.subheader.q-subheading
+      div.col-md-10.offset-md-1.subheader.q-subheading.gt-sm
         router-link(:to="{ name: 'home' }") PROJECTS
         router-link(:to="{ name: 'contributions' }") CONTRIBUTIONS
         router-link(:to="{ name: 'home' }") WALLET
@@ -46,11 +46,11 @@ u-layout-homepage
         )
   template(slot="main")
     span.q-title RECENT CONTRIBUTIONS
-    div.row.inline.no-wrap.contributions
-      template.col-md-4(v-for="(post, index) in visiblePosts")
-        u-post-preview.round-borders.shadow-3(:post="post", :class="index === 2 ? 'last' : ''")
+    div.row.inline.contributions.gutter-lg
+      div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in visiblePosts")
+        u-post-preview.round-borders.items-stretch.shadow-3(:post="post", exceptSize="350", titleSize="50")
 
     span.q-title POPULAR PROJECTS
     div.row.inline.no-wrap.contributions
-      template.col-md-4(v-for="(post, index) in visiblePosts")
-        u-post-preview.round-borders(:post="post", :class="index === 2 ? 'last' : ''")
+      div(v-for="(post, index) in visiblePosts")
+        u-post-preview.round-borders.col-md-4.col-xs-12.col-sm-12(:post="post")

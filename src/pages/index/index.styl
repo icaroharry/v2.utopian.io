@@ -55,11 +55,22 @@ div.q-layout-page.u-homepage.u-page-index, main.q-layout-page.u-homepage.page.u-
 .contributions {
   .u-post-preview {
     background-color #fff !important
-    margin-right 20px
-    margin-top 20px
+    margin-top 30px
+    padding 15px
     margin-bottom 50px
-  }
-  .last {
-    margin-right 0
+    height 300px
+    border-top-width 7px !important
+    .item-category > span {
+      color $grey-6
+      font-weight normal
+    }
+    .q-item-main {
+      display flex
+      flex-direction column
+      justify-content space-between
+    }
+    .q-item-except {
+      max-height none !important
+    }
   }
 }

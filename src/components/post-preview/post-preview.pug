@@ -51,10 +51,15 @@ q-item.u-post-preview(:to="post.url", :link="false", :class="post._category")
       div.col-md-12
         div.q-item-body
 
-          div.q-item-label {{ post.title }}
+          div.q-item-label {{ trimmedTitle || post.title }}
           div.q-item-except(v-if="showExcept === true")
             div(style="overflow: hidden") {{ except }}
-
+      
+    div.row.post-preview-row
+      div.col-md-12.flex.justify-between
+        div.tags
+          q-btn.tag(color="tertiary", dense, size="", outline, :key="tag.id", v-for="tag in post._visible_tags")
+           | {{ tag.label }}
 
     div.row.post-preview-row
       div.col-md-12.flex.justify-between
@@ -69,7 +74,3 @@ q-item.u-post-preview(:to="post.url", :link="false", :class="post._category")
               span {{ '@' + post.author  }}
               span.reputation {{ post._author_reputation }}
 
-
-        div.tags
-          q-btn.tag(color="tertiary", dense, size="", outline, :key="tag.id", v-for="tag in post._visible_tags")
-            | {{ tag.label }}
