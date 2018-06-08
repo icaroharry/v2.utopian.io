@@ -1,14 +1,14 @@
 <script>
 import UPostPreview from 'src/components/post-preview/post-preview'
 import ULayoutHomepage from 'src/layouts/parts/homepage/homepage'
-import { QCarousel } from 'quasar'
+import { byOrder } from 'src/services/steem/posts'
+import { concat, last, attempt, filter } from 'lodash-es'
 
 export default {
   name: 'PageIndex',
   components: {
     UPostPreview,
-    ULayoutHomepage,
-    QCarousel
+    ULayoutHomepage
   },
   data () {
     return {
@@ -17,7 +17,9 @@ export default {
         {name: 'd.tube', owner: '@paodebatata', description: 'lorem ipsum', image: 'https://placeimg.com/577/380/tech/grayscale'},
         {name: 'busy', owner: '@calzone', description: 'lorem ipsum', image: 'https://placeimg.com/577/380/people/grayscale'}
       ],
-      isMounted: false
+      posts: [],
+      isMounted: false,
+      loading: false
     }
   },
   filters: {
@@ -30,6 +32,21 @@ export default {
     carouselPrevious () {
       this.$refs.mainCarousel.previous()
       this.$refs.infoCarousel.previous()
+    },
+    loadInitial () {
+      this.loading = true
+      return this.loadPosts().then((result) => {
+        this.loading = false
+        return result
+      })
+    },
+    loadPosts (done) {
+      return byOrder('trending', { tag: 'utopian-io', limit: 10 }, last(this.posts))
+        .then((result) => {
+          this.posts = concat(this.posts, result)
+          attempt(done)
+          return result
+        })
     }
   },
   computed: {
@@ -38,13 +55,22 @@ export default {
     },
     carouselCanGoToPrevious () {
       return this.isMounted ? this.$refs.mainCarousel.canGoToPrevious : false
+    },
+    visiblePosts () {
+      const filteredPosts = filter(this.posts, (post) => ((post['parent_permlink'] === 'utopian-io' && post._category)))
+      return filteredPosts.slice(0, filteredPosts.length > 3 ? 3 : filteredPosts.length)
     }
   },
   mounted () {
     this.isMounted = true
+    this.loadInitial()
   },
   watch: {
-
+    visiblePosts () {
+      if (this.visiblePosts.length < 3) {
+        this.loadInitial()
+      }
+    }
   }
 }
 </script>

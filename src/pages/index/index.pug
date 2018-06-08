@@ -46,15 +46,11 @@ u-layout-homepage
         )
   template(slot="main")
     span.q-title RECENT CONTRIBUTIONS
-    div.container
-      div.row
-        q-card(v-for="n in 3")
-          q-card-title
-            | BLABLABLABL
-            span(slot="subtitle")
-              | by asdasdasd
-          q-card-main.q-title.text-weight-light.text-dusk
-            | uashduashduasdhasud
+    div.row.inline.no-wrap.contributions
+      template.col-md-4(v-for="(post, index) in visiblePosts")
+        u-post-preview.round-borders.shadow-3(:post="post", :class="index === 2 ? 'last' : ''")
 
-
-
+    span.q-title POPULAR PROJECTS
+    div.row.inline.no-wrap.contributions
+      template.col-md-4(v-for="(post, index) in visiblePosts")
+        u-post-preview.round-borders(:post="post", :class="index === 2 ? 'last' : ''")
