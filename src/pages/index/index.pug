@@ -47,10 +47,15 @@ u-layout-homepage
   template(slot="main")
     span.q-title RECENT CONTRIBUTIONS
     div.row.inline.contributions.gutter-lg
-      div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in visiblePosts")
+      div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in visibleContributions")
+        u-post-preview.round-borders.items-stretch.shadow-3(:post="post", exceptSize="350", titleSize="50")
+
+    span.q-title RECENT TASK REQUESTS
+    div.row.inline.contributions.gutter-lg
+      div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in visibleTaskRequests")
         u-post-preview.round-borders.items-stretch.shadow-3(:post="post", exceptSize="350", titleSize="50")
 
     span.q-title POPULAR PROJECTS
     div.row.inline.no-wrap.contributions
-      div(v-for="(post, index) in visiblePosts")
+      div(v-for="(post, index) in visibleContributions")
         u-post-preview.round-borders.col-md-4.col-xs-12.col-sm-12(:post="post")

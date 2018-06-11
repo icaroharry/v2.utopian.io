@@ -17,7 +17,8 @@ export default {
         {name: 'd.tube', owner: '@paodebatata', description: 'lorem ipsum', image: 'https://placeimg.com/577/380/tech/grayscale'},
         {name: 'busy', owner: '@calzone', description: 'lorem ipsum', image: 'https://placeimg.com/577/380/people/grayscale'}
       ],
-      posts: [],
+      contributions: [],
+      taskRequests: [],
       isMounted: false,
       loading: false
     }
@@ -35,18 +36,45 @@ export default {
     },
     loadInitial () {
       this.loading = true
-      return this.loadPosts().then((result) => {
-        this.loading = false
+
+      Promise.all([
+        this.loadContributions(),
+        this.loadTaskRequests()
+      ]).then((result) => {
+        if (this.visibleContributions.length >= 3 && this.visibleTaskRequests.length >= 3) {
+          this.loading = false
+        }
         return result
       })
     },
-    loadPosts (done) {
+    loadContributions (done) {
       return byOrder('trending', { tag: 'utopian-io', limit: 10 }, last(this.posts))
         .then((result) => {
-          this.posts = concat(this.posts, result)
+          this.contributions = concat(this.contributions, result)
           attempt(done)
           return result
         })
+    },
+    loadTaskRequests (done) {
+      const filterTags = ['task-bug-hunting', 'task-analysis', 'task-social', 'task-graphics',
+        'task-development', 'task-documentation', 'task-copywriting']
+
+      return byOrder('trending', { tag: 'utopian-io', filterTags, limit: 10 }, last(this.posts))
+        .then((result) => {
+          this.taskRequests = concat(this.taskRequests, result)
+          attempt(done)
+          return result
+        })
+    },
+    populateProjects () {
+      this.$firestore.collection('projects').add({
+        details: ['Basically it\'s the Steem interface you get used to but with additional handy options. Everything works out faster and easier with eSteem Mobile and eSteem Surfer applications. You can create your own posts, surf your friends feed or trending/hot/etc pages, upvote what you like, write comments, read replies, do all major Steem functions in your daily social surfing as well as wallet actions and of course few extras: search, discover different tags etc.'],
+        github_repository: 'https://github.com/esteemapp/esteem',
+        images: ['https://steemitimages.com/0x0/https://cdn.steemitimages.com/DQmYqaw1KBYfZDpGEcCS4FgztNoEvNAEBrfwDawePWQhXtJ/esteem.png'],
+        name: 'eSteem',
+        short_description: 'eSteem is a Steem interface with additional handy options. Everything works out faster and easier with eSteem Mobile and eSteem Surfer applications.',
+        tags: ['steem', 'interface', 'mobile']
+      })
     }
   },
   computed: {
@@ -56,19 +84,29 @@ export default {
     carouselCanGoToPrevious () {
       return this.isMounted ? this.$refs.mainCarousel.canGoToPrevious : false
     },
-    visiblePosts () {
-      const filteredPosts = filter(this.posts, (post) => ((post['parent_permlink'] === 'utopian-io' && post._category)))
-      return filteredPosts.slice(0, filteredPosts.length > 3 ? 3 : filteredPosts.length)
+    visibleContributions () {
+      const filteredContributions = filter(this.contributions, (post) => ((post['parent_permlink'] === 'utopian-io' && post._category)))
+      return filteredContributions.slice(0, filteredContributions.length > 3 ? 3 : filteredContributions.length)
+    },
+    visibleTaskRequests () {
+      const filteredTaskRequests = filter(this.taskRequests, (post) => ((post['parent_permlink'] === 'utopian-io' && post._category)))
+      return filteredTaskRequests.slice(0, filteredTaskRequests.length > 3 ? 3 : filteredTaskRequests.length)
     }
   },
   mounted () {
     this.isMounted = true
     this.loadInitial()
+    // this.populateProjects()
   },
   watch: {
-    visiblePosts () {
-      if (this.visiblePosts.length < 3) {
+    visibleContributions () {
+      if (this.visibleContributions.length < 3) {
         this.loadInitial()
+      }
+    },
+    visibleTaskRequests () {
+      if (this.visibleTaskRequests.length < 3) {
+        // this.loadInitial()
       }
     }
   }
