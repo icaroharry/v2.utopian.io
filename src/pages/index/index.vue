@@ -13,9 +13,33 @@ export default {
   data () {
     return {
       projects: [
-        {name: 'eSteem', owner: '@good-karma', description: 'eSteem is a Steem interface with additional handy options. Everything works out faster and easier with eSteem Mobile and eSteem Surfer applications.', image: 'https://steemitimages.com/0x0/https://cdn.steemitimages.com/DQmYqaw1KBYfZDpGEcCS4FgztNoEvNAEBrfwDawePWQhXtJ/esteem.png'},
-        {name: 'd.tube', owner: '@paodebatata', description: 'lorem ipsum', image: 'https://placeimg.com/577/380/tech/grayscale'},
-        {name: 'busy', owner: '@calzone', description: 'lorem ipsum', image: 'https://placeimg.com/577/380/people/grayscale'}
+        {
+          details: ['Basically it\'s the Steem interface you get used to but with additional handy options. Everything works out faster and easier with eSteem Mobile and eSteem Surfer applications. You can create your own posts, surf your friends feed or trending/hot/etc pages, upvote what you like, write comments, read replies, do all major Steem functions in your daily social surfing as well as wallet actions and of course few extras: search, discover different tags etc.'],
+          github_repository: 'https://github.com/esteemapp/esteem',
+          images: ['https://steemitimages.com/0x0/https://cdn.steemitimages.com/DQmYqaw1KBYfZDpGEcCS4FgztNoEvNAEBrfwDawePWQhXtJ/esteem.png'],
+          name: 'eSteem',
+          short_description: 'eSteem is a Steem interface with additional handy options. Everything works out faster and easier with eSteem Mobile and eSteem Surfer applications.',
+          tags: ['steem', 'interface', 'mobile'],
+          owner: 'good-karma'
+        },
+        {
+          details: ['D.Tube aims to become an alternative to YouTube that allows you to watch or upload videos on IPFS and share or comment about it on the immutable STEEM Blockchain, while earning cryptocurrency doing it.'],
+          github_repository: 'https://github.com/dtube/dtube',
+          images: ['https://steemitimages.com/DQmT7Ru1AmvYAXUwT3LrNt2kbySXbiyDVjYXoC3zfz95W95/dtube.png'],
+          name: 'd.tube',
+          short_description: 'D.Tube is the first crypto-decentralized video platform, built on top of the STEEM Blockchain and the IPFS peer-to-peer network.',
+          tags: ['steem', 'video', 'youtube'],
+          owner: 'dtube'
+        },
+        {
+          details: ['Steemblr is a microblogging platform written in javascript. It allows user to post and explore content which is smaller and more frivolous in its nature. Currently app is in development stage and you can see every posts from steemit. In the future it will show posts relative to steemblr app.'],
+          github_repository: 'https://github.com/snwolak/steemblr',
+          images: ['https://steemitimages.com/0x0/http://steemimages.com/images/2018/06/03/logo.png'],
+          name: 'Steemblr',
+          short_description: 'Steemblr is a microblogging platform written in javascript. It allows user to post and explore content which is smaller and more frivolous in its nature.',
+          tags: ['steem', 'tumblr', 'blogging'],
+          owner: 'snwolak'
+        }
       ],
       contributions: [],
       taskRequests: [],
@@ -106,7 +130,7 @@ export default {
     },
     visibleTaskRequests () {
       if (this.visibleTaskRequests.length < 3) {
-        // this.loadInitial()
+        this.loadInitial()
       }
     }
   }
