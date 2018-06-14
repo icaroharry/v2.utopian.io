@@ -32,9 +32,11 @@ u-layout-page.u-page-post(:meta="false")
 
       // actions for the root post (vote, stats...).
       u-comments-actions.post-actions(:comment="post")
+
       // comments section ruler.
       hr
-
+    // post content element.
+    div.post-content(v-if="post !== null")
       // post relies wrapper.
       div.post-replies
         // title.
