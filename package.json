@@ -8,12 +8,8 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "cross-env quasar build",
-    "dev": "cross-env quasar dev",
-    "build-mobile": "quasar build -m cordova -T",
-    "dev-mobile": "quasar dev -m cordova -T",
-    "build-electron": "quasar build -m electron",
-    "dev-electron": "quasar dev -m electron",
+    "build": "cross-env quasar build -m pwa -t mat",
+    "dev": "cross-env quasar dev -m pwa -t mat",
     "lint": "eslint --ext .js,.vue src",
     "test": "echo \"No test specified\" && exit 0"
   },
