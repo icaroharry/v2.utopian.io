@@ -1,6 +1,5 @@
 // environment config.
 require('dotenv').config()
-
 // quasar / app config.
 module.exports = function (ctx) {
   return {
@@ -11,8 +10,8 @@ module.exports = function (ctx) {
       'i18n',
       'axios',
       'vuex-router-sync',
-      'bootstrap'
-      // 'firebase'
+      'bootstrap',
+      'firebase'
     ],
     css: [
       'app.styl'
@@ -24,7 +23,11 @@ module.exports = function (ctx) {
     supportIE: false,
     build: {
       env: {
-        SC2_APP: process.env.SC2_APP
+        SC2_APP: (process.env.SC2_APP || '"utopian.signin"'),
+        FIREBASE_API_KEY: (process.env.FIREBASE_API_KEY || 'null'),
+        FIREBASE_PROJECT_ID: (process.env.FIREBASE_PROJECT_ID || '"utopian-io"'),
+        FIREBASE_AUTH_DOMAIN: (process.env.FIREBASE_AUTH_DOMAIN || '"auth.utopian.io"'),
+        FIREBASE_MESSAGING_SENDER_ID: (process.env.FIREBASE_MESSAGING_SENDER_ID || 'null')
       },
       scopeHoisting: true,
       vueRouterMode: 'history', // 'hash' : 'history'
@@ -103,7 +106,9 @@ module.exports = function (ctx) {
         'QToolbar',
         'QToolbarTitle',
         'QSlideTransition',
+        'QSlider',
         'QBtn',
+        'QVideo',
         'QScrollArea',
         'QIcon',
         'QListHeader',
@@ -127,11 +132,14 @@ module.exports = function (ctx) {
     },
     animations: 'all', // animations: []
     pwa: {
-      cacheExt: 'js,html,css,ttf,eot,otf,woff,woff2,json,svg,gif,jpg,jpeg,png,wav,ogg,webm,flac,aac,mp4,mp3',
+      workboxPluginMode: 'InjectManifest',
+      workboxOptions: {},
       manifest: {
         // name: 'Quasar App',
         // short_name: 'Quasar-PWA',
         // description: 'Best PWA App in town!',
+        start_url: '/?utm_source=a2hs',
+        gcm_sender_id: '103953800507',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
