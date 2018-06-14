@@ -1,162 +1,150 @@
-.markdown-content {
+.markdown-content
   font-weight 400
-  //max-width 720px
-  .disabled, [disabled] {
-    opacity 0.8 !important
-  }
-  blockquote {
+  font-family $typography-font-family-comments
+  line-height 1.8em
+  color $grey-9
+  padding 0 16px
+  font-size 20px
+  blockquote
     padding 4px 8px
     margin 0 0 1rem
     opacity 0.7
     background $grey-1
     border-left 2px solid $grey-6
-    p {
+    p
       margin 0 !important
-    }
-  }
-
-  ul.contains-task-list {
-    padding-left 0 !important
-  }
-  li {
-    //padding-left: 1em;
-    //text-indent: -.7em;
-  }
-  //li:before {
-  //  content: "• ";
-  //  opacity 0.8
-  //  //color: red; /* or whatever color you prefer */
-  //}
-  li.task-list-item {
-    list-style-type none
-  }
-  font-family $typography-font-family-comments
-  table {
+  a
+    &.external-link
+      &::after
+        line-height inherit
+        letter-spacing normal
+        text-transform none
+        white-space nowrap
+        word-wrap normal
+        content "\F3CC"
+        display inline-block
+        color $grey-6
+        font normal normal normal 14px "Material Design Icons"
+        padding 0 2px
+  ul
+    margin 0 0 1rem
+    padding-left 1.2em
+    &.contains-task-list
+      padding-left 0 !important
+    li
+      line-height 1.4em
+      margin 8px 0
+  li
+    &.task-list-item
+      list-style-type none
+  table
     border-collapse collapse
-    thead > tr {
-      background $grey-2
-      color $grey-9
-    }
-    tbody > tr:nth-child(even) {
-      background $grey-1
-    }
-    td, th {
-      padding 6px 12px
-      border: 1px solid $grey-4
-    }
-  }
-
-  & > :first-child {
+    thead
+      & > tr
+        background $grey-2
+        color $grey-9
+    tbody
+      & > tr
+        &:nth-child(even)
+          background $grey-1
+  & > :first-child
     margin-top 0
-  }
-  line-height 1.8em
-  a, a:hover, a:visited {
-    color $primary
-    text-decoration none
-  }
-  center {
+  center
     text-align center
-    > * {
+    & > *
       margin 0 auto
       text-align center
       display block
-    }
-  }
-  img {
+  img
     max-width 720px
-    // margin 0 auto
-  }
-  p, ul, li, a, i, em, code {
-    word-break break-word
-  }
-  p {
+  p
     width 100%
     word-break break-word
     margin 0 0 1.3rem
-  }
-  div.pull-right {
-    float: right;
-    padding-left: 1rem;
-    max-width: 50%;
-  }
-  color: $grey-9
-  padding 0 16px
-  font-size 20px
-  p > code {
-    font-weight 500
-  }
-  code {
+    & > code
+      font-weight 500
+  div
+    &.pull-right
+      float right
+      padding-left 1rem
+      max-width 50%
+  code
     font-family $typography-font-family-mono
     line-height 1em
     font-size 0.8em
     background $grey-2
     padding 2px 4px
     border-radius 4px
-  }
-  pre {
+  pre
     background $grey-2
     border-radius 4px
-    code {
-      // font-size 1em
+    width 100%
+    overflow-x auto
+    code
       width 100%
       display block
       line-height 1.6em
       padding 12px 12px !important
       background $grey-2
-
       color $tertiary
-      // color $grey-8
-      // font-weight 500
       font-size 0.8em
       letter-spacing 0.025em
       font-family $typography-font-family-mono
-      // background $grey-2
-      // padding 4px
       border-radius 2px
-    }
-    width 100%
-    overflow-x auto
-    //background $grey-2
-
-  }
-  h1, h2, h3, h4, h5, h6 {
-    &:not(.ejs-title) {
-      width 100%
-      font-weight 600
-      margin-bottom 0.15em
-      margin-top 2em
-      line-height 1em
-      color $grey-9
-      // font-family $typography-font-family
-    }
-  }
-  .ejs-title {
+  .ejs-title
     font-size 22px !important
-  }
-  h1:not(.ejs-title) {
-    font-size 28px
-  }
-  h2:not(.ejs-title) {
-    font-size 26px
-  }
-  h3:not(.ejs-title) {
-    font-size 24px
-  }
-  h4:not(.ejs-title) {
-    font-size 22px
-  }
-  h5:not(.ejs-title) {
-    font-size 21px
-  }
-  h6:not(.ejs-title) {
-    font-size 20px
-  }
-  ul {
-    margin 0 0 1rem
-    padding-left 1.2em
-    li {
-      line-height 1.4em
-      margin: 8px 0
-    }
-  }
-}
+  h1
+    &:not(.ejs-title)
+      font-size 28px
+  h2
+    &:not(.ejs-title)
+      font-size 26px
+  h3
+    &:not(.ejs-title)
+      font-size 24px
+  h4
+    &:not(.ejs-title)
+      font-size 22px
+  h5
+    &:not(.ejs-title)
+      font-size 21px
+  h6
+    &:not(.ejs-title)
+      font-size 20px
+
+.markdown-content .disabled,
+.markdown-content [disabled]
+  opacity 0.8 !important
+
+.markdown-content table td,
+.markdown-content table th
+  padding 6px 12px
+  border 1px solid $grey-4
+
+.markdown-content a,
+.markdown-content a:hover,
+.markdown-content a:visited
+  color $primary
+  text-decoration none
+
+.markdown-content p,
+.markdown-content ul,
+.markdown-content li,
+.markdown-content a,
+.markdown-content i,
+.markdown-content em,
+.markdown-content code
+  word-break break-word
+
+.markdown-content h1:not(.ejs-title),
+.markdown-content h2:not(.ejs-title),
+.markdown-content h3:not(.ejs-title),
+.markdown-content h4:not(.ejs-title),
+.markdown-content h5:not(.ejs-title),
+.markdown-content h6:not(.ejs-title)
+  width 100%
+  font-weight 600
+  margin-bottom 0.15em
+  margin-top 2em
+  line-height 1em
+  color $grey-9
