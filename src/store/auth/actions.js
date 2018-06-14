@@ -1,4 +1,5 @@
 // library imports.
+import firebase from 'firebase/app'
 import { get } from 'lodash-es'
 import moment from 'moment/moment'
 // project imports.
@@ -6,6 +7,12 @@ import * as user from 'src/database/tables/user'
 
 // auth store actions.
 
+export const loginWithGithub = () => {
+  // create a github provider instance.
+  const provider = new firebase.auth.GithubAuthProvider()
+  return firebase.auth().signInWithPopup(provider)
+    .then(console.log)
+}
 // load the stored user, if any.
 export const loadUser = async ({ getters, commit }) => {
   // get the expiration date.
@@ -19,9 +26,21 @@ export const loadUser = async ({ getters, commit }) => {
   }
 
   // commit the user information on store.
-  commit('setExpiration', moment.utc(expiration))
-  commit('setUsername', username)
-  commit('setToken', token)
+  commit('setSteemUser', {
+    expiration: moment.utc(expiration),
+    username,
+    token
+  })
+
+  // get github user from firebase auth.
+  const githubUser = firebase.auth().currentUser
+
+  // only set on store if present.
+  if (githubUser) {
+    commit('setGithubUser', githubUser)
+  } else {
+    commit('setGithubUser', null)
+  }
 
   // resolve the promise with the stored user name.
   return Promise.resolve(username)
@@ -56,14 +75,30 @@ export const loginWithCallback = async ({ state, commit, dispatch }, payload) =>
       { name: 'token', value: encrypted }
     ])
   })
+    .then(() => dispatch('loadUser'))
 }
 
 // user logout action.
-export const logout = ({ commit }) => {
+export const logoutFromSteem = ({ commit }) => {
   // remove local database itens related to the user.
-  return user.bulkRemove(['username', 'token', 'expiration'])
+  return user
+    .bulkRemove(['username', 'token', 'expiration'])
     // make sure to clear the store.
-    .then((result) => { commit('clearUser'); return result })
-    // resolve as true.
-    .then(() => Promise.resolve(true))
+    .then((result) => { commit('clearSteemUser'); return result })
+}
+
+// user logout action.
+export const logoutFromFirebase = ({ commit }) => {
+  // remove local database itens related to the user.
+  return firebase.auth().signOut()
+    .then((any) => {
+      commit('clearGithubUser')
+      return any
+    })
+}
+
+// user logout action.
+export const logout = ({ commit, dispatch }) => {
+  return dispatch('logoutFromSteem')
+    .then(() => dispatch('logoutFromFirebase'))
 }

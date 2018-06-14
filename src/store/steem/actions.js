@@ -12,7 +12,7 @@ import { remember } from 'src/database/cache'
 // meaning the token must be decrypted on every usage.
 export const prepareClient = ({ rootGetters, dispatch }) => {
   // get the access token from the root store.
-  const encryptedToken = get(rootGetters, 'auth/token')
+  const encryptedToken = get(rootGetters, 'auth/steem/token')
 
   // decrypt the token and return a prepared client.
   return dispatch('decrypt', encryptedToken, { root: true })
@@ -30,7 +30,7 @@ export const prepareClient = ({ rootGetters, dispatch }) => {
 // load the stored user, if any.
 export const vote = async ({ getters, commit, dispatch, rootGetters }, { author, permlink, weight }) => {
   // get username from root store.
-  const username = get(rootGetters, 'auth/username')
+  const username = get(rootGetters, 'auth/steem/username')
 
   // determine the action type based on weight
   const mutationName = (weight < 0) ? 'setBroadcastingDownvote' : 'setBroadcastingUpvote'
