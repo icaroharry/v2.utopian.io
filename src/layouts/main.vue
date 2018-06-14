@@ -55,7 +55,9 @@ q-layout.u-layout.q-layout-wallet(view='lHh Lpr lFf')
 
   // main content / router content.
   q-page-container.fit
-    div.container.container-page(:class="{ 'container-large': ($route.meta.large === true) }")
+    div.container.container-page(
+      :class="{ 'container-large': ($route.meta.large === true), 'container-centered': ($route.meta.centered === true) }"
+    )
       // route change transition (animation).
       transition(:duration="{ enter: 100, leave: 100 }", enter-active-class="animated fadeIn", leave-active-class="animated fadeOut")
         // router view.

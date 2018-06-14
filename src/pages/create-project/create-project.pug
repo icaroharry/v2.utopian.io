@@ -1,0 +1,38 @@
+u-layout-page.u-page-index(reverse=true)
+
+  template(slot="main")
+    p.q-headline Let's create your project
+    p.q-title Make a great first impression with all the project information filled and great images about your project.
+
+    div.create-project-form
+      q-input(v-model="project.name", stack-label="Project Name", placeholder="e.g DTube")
+      q-search(v-model="project.githubRepository" placeholder="e.g dtube/dtube")
+        q-autocomplete(
+          stack-label="Github Repository",
+          @search="searchGithubRepos"
+          :min-characters="3"
+          ref="autocomplete"
+          :debounce="500"
+          separator
+        )
+      q-uploader(v-model="project.image" url="localhost:8081/upload" stack-label="Project image")
+      q-field(:count="150")
+        q-input(
+          v-model="project.shortDescription",
+          type="textarea",
+          maxlength="150",
+          stack-label="Short description"
+        )
+      q-field(:count="150")
+        q-input(
+          v-model="project.details",
+          type="textarea",
+          stack-label="Details"
+        )
+      q-chips-input(v-model="project.tags", stack-label="Tags")
+
+
+
+
+
+

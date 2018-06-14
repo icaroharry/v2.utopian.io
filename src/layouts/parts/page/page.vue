@@ -22,6 +22,10 @@ export default {
     meta: {
       type: Boolean,
       default: true
+    },
+    reverse: {
+      type: Boolean,
+      default: false
     }
   },
 
