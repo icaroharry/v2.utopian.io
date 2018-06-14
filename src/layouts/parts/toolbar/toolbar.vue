@@ -2,6 +2,7 @@
 <script>
 // imports.
 import { mapGetters, mapActions } from 'vuex'
+import { popupLogin } from 'src/services/steem/connect/auth'
 
 // layout toolbar component.
 export default {
@@ -21,8 +22,14 @@ export default {
 
     // auth store getters.
     ...mapGetters('auth', [
-      'guest',
-      'username'
+      'githubUser',
+      'steemUser',
+      'guestOnSteem',
+      'guestOnGithub',
+      'steemAvatar',
+      'githubAvatar',
+      'steemUsername',
+      'githubUsername'
     ]),
 
     // common store getters.
@@ -31,10 +38,15 @@ export default {
       'isDesktop'
     ]),
 
-    // avatar image URL.
-    avatar () {
-      return this.guest ? null : ('https://img.blocker.press/a/' + this.username)
-    },
+    // // avatar image URL.
+    // steemAvatar () {
+    //   return this.guestOnSteem() ? null : ('https://img.blocker.press/a/' + this.steemUser.username)
+    // },
+
+    // // avatar image URL.
+    // githubAvatar () {
+    //   return this.guestOnGithub() ? null : (this.githubUser.profileURL)
+    // },
 
     createLabel () {
       return this.isDesktop ? 'Contribution' : ''
@@ -45,9 +57,17 @@ export default {
   methods: {
 
     ...mapActions('auth', [
-      'logout'
+      'logout',
+      'loginWithCallback',
+      'logoutFromSteem'
     ]),
 
+    startPopup () {
+      return popupLogin()
+        .then((result) => {
+          return this.loginWithCallback(result)
+        })
+    },
     // redirect to create route.
     redirectToCreate () {
       return this.$router.push({ name: 'create' })
@@ -56,6 +76,10 @@ export default {
     // redirect to login route.
     redirectToLogin () {
       return this.$router.push({ name: 'auth.login' })
+    },
+
+    loginWithGithub () {
+      this.$store.dispatch('auth/loginWithGithub')
     }
   }
 }

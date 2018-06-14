@@ -87,12 +87,12 @@ export default {
 
     // Markdown snippets
     // @TODO needs refactor to a separate module.
-    // ace.define('ace/snippets/markdown', ['require', 'exports', 'module'], function (e, t, n) {
-    //   'use strict'
-    //   /* eslint-disable-next-line */
-    //   t.snippetText = '# Markdown\nsnippet link\n\t[${1:text}](https://${2:address})\nsnippet image\n\t![${1:description}](https://${2:address})\n\nsnippet bold\n\t**${1:text}**\n\nsnippet code\n\t```${1:lang}\n\t${2:code}\n\t```\n\n'
-    //   t.scope = 'markdown'
-    // })
+    ace.define('ace/snippets/markdown', ['require', 'exports', 'module'], function (e, t, n) {
+      'use strict'
+      /* eslint-disable-next-line */
+      t.snippetText = '# Markdown\nsnippet link\n\t[${1:text}](https://${2:address})\nsnippet image\n\t![${1:description}](https://${2:address})\n\nsnippet bold\n\t**${1:text}**\n\nsnippet code\n\t```${1:lang}\n\t${2:code}\n\t```\n\n'
+      t.scope = 'markdown'
+    })
 
     // editor scroll style.
     editor.$blockScrolling = Infinity
@@ -117,12 +117,12 @@ export default {
     editor.setOptions({
       fontFamily: 'Roboto Mono',
       fontSize: '12pt',
-      showLineNumbers: true
+      showLineNumbers: true,
       // completion features are tempory disabled.
-      // enableEmmet: true
-      // enableBasicAutocompletion: true,
-      // enableSnippets: true,
-      // enableLiveAutocompletion: false
+      enableEmmet: true,
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: false
     })
   },
 

@@ -36,7 +36,7 @@ export default {
 
     // map steem store getters.
     ...mapGetters('auth', [
-      'username'
+      // 'username'
     ])
 
   },

@@ -5,6 +5,21 @@
 @import "~quasar-framework/src/css/core/size.styl"
 @import "~quasar-framework/src/css/core/mouse.styl"
 
+.user-menu {
+  .q-item-avatar, .q-item-avatar img {
+    width 32px
+    height 32px
+    border: 2px solid rgba(255,255,255,0.6)
+    border-radius 50px
+  }
+  .q-icon.q-item-icon {
+    width 32px
+    font-size 32px !important
+    height 32px
+    // border: 2px solid rgba(255,255,255,0.6)
+    border-radius 50px
+  }
+}
 
 .q-toolbar.u-toolbar {
   padding 0 !important
@@ -61,6 +76,14 @@
       margin-left 16px
     }
     font-size 22px
+
+    .user-menu {
+      .q-item-avatar, .q-item-avatar img {
+        width 20px
+        height 20px
+      }
+    }
+
     img.avatar {
       height 32px
       width 32px

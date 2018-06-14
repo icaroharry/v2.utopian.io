@@ -46,7 +46,7 @@ export default {
 
     // map steem store getters.
     ...mapGetters('auth', [
-      'username'
+      'steemUsername'
     ]),
 
     // map steem store getters.
@@ -57,10 +57,10 @@ export default {
     ]),
 
     currentVote () {
-      if (!this.username) {
+      if (!this.steemUsername) {
         return null
       }
-      return find(get(this.comment, 'active_votes'), (vote) => (vote.voter === this.username))
+      return find(get(this.comment, 'active_votes'), (vote) => (vote.voter === this.steemUsername))
     },
 
     votesCount () {

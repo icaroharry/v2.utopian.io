@@ -12,6 +12,10 @@ export default function () {
     loading: true,
 
     // default, starting locale name.
-    lang: 'en-US'
+    lang: 'en-US',
+
+    preferences: {
+      voteWeight: 100
+    }
   }
 }
