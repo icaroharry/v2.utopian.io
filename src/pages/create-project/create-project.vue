@@ -44,13 +44,14 @@ export default {
       this.$v.project.$touch()
 
       this.project.image = this.projectImageUrl()
+      this.project.slug = this.slug
       if (this.$v.project.$error || !this.projectImageUrl()) {
         this.$q.notify('Please review the form.')
         return
       }
       this.loading = true
       this.firestore.collection('projects').add(this.project).then(() => {
-        this.loading = false
+        this.$router.push({ name: 'project.contributions', path: `/project/${this.project.slug}/contributions` })
       }).catch((err) => {
         this.loading = false
         return err
@@ -79,9 +80,29 @@ export default {
         label: item.full_name,
         avatar: item.owner.avatar_url
       }))
+    },
+    slugify (str) {
+      str = str.replace(/^\s+|\s+$/g, '') // trim
+      str = str.toLowerCase()
+
+      // remove accents, swap ñ for n, etc
+      const from = 'ãàáäâẽèéëêìíïîõòóöôùúüûñç·/_,:;'
+      const to = 'aaaaaeeeeeiiiiooooouuuunc------'
+      for (let i = 0, l = from.length; i < l; i++) {
+        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i))
+      }
+
+      str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+        .replace(/\s+/g, '-') // collapse whitespace and replace by -
+        .replace(/-+/g, '-') // collapse dashes
+
+      return str
     }
   },
   computed: {
+    slug () {
+      return this.slugify(this.project.name)
+    }
   },
   mounted () {
     this.gh = new GitHub()

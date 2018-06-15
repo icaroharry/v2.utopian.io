@@ -15,6 +15,12 @@ u-layout-page.u-page-index(reverse=true)
           :error="$v.project.name.$error"
           @keyup.enter="submit"
         )
+        q-input(
+          v-model="slug"
+          stack-label="Project Slug Name"
+          placeholder="e.g dtube"
+          readonly
+        )
         q-search(
           v-model="project.githubRepository"
           stack-label="Github Repository"
