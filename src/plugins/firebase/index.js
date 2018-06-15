@@ -6,6 +6,8 @@ import 'firebase/auth'
 import 'firebase/firestore'
 // make sure firebase firestore is present on the bundle.
 import 'firebase/storage'
+// make sure firebase cloud functions is present on the bundle.
+import 'firebase/functions'
 // import the configuration builder for firebase.
 import config from './config'
 // import the authentication configurator.
@@ -24,7 +26,7 @@ import configureFirebaseStorage from './firebase-storage'
 export default ({ store, Vue }) => {
   // initialize firebase with the previously built configuration.
   const firebaseApp = firebase.initializeApp(config)
-
+  window.fa = firebase.auth
   // configure authentication.
   configureAuth(firebaseApp, store)
   // @TODO remove this once authentication is done

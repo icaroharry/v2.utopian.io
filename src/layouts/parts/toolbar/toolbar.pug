@@ -35,13 +35,13 @@ q-toolbar.u-toolbar(color='tertiary', :class="{ desktop: isDesktop }")
               q-item-side(side="right", icon="mdi-github-circle")
             // q-item()
             // q-item-separator
-            q-item(link, v-if="guestOnGithub === true")
+            q-item(@click.native="startPopup", link, v-if="guestOnSteem === true")
               q-item-side
                 q-icon.ut-steem
               q-item-main(label="Connect Steem Account", sublabel="123")
-              q-item-side(side="right", avatar="https://steemitimages.com/u/blocker.press/avatar")
+              // q-item-side(side="right", avatar="https://steemitimages.com/u/blocker.press/avatar")
 
-            q-item(@click.native="logoutFromSteem", link, v-if="guestOnGithub !== true")
+            q-item(@click.native="logoutFromSteem", link, v-if="guestOnSteem !== true")
               q-item-side(icon="mdi-check")
               q-item-main(label="Logout from Steem")
               q-item-side(side="right", :avatar="steemAvatar")

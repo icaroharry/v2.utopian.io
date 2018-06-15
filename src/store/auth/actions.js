@@ -54,7 +54,9 @@ export const loginWithCallback = async ({ state, commit, dispatch }, payload) =>
   const username = get(payload, 'username', null)
   // get the expiration ttl (seconds).
   const ttl = get(payload, 'expires_in', null)
-
+  firebase.functions().httpsCallable('auth-login')(token)
+    .then(console.log)
+    .catch(console.log)
   // avoid proceeding if required values are not present.
   if (!token || !username || !ttl) {
     return Promise.reject(new Error('Invalid callback parameters.'))
