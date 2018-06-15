@@ -5,5 +5,5 @@ module.exports = [
   'axios',
   'vuex-router-sync',
   'bootstrap',
-  'firebase'
+  'firebase/index'
 ]

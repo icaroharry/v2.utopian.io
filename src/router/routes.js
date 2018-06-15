@@ -13,6 +13,22 @@ export default [
     component: () => import('src/layouts/main'),
     children: [
       {
+        path: 'project/create',
+        name: 'project.create',
+        component: () => import('src/pages/create-project/create-project'),
+        meta: {weight: 50}
+      },
+      {
+        path: 'project/:name',
+        name: 'project',
+        component: () => import('src/pages/project/project'),
+        children: [
+          {path: 'details', name: 'project.details', component: () => import('src/pages/project/details/details')},
+          {path: 'contributions', name: 'project.contributions', component: () => import('src/pages/project/contributions/contributions')},
+          {path: 'tasks', name: 'project.tasks', component: () => import('src/pages/project/tasks/tasks')}
+        ]
+      },
+      {
         path: 'contributions',
         name: 'contributions',
         component: () => import('src/pages/contributions/contributions'),
@@ -59,22 +75,6 @@ export default [
         name: 'settings',
         component: () => import('src/pages/settings/settings'),
         meta: {weight: 50}
-      },
-      {
-        path: 'project/create',
-        name: 'project.create',
-        component: () => import('src/pages/create-project/create-project'),
-        meta: {weight: 50}
-      },
-      {
-        path: 'project/:name',
-        name: 'project',
-        component: () => import('src/pages/project/project'),
-        children: [
-          {path: 'details', name: 'project.details', component: () => import('src/pages/project/details/details')},
-          {path: 'contributions', name: 'project.contributions', component: () => import('src/pages/project/contributions/contributions')},
-          {path: 'tasks', name: 'project.tasks', component: () => import('src/pages/project/tasks/tasks')}
-        ]
       }
     ]
   },
