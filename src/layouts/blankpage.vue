@@ -10,7 +10,7 @@ import { mapGetters } from 'vuex'
 export default {
 
   // component name.
-  name: 'u-layout-main',
+  name: 'u-layout-blankpage',
 
   // child components.
   components: {
@@ -20,12 +20,6 @@ export default {
   // component data.
   data () {
     return {
-      // router transition speed.
-      transitionDuration: {
-        enter: 100,
-        leave: 100
-      },
-
       // enable a black button with a route.
       controls: null
     }
@@ -54,14 +48,7 @@ q-layout.u-layout.q-layout-wallet(view='lHh Lpr lFf')
     u-layout-toolbar
 
   // main content / router content.
-  q-page-container.fit
-    div.container.container-page(
-      :class="{ 'container-large': ($route.meta.large === true), 'container-centered': ($route.meta.centered === true) }"
-    )
-      // route change transition (animation).
-      transition(:duration="{ enter: 100, leave: 100 }", enter-active-class="animated fadeIn", leave-active-class="animated fadeOut")
-        // router view.
-        router-view(:key="$route.path")
+  router-view(:key="$route.path")
 
     // ajax magic loading bar.
     q-ajax-bar(color="primary", size="3px")
@@ -72,20 +59,9 @@ q-layout.u-layout.q-layout-wallet(view='lHh Lpr lFf')
 <style lang="stylus">
 // default variable import.
 @import "~variables"
-
-body
-  background-color: $grey-1
-
 // app wrapper.
-  .u-app#q-app
-
-  // transition rule for layout pages.
-  div, main
-    &.q-layout-page.u-page
-      padding: 24px 24px
-      transition: left 0.5s ease;
-
-//.container.container-page
-//  max-width 98%
+.u-app#q-app
+body
+  background: $grey-1
 
 </style>

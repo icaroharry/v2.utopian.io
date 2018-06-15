@@ -43,5 +43,18 @@ module.exports = [
   'QCollapsible',
   'QItemMain',
   'QItemSide',
-  'QBtnToggle'
+  'QBtnToggle',
+  'QCarousel',
+  'QCarouselSlide',
+  'QCarouselControl',
+  'QCard',
+  'QCardTitle',
+  'QCardMain',
+  'QCardMedia',
+  'QCardSeparator',
+  'QCardActions',
+  'QProgress',
+  'QChipsInput',
+  'QUploader',
+  'QAutocomplete'
 ]

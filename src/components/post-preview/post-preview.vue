@@ -24,13 +24,22 @@ export default {
     showExcept: {
       type: Boolean,
       default: true
+    },
+    exceptSize: {
+      type: String,
+      default: '300'
+    },
+    titleSize: {
+      type: String,
+      default: null
     }
   },
 
   // component data.
   data () {
     return {
-      except: null
+      except: null,
+      trimmedTitle: null
     }
   },
 
@@ -40,7 +49,10 @@ export default {
   },
   mounted () {
     return renderText(this.post.body, false).then((data) => {
-      this.except = data.substr(0, 300)
+      this.except = `${data.substr(0, this.exceptSize)}...`
+      if (this.titleSize && this.titleSize < this.post.title.length) {
+        this.trimmedTitle = `${this.post.title.substr(0, this.titleSize)}...`
+      }
       return Promise.resolve(data)
     })
   }

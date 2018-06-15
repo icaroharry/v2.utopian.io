@@ -9,7 +9,7 @@ import { mapGetters } from 'vuex'
 export default {
 
   // component name.
-  name: 'u-layout-page',
+  name: 'u-layout-homepage',
 
   // component data.
   data () {
@@ -18,14 +18,10 @@ export default {
 
   // props.
   props: {
-    // enable / disable meta bar.
-    meta: {
+    // enable / disable jumbotron.
+    jumbotron: {
       type: Boolean,
       default: true
-    },
-    reverse: {
-      type: Boolean,
-      default: false
     }
   },
 
@@ -47,7 +43,7 @@ export default {
 </script>
 
 <!-- component template. -->
-<template src="./page.pug" lang="pug"></template>
+<template src="./homepage.pug" lang="pug"></template>
 
 <!-- component styles. -->
-<style src="./page.styl" lang="stylus"></style>
+<style src="./homepage.styl" lang="stylus"></style>

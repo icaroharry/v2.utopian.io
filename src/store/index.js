@@ -12,6 +12,7 @@ import * as actions from './actions'
 import common from './common'
 import auth from './auth'
 import steem from './steem'
+import project from './project'
 
 // enable vuex.
 Vue.use(Vuex)
@@ -25,7 +26,8 @@ const store = new Vuex.Store({
   modules: {
     auth,
     common,
-    steem
+    steem,
+    project
   }
 })
 

@@ -1,0 +1,23 @@
+div
+  u-layout-page.project-banner(:meta="false")
+    template(slot="main")
+      div.row(v-if="!loading")
+        div.col-md-8
+          img.project-image(:src="project.images[0]")
+        div.project-description.col-md-4
+          div.row.project-title.inline.nowrap.items-center
+            img.project-avatar(:src="project.images[0]")
+            span.q-headline.project-name {{ project.name }}
+          p {{ project.short_description }}
+  
+  u-layout-page.u-page-index(:reverse="true")
+    template(slot="meta")
+      div META
+
+    template(slot="main")
+      router-view
+
+
+
+
+

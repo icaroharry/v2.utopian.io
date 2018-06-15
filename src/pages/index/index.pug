@@ -1,54 +1,80 @@
-u-layout-page.u-page-index
+u-layout-homepage
 
-  template(slot="meta")
-    q-collapsible.u-filters(:opened="$q.platform.is.desktop", icon="mdi-filter" label="Filters")
-      div.row.row-filters
-
-        div.col-md-12
-
-            q-field.field-order(label="Sort by", orientation="vertical")
-              q-btn-dropdown(:label='sortBy', flat, dense, no-ripple)
-                // dropdown content
-                q-list(link='')
-                  q-item(v-for="option in sortOptions", :key="option.value", :to="{ name: 'posts.' + option.value, params: { category }  }")
-                    q-item-main
-                      q-item-tile(label='') {{ option.label }}
-
-
-
-      div.row.row-filters
-        div.col-md-12
-          q-field(label="Categories", orientation="vertical")
-
-            q-list.full-width.categories-list(no-border, multiline)
-
-
-              q-item(:to="{ name: ('posts.' + sortBy), params: { category: 'utopian-io' } }", :exact="true")
-                q-item-side(style="min-width: 20px")
-                  q-icon.ut-utopian
-                q-item-main
-                  .q-item-label All
-              template(v-for="category in categoryOptions", separator)
-                q-item(:to="{ name: ('posts.' + sortBy), params: { category: category.value } }")
-                  q-item-side(style="min-width: 20px")
-                    q-icon(:class="'ut-' + category.value")
-
-                  q-item-main
-                    .q-item-label
-                      | {{ $t('utopian.categories.' + category.value) }}
-
-
+  template(slot="jumbotron")
+    div.row
+      div.col-md-10.offset-md-1.subheader.q-subheading.gt-sm
+        router-link(:to="{ name: 'home' }") PROJECTS
+        router-link(:to="{ name: 'contributions' }") CONTRIBUTIONS
+        router-link(:to="{ name: 'home' }") WALLET
+        router-link(:to="{ name: 'home' }") SPONSORS
+        router-link(:to="{ name: 'home' }") MODERATORS
+      div.col-md-10.offset-md-1.projects-slider
+        q-carousel.shadow-2(color="white", height="380px", ref="mainCarousel")
+          q-carousel-slide(v-for="project in projects", :img-src="project.images[0]", :key="project.name")
+        q-carousel.project-info.shadow-8(color="white", ref="infoCarousel", no-swipe)
+          q-carousel-slide(v-for="project in projects", :key="project.name")
+            q-card.project-card
+              q-card-title
+                | {{ project.name }}
+                span(slot="subtitle")
+                  | by 
+                  span.text-dark.q-subheading {{ project.owner }}
+              q-card-main.q-title.text-weight-light.text-dusk
+                | {{ project.short_description }}
+              q-card-actions(align="center")
+                q-btn(label="Contribute to this project", color="primary")
+      div.col-md-1.carousel-arrows
+        q-btn.carousel-arrow(
+          flat,
+          round,
+          icon="mdi-arrow-up",
+          color="blue-grey-6",
+          size="24px",
+          dense,
+          @click="carouselPrevious"
+          :disable="!carouselCanGoToPrevious"
+        )
+        q-btn.carousel-arrow(
+          flat,
+          round,
+          icon="mdi-arrow-down",
+          color="blue-grey-6",
+          size="24px",
+          dense,
+          @click="carouselNext"
+          :disable="!carouselCanGoToNext"          
+        )
   template(slot="main")
-    q-infinite-scroll(:handler="loadPostsScroll", ref="infiniteScroll")
-      q-list.flex.posts-list(padding, separator, sparse, no-border, multiline)
-        template(v-for="item in visiblePosts", v-if="item.parent_permlink === 'utopian-io' && item._category")
-          u-post-preview(:post="item")
+    span.q-title RECENT CONTRIBUTIONS
+    div.row.inline.contributions.gutter-lg
+      div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in visibleContributions")
+        u-post-preview.round-borders.items-stretch.shadow-3(:post="post", exceptSize="350", titleSize="50")
 
-      // spinner for infinite scroll loading.
-      q-spinner-dots(slot="message", :size="40", style="margin: 0 auto")
+    span.q-title RECENT TASK REQUESTS
+    div.row.inline.contributions.gutter-lg
+      div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in visibleTaskRequests")
+        u-post-preview.round-borders.items-stretch.shadow-3(:post="post", exceptSize="350", titleSize="50")
 
+    span.q-title POPULAR PROJECTS
+    div.row.inline.projects.gutter-lg
+      div(v-for="(project, index) in projects").col-md-4.col-xs-12.col-sm-12
+        q-card.inline.round-borders.shadow-3(color="white", text-color="grey-7")
+          q-card-media
+            img(:src="project.images[0]")
+          q-card-title {{project.name}}
+          q-card-main
+            p.short-description {{project.short_description}}
+            p
+              q-btn.tag(color="tertiary", dense, size="", outline, :key="tag", v-for="tag in project.tags")
+                | {{tag}}
+            p {{project.owner}}
 
-
-
-
-
+    div.row.submit-project.round-borders.shadow-3.justify-between.items-center
+      div.row.no-wrap.items-center
+        img.blue-text(src="~assets/img/skyline.svg")
+        div.row.column
+          p.blue-text.q-headline List your Project on Utopian opensource platform.
+          p Utopian.io will reward contributors for the hard work in your project.
+      div
+        q-btn(color="primary", size="lg", @click="redirectToCreateProject").shadow-3
+          | Submit my project
