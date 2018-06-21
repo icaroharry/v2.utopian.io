@@ -67,7 +67,12 @@ u-layout-homepage
             p
               q-btn.tag(color="tertiary", dense, size="", outline, :key="tag", v-for="tag in project.tags")
                 | {{tag}}
-            p {{project.owner}}
+            div.author.items-center
+              div.avatar
+                img.align-bottom(:src="'https://img.blocker.press/a/' + project.owner")
+              div.author-details
+                div.name
+                  span {{ '@' + project.owner  }}
 
     div.row.submit-project.round-borders.justify-between.items-center
       div.row.no-wrap.items-center

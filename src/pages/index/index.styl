@@ -88,7 +88,7 @@ div.q-layout-page.u-homepage.u-page-index, main.q-layout-page.u-homepage.page.u-
   .q-card {
     margin-top 30px
     margin-bottom 50px
-    height 420px
+    min-height 420px
     box-shadow none
     border solid 1px #e0e2e5
   }
@@ -96,8 +96,7 @@ div.q-layout-page.u-homepage.u-page-index, main.q-layout-page.u-homepage.page.u-
     font-size 1rem
   }
   .short-description {
-    height 50px
-    max-height 50px
+    min-height 50px
   }
   .tags {
     white-space word-wrap
@@ -110,6 +109,25 @@ div.q-layout-page.u-homepage.u-page-index, main.q-layout-page.u-homepage.page.u-
     margin-right 5px
     &:last-child {
       margin-right 0
+    }
+  }
+  .author {
+    display flex
+    font-weight 600
+    .author-details {
+      .name {
+        line-height 14px
+        font-size 14px
+        vertical-align middle
+      }
+    }
+  }
+  .avatar {
+    margin-right 5px
+    img {
+      width 28px
+      height 28px
+      border-radius 4px
     }
   }
 }
