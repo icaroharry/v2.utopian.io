@@ -9,7 +9,15 @@ div
             img.project-avatar(:src="project.images[0]")
             span.q-headline.project-name {{ project.name }}
           p {{ project.short_description }}
-  
+
+  q-tabs(color="black" inverted v-if="!loading")
+    q-route-tab(:to="`/project/${project.slug}/contributions`" name="tab-contributions" append label="Contributions" slot="title" exact)
+    q-route-tab(:to="`/project/${project.slug}/details`" name="tab-details" append label="Details" slot="title" exact)
+    q-route-tab(:to="`/project/${project.slug}/updates`" name="tab-updates" append label="Updates" slot="title" exact)
+    q-route-tab(:to="`/project/${project.slug}/task`" name="tab-task-requests" append label="Task Requests" slot="title" exact)
+    q-route-tab(:to="`/project/${project.slug}/contributors`" name="tab-contributors" append label="Contributors" slot="title" exact)
+    q-route-tab(:to="`/project/${project.slug}/sponsors`" name="tab-sponsors" append label="Sponsors" slot="title" exact)
+
   u-layout-page.u-page-index(:reverse="true")
     template(slot="meta")
       div META
