@@ -62,6 +62,6 @@ q-layout.u-layout.q-layout-wallet(view='lHh Lpr lFf')
 // app wrapper.
 .u-app#q-app
 body
-  background: $grey-1
+  background: #fafbfc
 
 </style>
