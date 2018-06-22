@@ -2,7 +2,7 @@
 import UPostPreview from 'src/components/post-preview/post-preview'
 import ULayoutHomepage from 'src/layouts/parts/homepage/homepage'
 import { byOrder } from 'src/services/steem/posts'
-import { concat, last, attempt, filter } from 'lodash-es'
+import { concat, last, attempt, filter, each } from 'lodash-es'
 
 export default {
   name: 'PageIndex',
@@ -83,12 +83,11 @@ export default {
       const filterTags = ['task-bug-hunting', 'task-analysis', 'task-social', 'task-graphics',
         'task-development', 'task-documentation', 'task-copywriting']
 
-      return byOrder('trending', { tag: 'utopian-io', filterTags, limit: 10 }, last(this.posts))
-        .then((result) => {
-          this.taskRequests = concat(this.taskRequests, result)
-          attempt(done)
-          return result
-        })
+      return each(filterTags, (tag) => byOrder('trending', { tag: tag, limit: 3 }, last(this.posts)).then((result) => {
+        this.taskRequests = concat(this.taskRequests, result)
+        attempt(done)
+        return result
+      }))
     },
     redirectToCreateProject () {
       return this.$router.push({ name: 'project.create' })
