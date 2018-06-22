@@ -11,7 +11,7 @@ u-layout-homepage
       div.col-md-10.offset-md-1.projects-slider
         q-carousel.shadow-2(color="white", height="380px", ref="mainCarousel")
           q-carousel-slide(v-for="project in projects", :img-src="project.images[0]", :key="project.name")
-        q-carousel.project-info.shadow-8(color="white", ref="infoCarousel", no-swipe)
+        q-carousel.project-info(color="white", ref="infoCarousel", no-swipe)
           q-carousel-slide(v-for="project in projects", :key="project.name")
             q-card.project-card
               q-card-title
@@ -46,19 +46,19 @@ u-layout-homepage
         )
   template(slot="main")
     span.q-title RECENT CONTRIBUTIONS
-    div.row.inline.contributions.gutter-lg
+    div.row.inline.contributions.gutter-sm
       div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in visibleContributions")
-        u-post-preview.round-borders.items-stretch.shadow-3(:post="post", exceptSize="350", titleSize="50")
+        u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50")
 
     span.q-title RECENT TASK REQUESTS
-    div.row.inline.contributions.gutter-lg
+    div.row.inline.contributions.gutter-sm
       div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in visibleTaskRequests")
-        u-post-preview.round-borders.items-stretch.shadow-3(:post="post", exceptSize="350", titleSize="50")
+        u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50")
 
     span.q-title POPULAR PROJECTS
-    div.row.inline.projects.gutter-lg
+    div.row.inline.projects.gutter-sm
       div(v-for="(project, index) in projects").col-md-4.col-xs-12.col-sm-12
-        q-card.inline.round-borders.shadow-3(color="white", text-color="grey-7")
+        q-card.inline.round-borders(color="white", text-color="grey-7")
           q-card-media
             img(:src="project.images[0]")
           q-card-title {{project.name}}
@@ -67,13 +67,18 @@ u-layout-homepage
             p
               q-btn.tag(color="tertiary", dense, size="", outline, :key="tag", v-for="tag in project.tags")
                 | {{tag}}
-            p {{project.owner}}
+            div.author.items-center
+              div.avatar
+                img.align-bottom(:src="'https://img.blocker.press/a/' + project.owner")
+              div.author-details
+                div.name
+                  span {{ '@' + project.owner  }}
 
-    div.row.submit-project.round-borders.shadow-3.justify-between.items-center
+    div.row.submit-project.round-borders.justify-between.items-center
       div.row.no-wrap.items-center
         img.blue-text(src="~assets/img/skyline.svg")
         div.row.column
-          p.blue-text.q-headline List your Project on Utopian opensource platform.
+          p.blue-text.q-headline.q-mb-none List your Project on Utopian opensource platform.
           p Utopian.io will reward contributors for the hard work in your project.
       div
         q-btn(color="primary", size="lg", @click="redirectToCreateProject").shadow-3

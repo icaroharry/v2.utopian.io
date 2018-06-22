@@ -25,6 +25,13 @@
 
 }
 
+// primary button style
+.q-btn.bg-primary
+  box-shadow 0 4px 10px 0 rgba(71, 134, 255, 0.4)
+
+.q-btn.bg-primary:not(.disabled):not(.q-btn-flat):not(.q-btn-outline):not(.q-btn-push):active:before
+  box-shadow: 0 5px 5px -3px rgba(71, 134, 255, 0.2), 0 8px 10px 1px rgba(71, 134, 255, 0.2), 0 3px 14px 2px rgba(71, 134, 255, 0.2);
+  z-index 1
 
 // normalize icon size.
 .q-btn, .q-item {
