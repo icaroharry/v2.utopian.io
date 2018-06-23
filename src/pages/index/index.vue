@@ -80,10 +80,13 @@ export default {
         })
     },
     loadTaskRequests (done) {
-      const filterTags = ['task-bug-hunting', 'task-analysis', 'task-social', 'task-graphics',
-        'task-development', 'task-documentation', 'task-copywriting']
+      const filterTags = ['task-bug-hunting', 'task-analysis', 'task-social',
+        'task-development', 'task-documentation', 'task-copywriting', 'task-graphics']
 
-      return map(filterTags, (tag) => byOrder('trending', { tag: tag, limit: 3 }, last(this.posts)).then((result) => {
+      //  map over the task tags and grab associated tasks.
+      //  lowering limit reduces the potential for multiple tasks by same author to appear on the carousel
+
+      return map(filterTags, (tag) => byOrder('trending', { tag: tag, limit: 2 }, last(this.posts)).then((result) => {
         this.taskRequests = concat(this.taskRequests, result)
         attempt(done)
         return result
@@ -104,8 +107,10 @@ export default {
       const filteredContributions = filter(this.contributions, (post) => ((post['parent_permlink'] === 'utopian-io' && post._category)))
       return filteredContributions.slice(0, filteredContributions.length > 3 ? 3 : filteredContributions.length)
     },
+    //  && post._category - Many of the _categories for these objects are either 'utopian-io' or undefined.
+
     visibleTaskRequests () {
-      const filteredTaskRequests = filter(this.taskRequests, (post) => ((post['parent_permlink'] === 'utopian-io' && post._category)))
+      const filteredTaskRequests = filter(this.taskRequests, (post) => ((post['parent_permlink'] === 'utopian-io')))
       return filteredTaskRequests.slice(0, filteredTaskRequests.length > 3 ? 3 : filteredTaskRequests.length)
     }
   },
