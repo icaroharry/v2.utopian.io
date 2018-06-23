@@ -4,13 +4,35 @@ div
       div.row(v-if="!loading")
         div.col-md-8
           img.project-image(:src="project.images[0]")
-        div.project-description.col-md-4
-          div.row.project-title.inline.nowrap.items-center
-            img.project-avatar(:src="project.images[0]")
-            span.q-headline.project-name {{ project.name }}
-          p {{ project.short_description }}
+        div.project-description.col-md-4.column.justify-between
+          div
+            div.row.project-title.inline.nowrap.items-center
+              img.project-avatar(:src="project.images[0]")
+              span.q-headline.project-name {{ project.name }}
+            p {{ project.short_description }}
+            p.q-caption.text-grey
+              span.row.items-center.justify-start.project-separator
+                img.project-owner-avatar(:src="'https://img.blocker.press/a/' + project.owner")
+                span.project-created-by created by 
+                span.q-body-1.text-black {{project.owner}}
+          div.row.project-title.inline.nowrap.items-center.project-stats
+            div.row.column.col-md-6.items-start
+              span.q-headline 1234
+              span.q-body-1.uppercase.text-grey contributions
+            div.row.column.col-md-6.items-start
+              span.q-headline 1234000 SP
+              span.q-body-1.uppercase.text-grey sponsors delegation
+            div.row.column.col-md-6.items-start
+              span.q-headline 14
+              span.q-body-1.uppercase.text-grey contributors
+            div.row.column.col-md-6.items-start
+              span.q-headline $ 24123
+              span.q-body-1.uppercase.text-grey rewards
+          div.row.justify-between.project-buttons
+            q-btn.col-md-6(dense, color="primary") Contribute
+            q-btn.col-md-6(dense, icon="mdi-github-circle", size="12px", outline, color="dark", reverse) Github Repository
 
-  q-tabs(color="black" inverted v-if="!loading")
+  q-tabs(color="black" inverted v-if="!loading" align="justify")
     q-route-tab(:to="`/project/${project.slug}/contributions`" name="tab-contributions" append label="Contributions" slot="title" exact)
     q-route-tab(:to="`/project/${project.slug}/details`" name="tab-details" append label="Details" slot="title" exact)
     q-route-tab(:to="`/project/${project.slug}/updates`" name="tab-updates" append label="Updates" slot="title" exact)
