@@ -20,18 +20,18 @@ before_deploy:
   # enable the firebase project to be used for deployment.
   - firebase use --add $FIREBASE_PROJECT_ID --alias default
   # move to pre deploy.
-  - firebase deploy --only hosting -m "$CI_BUILD_ID" --non-interactive
-  on:
-      branch: master
+  # - firebase deploy --only hosting -m "$CI_BUILD_ID" --non-interactive
+  # on:
+  #     branch: master
 ## deployment stage.
 deploy:
-#  # use script as strategy
-#  provider: script
-#  # run firebase deploy, with a custom message and using the CI token.
-#  script: firebase deploy --only hosting -m "$CI_BUILD_ID" --non-interactive
-#  # deployments on firebase should be on master branch only.
-#  on:
-#    branch: master
+  #  # use script as strategy
+  #  provider: script
+  #  # run firebase deploy, with a custom message and using the CI token.
+  #  script: firebase deploy --only hosting -m "$CI_BUILD_ID" --non-interactive
+  #  # deployments on firebase should be on master branch only.
+  #  on:
+  #    branch: master
   provider: firebase
   token: $FIREBASE_TOKEN
   project: $FIREBASE_PROJECT_ID
