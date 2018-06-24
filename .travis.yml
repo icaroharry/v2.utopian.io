@@ -14,3 +14,5 @@ before_deploy:
 deploy:
   provider: script
   script: firebase deploy -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_TOKEN
+  on:
+    branch: master
