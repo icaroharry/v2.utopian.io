@@ -33,5 +33,6 @@ deploy:
   #  on:
   #    branch: master
   provider: firebase
+  skip_cleanup: true
   token: $FIREBASE_TOKEN
   project: $FIREBASE_PROJECT_ID
