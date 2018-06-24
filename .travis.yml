@@ -25,14 +25,14 @@ before_deploy:
   #     branch: master
 ## deployment stage.
 deploy:
-  #  # use script as strategy
-  #  provider: script
-  #  # run firebase deploy, with a custom message and using the CI token.
-  #  script: firebase deploy --only hosting -m "$CI_BUILD_ID" --non-interactive
-  #  # deployments on firebase should be on master branch only.
-  #  on:
-  #    branch: master
+  # firebase deployment strategy.
   provider: firebase
+  # skip cleanup so built artifacts are not lost.
   skip_cleanup: true
+  # firebase authentication token.
   token: $FIREBASE_TOKEN
+  # project id
   project: $FIREBASE_PROJECT_ID
+  # deployments for master branch only (production).
+  on:
+    branch: master
