@@ -2,7 +2,7 @@
 import UPostPreview from 'src/components/post-preview/post-preview'
 import ULayoutHomepage from 'src/layouts/parts/homepage/homepage'
 import { byOrder } from 'src/services/steem/posts'
-import { concat, last, attempt, filter } from 'lodash-es'
+import { concat, last, attempt, filter, map } from 'lodash-es'
 
 export default {
   name: 'PageIndex',
@@ -80,15 +80,17 @@ export default {
         })
     },
     loadTaskRequests (done) {
-      const filterTags = ['task-bug-hunting', 'task-analysis', 'task-social', 'task-graphics',
-        'task-development', 'task-documentation', 'task-copywriting']
+      const filterTags = ['task-bug-hunting', 'task-analysis', 'task-social',
+        'task-development', 'task-documentation', 'task-copywriting', 'task-graphics']
 
-      return byOrder('trending', { tag: 'utopian-io', filterTags, limit: 10 }, last(this.posts))
-        .then((result) => {
-          this.taskRequests = concat(this.taskRequests, result)
-          attempt(done)
-          return result
-        })
+      //  map over the task tags and grab associated tasks.
+      //  lowering limit reduces the potential for multiple tasks by same author to appear on the carousel
+
+      return map(filterTags, (tag) => byOrder('trending', { tag: tag, limit: 2 }, last(this.posts)).then((result) => {
+        this.taskRequests = concat(this.taskRequests, result)
+        attempt(done)
+        return result
+      }))
     },
     redirectToCreateProject () {
       return this.$router.push({ name: 'project.create' })
@@ -105,8 +107,10 @@ export default {
       const filteredContributions = filter(this.contributions, (post) => ((post['parent_permlink'] === 'utopian-io' && post._category)))
       return filteredContributions.slice(0, filteredContributions.length > 3 ? 3 : filteredContributions.length)
     },
+    //  && post._category - Many of the _categories for these objects are either 'utopian-io' or undefined.
+
     visibleTaskRequests () {
-      const filteredTaskRequests = filter(this.taskRequests, (post) => ((post['parent_permlink'] === 'utopian-io' && post._category)))
+      const filteredTaskRequests = filter(this.taskRequests, (post) => ((post['parent_permlink'] === 'utopian-io')))
       return filteredTaskRequests.slice(0, filteredTaskRequests.length > 3 ? 3 : filteredTaskRequests.length)
     }
   },

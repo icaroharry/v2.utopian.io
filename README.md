@@ -55,17 +55,17 @@ Be sure to have a `.env` file on the project root folder. The same can be create
 ##### Install dependencies.
 
 ```shell
-yarn install
+npm install
 ```
 
 ##### Run Development Server
 
 ```shell
-yarn dev
+npm run dev
 ```
 
 ##### Production Builds
 
 ```shell
-yarn build
+npm run build
 ```

@@ -12,9 +12,9 @@ yarn-debug.log*
 yarn-error.log*
 
 # Lock files
-# NPM lock file is ignored in favor use Yarn lock file.
-package-lock.json
-!yarn.lock
+# Yarn lock file is ignored in favor use NPM lock file.
+!package-lock.json
+yarn.lock
 
 # Firebase
 .firebaserc
