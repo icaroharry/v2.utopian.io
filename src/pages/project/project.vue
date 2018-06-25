@@ -11,17 +11,17 @@ export default {
       project: {},
       loading: true,
       contributors: [
-        { name: 'icaro', numberOfContributions: 17 },
-        { name: 'hernandev', numberOfContributions: 23 },
-        { name: 'elear', numberOfContributions: 12 },
-        { name: 'espoem', numberOfContributions: 91 },
-        { name: 'mkt', numberOfContributions: 21 }
+        { id: 1, name: 'icaro', numberOfContributions: 17 },
+        { id: 2, name: 'hernandev', numberOfContributions: 23 },
+        { id: 3, name: 'elear', numberOfContributions: 12 },
+        { id: 4, name: 'espoem', numberOfContributions: 91 },
+        { id: 5, name: 'mkt', numberOfContributions: 21 }
       ],
       taskRequests: [
-        { category: 'development', title: 'Fetch posts from Steem blockchain' },
-        { category: 'graphics', title: 'New logo for eSteem' },
-        { category: 'development', title: 'Create new date picker' },
-        { category: 'blog', title: 'New blog post for eSteem' }
+        { id: 1, category: 'development', title: 'Fetch posts from Steem blockchain' },
+        { id: 2, category: 'graphics', title: 'New logo for eSteem' },
+        { id: 3, category: 'development', title: 'Create new date picker' },
+        { id: 4, category: 'blog', title: 'New blog post for eSteem' }
       ]
     }
   },
