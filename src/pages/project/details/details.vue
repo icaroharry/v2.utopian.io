@@ -1,90 +1,71 @@
 <script>
-import { byOrder } from 'src/services/steem/posts'
-import moment from 'moment'
-import UPostPreview from 'src/components/post-preview/post-preview'
+import { get } from 'lodash-es'
 import ULayoutPage from 'src/layouts/parts/page/page'
-import { categories, categoryOptions } from 'src/services/utopian/categories'
-import { map, concat, get, last, filter, attempt, debounce } from 'lodash-es'
+import { render } from 'src/services/steem/markdown'
 
 export default {
-  name: 'PageProjectDetails',
+  name: 'PageCreate',
   components: {
-    UPostPreview,
     ULayoutPage
   },
   data () {
     return {
-      sortBy: 'trending',
-      sortOptions: [
-        { label: 'Trending', value: 'trending' },
-        { label: 'New', value: 'new' }
-      ],
+      editor: null,
+      contentBackup: '',
+      gists: '',
+      screenWidth: (() => { return window.innerWidth })(),
+      screenHeight: (() => { return window.innerHeight })(),
       loading: false,
-      category: 'utopian-io',
-      posts: [],
-      search: ''
+      preview: ''
     }
   },
-  filters: {
-    timeAgo (isoDateString) {
-      return moment.utc(isoDateString).fromNow()
+  props: {
+    details: {
+      type: String,
+      default: null
     }
   },
   methods: {
-    loadInitial () {
+    renderPreview () {
       this.loading = true
-      return this.loadPosts().then((result) => {
+      return render(this.details).then((result) => {
         this.loading = false
+        this.preview = result
         return result
       })
-    },
-    loadPostsScroll: debounce(function (index, done) {
-      return this.loadPosts(done)
-    }, 3000),
-    loadPosts (done) {
-      const order = get(this.$route, 'meta.order', 'trending')
-      const tag = get(this.$route, 'params.category', 'utopian-io')
-      return byOrder(order, { tag, limit: 40 }, last(this.posts))
-        .then((result) => {
-          this.posts = concat(this.posts, result)
-          if (result.length < 40) {
-            attempt(done)
-            this.$refs.infiniteScroll.stop()
-          } else {
-            attempt(done)
-          }
-          return result
-        })
     }
   },
   computed: {
-    categories () {
-      return categories
+    previewStyle () {
+      if (!this.isMobile && this.screenWidth > 992) {
+        return {
+          // 'height': (this.screenHeight - 62 - 48) + 'px',
+          // 'max-height': (this.screenHeight - 62 - 48) + 'px',
+          'overflow-y': 'auto'
+        }
+      }
+
+      return {}
     },
-    categoryOptions () {
-      return map(categoryOptions, (option) => {
-        option.label = option.label.toUpperCase()
-        return option
-      })
+    editorStyle () {
+      if (!this.isMobile && this.screenWidth > 992) {
+        return {}
+      }
+
+      if (this.isMobile) {
+        return {
+          'height': (this.screenHeight - 62 - 48 - 30) + 'px',
+          'max-height': (this.screenHeight - 62 - 48 - 30) + 'px',
+          'overflow-y': 'auto'
+        }
+      }
     },
-    currentCategory () {
-      return get(this.$route, 'params.category', null)
-    },
-    visiblePosts () {
-      return filter(this.posts, (post) => ((post['parent_permlink'] === 'utopian-io')))
+    isMobile () {
+      return get(this.$q, 'platform.is.mobile', false)
     }
   },
   mounted () {
-    this.sortBy = get(this.$route, 'meta.order', 'trending')
-    this.category = get(this.$route, 'params.category', 'utopian-io')
-
-    this.loadInitial()
-    return true
-  },
-  watch: {
-    currentCategory () {
-      this.loadInitial()
-    }
+    this.renderPreview()
   }
 }
 </script>

@@ -31,7 +31,7 @@ export default {
     loadProject () {
       setTimeout(() => {
         this.project = {
-          details: ['Basically it\'s the Steem interface you get used to but with additional handy options. Everything works out faster and easier with eSteem Mobile and eSteem Surfer applications. You can create your own posts, surf your friends feed or trending/hot/etc pages, upvote what you like, write comments, read replies, do all major Steem functions in your daily social surfing as well as wallet actions and of course few extras: search, discover different tags etc.'],
+          details: 'Basically it\'s the Steem interface you get used to but with additional handy options. Everything works out faster and easier with eSteem Mobile and eSteem Surfer applications. You can create your own posts, surf your friends feed or trending/hot/etc pages, upvote what you like, write comments, read replies, do all major Steem functions in your daily social surfing as well as wallet actions and of course few extras: search, discover different tags etc.',
           github_repository: 'https://github.com/esteemapp/esteem',
           images: ['https://steemitimages.com/0x0/https://cdn.steemitimages.com/DQmYqaw1KBYfZDpGEcCS4FgztNoEvNAEBrfwDawePWQhXtJ/esteem.png'],
           name: 'eSteem',
