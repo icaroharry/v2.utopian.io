@@ -1,16 +1,17 @@
 u-layout-homepage
 
-  template(slot="jumbotron")
+  template(slot="header")
+    div.gt-sm.row.justify-center.q-my-lg.menu
+      router-link(:to="{ name: 'home' }") PROJECTS
+      router-link(:to="{ name: 'contributions' }") CONTRIBUTIONS
+      router-link(:to="{ name: 'home' }") WALLET
+      router-link(:to="{ name: 'home' }") SPONSORS
+      router-link(:to="{ name: 'home' }") MODERATORS
     div.row
-      div.col-md-10.offset-md-1.subheader.q-subheading.gt-sm
-        router-link(:to="{ name: 'home' }") PROJECTS
-        router-link(:to="{ name: 'contributions' }") CONTRIBUTIONS
-        router-link(:to="{ name: 'home' }") WALLET
-        router-link(:to="{ name: 'home' }") SPONSORS
-        router-link(:to="{ name: 'home' }") MODERATORS
-      div.col-md-10.offset-md-1.projects-slider
-        q-carousel.shadow-2(color="white", height="380px", ref="mainCarousel")
+      div.col-lg-6.offset-lg-1.projects-slider
+        q-carousel(color="white", height="380px", ref="mainCarousel")
           q-carousel-slide(v-for="project in projects", :img-src="project.images[0]", :key="project.name")
+      div.col-lg-4.text-center
         q-carousel.project-info(color="white", ref="infoCarousel", no-swipe)
           q-carousel-slide(v-for="project in projects", :key="project.name")
             q-card.project-card
@@ -23,11 +24,11 @@ u-layout-homepage
                 | {{ project.short_description }}
               q-card-actions(align="center")
                 q-btn(label="Contribute to this project", color="primary")
-      div.col-md-1.carousel-arrows
+
         q-btn.carousel-arrow(
           flat,
           round,
-          icon="mdi-arrow-up",
+          icon="mdi-arrow-left",
           color="blue-grey-6",
           size="24px",
           dense,
@@ -37,7 +38,7 @@ u-layout-homepage
         q-btn.carousel-arrow(
           flat,
           round,
-          icon="mdi-arrow-down",
+          icon="mdi-arrow-right",
           color="blue-grey-6",
           size="24px",
           dense,
@@ -45,23 +46,23 @@ u-layout-homepage
           :disable="!carouselCanGoToNext"          
         )
   template(slot="main")
-    span.q-title RECENT CONTRIBUTIONS
+    div.q-title.q-my-lg RECENT CONTRIBUTIONS
     div.row.contributions.gutter-sm
-      div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in visibleContributions", v-if="!loading")
+      div.col-md-12.col-lg-4(v-for="(post, index) in visibleContributions", v-if="!loading")
         u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50")
-      div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in emptyContributions", v-if="loading")
+      div.col-md-12.col-lg-4(v-for="(post, index) in emptyContributions", v-if="loading")
         u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50", :loading="true")
 
-    span.q-title RECENT TASK REQUESTS
+    div.q-title.q-my-lg.q-pt-lg RECENT TASK REQUESTS
     div.row.contributions.gutter-sm
-      div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in visibleTaskRequests", v-if="!loading")
+      div.col-md-12.col-lg-4(v-for="(post, index) in visibleTaskRequests", v-if="!loading")
         u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50")
-      div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in emptyContributions", v-if="loading")
+      div.col-md-12.col-lg-4(v-for="(post, index) in emptyContributions", v-if="loading")
         u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50", :loading="true")
 
-    span.q-title POPULAR PROJECTS
+    div.q-title.q-my-lg.q-pt-lg POPULAR PROJECTS
     div.row.inline.projects.gutter-sm
-      div(v-for="(project, index) in projects").col-md-4.col-xs-12.col-sm-12
+      div(v-for="(project, index) in projects").col-md-12.col-lg-4
         q-card.inline.round-borders(color="white", text-color="grey-7")
           q-card-media
             img(:src="project.images[0]")
@@ -78,7 +79,7 @@ u-layout-homepage
                 div.name
                   span {{ '@' + project.owner  }}
 
-    div.row.submit-project.round-borders.justify-between.items-center
+    div.row.submit-project.round-borders.justify-between.items-center.q-mt-lg
       div.row.no-wrap.items-center
         img.blue-text(src="~assets/img/skyline.svg")
         div.row.column
