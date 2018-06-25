@@ -10,6 +10,7 @@
     :filter="filter"
     :filterPlaceholder="filterPlaceholder"
     autofocus-filter
+    @input="handleChange"
     @change="handleChange"
   />
 </template>

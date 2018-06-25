@@ -7,6 +7,7 @@
     :value="value"
     :placeholder="placeholder"
     :readonly="readonly"
+    @input="handleChange"
     @change="handleChange"
   />
 </template>
