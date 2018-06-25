@@ -32,6 +32,10 @@ export default {
     titleSize: {
       type: String,
       default: null
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
 
