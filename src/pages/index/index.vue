@@ -44,7 +44,12 @@ export default {
       contributions: [],
       taskRequests: [],
       isMounted: false,
-      loading: false
+      loading: false,
+      emptyContributions: [
+        {_category: 'development'},
+        {_category: 'graphics'},
+        {_category: 'tutorials'}
+      ]
     }
   },
   filters: {

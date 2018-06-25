@@ -2,7 +2,10 @@
 // q-item.u-post-preview(:class="post._category")
 q-item.u-post-preview(:to="post.url", :link="false", :class="post._category")
 
-  q-item-main
+  q-item-main(v-show="loading")
+    div.row.col-12.justify-center.items-center
+      q-spinner-bars(:size="40", style="")
+  q-item-main(v-show="!loading")
     div.row.post-preview-row
       div.col-6
 

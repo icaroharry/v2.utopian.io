@@ -46,14 +46,18 @@ u-layout-homepage
         )
   template(slot="main")
     span.q-title RECENT CONTRIBUTIONS
-    div.row.inline.contributions.gutter-sm
-      div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in visibleContributions")
+    div.row.contributions.gutter-sm
+      div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in visibleContributions", v-if="!loading")
         u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50")
+      div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in emptyContributions", v-if="loading")
+        u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50", :loading="true")
 
     span.q-title RECENT TASK REQUESTS
-    div.row.inline.contributions.gutter-sm
-      div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in visibleTaskRequests")
+    div.row.contributions.gutter-sm
+      div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in visibleTaskRequests", v-if="!loading")
         u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50")
+      div.col-md-4.col-xs-12.col-sm-12(v-for="(post, index) in emptyContributions", v-if="loading")
+        u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50", :loading="true")
 
     span.q-title POPULAR PROJECTS
     div.row.inline.projects.gutter-sm

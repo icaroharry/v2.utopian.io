@@ -25,6 +25,7 @@ module.exports = [
   'QInfiniteScroll',
   'QSpinner',
   'QSpinnerDots',
+  'QSpinnerBars',
   'QAjaxBar',
   'QItemSeparator',
   'QItemTile',
