@@ -32,7 +32,7 @@ div
             q-btn.col-md-6(dense, color="primary") Contribute
             q-btn.col-md-6(dense, icon="mdi-github-circle", size="12px", outline, color="dark", reverse) Github Repository
 
-  q-tabs(color="black" inverted v-if="!loading" align="justify").hidden
+  q-tabs(color="black" inverted v-if="!loading" align="justify")
     q-route-tab(:to="`/project/${project.slug}/contributions`" name="tab-contributions" append label="Contributions" slot="title" exact)
     q-route-tab(:to="`/project/${project.slug}/details`" name="tab-details" append label="Details" slot="title" exact)
     q-route-tab(:to="`/project/${project.slug}/updates`" name="tab-updates" append label="Updates" slot="title" exact disabled)
@@ -46,16 +46,15 @@ div
         div.recent-task-requests
           span.q-title.uppercase recent task requests
           q-list(separator)
-            q-item(v-for="i in 4")
+            q-item(v-for="taskRequest in taskRequests")
               q-item-main
-                q-item-tile.row.items-center(label)
-                  q-icon(name="mdi-checkbox-blank-circle")
-                  | Content filtering
-                q-item-tile(sublabel) Set the content filtering level to restrict apps that can be downloaded
+                q-item-tile.row.items-center(sublabel)
+                  q-icon(name="mdi-checkbox-blank-circle", :color="taskRequest.category")
+                  | {{ taskRequest.category.toUpperCase() }}
+                q-item-tile(label) {{ taskRequest.title }}
             q-item
               q-item-main.row
                 q-btn.col-12(color="primary") see all
-
 
         div.top-contributors
           span.q-title.uppercase top contributors

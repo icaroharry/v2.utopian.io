@@ -16,6 +16,12 @@ export default {
         { name: 'elear', numberOfContributions: 12 },
         { name: 'espoem', numberOfContributions: 91 },
         { name: 'mkt', numberOfContributions: 21 }
+      ],
+      taskRequests: [
+        { category: 'development', title: 'Fetch posts from Steem blockchain' },
+        { category: 'graphics', title: 'New logo for eSteem' },
+        { category: 'development', title: 'Create new date picker' },
+        { category: 'blog', title: 'New blog post for eSteem' }
       ]
     }
   },
