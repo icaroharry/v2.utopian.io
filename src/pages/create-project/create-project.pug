@@ -16,31 +16,34 @@ u-layout-page.u-page-index(reverse=true)
           @keyup.enter="submit"
         )
         q-input(
+          style="display:none;"
           v-model="slug"
           stack-label="Project Slug Name"
           placeholder="e.g: Dtube"
           readonly
         )
-        q-search.github(
-          v-model="project.githubRepository"
-          stack-label="Github Repository"
-          placeholder="Github repository"
-          @blur="$v.project.githubRepository.$touch"
-          :error="$v.project.githubRepository.$error"
-          @keyup.enter="submit"
-        )
-          q-autocomplete(
-            stack-label="Github Repository",
-            @search="searchGithubRepos"
-            :min-characters="3"
-            ref="autocomplete"
-            :debounce="500"
-            separator
+        div.github
+          q-search(
+            v-model="project.githubRepository"
+            stack-label="Github Repository"
+            placeholder="Github repository"
+            @blur="$v.project.githubRepository.$touch"
+            :error="$v.project.githubRepository.$error"
+            @keyup.enter="submit"
           )
-        u-file-uploader(ref="uploader")
+        q-autocomplete(
+          stack-label="Github Repository",
+          @search="searchGithubRepos"
+          :min-characters="3"
+          ref="autocomplete"
+          :debounce="500"
+          separator
+        )
+        u-file-uploader(ref="uploader", id="upload")
 
         q-field(:count="250")
           q-input(
+            id="description"
             v-model="project.shortDescription",
             type="textarea",
             maxlength="150",
@@ -52,6 +55,7 @@ u-layout-page.u-page-index(reverse=true)
           )
         q-field()
           q-input(
+            id="details"
             v-model="project.details",
             type="textarea",
             stack-label="Details"
@@ -61,6 +65,7 @@ u-layout-page.u-page-index(reverse=true)
             @keyup.enter="submit"
           )
         q-chips-input(
+          id="tags"
           v-model="project.tags"
           stack-label="Project Tags"
           placeholder="e.g: Dtube,"

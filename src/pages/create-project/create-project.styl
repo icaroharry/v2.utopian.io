@@ -16,33 +16,70 @@ div.q-layout-page.u-page.u-page-index, main.q-layout-page.u-page.u-page-index {
   font-size 17px
 }
 
-input:placeholder, textarea:placeholder {
-    vertical-align middle !important
-    font-size 12px !important
-    font-family NotoSans !important
-}
-
-
 .create-project-form {
   .q-input, .q-chips-input {
-    margin 25px 0
+    margin 25px 0 0 0
     border-radius 2px
     background-color #ffffff
     border solid 1px #e0e2e5;
-
   }
 
+
+  input:placeholder, textarea:placeholder {
+    vertical-align middle !important
+    font-size 12px !important
+    font-family NotoSans !important
+  }
+
+  input[type='text'], textarea, input#tags {
+    margin-left 10px
+  }
+
+  #description {
+    min-height 80px
+  }
+
+  #details {
+    min-height 317px
+  }
+
+  #upload {
+    input {
+      min-height 336px
+    }
+  }
 
   .q-btn {
     margin-top 10px
   }
+
   .q-if-label {
     font-family Lato
     font-size 18px
     font-weight bold
     line-height 1.5
     color #000000
-    margin -20px 0 0 0
+    margin -20px
+  }
+}
 
+
+.github {
+  .q-if{
+    padding-bottom 0 !important
+  }
+  i.q-icon {
+      border-right 1px solid #e0e2e5
+      width 42px !important
+      height 42px !important
+  }
+  div.q-if-label {
+    margin-left -44px !important
+  }
+  input:placeholder {
+    margin-left 10%
+  }
+  input.q-input-target {
+      margin-bottom 12px
   }
 }
