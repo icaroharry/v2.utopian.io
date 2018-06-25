@@ -36,7 +36,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
   .u-select {
     background #fff
     border solid 1px #e0e2e5
