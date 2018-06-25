@@ -22,7 +22,7 @@ export default {
   props: {
     details: {
       type: String,
-      default: null
+      default: ''
     }
   },
   methods: {
