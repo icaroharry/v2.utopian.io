@@ -31,6 +31,7 @@ u-layout-page.u-page-index(reverse=true)
             :error="$v.project.githubRepository.$error"
             @keyup.enter="submit"
           )
+
         q-autocomplete(
           stack-label="Github Repository",
           @search="searchGithubRepos"
@@ -39,6 +40,8 @@ u-layout-page.u-page-index(reverse=true)
           :debounce="500"
           separator
         )
+        .github-footer To create a project on Utopian.io you need to have a Github repository for the project
+
         u-file-uploader(ref="uploader", id="upload")
 
         q-field(:count="250")
