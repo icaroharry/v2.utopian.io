@@ -46,7 +46,7 @@ div
         div.recent-task-requests
           span.q-title.uppercase recent task requests
           q-list(separator)
-            q-item(v-for="taskRequest in taskRequests")
+            q-item(v-for="taskRequest in taskRequests" :key="taskRequest.id")
               q-item-main
                 q-item-tile.row.items-center(sublabel)
                   q-icon(name="mdi-checkbox-blank-circle", :color="taskRequest.category")
@@ -59,7 +59,7 @@ div
         div.top-contributors
           span.q-title.uppercase top contributors
           q-list(separator).row
-            q-item(v-for="contributor in contributors").col-12
+            q-item(v-for="contributor in contributors" :key="contributor.id").col-12
               q-item-side(:avatar="'https://img.blocker.press/a/' + contributor.name")
               q-item-main
                 q-item-tile.row.items-center(label) {{ contributor.name }}
