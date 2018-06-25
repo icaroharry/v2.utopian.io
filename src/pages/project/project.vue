@@ -9,7 +9,14 @@ export default {
   data () {
     return {
       project: {},
-      loading: true
+      loading: true,
+      contributors: [
+        { name: 'icaro', numberOfContributions: 17 },
+        { name: 'hernandev', numberOfContributions: 23 },
+        { name: 'elear', numberOfContributions: 12 },
+        { name: 'espoem', numberOfContributions: 91 },
+        { name: 'mkt', numberOfContributions: 21 }
+      ]
     }
   },
   filters: {
