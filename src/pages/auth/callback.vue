@@ -15,7 +15,7 @@ export default {
   methods: {
     // parse oauth callback query.
     parseQuery () {
-      return this.$store.dispatch('auth/loginWithCallback', get(this.$route, 'query'))
+      return this.$store.dispatch('auth/login', get(this.$route, 'query'))
     }
   },
 
