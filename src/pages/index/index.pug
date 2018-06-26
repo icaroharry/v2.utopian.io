@@ -64,8 +64,7 @@ u-layout-homepage
     div.row.inline.projects.gutter-sm
       div(v-for="(project, index) in projects").col-md-12.col-lg-4
         q-card.inline.round-borders(color="white", text-color="grey-7")
-          q-card-media
-            img(:src="project.images[0]")
+          q-card-media(:style="'background-image: url(' + project.images[0] + ')'")
           q-card-title {{project.name}}
           q-card-main
             p.short-description {{project.short_description}}
