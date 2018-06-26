@@ -1,6 +1,10 @@
 // imports.
 import { user } from 'src/database'
 import { get } from 'lodash-es'
+import Table from 'src/database/tables/table'
+
+// export a table instance for the user settings table.
+export const table = new Table('user', ['name'], 'value')
 
 // get all user stored values.
 export const all = () => user.toArray()

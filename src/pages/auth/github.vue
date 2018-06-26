@@ -1,21 +1,21 @@
-<!-- auth callback (oauth) -->
+<!-- auth github (oauth) -->
 
 <!-- component script -->
 <script>
 // imports.
 import { get } from 'lodash-es'
 
-// auth callback component.
+// auth github component.
 export default {
 
   // component name,
-  name: 'u-auth-callback',
+  name: 'u-auth-github',
 
   // component methods.
   methods: {
     // parse oauth callback query.
     parseQuery () {
-      return this.$store.dispatch('auth/login', get(this.$route, 'query'))
+      return this.$store.dispatch('auth/checkGithubReturn', get(this.$route, 'query'))
     }
   },
 
@@ -23,10 +23,10 @@ export default {
   mounted () {
     // call the parse query method upon render.
     return this.parseQuery()
-      .then(() => {
-        // after, redirect home after login.
-        this.$router.push({ name: 'home' })
-      })
+    // .then(() => {
+    //   // after, redirect home after login.
+    //   this.$router.push({ name: 'home' })
+    // })
   }
 }
 </script>
@@ -34,4 +34,5 @@ export default {
 <!-- component template -->
 <template lang="pug">
   div
+    a(@click="$store.dispatch('auth/linkGithubAccount')") testing
 </template>

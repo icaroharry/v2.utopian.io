@@ -22,6 +22,9 @@ export default {
 
     // auth store getters.
     ...mapGetters('auth', [
+      'user',
+      'photoURL',
+      'guest',
       'githubUser',
       'steemUser',
       'guestOnSteem',
@@ -58,14 +61,15 @@ export default {
 
     ...mapActions('auth', [
       'logout',
-      'loginWithCallback',
-      'logoutFromSteem'
+      'login',
+      'logoutFromSteem',
+      'linkGithubAccount'
     ]),
 
     startPopup () {
       return popupLogin()
         .then((result) => {
-          return this.loginWithCallback(result)
+          return this.login(result)
         })
     },
     // redirect to create route.
@@ -79,7 +83,7 @@ export default {
     },
 
     loginWithGithub () {
-      this.$store.dispatch('auth/loginWithGithub')
+      this.$store.dispatch('auth/linkGithubAccount')
     }
   }
 }

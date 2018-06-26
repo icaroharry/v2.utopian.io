@@ -14,8 +14,8 @@ import config from './config'
 import configureAuth from './auth'
 // import the firebase configurator.
 import configureFirestore from './firestore'
-
-import configureFirebaseStorage from './firebase-storage'
+// import storage configuration.
+import configureStorage from './storage'
 
 /**
  * Firebase plugin.
@@ -26,15 +26,13 @@ import configureFirebaseStorage from './firebase-storage'
 export default ({ store, Vue }) => {
   // initialize firebase with the previously built configuration.
   const firebaseApp = firebase.initializeApp(config)
-  window.fa = firebase.auth
+
   // configure authentication.
   configureAuth(firebaseApp, store)
-  // @TODO remove this once authentication is done
-  firebaseApp.auth().signInAnonymously().catch((error) => {
-    throw error
-  })
+
   // configure firestore.
   configureFirestore(firebaseApp, Vue)
 
-  configureFirebaseStorage(firebaseApp, Vue)
+  // configure storage.
+  configureStorage(firebaseApp, Vue)
 }

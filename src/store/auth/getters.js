@@ -4,32 +4,52 @@ import moment from 'moment'
 
 // auth store getters.
 
-export const githubUser = ({ github }) => github
-export const steemUser = ({ steem }) => steem
+// user getter.
+export const user = ({ user }) => user
 
-export const steemAvatar = ({ steem }) => {
-  const username = get(steem, 'username', null)
+// user photo url / avatar.
+export const photoURL = ({ user }) => get(user, 'photoURL', null)
+
+// steem user getter.
+export const steemUser = ({ steemUser }) => steemUser
+
+// user or guest.
+export const guest = ({ user }) => user === null
+
+export const steemAvatar = ({ steemUser }) => {
+  const username = get(steemUser, 'username', null)
 
   return username ? `https://img.blocker.press/a/${username}` : null
 }
 export const githubAvatar = ({ github }) => get(github, 'photoURL', null)
 
 // username getter.
-export const steemUsername = ({ steem }) => steem.username
-export const githubUsername = ({ github }) => github.username
+export const steemUsername = ({ steemUser }) => get(steemUser, 'username')
+export const githubUsername = ({ github }) => get(github, 'username')
 
 // token expiration getter.
-export const steemExpiration = ({ steem }) => steem.expiration
+export const steemExpiration = ({ steemUser }) => get(steemUser, 'expiration')
 
 // access token getter.
-export const steemToken = ({ steem }) => steem.expiration
+export const steemToken = ({ steemUser }) => get(steemUser, 'token')
 
 // token expired.
-export const steemTokenExpired = ({ steem }) => steem.expiration ? steem.expiration.isBefore(moment.utc()) : true
+export const steemTokenExpired = ({ steemUser }) => {
+  const expiration = steemExpiration({ steemUser })
+
+  if (!expiration) {
+    return true
+  }
+
+  return moment.utc(expiration).isBefore(moment.utc())
+}
 
 // empty user fields.
-export const steemHasEmptyFields = ({ steem }) => {
-  const { username, expiration, token } = steem
+export const steemHasEmptyFields = ({ steemUser }) => {
+  if (!steemUser) {
+    return true
+  }
+  const { username, expiration, token } = steemUser
   return (isEmpty(username) || isEmpty(expiration) || isEmpty(token))
 }
 
