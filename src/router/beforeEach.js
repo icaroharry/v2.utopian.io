@@ -5,7 +5,7 @@ import store from 'src/store'
 const beforeEach = async (to, from, next) => {
   // dispatch derivation key and user check.
   const initializers = store.dispatch('prepareEncryption')
-    .then(() => store.dispatch('auth/loadUser'))
+    .then(() => store.dispatch('auth/loadSteemConnectData'))
     .catch(() => {})
 
   // finish the initialization calling next().
