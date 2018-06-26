@@ -127,14 +127,36 @@ div.main {
   background-color #FFF
   margin-bottom 50px
   border solid 1px #e0e2e5
+  @media screen and (max-width: $breakpoint-md) {
+    padding 0 24px
+    flex-direction column
+  }
+  > .row {
+    @media screen and (max-width: $breakpoint-sm) {
+      flex-direction column
+    }
+  }
   img {
     height 62px
     margin 24px 0
   }
   .blue-text {
     color $primary
+    font-size 1.3rem
   }
   p {
     margin-left 50px
+    @media screen and (max-width: $breakpoint-sm) {
+      margin-left 0
+      text-align center
+    }
+  }
+  button {
+    @media screen and (max-width: $breakpoint-md) {
+      margin-bottom 24px
+    }
+    @media screen and (max-width: $breakpoint-sm) {
+      margin-top 24px
+    }
   }
 }
