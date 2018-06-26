@@ -26,21 +26,19 @@ u-layout-page.u-page-index(reverse=true)
           q-search(
             v-model="project.githubRepository"
             stack-label="Github Repository"
-            placeholder="Github repository"
+            placeholder="e.g dtube/dtube"
             @blur="$v.project.githubRepository.$touch"
             :error="$v.project.githubRepository.$error"
             @keyup.enter="submit"
           )
-
-        q-autocomplete(
-          stack-label="Github Repository",
-          @search="searchGithubRepos"
-          :min-characters="3"
-          ref="autocomplete"
-          :debounce="500"
-          separator
-        )
-        .github-footer To create a project on Utopian.io you need to have a Github repository for the project
+            q-autocomplete(
+              stack-label="Github Repository",
+              @search="searchGithubRepos"
+              :min-characters="3"
+              ref="autocomplete"
+              :debounce="500"
+              separator
+            )
 
         u-file-uploader(ref="uploader", id="upload")
 
