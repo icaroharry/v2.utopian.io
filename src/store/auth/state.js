@@ -1,16 +1,9 @@
 // auth store state.
 export default {
 
-  steem: {
-    // current account name.
-    username: null,
+  // steem connect user data.
+  steemUser: null,
 
-    // user token expiration date.
-    expiration: null,
-
-    // user access token (encrypted).
-    token: null
-  },
-
-  github: null
+  // firebase user data.
+  user: null
 }
