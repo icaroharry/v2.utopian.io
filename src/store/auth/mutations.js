@@ -1,26 +1,33 @@
 // auth store mutations.
 
-export const setSteemUser = (state, { username, expiration, token }) => {
-  state.steem.username = username
-  state.steem.expiration = expiration
-  state.steem.token = token
+/**
+ * setUser mutation.
+ *
+ * @param state
+ * @param user
+ */
+export const setUser = (state, user = null) => {
+  state.user = user ? JSON.parse(JSON.stringify(user)) : user
 }
 
-// stored user token expiration.
-export const setGithubUser = (state, githubUser) => {
-  state.github = githubUser
+/**
+ * setSteemUser mutation.
+ *
+ * @param state
+ * @param steemUser
+ */
+export const setSteemUser = (state, steemUser = null) => {
+  state.steemUser = steemUser
 }
 
-// clear the store user immediately.
-export const clearSteemUser = (state) => {
-  state.steem = { username: null, expiration: null, token: null }
-}
-
-export const clearGithubUser = (state) => {
-  state.github = null
-}
-
-export const clearAll = (state) => {
-  clearSteemUser(state)
-  clearGithubUser(state)
+/**
+ * clear mutation
+ *
+ * Removes authentication data on the Store.
+ *
+ * @param state
+ */
+export const clear = (state) => {
+  setUser(state, null)
+  setSteemUser(state, null)
 }
