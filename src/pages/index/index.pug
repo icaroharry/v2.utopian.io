@@ -9,7 +9,7 @@ u-layout-homepage
       router-link(:to="{ name: 'home' }") MODERATORS
     div.row
       div.col-lg-6.offset-lg-1.projects-slider
-        q-carousel(color="white", height="380px", ref="mainCarousel")
+        q-carousel.project-images(color="white", ref="mainCarousel")
           q-carousel-slide(v-for="project in projects", :img-src="project.images[0]", :key="project.name")
       div.col-lg-4.text-center
         q-carousel.project-info(color="white", ref="infoCarousel", no-swipe)
