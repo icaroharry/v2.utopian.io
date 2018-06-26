@@ -8,7 +8,7 @@ const configureAuth = (firebase, store) => {
   // when firebase changes the authentication state, do the following actions.
   firebase.auth().onAuthStateChanged((user) => {
     // commit the currently github authenticated user on Vuex store.
-    store.commit('auth/setGithubUser', (user || null))
+    store.commit('auth/setUser', (user || null))
   })
 }
 
