@@ -1,11 +1,6 @@
 <script>
-import ULayoutHomepage from 'src/layouts/parts/homepage/homepage'
-
 export default {
   name: 'PageProject',
-  components: {
-    ULayoutHomepage
-  },
   data () {
     return {
       project: {},

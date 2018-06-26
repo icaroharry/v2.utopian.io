@@ -1,64 +1,63 @@
 @import "~variables"
 
-div.q-layout-page.u-homepage.u-page-index, main.q-layout-page.u-homepage.page.u-page-index {
-  padding: 12px 24px
+.menu {
+  a {
+    text-decoration none
+    color #000
+    margin 0 20px
+    @media screen and (min-width: $breakpoint-md) {
+      margin 0 40px
+    }
+  }
 }
 
-.u-homepage.u-page-index {
-  .q-carousel {
-    width 577px
-  }
-  .subheader {
-    display flex
-    justify-content space-between
-    margin-bottom 50px
-    a {
-      text-decoration none
-      color #000
+div.header {
+  border-bottom solid 1px $grey-3
+  background #fff
+  .container {
+    @media screen and (max-width: $breakpoint-md) {
+      padding 0
     }
   }
-  .projects-slider {
-    display flex 
-    .project-info {
-      box-shadow 0 4px 20px 0 rgba(0, 0, 0, 0.1)
-      .project-card {
-        height 100%
-        width 100%
-        .q-card-title {
-          font-size 26px !important
-        }
-        .q-card-main {
-          height 120px
-          max-height 120px
-        }
-      }
-      .q-carousel-slide {
-        padding 0 !important
-      }
+
+  .project-images {
+    height 380px
+    @media screen and (max-width: $breakpoint-sm) {
+      height 250px
+    }
+  }
+
+  .project-info {
+    background #fff
+    @media screen and (min-width: $breakpoint-md) {
+      box-shadow 0 0 25px rgba(0, 0, 0, .1)
+      margin-left -50px
       margin-top 50px
-      margin-left -100px
-      height 273px
-      width 341px
-      background-color #fff
-      z-index 2
+    }
+    .q-carousel-slide {
+      @media screen and (max-width: $breakpoint-md) {
+        padding 0
+      }
+      .q-card {
+        box-shadow none
+        .q-card-title {
+          font-size 1.5rem
+        }
+      }
     }
   }
-  .carousel-arrows {
-    margin-top 120px
-    display flex
-    flex-direction column
-    padding-left 25px
-    .carousel-arrow {
-    }
+}
+
+div.main {
+  .q-layout-page-container {
+    padding-top 0 !important
   }
 }
 
 .contributions {
   .u-post-preview {
     background-color #fff !important
-    margin-top 30px
     padding 15px
-    margin-bottom 50px
     min-height 234px
     border-top-width 7px !important
     .item-category > span {
@@ -84,10 +83,10 @@ div.q-layout-page.u-homepage.u-page-index, main.q-layout-page.u-homepage.page.u-
   }
   .q-card-media {
     height 210px
+    background-size cover
+    background-position center center
   }
   .q-card {
-    margin-top 30px
-    margin-bottom 50px
     min-height 420px
     box-shadow none
     border solid 1px #e0e2e5
@@ -137,14 +136,36 @@ div.q-layout-page.u-homepage.u-page-index, main.q-layout-page.u-homepage.page.u-
   background-color #FFF
   margin-bottom 50px
   border solid 1px #e0e2e5
+  @media screen and (max-width: $breakpoint-md) {
+    padding 0 24px
+    flex-direction column
+  }
+  > .row {
+    @media screen and (max-width: $breakpoint-sm) {
+      flex-direction column
+    }
+  }
   img {
     height 62px
     margin 24px 0
   }
   .blue-text {
     color $primary
+    font-size 1.3rem
   }
   p {
     margin-left 50px
+    @media screen and (max-width: $breakpoint-sm) {
+      margin-left 0
+      text-align center
+    }
+  }
+  button {
+    @media screen and (max-width: $breakpoint-md) {
+      margin-bottom 24px
+    }
+    @media screen and (max-width: $breakpoint-sm) {
+      margin-top 24px
+    }
   }
 }
