@@ -84,7 +84,8 @@ export default [
     children: [
       {path: 'login', name: 'auth.login', component: () => import('src/pages/auth/login'), meta: {weight: 10}},
       {path: 'logout', name: 'auth.logout', component: () => import('src/pages/auth/logout'), meta: {weight: 10}},
-      {path: 'callback', name: 'auth.callback', component: () => import('src/pages/auth/callback'), meta: {weight: 10}}
+      {path: 'callback', name: 'auth.callback', component: () => import('src/pages/auth/callback'), meta: {weight: 10}},
+      {path: 'github', name: 'auth.github', component: () => import('src/pages/auth/github'), meta: {weight: 10}}
     ]
   },
   { // Always leave this as last one
