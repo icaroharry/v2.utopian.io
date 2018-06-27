@@ -6,6 +6,9 @@ import { toString } from 'lodash-es'
 import messages from 'src/i18n'
 import { find, save } from 'src/database/tables/preferences'
 
+// list of enabled localed on the app.
+export const enabledLocales = ['en-us', 'pt-br', 'pt']
+
 // guess the locale code.
 const guessLocale = (fallback = 'en') => toString(Quasar.i18n.getLocale() || fallback)
 
@@ -19,22 +22,29 @@ export const getLocale = async () => {
 
 // set a new locale.
 export const setLocale = async (localeCode = null, i18nInstance = null) => {
+  // candidate locale.
+  const candidateLocale = localeCode || guessLocale('en-us')
+
+  // use the locale only if on enabled ones.
+  const locale = (enabledLocales.indexOf(candidateLocale) === -1) ? 'en-us' : candidateLocale
+
   // retrieve or guess the locale.
-  const locale = await save('locale', localeCode || guessLocale('en-us'))
+  const finalLocale = await save('locale', locale)
+
   // import locale.
-  const importedLocale = await import(`quasar-framework/i18n/${locale}`)
+  const importedLocale = await import(`quasar-framework/i18n/${finalLocale}`)
   // set on quasar.
   Quasar.i18n.set(importedLocale.default)
   // set on moment.
-  moment.locale(locale)
+  moment.locale(finalLocale)
 
   // when a instance was passed, alter the locale (on the fly changes).
   if (i18nInstance) {
-    i18nInstance.locale = localeCode
+    i18nInstance.locale = finalLocale
   }
 
   // return the locale value itself.
-  return locale
+  return finalLocale
 }
 
 // export plugin.
