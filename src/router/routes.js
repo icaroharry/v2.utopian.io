@@ -68,7 +68,7 @@ export default [
         path: 'create',
         name: 'create',
         component: () => import('src/pages/create/create'),
-        meta: {weight: 10, large: true}
+        meta: {weight: 10}
       },
       {
         path: 'settings',
