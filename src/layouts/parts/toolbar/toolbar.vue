@@ -22,17 +22,14 @@ export default {
 
     // auth store getters.
     ...mapGetters('auth', [
-      'user',
-      'photoURL',
       'guest',
-      'githubUser',
-      'steemUser',
-      'guestOnSteem',
-      'guestOnGithub',
-      'steemAvatar',
-      'githubAvatar',
-      'steemUsername',
-      'githubUsername'
+      'user',
+      'account',
+      'github',
+      'githubUsername',
+      'username',
+      'avatar',
+      'githubGuest'
     ]),
 
     // common store getters.
@@ -40,16 +37,6 @@ export default {
       'isMobile',
       'isDesktop'
     ]),
-
-    // // avatar image URL.
-    // steemAvatar () {
-    //   return this.guestOnSteem() ? null : ('https://img.blocker.press/a/' + this.steemUser.username)
-    // },
-
-    // // avatar image URL.
-    // githubAvatar () {
-    //   return this.guestOnGithub() ? null : (this.githubUser.profileURL)
-    // },
 
     createLabel () {
       return this.isDesktop ? 'Contribution' : ''
@@ -59,6 +46,13 @@ export default {
   // component methods.
   methods: {
 
+    ...mapActions([
+      'showDialog',
+      'startLoading',
+      'updateLoading',
+      'stopLoading'
+    ]),
+
     ...mapActions('auth', [
       'logout',
       'login',
@@ -66,24 +60,47 @@ export default {
       'linkGithubAccount'
     ]),
 
+    startGithubLink () {
+      // start the loading overlay.
+      this.startLoading('Linking Github Account...')
+      // call the popup for steem connect authorization.
+      return this.linkGithubAccount()
+        // handle errors.
+        .catch((e) => {
+          this.showDialog({ title: 'foo', 'message': 'Error while linking Github Account.' })
+        })
+        // finish by stop loading.
+        .finally(() => {
+          // finish loading.
+          this.stopLoading()
+        })
+    },
+
     startPopup () {
+      // start the loading overlay.
+      this.startLoading('Awaiting authorization...')
+      // call the popup for steem connect authorization.
       return popupLogin()
+        // handle success.
         .then((result) => {
+          // update the loading message to "processing".
+          this.startLoading('Processing login...')
+          // use the authorization callback to log the user in.
           return this.login(result)
+        })
+        // handle errors.
+        .catch((e) => {
+          this.showDialog({ title: 'foo', 'message': 'An error occurred while trying to authenticate.' })
+        })
+        // finish by stop loading.
+        .finally(() => {
+          // finish loading.
+          this.stopLoading()
         })
     },
     // redirect to create route.
     redirectToCreate () {
       return this.$router.push({ name: 'create' })
-    },
-
-    // redirect to login route.
-    redirectToLogin () {
-      return this.$router.push({ name: 'auth.login' })
-    },
-
-    loginWithGithub () {
-      this.$store.dispatch('auth/linkGithubAccount')
     }
   }
 }

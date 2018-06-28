@@ -7,7 +7,9 @@ q-toolbar.u-toolbar(color='tertiary', :class="{ desktop: isDesktop }")
 
     // brand / logo element.
     router-link(:to="{ name: 'home' }")
+      // mobile only logo.
       img.u-logo.mobile-only(src="~assets/img/logo-icon.svg")
+      // desktop only logo.
       img.u-logo.desktop-only(src="~assets/img/logo-white.svg")
 
     // right side
@@ -17,15 +19,15 @@ q-toolbar.u-toolbar(color='tertiary', :class="{ desktop: isDesktop }")
       // login button.
       // q-btn(@click="startPopup", label="Login")
       // q-btn(@click="loginWithGithub", label="Login Github")
-      q-btn(@click.native="startPopup", label="Login SC2")
+      q-btn(@click.native="startPopup", label="Login")
 
     // right side menu items for users.
     div.u-toolbar-right.u-toolbar-right-user(v-if="!guest")
-      q-btn(@click.native="linkGithubAccount", link, label="Login Github")
+      // q-btn(@click.native="linkGithubAccount", link, label="Login Github")
       q-btn.u-add(no-ripple, dense, color="primary", :label="createLabel", icon="mdi-plus", @click="redirectToCreate")
-      q-icon(name="mdi-bell-outline")
+      // q-icon(name="mdi-bell-outline")
       span.avatar-wrapper
-        img.avatar(:src="photoURL")
+        img.avatar(:src="avatar")
         q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]")
           q-list(dense, :link="true", separator)
             // q-list-header.flex.justify-between(v-if="guestOnGithub !== true")
@@ -47,9 +49,24 @@ q-toolbar.u-toolbar(color='tertiary', :class="{ desktop: isDesktop }")
               q-item-side(icon="mdi-check")
               q-item-main(label="Logout from Steem")
               q-item-side(side="right", :avatar="steemAvatar")
+            // item to display steem username.
+            q-item
+              q-item-side
+                q-icon.q-item-icon.ut-steem
+              q-item-main(:label="username", sublabel="via SteemConnect")
+            // item to display github data.
+            q-item(v-if="githubUsername")
+              q-item-side(icon="mdi-github-circle")
+              q-item-main(:label="githubUsername", sublabel="Linked Github Account")
+            q-item(v-if="!githubUsername", @click.native="startGithubLink")
+              q-item-side(icon="mdi-github-circle")
+              q-item-main(label="Link Github Account", sublabel="Click to verify.")
+              q-item-side(side="right", icon="mdi-alert-circle-outline", text-color="red")
+            // menu link to settings.
             q-item(:to="{ name: 'settings' }")
               q-item-side(icon="mdi-settings")
               q-item-main(label="Settings")
+            // menu link to logout.
             q-item(:to="{ name: 'auth.logout' }")
               q-item-side(icon="mdi-logout")
               q-item-main(label="Logout")

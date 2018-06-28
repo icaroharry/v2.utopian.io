@@ -82,3 +82,9 @@ export const loadAccount = ({ commit }, accountUser) => {
       return account
     })
 }
+
+// load an user account.
+export const setOverlay = ({ commit }, overlay = false) => {
+  commit('setOverlay', overlay)
+  return true
+}
