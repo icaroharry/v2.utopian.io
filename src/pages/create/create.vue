@@ -4,7 +4,6 @@ import * as GitHub from '@octokit/rest'
 import { required } from 'vuelidate/lib/validators'
 import UFileUploader from 'src/components/project/file-uploader/file-uploader'
 import { categories } from 'src/services/utopian/categories'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'PageCreate',
@@ -14,29 +13,22 @@ export default {
   },
   data () {
     return {
-      ...mapGetters('project', ['projectImageUrl']),
-      project: {
-        name: '',
-        githubRepository: '',
-        image: '',
-        shortDescription: '',
-        details: '',
+      contribution: {
+        title: '',
+        body: '',
+        parsedBody: '',
+        rewards: [0.5, 0.5],
         tags: []
       },
-      gh: {},
-      ghRepos: [],
       loading: false
     }
   },
   filters: {
   },
   validations: {
-    project: {
-      name: { required },
-      image: { required },
-      githubRepository: { required },
-      shortDescription: { required },
-      details: { required },
+    contribution: {
+      title: { required },
+      body: { required },
       tags: { required }
     }
   },

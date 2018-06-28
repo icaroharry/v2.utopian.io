@@ -5,84 +5,46 @@ u-layout-page.u-page-index(:meta="false")
     div(v-if="!loading")
       p.q-headline What is your contribution about?
 
-      div.create-contribution-form
-        q-tabs(color="white")
+      div.create-contribution-form.row.gutter-sm
+        q-tabs(color="white", scrollable).col-12
           q-tab(slot="title", v-for="category in categories", :key="category", scrollable)
             div.u-category-icons.row.justify-center.items-center(:class="'text-' + category")
               q-icon(:class="'ut-' + category", size="30px")
             div.q-body.text-black {{ category }}
-
-        q-input(
-          v-model="project.name"
-          stack-label="Project Name"
-          placeholder="e.g DTube"
-          @blur="$v.project.name.$touch"
-          :error="$v.project.name.$error"
-          @keyup.enter="submit"
-        )
-        q-input(
-          style="display:none;"
-          v-model="slug"
-          stack-label="Project Slug Name"
-          placeholder="e.g: Dtube"
-          readonly
-        )
-        div.github
-          q-search(
-            v-model="project.githubRepository"
-            stack-label="Github Repository"
-            placeholder="e.g dtube/dtube"
-            @blur="$v.project.githubRepository.$touch"
-            :error="$v.project.githubRepository.$error"
+        div.col-9
+          q-input(
+            v-model="contribution.title"
+            stack-label="Contribution title"
+            @blur="$v.contribution.title.$touch"
+            :error="$v.contribution.title.$error"
             @keyup.enter="submit"
           )
-            q-autocomplete(
-              stack-label="Github Repository",
-              @search="searchGithubRepos"
-              :min-characters="3"
-              ref="autocomplete"
-              :debounce="500"
-              separator
+
+          q-field()
+            q-input(
+              id="details"
+              v-model="contribution.body",
+              type="textarea",
+              placeholder="Write everything about your contribution…"
+              @blur="$v.contribution.body.$touch"
+              :error="$v.contribution.body.$error"
+              @keyup.enter="submit"
             )
-
-        u-file-uploader(ref="uploader", id="upload")
-
-        q-field(:count="250")
+        div.col-3
           q-input(
-            id="description"
-            v-model="project.shortDescription",
-            type="textarea",
-            maxlength="150",
-            stack-label="Short description"
-            placeholder="Give people a sense about your project…"
-            @blur="$v.project.shortDescription.$touch"
-            :error="$v.project.shortDescription.$error"
+            v-model="contribution.project"
+            stack-label="Project name"
+            placeholder="e.g DTube"
+            @blur="$v.contribution.title.$touch"
+            :error="$v.contribution.title.$error"
             @keyup.enter="submit"
           )
-        q-field()
-          q-input(
-            id="details"
-            v-model="project.details",
-            type="textarea",
-            stack-label="Details"
-            placeholder="Write everything about your project…"
-            @blur="$v.project.details.$touch"
-            :error="$v.project.details.$error"
-            @keyup.enter="submit"
+          q-chips-input(
+            id="tags"
+            v-model="contribution.tags"
+            stack-label="Tags"
+            placeholder="e.g development, javascript"
+            @blur="$v.contribution.tags.$touch"
+            :error="$v.contribution.tags.$error"
           )
-        q-chips-input(
-          id="tags"
-          v-model="project.tags"
-          stack-label="Project Tags"
-          placeholder="e.g: Dtube,"
-          @blur="$v.project.tags.$touch"
-          :error="$v.project.tags.$error"
-        )
-        q-btn.full-width(color="primary", label="Create", @click="submit")
-
-
-
-
-
-
-
+          q-btn.full-width(color="primary", label="Submit", @click="submit")
