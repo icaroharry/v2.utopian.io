@@ -27,6 +27,14 @@ export const photoURL = ({ user }) => get(user, 'photoURL', null)
 // avatar alias for the photo url getter.
 export const avatar = photoURL
 
+// account data.
+export const account = ({ account }) => account
+
+// get github data on account.
+export const github = ({ account }) => get(account, 'github', null)
+// github username.
+export const githubUsername = ({ account }) => get(github({ account }), 'username', null)
+
 // all credentials.
 export const credentials = ({ credentials }) => credentials
 
@@ -38,4 +46,4 @@ export const githubCredentials = ({ credentials }) => get(credentials, 'github',
 // guest on steem.
 export const steemGuest = ({ credentials }) => steemCredentials({ credentials }) !== null
 // guest on github.
-export const githubGuest = ({ credentials }) => githubCredentials({ credentials }) !== null
+export const githubGuest = ({ credentials }) => githubCredentials({ credentials }) === null
