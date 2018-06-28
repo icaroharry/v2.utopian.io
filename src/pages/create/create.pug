@@ -1,13 +1,50 @@
-u-layout-page.u-page-create(:meta="false")
+u-layout-page.u-page-index(:meta="false")
 
   template(slot="main")
+    q-spinner-dots(v-if="loading" :size="40", style="margin: 0 auto")
+    div(v-if="!loading")
+      p.q-headline What is your contribution about?
 
-    div.editor-wrapper
-      div.side-editor(:style="editorStyle")
-        div.flex.fit.editor
-          div.editor-container#editor-container
+      div.create-contribution-form.row.gutter-sm
+        q-tabs(color="white", scrollable).col-12
+          q-tab(slot="title", v-for="category in categories", :key="category", scrollable)
+            div.u-category-icons.row.justify-center.items-center(:class="'text-' + category")
+              q-icon(:class="'ut-' + category", size="30px")
+            div.q-body.text-black {{ category }}
+        div.col-9
+          q-input(
+            v-model="contribution.title"
+            stack-label="Contribution title"
+            @blur="$v.contribution.title.$touch"
+            :error="$v.contribution.title.$error"
+            @keyup.enter="submit"
+          )
 
-      div.side-preview(:style="previewStyle")
-        div.flex.fit.preview
-          div.post-body.markdown-content(v-html="preview")
-
+          q-field()
+            q-input(
+              id="details"
+              v-model="contribution.body",
+              type="textarea",
+              placeholder="Write everything about your contribution…"
+              @blur="$v.contribution.body.$touch"
+              :error="$v.contribution.body.$error"
+              @keyup.enter="submit"
+            )
+        div.col-3
+          q-input(
+            v-model="contribution.project"
+            stack-label="Project name"
+            placeholder="e.g DTube"
+            @blur="$v.contribution.title.$touch"
+            :error="$v.contribution.title.$error"
+            @keyup.enter="submit"
+          )
+          q-chips-input(
+            id="tags"
+            v-model="contribution.tags"
+            stack-label="Tags"
+            placeholder="e.g development, javascript"
+            @blur="$v.contribution.tags.$touch"
+            :error="$v.contribution.tags.$error"
+          )
+          q-btn.full-width(color="primary", label="Submit", @click="submit")

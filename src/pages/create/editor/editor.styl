@@ -1,0 +1,93 @@
+@import "~variables"
+
+body.mobile {
+  .u-page.u-page-create {
+    .editor-wrapper {
+      flex-direction column
+    }
+    .col-md-6 {
+      padding 0
+    }
+
+    .side-preview {
+      margin-top 15px
+    }
+  }
+}
+.u-page.u-page-create {
+  display flex
+  max-height 100%;
+  height 100% !important;
+  overflow auto
+  .side-editor, .side-preview {
+    border 1px solid $grey-4
+  }
+  .editor-container {
+    height 100% !important
+    width 100% !important
+  }
+  .editor-wrapper {
+    & > div {
+      flex 1
+      & + div {
+        margin-left 18px
+      }
+    }
+    display flex
+    flex-direction row
+    justify-content space-between
+    flex-grow 1
+    width 100%
+    max-height: 100%
+    text-area {
+
+    }
+  }
+  .q-layout-page.u-page {
+    padding 18px 0
+  }
+  .post-body {
+    &.markdown-content {
+      h1:first-child {
+        margin-top 0
+      }
+    }
+    width 100%
+    padding 0
+  }
+  .u-page {
+    display flex
+    flex-direction column
+  }
+
+
+  .editor {
+    padding 0
+  }
+  .preview {
+    padding 0
+  }
+  .side-preview {
+    .post-body {
+      padding 10px
+    }
+  }
+  .side-editor {
+    textarea {
+      padding 10px
+      background white
+    }
+    .q-input {
+      display flex
+      height 100%
+      width 100%
+      justify-content flex-start
+      & > *, & > * > * {
+        height 100%
+        justify-content flex-start
+      }
+    }
+  }
+}
+
+

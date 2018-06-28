@@ -1,139 +1,109 @@
 <script>
-import ace from 'brace'
-import UPostPreview from 'src/components/post-preview/post-preview'
-import { categories, categoryOptions } from 'src/services/utopian/categories'
-import { map, get } from 'lodash-es'
 import ULayoutPage from 'src/layouts/parts/page/page'
-import { render } from 'src/services/steem/markdown'
+import * as GitHub from '@octokit/rest'
+import { required } from 'vuelidate/lib/validators'
+import UFileUploader from 'src/components/project/file-uploader/file-uploader'
+import { categories } from 'src/services/utopian/categories'
 
 export default {
   name: 'PageCreate',
   components: {
-    UPostPreview,
-    ULayoutPage // ,
-    // editor: require('vue2-ace-editor')
+    ULayoutPage,
+    UFileUploader
   },
   data () {
     return {
-      editor: null,
-      contentBackup: '',
-      gists: '',
-      screenWidth: (() => { return window.innerWidth })(),
-      screenHeight: (() => { return window.innerHeight })(),
-      body: '',
-      preview: ''
+      contribution: {
+        title: '',
+        body: '',
+        parsedBody: '',
+        rewards: [0.5, 0.5],
+        tags: []
+      },
+      loading: false
+    }
+  },
+  filters: {
+  },
+  validations: {
+    contribution: {
+      title: { required },
+      body: { required },
+      tags: { required }
+    }
+  },
+  methods: {
+    submit () {
+      this.$v.project.$touch()
+
+      this.project.image = this.projectImageUrl()
+      this.project.slug = this.slug
+      if (this.$v.project.$error || !this.projectImageUrl()) {
+        this.$q.notify('Please review the form.')
+        return
+      }
+      this.loading = true
+      this.firestore.collection('projects').add(this.project).then(() => {
+        this.$router.push({ name: 'project.contributions', path: `/project/${this.project.slug}/contributions` })
+      }).catch((err) => {
+        this.loading = false
+        return err
+      })
+    },
+    searchGithubRepos (query, done) {
+      this.gh.search.repos({
+        q: `${query} in:name fork:true`,
+        sort: 'updated',
+        per_page: 5,
+        page: 1
+      }, (err, res) => {
+        if (err) {
+          done([])
+        }
+        done(this.factoryRepos(res.data.items))
+      })
+    },
+    selectGithubRepo (repo) {
+      this.project.githubRepository = repo
+      this.$refs.autocomplete.setValue(repo)
+    },
+    factoryRepos (repos) {
+      return repos.map(item => ({
+        value: item.url,
+        label: item.full_name,
+        avatar: item.owner.avatar_url
+      }))
+    },
+    slugify (str) {
+      str = str.replace(/^\s+|\s+$/g, '') // trim
+      str = str.toLowerCase()
+
+      // remove accents, swap ñ for n, etc
+      const from = 'ãàáäâẽèéëêìíïîõòóöôùúüûñç·/_,:;'
+      const to = 'aaaaaeeeeeiiiiooooouuuunc------'
+      for (let i = 0, l = from.length; i < l; i++) {
+        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i))
+      }
+
+      str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+        .replace(/\s+/g, '-') // collapse whitespace and replace by -
+        .replace(/-+/g, '-') // collapse dashes
+
+      return str
     }
   },
   computed: {
-    previewStyle () {
-      if (!this.isMobile && this.screenWidth > 992) {
-        return {
-          // 'height': (this.screenHeight - 62 - 48) + 'px',
-          // 'max-height': (this.screenHeight - 62 - 48) + 'px',
-          'overflow-y': 'auto'
-        }
-      }
-
-      return {}
-    },
-    editorStyle () {
-      if (!this.isMobile && this.screenWidth > 992) {
-        return {}
-      }
-
-      if (this.isMobile) {
-        return {
-          'height': (this.screenHeight - 62 - 48 - 30) + 'px',
-          'max-height': (this.screenHeight - 62 - 48 - 30) + 'px',
-          'overflow-y': 'auto'
-        }
-      }
-    },
-    isMobile () {
-      return get(this.$q, 'platform.is.mobile', false)
+    slug () {
+      return this.slugify(this.project.name)
     },
     categories () {
       return categories
-    },
-    categoryOptions () {
-      return map(categoryOptions, (option) => {
-        option.label = option.label.toUpperCase()
-        return option
-      })
     }
-  },
-  beforeDestroy () {
-    this.editor.destroy()
-    this.editor.container.remove()
   },
   mounted () {
-    // require a ton of plugins to initialize ace.
-    require('emmet-core/emmet')
-    require('brace/ext/emmet')
-    require('brace/ext/language_tools')
-    require('brace/ext/textarea')
-    require('brace/mode/html')
-    require('brace/mode/php')
-    require('brace/mode/javascript')
-    require('brace/mode/markdown')
-    require('brace/theme/chrome')
-    require('brace/ext/statusbar')
-    require('brace/ext/searchbox')
-    require('brace/ext/settings_menu')
-    require('brace/ext/modelist')
-
-    // create an ace editor instance.
-    const editor = this.editor = ace.edit('editor-container')
-
-    // Markdown snippets
-    // @TODO needs refactor to a separate module.
-    ace.define('ace/snippets/markdown', ['require', 'exports', 'module'], function (e, t, n) {
-      'use strict'
-      /* eslint-disable-next-line */
-      t.snippetText = '# Markdown\nsnippet link\n\t[${1:text}](https://${2:address})\nsnippet image\n\t![${1:description}](https://${2:address})\n\nsnippet bold\n\t**${1:text}**\n\nsnippet code\n\t```${1:lang}\n\t${2:code}\n\t```\n\n'
-      t.scope = 'markdown'
-    })
-
-    // editor scroll style.
-    editor.$blockScrolling = Infinity
-    // set markdown as the language for the editor.
-    editor.getSession().setMode('ace/mode/markdown')
-    // set chrome as the color theme.
-    editor.setTheme('ace/theme/chrome')
-    // init the editor content.
-    editor.setValue(this.body, 1)
-
-    // listen for editor changes, to update the preview.
-    editor.on('change', () => {
-      // assign the editor content as body.
-      this.body = editor.getValue()
-      // // render the markdown preview and assign.
-      // return render(this.body).then((result) => {
-      //   this.preview = result
-      // })
-    })
-
-    // set editor style options.
-    editor.setOptions({
-      fontFamily: 'Roboto Mono',
-      fontSize: '12pt',
-      showLineNumbers: true,
-      // completion features are tempory disabled.
-      enableEmmet: true,
-      enableBasicAutocompletion: true,
-      enableSnippets: true,
-      enableLiveAutocompletion: false
-    })
+    this.gh = new GitHub()
   },
-
-  // watch for body changes, to trigger rending the preview.
   watch: {
-    body () {
-      return render(this.body).then((result) => {
-        this.preview = result
-        return Promise.resolve(result)
-      })
-    }
   }
 }
 </script>
