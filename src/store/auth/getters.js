@@ -1,63 +1,41 @@
 // imports.
-import { isEmpty, get } from 'lodash-es'
-import moment from 'moment'
+import { get } from 'lodash-es'
 
 // auth store getters.
 
-// user getter.
+// returns true if the user is not authenticated.
+// returns false if hte user is authenticated / present.
+export const guest = ({ user }) => (user === null)
+
+// "check" is the inverse check of guest.
+export const check = ({ user }) => !guest({ user })
+
+// user data.
 export const user = ({ user }) => user
 
-// user photo url / avatar.
+// user UID (Firebase).
+export const uid = ({ user }) => get(user, 'uid', null)
+
+// username (also UID).
+export const username = uid
+
+// name (real or username).
+export const name = ({ user }) => get(user, 'displayName', null)
+
+// user photo url.
 export const photoURL = ({ user }) => get(user, 'photoURL', null)
+// avatar alias for the photo url getter.
+export const avatar = photoURL
 
-// steem user getter.
-export const steemUser = ({ steemUser }) => steemUser
+// all credentials.
+export const credentials = ({ credentials }) => credentials
 
-// user or guest.
-export const guest = ({ user }) => user === null
+// steem credentials.
+export const steemCredentials = ({ credentials }) => get(credentials, 'steem', null)
+// github credentials.
+export const githubCredentials = ({ credentials }) => get(credentials, 'github', null)
 
-export const steemAvatar = ({ steemUser }) => {
-  const username = get(steemUser, 'username', null)
-
-  return username ? `https://img.blocker.press/a/${username}` : null
-}
-export const githubAvatar = ({ github }) => get(github, 'photoURL', null)
-
-// username getter.
-export const steemUsername = ({ steemUser }) => get(steemUser, 'username')
-export const githubUsername = ({ github }) => get(github, 'username')
-
-// token expiration getter.
-export const steemExpiration = ({ steemUser }) => get(steemUser, 'expiration')
-
-// access token getter.
-export const steemToken = ({ steemUser }) => get(steemUser, 'token')
-
-// token expired.
-export const steemTokenExpired = ({ steemUser }) => {
-  const expiration = steemExpiration({ steemUser })
-
-  if (!expiration) {
-    return true
-  }
-
-  return moment.utc(expiration).isBefore(moment.utc())
-}
-
-// empty user fields.
-export const steemHasEmptyFields = ({ steemUser }) => {
-  if (!steemUser) {
-    return true
-  }
-  const { username, expiration, token } = steemUser
-  return (isEmpty(username) || isEmpty(expiration) || isEmpty(token))
-}
-
-export const checkOnGithub = ({ github }) => github !== null
-export const guestOnGithub = (state) => !checkOnGithub(state)
-
-// check user session is valid.
-export const checkOnSteem = (state) => (!steemHasEmptyFields(state) && !steemTokenExpired(state))
-
-// guest (inverse of check).
-export const guestOnSteem = (state) => !checkOnSteem(state)
+// guest on steem.
+export const steemGuest = ({ credentials }) => steemCredentials({ credentials }) !== null
+// guest on github.
+export const githubGuest = ({ credentials }) => githubCredentials({ credentials }) !== null
