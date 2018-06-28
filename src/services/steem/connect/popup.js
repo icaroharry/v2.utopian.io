@@ -39,6 +39,10 @@ function poll (popup, resolve, reject) {
   // let done = once(fn)
 
   let intervalId = setInterval(function polling () {
+    if (popup.closed) {
+      clearInterval(intervalId)
+      return reject(new Error('closed'))
+    }
     const { documentOrigin, popupWindowOrigin } = attempt(() => {
       try {
         const doc = get(document, 'location.host')
@@ -56,12 +60,8 @@ function poll (popup, resolve, reject) {
 
     if (popupWindowOrigin === documentOrigin && (popup.location.search || popup.location.hash)) {
       let queryParams = popup.location.search.substring(1).replace(/\/$/, '')
-      console.log(queryParams)
-      // let hashParams = popup.location.hash.substring(1).replace(/[/$]/, '')
-      // let hash = querystring.parse(hashParams)
+
       let qs = querystring.parse(queryParams)
-      console.log(qs)
-      // qs = assign(qs, hash)
 
       if (get(qs, 'error', null)) {
         clearInterval(intervalId)
@@ -76,6 +76,8 @@ function poll (popup, resolve, reject) {
       }
     }
   }, 35)
+
+  return intervalId
 }
 
 /**
