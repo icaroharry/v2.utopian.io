@@ -21,12 +21,13 @@ import configureStorage from './storage'
  * Firebase plugin.
  *
  * @param store
- * @param {Vue} Vue
+ * @param Vue
  */
 export default ({ store, Vue }) => {
   // initialize firebase with the previously built configuration.
   const firebaseApp = firebase.initializeApp(config)
-
+  // set on vue prototype.
+  Vue.prototype.firebase = firebaseApp
   // configure authentication.
   configureAuth(firebaseApp, store)
 

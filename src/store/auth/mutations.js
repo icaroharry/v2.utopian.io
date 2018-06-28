@@ -1,7 +1,10 @@
 // auth store mutations.
 
+// import lodash helpers.
+import { get } from 'lodash-es'
+
 /**
- * setUser mutation.
+ * User (Firebase) mutation.
  *
  * @param state
  * @param user
@@ -11,23 +14,62 @@ export const setUser = (state, user = null) => {
 }
 
 /**
- * setSteemUser mutation.
+ * User Account (Firebase) mutation.
  *
  * @param state
- * @param steemUser
+ * @param account
  */
-export const setSteemUser = (state, steemUser = null) => {
-  state.steemUser = steemUser
+export const setAccount = (state, account = null) => {
+  state.account = account
 }
 
 /**
- * clear mutation
+ * Credentials mutation.
+ *
+ * @param state
+ * @param credentials
+ */
+export const setCredentials = (state, credentials = null) => {
+  const name = get(credentials, 'name', null)
+  const value = get(credentials, 'value', null)
+
+  if (name) {
+    state.credentials[name] = value
+  }
+}
+
+/**
+ * SteemConnect credentials mutation.
+ *
+ * @param state
+ * @param steemCredentials
+ */
+export const setSteemCredentials = (state, steemCredentials = null) => {
+  state.credentials.steem = steemCredentials
+}
+
+/**
+ * Github credentials mutation.
+ *
+ * @param state
+ * @param githubCredentials
+ */
+export const setGithubCredentials = (state, githubCredentials = null) => {
+  state.credentials.github = githubCredentials
+}
+
+/**
+ * Clear user and credentials.
  *
  * Removes authentication data on the Store.
  *
  * @param state
  */
 export const clear = (state) => {
+  // clear Firebase user.
   setUser(state, null)
-  setSteemUser(state, null)
+  // clear Github credentials.
+  setGithubCredentials(state, null)
+  // clear SteemConnect credentials.
+  setSteemCredentials(state, null)
 }

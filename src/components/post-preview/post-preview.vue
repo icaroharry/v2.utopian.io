@@ -2,6 +2,7 @@
 // imports.
 import UCommentsActions from 'src/components/comments/actions/actions'
 import { renderText } from 'src/services/steem/markdown'
+import { get } from 'lodash'
 
 // post preview component.
 export default {
@@ -54,7 +55,7 @@ export default {
   mounted () {
     return renderText(this.post.body, false).then((data) => {
       this.except = `${data.substr(0, this.exceptSize)}...`
-      if (this.titleSize && this.titleSize < this.post.title.length) {
+      if (this.titleSize && this.titleSize < get(this.post, 'title.length', null)) {
         this.trimmedTitle = `${this.post.title.substr(0, this.titleSize)}...`
       }
       return Promise.resolve(data)

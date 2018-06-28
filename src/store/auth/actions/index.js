@@ -3,8 +3,8 @@ import { get } from 'lodash-es'
 import { parseSteemConnectCallback } from 'src/services/steem/connect/parseCallback'
 
 // export sub actions.
+export * from './credentials'
 export * from './firebase'
-export * from './steem-connect'
 export * from './github'
 
 /**
@@ -18,20 +18,20 @@ export const login = ({ dispatch, commit }, steemConnectData) => {
   const data = parseSteemConnectCallback(steemConnectData)
 
   // extract the SteemConnect token from the callback.
-  const steemConnectToken = get(data, 'token', null)
+  const token = get(data, 'secret', null)
 
   // dispatch the token exchange, where a SteemConnect token will be exchange by
   // a firebase only token.
-  return dispatch('issueFirebaseToken', { token: steemConnectToken })
+  return dispatch('issueFirebaseToken', { token })
     // use the firebase token to authenticate locally on firebase client.
     .then(firebaseToken => dispatch('loginWithFirebaseToken', firebaseToken))
     // after all going well, consider the steem connect data valid and store locally.
     // this method encrypts the token before stored.
-    .then(() => dispatch('storeSteemConnectData', data))
+    .then(() => dispatch('storeCredentials', data))
     // also, load the same stored data, to assure encryption is working
     // and the values are safely stored and retrieved.
     // this will populate the vuex store as well (commit data).
-    .then(() => dispatch('loadSteemConnectData'))
+    .then(() => dispatch('loadCredentials', data.name))
 }
 
 /**
@@ -44,7 +44,8 @@ export const login = ({ dispatch, commit }, steemConnectData) => {
  */
 export const logout = ({ dispatch, commit }) => {
   // remove local database itens related to the user.
-  return dispatch('deleteSteemConnectData')
+  return dispatch('deleteCredentials', 'steem')
+    .then(() => dispatch('deleteCredentials', 'github'))
     .then(() => dispatch('logoutFromFirebase'))
     .then(() => commit('clear'))
     .then(() => null)

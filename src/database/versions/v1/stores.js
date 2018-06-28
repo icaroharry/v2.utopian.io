@@ -6,6 +6,8 @@ export default {
   secrets: 'name',
   // unencrypted preferences.
   preferences: 'name,value',
+  // application credentials vault.
+  credentials: 'name,secret,meta,expiration',
   // activity.
   activities: '[account+id],account,id,value.timestamp',
   // user.
