@@ -5,6 +5,27 @@ div.q-layout-page.u-page.u-page-index, main.q-layout-page.u-page.u-page-index {
 }
 
 .create-contribution-form {
+  .u-categories {
+    height 150px
+  }
+
+  .u-category-icons {
+    color $grey
+    border 2px solid $grey-1
+    border-radius 50%
+    height 100px
+    width 100px
+    margin-bottom 5px
+  }
+
+  .q-tab .active {
+    .u-category-icons {
+      background-color #4dd39f
+      border 2px solid $white
+      color $white !important
+    }
+  }
+
   .q-input, .q-chips-input {
     margin 25px 0 0 0
     border-radius 2px
@@ -15,8 +36,6 @@ div.q-layout-page.u-page.u-page-index, main.q-layout-page.u-page.u-page-index {
 
   input:placeholder, textarea:placeholder {
     vertical-align middle !important
-    font-size 12px !important
-    font-family NotoSans !important
   }
 
   input[type='text'], textarea, input#tags {
@@ -71,7 +90,6 @@ div.q-layout-page.u-page.u-page-index, main.q-layout-page.u-page.u-page-index {
 }
 
 .github-footer {
-    font-family  NotoSans
     font-size 12px
     height 20px
 }

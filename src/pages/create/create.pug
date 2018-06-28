@@ -1,11 +1,16 @@
-u-layout-page.u-page-index(reverse=true)
+u-layout-page.u-page-index(:meta="false")
 
   template(slot="main")
     q-spinner-dots(v-if="loading" :size="40", style="margin: 0 auto")
     div(v-if="!loading")
       p.q-headline What is your contribution about?
 
-      
+      div.create-contribution-form
+        q-tabs(color="white")
+          q-tab(slot="title", v-for="category in categories", :key="category", scrollable)
+            div.u-category-icons.row.justify-center.items-center(:class="'text-' + category")
+              q-icon(:class="'ut-' + category", size="30px")
+            div.q-body.text-black {{ category }}
 
         q-input(
           v-model="project.name"
