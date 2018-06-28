@@ -9,6 +9,12 @@ const configureAuth = (firebase, store) => {
   firebase.auth().onAuthStateChanged((user) => {
     // commit the currently github authenticated user on Vuex store.
     store.commit('auth/setUser', (user || null))
+
+    // if an UID is present (user is logged in).
+    if ((user && user.uid)) {
+      // dispatch the account loading method, passing the actual UID.
+      store.dispatch('auth/loadFirebaseAccount', (user.uid))
+    }
   })
 }
 

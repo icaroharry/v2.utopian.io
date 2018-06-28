@@ -1,7 +1,7 @@
 // header toolbar wrapper.
 q-toolbar.u-toolbar(color='tertiary', :class="{ desktop: isDesktop }")
   // wrapper container.
-  div.toolbar-container
+  div.container.toolbar-container
 
     // left side
 
@@ -27,7 +27,7 @@ q-toolbar.u-toolbar(color='tertiary', :class="{ desktop: isDesktop }")
       span.avatar-wrapper
         img.avatar(:src="photoURL")
         q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]")
-          q-list(:link="true", separator)
+          q-list(dense, :link="true", separator)
             // q-list-header.flex.justify-between(v-if="guestOnGithub !== true")
               q-icon(name="mdi-github-circle")
               span Github Account

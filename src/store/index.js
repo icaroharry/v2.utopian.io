@@ -13,6 +13,10 @@ import common from './common'
 import auth from './auth'
 import steem from './steem'
 import project from './project'
+import contributions from './contributions'
+
+// join modules.
+const modules = { common, auth, steem, project, contributions }
 
 // enable vuex.
 Vue.use(Vuex)
@@ -23,12 +27,7 @@ const store = new Vuex.Store({
   getters,
   mutations,
   actions,
-  modules: {
-    auth,
-    common,
-    steem,
-    project
-  }
+  modules
 })
 
 // main export.
