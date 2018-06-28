@@ -1,9 +1,14 @@
 // auth store state.
 export default {
-
-  // steem connect user data.
-  steemUser: null,
-
   // firebase user data.
-  user: null
+  user: null,
+
+  // User account (normalized and parsed from API).
+  account: null,
+
+  // steem / github / 3rd part credentials.
+  credentials: {
+    steem: null,
+    github: null
+  }
 }
