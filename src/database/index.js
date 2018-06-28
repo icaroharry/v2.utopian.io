@@ -24,6 +24,7 @@ export const secrets = DB.table('secrets')
 export const preferences = DB.table('preferences')
 export const user = DB.table('user')
 export const cache = DB.table('cache')
+export const credentials = DB.table('credentials')
 
 // default export.
 export default DB
