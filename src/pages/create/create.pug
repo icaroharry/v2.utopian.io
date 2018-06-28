@@ -3,10 +3,10 @@ u-layout-page.u-page-index(reverse=true)
   template(slot="main")
     q-spinner-dots(v-if="loading" :size="40", style="margin: 0 auto")
     div(v-if="!loading")
-      p.q-headline Let's create your project
-      p.q-title Make a great first impression with all the project information filled and great images about your project.
+      p.q-headline What is your contribution about?
 
-      div.create-project-form
+      
+
         q-input(
           v-model="project.name"
           stack-label="Project Name"

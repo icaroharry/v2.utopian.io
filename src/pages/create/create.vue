@@ -3,6 +3,7 @@ import ULayoutPage from 'src/layouts/parts/page/page'
 import * as GitHub from '@octokit/rest'
 import { required } from 'vuelidate/lib/validators'
 import UFileUploader from 'src/components/project/file-uploader/file-uploader'
+import { categories } from 'src/services/utopian/categories'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -102,6 +103,9 @@ export default {
   computed: {
     slug () {
       return this.slugify(this.project.name)
+    },
+    categories () {
+      return categories
     }
   },
   mounted () {
