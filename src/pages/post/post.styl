@@ -15,9 +15,10 @@ body.mobile {
     .row-author {
       flex-direction column
       justify-content center
-      .text-right {
-        text-align center
-      }
+      //.text-right {
+      //  text-align center
+      //  //
+      //}
     }
   }
 }
@@ -25,10 +26,9 @@ body.mobile {
 .u-page-post {
 
   .text-right {
-      text-align center
-      justify-content space-between
-      margin-left auto
-    }
+    justify-content space-between
+    margin-left auto
+  }
 
   .post-actions {
     margin 40px 0
@@ -55,8 +55,12 @@ body.mobile {
     margin-top 120px
   }
   .post-content {
+    .post-body {
+      // background darken(white, 1%)
+    }
     border: 1px solid #f5f5f5;
-    padding: 12px;
+
+    padding: 24px;
     border-radius: 4px;
     // max-width 850px
     max-width 100%
@@ -94,7 +98,6 @@ body.mobile {
       padding 0
     }
   }
-
 
   .u-page-meta > div {
     padding-right 20px
@@ -141,7 +144,6 @@ body.mobile {
     margin 40px 0 0 0
     font-weight 600
     font-family 'Roboto'
-
 
   }
   .u-post-author {
