@@ -8,18 +8,20 @@ u-layout-page.u-page-post(:meta="false")
 
       // display author information.
       div.row.justify-between.row-author
-        // author header component.
-        u-comments-author-header(v-if="author !== null", :author="author")
-
+        div.col-10
+          // author header component.
+          u-comments-author-header(v-if="author !== null", :author="author")
+        div.col-2.text-right
+          // post created time ago.
+          div.time-ago
+            | {{ post._time_created_from_now }}
         // right side info.
         div.text-right
           // display posts tags.
           div.tags
             q-btn.tag(color="tertiary", dense, size="", outline, :key="tag.id", v-for="tag in post._visible_tags")
               | {{ tag.label }}
-          // post created time ago.
-          div.time-ago(style="padding-top: 12px")
-            | {{ post._time_created_from_now }}
+
 
       // separate with horizontal rule.
       hr
