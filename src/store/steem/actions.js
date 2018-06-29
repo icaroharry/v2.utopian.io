@@ -7,16 +7,19 @@ import { remember } from 'src/database/cache'
 
 // steem store actions.
 
+const getEncryptedToken = (rootGetters) => get(get(rootGetters, 'auth/steemCredentials', { secret: null }), 'secret', null)
+
 // prepare a steem-connect client instance to broadcast something.
 // this method is intended to not persist the token on steem-connect sdk.
 // meaning the token must be decrypted on every usage.
 export const prepareClient = ({ rootGetters, dispatch }) => {
-  // get the access token from the root store.
-  const encryptedToken = get(rootGetters, 'auth/steem/token')
+  // get encrypted steem connect token.
+  const encryptedToken = getEncryptedToken(rootGetters)
 
   // decrypt the token and return a prepared client.
   return dispatch('decrypt', encryptedToken, { root: true })
     .then((token) => {
+      console.log(token)
       // clone the base client.
       const client = clone(baseClient)
       // set the decrypted access token.
@@ -30,23 +33,13 @@ export const prepareClient = ({ rootGetters, dispatch }) => {
 // load the stored user, if any.
 export const vote = async ({ getters, commit, dispatch, rootGetters }, { author, permlink, weight }) => {
   // get username from root store.
-  const username = get(rootGetters, 'auth/steem/username')
-
-  // determine the action type based on weight
-  const mutationName = (weight < 0) ? 'setBroadcastingDownvote' : 'setBroadcastingUpvote'
-
-  // commit the broadcasting state.
-  commit(mutationName, true)
+  const username = get(rootGetters, 'auth/username')
 
   // prepare client.
   return dispatch('prepareClient')
     .then((client) => {
       // call the client for a vote.
       return client.vote(username, author, permlink, (weight * 100))
-    })
-    .then(result => {
-      commit(mutationName, false)
-      return result
     })
 }
 

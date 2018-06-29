@@ -1,4 +1,5 @@
 <script>
+import ULayoutPage from 'src/layouts/parts/page/page'
 import UPostPreview from 'src/components/post-preview/post-preview'
 import { byOrder } from 'src/services/steem/posts'
 import { concat, last, attempt, filter, map } from 'lodash-es'
@@ -6,6 +7,7 @@ import { concat, last, attempt, filter, map } from 'lodash-es'
 export default {
   name: 'PageIndex',
   components: {
+    ULayoutPage,
     UPostPreview
   },
   data () {
