@@ -31,24 +31,28 @@ u-layout-page.u-page-index(:meta="false")
             div.col-9
               q-field(label="Contribution title", orientation="vertical")
                 q-input(v-model="contribution.title",
-                  :error="$v.contribution.title.$error")
+                  :error="errors['title']")
 
               q-field(label="Contribution Details", orientation="vertical")
                 q-input(id="details", v-model="contribution.body",
                   type="textarea", placeholder="Write everything about your contribution…",
-                  :error="$v.contribution.body.$error")
+                  :error="errors['body']")
 
             div.col-3
               div.row
                 div.col-12
-                  q-field(label="Project name", orientation="vertical")
-                    q-input(v-model="contribution.project", placeholder="e.g DTube",
-                      :error="$v.contribution.title.$error")
+                  q-field(label="Github Project", orientation="vertical")
+                    q-search(v-model="projectSelector",
+                    :error="errors['projectId']"
+                    placeholder="e.g dtube/dtube")
+                      q-autocomplete(@search="searchGithubRepos", @selected="setRepository" :min-characters="3", ref="autocomplete",
+                      :debounce="500", separator)
+
                 div.col-12
                   q-field(label="Tags", orientation="vertical", helper="hit enter to select a tag.")
                     q-chips-input(id="tags", v-model="contribution.tags",
                       placeholder="e.g development, javascript",
-                      :error="$v.contribution.tags.$error")
+                      :error="errors['tags']")
 
                 div.col-12
                   q-btn.full-width(color="primary", label="Submit", @click="submit")
