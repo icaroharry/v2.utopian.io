@@ -1,98 +1,26 @@
 @import "~variables"
 
-div.q-layout-page.u-page.u-page-index, main.q-layout-page.u-page.u-page-index {
-  padding 12px 24px
-}
-
 .create-contribution-form {
-  .u-categories {
-    height 150px
-  }
-
-  .u-category-icons {
-    border 2px solid $grey-1
-    border-radius 50%
-    height 100px
-    width 100px
-    margin-bottom 5px
-  }
-
-  .q-tab .active {
+  .u-tabs-categories {
+    background white
+    border  1px solid $neutral
+    border-radius 2px
+    overflow hidden
+    .q-icon {
+      // font-size 30px
+    }
     .u-category-icons {
-      background-color #4dd39f
-      border 2px solid $white
-      color $white !important
+      border 2px solid $grey-1
+      border-radius 50%
+      height 100px
+      width 100px
+      margin-bottom 5px
     }
   }
 
-  .q-input, .q-chips-input {
-    margin 25px 0 0 0
-    border-radius 2px
-    background-color #ffffff
-    border solid 1px #e0e2e5;
-  }
-
-
-  input:placeholder, textarea:placeholder {
-    vertical-align middle !important
-  }
-
-  input[type='text'], textarea, input#tags {
-    margin-left 10px
-  }
-
-  #description {
-    min-height 80px
-  }
 
   #details {
     min-height 317px
   }
 
-  #upload > input {
-      min-height 336px
-  }
-
-  .q-btn {
-    margin-top 10px
-  }
-
-  .q-if-label {
-    font-family Lato
-    font-size 16px
-    font-weight bold
-    line-height 1.5
-    margin -20px
-    color: #000000;
-  }
-}
-
-
-.github {
-  .q-if{
-    padding-bottom 0 !important
-  }
-  i.q-icon {
-      border-right 1px solid #e0e2e5
-      width 42px !important
-      height 42px !important
-  }
-  div.q-if-label {
-    margin-left -44px !important
-  }
-  input:placeholder {
-    margin-left 10%
-  }
-  input.q-input-target {
-      margin-bottom 12px
-  }
-}
-
-.github-footer {
-  font-size 12px
-  height 20px
-}
-
-.u-page .u-page {
-  overflow visible !important
 }

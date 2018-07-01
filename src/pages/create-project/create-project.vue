@@ -1,19 +1,33 @@
 <script>
+// imports.
 import ULayoutPage from 'src/layouts/parts/page/page'
 import * as GitHub from '@octokit/rest'
 import { required } from 'vuelidate/lib/validators'
 import UFileUploader from 'src/components/project/file-uploader/file-uploader'
 import { mapGetters } from 'vuex'
 
+// create project component export.
 export default {
-  name: 'PageCreateProject',
+
+  // component name.
+  name: 'u-page-create-project',
+
+  // child components.
   components: {
     ULayoutPage,
     UFileUploader
   },
+
+  // component data.
   data () {
     return {
-      ...mapGetters('project', ['projectImageUrl']),
+
+      // map project store getters.
+      ...mapGetters('project', [
+        'projectImageUrl'
+      ]),
+
+      // project internal data.
       project: {
         name: '',
         githubRepository: '',
@@ -22,13 +36,19 @@ export default {
         details: '',
         tags: []
       },
+
+      // github placeholder.
       gh: {},
+
+      // github repositories.
       ghRepos: [],
+
+      // loading state indicator.
       loading: false
     }
   },
-  filters: {
-  },
+
+  // component validations.
   validations: {
     project: {
       name: { required },
@@ -39,6 +59,8 @@ export default {
       tags: { required }
     }
   },
+
+  // component methods.
   methods: {
     submit () {
       this.$v.project.$touch()

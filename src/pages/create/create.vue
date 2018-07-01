@@ -1,109 +1,81 @@
 <script>
+// imports.
 import ULayoutPage from 'src/layouts/parts/page/page'
-import * as GitHub from '@octokit/rest'
-import { required } from 'vuelidate/lib/validators'
+// import { required } from 'vuelidate/lib/validators'
 import UFileUploader from 'src/components/project/file-uploader/file-uploader'
 import { categories } from 'src/services/utopian/categories'
+import { mapActions } from 'vuex'
+import { get } from 'lodash'
 
+// create contribution component.
 export default {
-  name: 'PageCreate',
+
+  // component name.
+  name: 'u-page-create',
+
+  // children components.
   components: {
     ULayoutPage,
     UFileUploader
   },
+
+  // component data.
   data () {
     return {
+      // errors list (API returned, not frontend UX helper).
+      errors: {},
+      // temporary field for the repository selector field.
+      projectSelector: null,
+      // contribution data.
       contribution: {
         title: '',
         body: '',
-        parsedBody: '',
+        projectId: null,
         rewards: [0.5, 0.5],
         tags: []
       },
+      // rendered contribution preview (html).
+      preview: null,
+      // loading state indicator.
       loading: false
     }
   },
-  filters: {
-  },
-  validations: {
-    contribution: {
-      title: { required },
-      body: { required },
-      tags: { required }
-    }
-  },
+
+  // component methods.
   methods: {
-    submit () {
-      this.$v.project.$touch()
 
-      this.project.image = this.projectImageUrl()
-      this.project.slug = this.slug
-      if (this.$v.project.$error || !this.projectImageUrl()) {
-        this.$q.notify('Please review the form.')
-        return
-      }
-      this.loading = true
-      this.firestore.collection('projects').add(this.project).then(() => {
-        this.$router.push({ name: 'project.contributions', path: `/project/${this.project.slug}/contributions` })
-      }).catch((err) => {
-        this.loading = false
-        return err
-      })
+    // map contributions store actions.
+    ...mapActions('contributions', [
+      'searchGithubRepository'
+    ]),
+
+    saveContribution () {
+
     },
+
+    // search github for repositories matching a given query.
     searchGithubRepos (query, done) {
-      this.gh.search.repos({
-        q: `${query} in:name fork:true`,
-        sort: 'updated',
-        per_page: 5,
-        page: 1
-      }, (err, res) => {
-        if (err) {
-          done([])
-        }
-        done(this.factoryRepos(res.data.items))
-      })
+      this.searchGithubRepository(query).then(done)
     },
-    selectGithubRepo (repo) {
-      this.project.githubRepository = repo
-      this.$refs.autocomplete.setValue(repo)
-    },
-    factoryRepos (repos) {
-      return repos.map(item => ({
-        value: item.url,
-        label: item.full_name,
-        avatar: item.owner.avatar_url
-      }))
-    },
-    slugify (str) {
-      str = str.replace(/^\s+|\s+$/g, '') // trim
-      str = str.toLowerCase()
 
-      // remove accents, swap ñ for n, etc
-      const from = 'ãàáäâẽèéëêìíïîõòóöôùúüûñç·/_,:;'
-      const to = 'aaaaaeeeeeiiiiooooouuuunc------'
-      for (let i = 0, l = from.length; i < l; i++) {
-        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i))
-      }
-
-      str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-        .replace(/\s+/g, '-') // collapse whitespace and replace by -
-        .replace(/-+/g, '-') // collapse dashes
-
-      return str
+    // set repository ID on the contribution data.
+    setRepository (repository) {
+      this.contribution.projectId = get(repository, 'id', null)
     }
   },
+
+  // computed properties.
   computed: {
+
+    // @TODO remove this.
     slug () {
       return this.slugify(this.project.name)
     },
+
+    // categories list.
     categories () {
       return categories
     }
-  },
-  mounted () {
-    this.gh = new GitHub()
-  },
-  watch: {
   }
 }
 </script>

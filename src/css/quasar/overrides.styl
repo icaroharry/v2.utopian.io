@@ -40,7 +40,53 @@
   }
 }
 
-// global field margin.
+// forms and fields overrides.
 .q-field {
-  margin: 0 0 32px 0
+  &.disabled, &[disabled] {
+    opacity 1 !important
+    .q-field-label {
+
+    }
+    .q-field-content {
+      background $grey-2
+    }
+  }
+  overflow auto
+  .q-if-control {
+    min-width 24px
+    width auto
+  }
+  .q-if-control.q-if-control-before {
+    margin-right 6px
+    padding-right 4px
+    border-right 1px solid $neutral
+  }
+
+  .q-field-label {
+    font-size 14px
+    font-weight 600
+  }
+  .q-input-target {
+    line-height 1em
+    overflow visible
+  }
+  margin: 0 0 28px 0
+  .q-field-content {
+    .q-if, .q-input, .q-chips-input {
+      background white
+      border-left  1px solid $neutral
+      border-top 1px solid $neutral
+      border-right 1px solid $neutral
+      border-bottom none
+      border-radius 2px
+    }
+
+    .q-if {
+      padding 6px 8px 8px 8px
+    }
+  }
+}
+
+.q-field-vertical .q-field-label + .q-field-content {
+  padding-top 0
 }

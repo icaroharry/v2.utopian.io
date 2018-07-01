@@ -18,4 +18,4 @@ export const categories = [
 ]
 
 // map categories into selectable options array.
-export const categoryOptions = map(categories, (categoryName) => ({ value: categoryName, label: categoryName, icon: '' }))
+export const categoryOptions = map(categories, (categoryName) => ({ value: categoryName, label: categoryName, icon: `ut-${categoryName}` }))

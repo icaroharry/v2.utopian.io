@@ -14,7 +14,7 @@ const configureFirestore = (firebaseApp, Vue) => {
   Vue.prototype.firestore = db
 
   // enable database persistence (locally store things for offline usage).
-  return db.enablePersistence()
+  return db.enablePersistence().catch((e) => { /* console.log(e) */ })
 }
 
 // default export the auth configure function.
