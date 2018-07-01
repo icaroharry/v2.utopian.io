@@ -1,12 +1,12 @@
 <script>
 // imports.
 import ULayoutPage from 'src/layouts/parts/page/page'
-import * as GitHub from '@octokit/rest'
 // import { required } from 'vuelidate/lib/validators'
 import UFileUploader from 'src/components/project/file-uploader/file-uploader'
 import { categories } from 'src/services/utopian/categories'
 import { mapActions } from 'vuex'
 import { get } from 'lodash'
+
 // create contribution component.
 export default {
 
@@ -40,49 +40,42 @@ export default {
       loading: false
     }
   },
+
+  // component methods.
   methods: {
 
+    // map contributions store actions.
     ...mapActions('contributions', [
       'searchGithubRepository'
     ]),
 
-    submit () {
-      this.$v.project.$touch()
+    saveContribution () {
 
-      this.project.image = this.projectImageUrl()
-      this.project.slug = this.slug
-      if (this.$v.project.$error || !this.projectImageUrl()) {
-        this.$q.notify('Please review the form.')
-        return
-      }
-      this.loading = true
-      this.firestore.collection('projects').add(this.project).then(() => {
-        this.$router.push({ name: 'project.contributions', path: `/project/${this.project.slug}/contributions` })
-      }).catch((err) => {
-        this.loading = false
-        return err
-      })
     },
+
+    // search github for repositories matching a given query.
     searchGithubRepos (query, done) {
-      this.searchGithubRepository(query)
-        .then(done)
+      this.searchGithubRepository(query).then(done)
     },
+
+    // set repository ID on the contribution data.
     setRepository (repository) {
       this.contribution.projectId = get(repository, 'id', null)
     }
   },
+
+  // computed properties.
   computed: {
+
+    // @TODO remove this.
     slug () {
       return this.slugify(this.project.name)
     },
+
+    // categories list.
     categories () {
       return categories
     }
-  },
-  mounted () {
-    this.gh = new GitHub()
-  },
-  watch: {
   }
 }
 </script>
