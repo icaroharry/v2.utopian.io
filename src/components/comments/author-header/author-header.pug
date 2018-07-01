@@ -6,13 +6,13 @@ div.u-comments-author-header(@click.prevent="")
       img(:src="'https://img.blocker.press/a/' + account.name")
     div.details
       div.username.flex
-        div.text(v-if="account._name")
-          span.name(v-if="account._name") {{ account._name }} |
+        div.text()
+          span.name(v-if="account._name") {{ account._name }}
           span.username @{{ account.name }}
         div.reputation
           span {{ account._reputation }}
 
       //div.name {{ account._name }}
-      div.about {{ account._about }}
-      div.location {{ account._location }}
+      div.about {{ account._about || 'Utopian Contributor' }}
+      div.location {{ account._location || 'Citizen of the World' }}
 
