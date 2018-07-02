@@ -3,7 +3,7 @@ import ULayoutPage from 'src/layouts/parts/page/page'
 import UPostPreview from 'src/components/post-preview/post-preview'
 import { byOrder } from 'src/services/steem/posts'
 import { concat, last, attempt } from 'lodash-es'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'PageProfile',
@@ -34,12 +34,26 @@ export default {
   filters: {
   },
   methods: {
+    ...mapActions({
+      loadFirebaseAccount: 'auth/loadFirebaseAccount',
+      loadSteemAccount: 'steem/loadAccount'
+    }),
     loadInitial () {
       this.loading = true
+      const username = this.$route.params['username']
 
-      if (this.isOwnProfile) {
+      if (this.isOwnProfile) { // if the profile belongs to the current logged user, fetch data from vuex
         this.userAccount = this.account()
         this.loading = false
+      } else { // if it is not the logged user, try to fetch from firestore
+        this.loadFirebaseAccount(username).then((account) => {
+          this.userAccount = account
+          if (account === null) { // if the user is not registered on firestore, fetch from the blockchain
+            this.loadSteemAccount(username).then((result) => {
+              console.log(result)
+            })
+          }
+        })
       }
     },
     loadContributions (done) {
