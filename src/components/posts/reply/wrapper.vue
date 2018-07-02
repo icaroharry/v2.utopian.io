@@ -9,6 +9,10 @@ export default {
     reply: {
       type: Object,
       default: null
+    },
+    maxDepth: {
+      type: Number,
+      default: 6
     }
   }
 
@@ -17,5 +21,5 @@ export default {
 
 <!-- component template. -->
 <template lang="pug">
-  u-post-reply(:reply="reply")
+  u-post-reply(:reply="reply", :depth=0)
 </template>
