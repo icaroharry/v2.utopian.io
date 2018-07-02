@@ -5,7 +5,8 @@ export default [
     path: '/',
     component: () => import('src/layouts/blankpage'),
     children: [
-      {path: '', name: 'home', component: () => import('src/pages/index/index'), meta: {weight: 10}}
+      {path: '', name: 'home', component: () => import('src/pages/index/index'), meta: {weight: 10}},
+      {path: '@:username', name: 'profile', component: () => import('src/pages/profile/profile'), meta: {weight: 10}}
     ]
   },
   {
