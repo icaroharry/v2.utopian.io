@@ -1,7 +1,7 @@
 // component wrapper.
 div.u-comments-author-header(@click.prevent="")
   // flex container.
-  div.flex.header-container(v-if="!loading && account !== null")
+  div.flex.no-wrap.header-container(v-if="!loading && account !== null")
     div.avatar
       img(:src="'https://img.blocker.press/a/' + account.name")
     div.details

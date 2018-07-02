@@ -25,10 +25,17 @@ export default {
     feed: {
       type: Number,
       default: 0
+    },
+    currentDepth: {
+      type: Number,
+      default: 0
+    },
+    maxDepth: {
+      type: Number,
+      default: 7
     }
   },
 
-  // component data.
   data () {
     return {
       body: null,
@@ -117,6 +124,10 @@ export default {
 
     emitVoted () {
       this.$emit('voted')
+    },
+
+    getReplyUrl (reply) {
+      return `/${reply.category}/@${reply.author}/${reply.permlink}`
     }
   },
 
