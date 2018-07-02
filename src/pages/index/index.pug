@@ -18,7 +18,7 @@ div
                 q-card-title
                   | {{ project.name }}
                   span(slot="subtitle")
-                    | by
+                    | {{ 'by ' }}
                     span.text-dark.q-subheading {{ project.owner }}
                 q-card-main.q-title.text-weight-light.text-dusk
                   | {{ project.short_description }}
@@ -29,7 +29,7 @@ div
             flat,
             round,
             icon="mdi-arrow-left",
-            color="blue-grey-6",
+            color="grey-8",
             size="24px",
             dense,
             @click="carouselPrevious"
@@ -39,7 +39,7 @@ div
             flat,
             round,
             icon="mdi-arrow-right",
-            color="blue-grey-6",
+            color="grey-8",
             size="24px",
             dense,
             @click="carouselNext"
