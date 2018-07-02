@@ -1,13 +1,11 @@
 // imports.
 import ULayoutPage from 'src/layouts/parts/page/page'
-import UPostReplyWrapper from 'src/components/posts/reply/wrapper'
 import UPostReply from 'src/components/posts/reply/reply'
 
 // main application bootstrap (before router init methods).
 export default ({ app, router, Vue, store }) => {
   // register globally available components.
   Vue.component('u-layout-page', ULayoutPage)
-  Vue.component('u-post-reply-wrapper', UPostReplyWrapper)
   Vue.component('u-post-reply', UPostReply)
 
   // dispatch common actions.
