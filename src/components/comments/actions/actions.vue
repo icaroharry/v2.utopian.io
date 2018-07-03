@@ -35,9 +35,16 @@ export default {
   // component data.
   data () {
     return {
+      // broadcasting indicator.
       broadcasting: false,
+      // votes popover indicator,
       showingVotes: false,
-      showingPayout: false
+      // payout popover indicator.
+      showingPayout: false,
+      // replying indicator.
+      replying: false,
+      // reply body content.
+      reply: null
     }
   },
 
@@ -97,12 +104,28 @@ export default {
 
     downvoted () {
       return get(this.currentVote, 'percent', 0) < 0
+    },
+
+    replyPreview () {
+      return this.reply
     }
   },
 
   methods: {
     showVotes () {
       this.showingVotes = true
+    },
+
+    toggleReplyBox () {
+      this.replying = !this.replying
+    },
+
+    showReplyBox () {
+      this.replying = true
+    },
+
+    hideReplyBox () {
+      this.replying = false
     },
 
     hideVotes () {
