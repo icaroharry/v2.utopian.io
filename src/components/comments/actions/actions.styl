@@ -3,7 +3,19 @@
 
 
 div.u-comments-actions {
-
+  display flex
+  width 100%
+  flex-direction column
+  .actions-line {
+    width 100%
+    display flex
+    justify-content space-between
+  }
+  .actions-reply {
+    .q-field {
+      margin-bottom 0
+    }
+  }
   .payout.declined {
     span {
       text-decoration line-through
@@ -11,6 +23,9 @@ div.u-comments-actions {
   }
   .action-item {
 
+    &.action-item-reply {
+      float right
+    }
     span.vote-count {
       margin-right 10px
       &.primary {
