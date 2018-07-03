@@ -1,10 +1,16 @@
 div
   div.header.q-pb-lg
-    q-page-container.container
-      div.row
-        div.col-lg-6.offset-lg-1.projects-slider
+    q-parallax(:src="coverImage", :height="300")
+      q-page-container.container
+        div.row
+          img(:src="userProfile.avatar").avatar
+          div.user-info.column.justify-center
+            div.row
+              span.text-white {{ userProfile.name }}
+              span.reputation {{ userAccount._reputation }}
+            span.text-grey-7.text-weight-light {{ '@' + userAccount.name }}
+            // q-btn(color="primary", dense, size="sm") Follow
 
-        div.col-lg-4.text-center
 
   div.main
     q-page-container.container
