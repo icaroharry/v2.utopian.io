@@ -50,6 +50,7 @@ div.u-comments-actions(@click.prevent="")
   // reply box.
   div.flex.actions-line.actions-reply(v-if="replying")
     div.row.fit
+      // editor reply section.
       div.col-12
         q-field.reply-editor(label="Reply Body", orientation="vertical")
           q-input(
@@ -58,6 +59,13 @@ div.u-comments-actions(@click.prevent="")
           type="textarea",
           placeholder="Give people a sense about your project…",
           @keyup.enter="submit")
+
+      // preview reply section.
       div.col-12
         q-field.reply-preview(label="Preview", orientation="vertical")
           div(v-html="replyPreview")
+
+      // action buttons reply section.
+      div.col-12.reply-buttons
+        q-btn(color="primary", label="Reply", icon="mdi-comment")
+        q-btn(flat="", label="Cancel", @click="toggleReplyBox")
