@@ -45,30 +45,29 @@ export default {
       // extract profile from meta.
       const profile = get(meta, 'profile', {})
       // assign avatar field on the profile.
-      profile.avatar = get(profile, 'profile_image')
+      profile.avatar = 'https://img.blocker.press/a/' + data.name
       // return the prepared object.
       return profile
     },
-    loadInitial () {
-      this.loading = true
+    async loadInitial () {
       const username = this.$route.params['username']
 
       if (this.isOwnProfile) { // if the profile belongs to the current logged user, fetch data from vuex
         this.userAccount = this.account()
         this.userProfile = this.userAccount.profile
-        this.loading = false
+        return this.userProfile
       } else { // if it is not the logged user, try to fetch from firestore
         this.loadFirebaseAccount(username).then((account) => {
           if (account === null) { // if the user is not registered on firestore, fetch from the blockchain
             this.loadSteemAccount(username).then((account) => {
               this.userAccount = account
               this.userProfile = this.factoryProfile(account)
-              this.loading = false
+              return this.userProfile
             })
           } else {
             this.userAccount = account
             this.userProfile = account.profile
-            this.loading = false
+            return this.userProfile
           }
         })
       }
@@ -87,11 +86,22 @@ export default {
       return this.uid() === this.$route.params['username']
     },
     coverImage () {
-      return this.userProfile.cover_image || 'https://source.unsplash.com/1600x900/?coding,computer,tech'
+      if (this.isMounted) {
+        if (this.userProfile.cover_image) {
+          return 'https://steemitimages.com/2048x512/' + this.userProfile.cover_image
+        } else {
+          return 'https://source.unsplash.com/2048x512/?coding,computer,tech'
+        }
+      }
+      return ''
     }
   },
   mounted () {
-    this.loadInitial()
+    this.loading = true
+    this.loadInitial().then(() => {
+      this.loading = false
+      this.isMounted = true
+    })
   },
   watch: {
   }

@@ -1,16 +1,23 @@
 div
-  div.header.q-pb-lg
+  div.header
     q-parallax(:src="coverImage", :height="300")
       q-page-container.container
         div.row
           img(:src="userProfile.avatar").avatar
           div.user-info.column.justify-center
-            div.row
-              span.text-white {{ userProfile.name }}
-              span.reputation {{ userAccount._reputation }}
-            span.text-grey-7.text-weight-light {{ '@' + userAccount.name }}
-            // q-btn(color="primary", dense, size="sm") Follow
-
+            div.row.items-center
+              span.text-white {{ userProfile.name || userAccount.name }}
+              span(v-if="userAccount._reputation").row.user-reputation.content-center.items-center {{ userAccount._reputation }}
+              q-btn.q-ml-md(color="primary", dense) Follow
+            span.text-grey-5.text-weight-light {{ '@' + userAccount.name }}
+            span.text-white
+              a(:href="userProfile.website")
+    div#u-profile-tabs.container.row
+      q-tabs.offset-3.col-9(color="black" inverted v-if="!loading")
+        q-route-tab(:to="`/@${userAccount.name}`" name="tab-contributions" append label="Contributions" slot="title")
+        q-route-tab(:to="`/@${userAccount.name}/details`" name="tab-projects" append label="Projects" slot="title" exact)
+        q-route-tab(:to="`/@${userAccount.name}/updates`" name="tab-followers" append label="Followers" slot="title" exact)
+        q-route-tab(:to="`/@${userAccount.name}/task`" name="tab-following" append label="Following" slot="title" exact)
 
   div.main
     q-page-container.container
