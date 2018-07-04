@@ -5,7 +5,7 @@ import UCommentsPayoutPopover from 'src/components/comments/payout-popover/payou
 import { mapGetters, mapActions } from 'vuex'
 import { get, find } from 'lodash-es'
 import { parseCurrencyString } from 'src/services/currencies/formatter'
-
+import { render } from 'src/services/common/markdown/markdown'
 // comment actions (like, flag, payout).
 export default {
   // component name.
@@ -43,8 +43,16 @@ export default {
       showingPayout: false,
       // replying indicator.
       replying: false,
-      // reply body content.
-      reply: null
+      // reply body content (markdown).
+      reply: '',
+      // reply body preview (html).
+      replyPreview: ''
+    }
+  },
+
+  watch: {
+    reply () {
+      this.updateReplyPreview()
     }
   },
 
@@ -104,10 +112,6 @@ export default {
 
     downvoted () {
       return get(this.currentVote, 'percent', 0) < 0
-    },
-
-    replyPreview () {
-      return this.reply
     }
   },
 
@@ -124,6 +128,13 @@ export default {
       this.replying = true
     },
 
+    updateReplyPreview () {
+      render(this.reply)
+        .then(htmlResult => {
+          this.replyPreview = htmlResult
+          return htmlResult
+        })
+    },
     hideReplyBox () {
       this.replying = false
     },
