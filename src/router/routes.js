@@ -6,7 +6,14 @@ export default [
     component: () => import('src/layouts/blankpage'),
     children: [
       {path: '', name: 'home', component: () => import('src/pages/index/index'), meta: {weight: 10}},
-      {path: '@:username', name: 'profile', component: () => import('src/pages/profile/profile'), meta: {weight: 10}}
+      {
+        path: '@:username',
+        name: 'profile',
+        component: () => import('src/pages/profile/profile'),
+        children: [
+          {path: 'contributions', name: 'profile.contributions', component: () => import('src/pages/profile/contributions/contributions')}
+        ]
+      }
     ]
   },
   {

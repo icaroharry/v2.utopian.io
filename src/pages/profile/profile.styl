@@ -42,9 +42,25 @@ div.header {
   padding 0
 }
 
-div.main {
-  height 2000px
+div.main#u-profile-main {
+  .q-layout-page-container {
+    padding-top 0 !important
+  }
+
+  .q-list#u-about-me {
+    background-color #fff
+    padding 10px
+    
+    .q-item {
+      text-transform none !important
+    }
+
+    .u-no-separator {
+      border none !important
+    }
+  }
 }
+
 
 .contributions {
   .u-post-preview {
