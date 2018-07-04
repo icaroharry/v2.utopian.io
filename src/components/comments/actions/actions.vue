@@ -153,6 +153,9 @@ export default {
         parentPermlink: this.permlink,
         content: this.replyBody,
         meta: {}
+      }).then(r => {
+        this.emitVoted()
+        this.replying = false
       })
     },
 
