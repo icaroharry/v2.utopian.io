@@ -55,7 +55,7 @@ div.u-comments-actions(@click.prevent="")
         q-field.reply-editor(label="Reply Body", orientation="vertical")
           q-input(
           id="description"
-          v-model="reply",
+          v-model="replyBody",
           type="textarea",
           placeholder="Give people a sense about your project…",
           @keyup.enter="submit")
@@ -67,5 +67,5 @@ div.u-comments-actions(@click.prevent="")
 
       // action buttons reply section.
       div.col-12.reply-buttons
-        q-btn(color="primary", label="Reply", icon="mdi-comment")
+        q-btn(color="primary", label="Reply", icon="mdi-comment", @click="doReply")
         q-btn(flat="", label="Cancel", @click="toggleReplyBox")
