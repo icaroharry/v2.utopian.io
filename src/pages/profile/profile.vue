@@ -2,6 +2,7 @@
 import ULayoutPage from 'src/layouts/parts/page/page'
 import UPostPreview from 'src/components/post-preview/post-preview'
 import { byOrder } from 'src/services/steem/posts'
+import { getFollowCount } from 'src/services/steem/account'
 import { concat, last, attempt, get } from 'lodash-es'
 import { mapGetters, mapActions } from 'vuex'
 
@@ -15,17 +16,14 @@ export default {
     return {    
       // auth store getters.
       ...mapGetters('auth', [
-        'guest',
-        'user',
         'uid',
         'account',
-        'github',
-        'githubUsername',
         'username',
-        'avatar',
-        'githubGuest'
+        'avatar'
       ]),
       userProfile: {},
+      followerCount: 0,
+      followersCount: {},
       userAccount: {},
       contributions: [],
       isMounted: false,
@@ -79,6 +77,12 @@ export default {
           attempt(done)
           return result
         })
+    },
+    loadFollowCount () {
+      return getFollowCount(this.$route.params['username']).then((result) => {
+        this.followerCount = result.follower_count
+        this.followingCount = result.following_count
+      })
     }
   },
   computed: {
@@ -98,7 +102,7 @@ export default {
   },
   mounted () {
     this.loading = true
-    this.loadInitial().then(() => {
+    Promise.all([this.loadInitial(), this.loadFollowCount()]).then(() => {
       this.loading = false
       this.isMounted = true
     })

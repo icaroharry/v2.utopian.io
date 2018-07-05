@@ -1,10 +1,10 @@
 <script>
-import { byOrder } from 'src/services/steem/posts'
+import { byAuthor } from 'src/services/steem/posts'
 import moment from 'moment'
 import UPostPreview from 'src/components/post-preview/post-preview'
 import ULayoutPage from 'src/layouts/parts/page/page'
 import { categories, categoryOptions } from 'src/services/utopian/categories'
-import { concat, last, filter, attempt, debounce } from 'lodash-es'
+import { concat, last, filter, attempt, debounce, get, uniqBy } from 'lodash-es'
 import { format } from 'quasar'
 
 const { capitalize } = format
@@ -41,13 +41,12 @@ export default {
       return this.loadPosts(done)
     }, 3000),
     loadPosts (done) {
-      const order = 'trending'
-      const tag = this.currentCategory || 'utopian-io'
       const author = this.$route.params.username
-      return byOrder(order, { tag, author, limit: NUMBER_OF_POSTS }, last(this.posts))
+      const startPermLink = get(last(this.posts), 'permlink', '')
+      return byAuthor({ author, limit: NUMBER_OF_POSTS, startPermLink })
         .then((result) => {
           this.posts = concat(this.posts, result)
-          if (result.length < NUMBER_OF_POSTS) {
+          if (result.length < NUMBER_OF_POSTS || last(this.posts) === last(result)) {
             attempt(done)
             this.$refs.infiniteScroll.stop()
           } else {
@@ -67,7 +66,7 @@ export default {
       )
     },
     visiblePosts () {
-      return filter(this.posts, (post) => ((post['parent_permlink'] === 'utopian-io')))
+      return uniqBy(filter(this.posts, (post) => ((post['parent_permlink'] === 'utopian-io'))), 'permlink')
     }
   },
   mounted () {

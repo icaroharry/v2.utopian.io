@@ -13,11 +13,11 @@ div
             span.text-white
               a(:href="userProfile.website")
     div#u-profile-tabs.container.row
-      q-tabs.offset-3.col-9(color="black" inverted v-if="!loading")
-        q-route-tab(:to="`/@${userAccount.name}/contributions`" name="tab-contributions" append label="Contributions" slot="title" exact default)
-        q-route-tab(:to="`/@${userAccount.name}/contributions`" name="tab-projects" append label="Projects" slot="title" exact)
-        q-route-tab(:to="`/@${userAccount.name}/updates`" name="tab-followers" append label="Followers" slot="title" exact)
-        q-route-tab(:to="`/@${userAccount.name}/task`" name="tab-following" append label="Following" slot="title" exact)
+      q-tabs.offset-3.col-9(color="black" inverted v-if="isMounted")
+        q-route-tab(:to="`/@${userAccount.name}/contributions`", name="tab-contributions", append, label="Contributions", slot="title", default)
+        // q-route-tab(:to="`/@${userAccount.name}/contributions`" name="tab-projects" append label="Projects" slot="title")
+        q-route-tab(:to="`/@${userAccount.name}/updates`", name="tab-followers", append, :label="followerCount + ' followers'", slot="title")
+        q-route-tab(:to="`/@${userAccount.name}/task`", name="tab-following", append, :label="followingCount + ' following'", slot="title")
 
   div.main#u-profile-main
     q-page-container.container.q-pt-none
