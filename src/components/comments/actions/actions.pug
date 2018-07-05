@@ -1,41 +1,71 @@
 // component wrapper.
 div.u-comments-actions(@click.prevent="")
-  // flex container.
-  div.flex
+  div.flex.actions-line
+    // flex container.
+    div.flex
 
-    // comment replies (count of replies on the comment).
-    // only enabled for root comments (posts)
-    div.action-item.space-icon.replies(v-if="comment.depth === 0")
-      q-icon(name="mdi-comment-text-outline")
-      span {{ comment.children }}
+      // comment replies (count of replies on the comment).
+      // only enabled for root comments (posts)
+      div.action-item.space-icon.replies(v-if="comment.depth === 0")
+        q-icon(name="mdi-comment-text-outline")
+        span {{ comment.children }}
 
-    // comment votes.
-    div.action-item.space-icon.likes(@click="showVotes = true")
+      // comment votes.
+      div.action-item.space-icon.likes(@click="showVotes = true")
 
-      // simple loading indicator for upvote / downvote broadcasting.
-      span(v-show="broadcasting")
-        q-spinner(color="tertiary" :size="16")
+        // simple loading indicator for upvote / downvote broadcasting.
+        span(v-show="broadcasting")
+          q-spinner(color="tertiary" :size="16")
 
-      // upvote button.
-      span(v-show="!broadcasting")
-        q-btn(dense, flat, :color="upvoteColor", @click="upvote", :icon="upvoteIcon")
-          q-tooltip {{ upvoteTooltip }}
+        // upvote button.
+        span(v-show="!broadcasting")
+          q-btn(dense, flat, :color="upvoteColor", @click="upvote", :icon="upvoteIcon")
+            q-tooltip {{ upvoteTooltip }}
 
-      // vote counter (net votes).
-      // only show for non-zero count comments.
-      span.vote-count(v-show="!broadcasting && votesCount !== 0", :class="upvoteColor")
-        // numeric display.
-        span {{ votesCount }}
-        // popover listing the actual votes.
-        u-comments-votes-popover(:comment="comment", :showing="showingVotes", @hide="hideVotes")
+        // vote counter (net votes).
+        // only show for non-zero count comments.
+        span.vote-count(v-show="!broadcasting && votesCount !== 0", :class="upvoteColor")
+          // numeric display.
+          span {{ votesCount }}
+          // popover listing the actual votes.
+          u-comments-votes-popover(:comment="comment", :showing="showingVotes", @hide="hideVotes")
 
-      // downvote button.
-      span(v-show="!broadcasting")
-        q-btn(dense, flat, :color="downvoteColor", @click="downvote", :icon="downvoteIcon")
-          q-tooltip {{ downvoteTooltip }}
+        // downvote button.
+        span(v-show="!broadcasting")
+          q-btn(dense, flat, :color="downvoteColor", @click="downvote", :icon="downvoteIcon")
+            q-tooltip {{ downvoteTooltip }}
 
-    // comment payout.
-    div.action-item.payout(@click="showPayout = true", :class="comment._payout_declined ? 'declined' : 'not-declined'")
-      q-icon(name="mdi-currency-usd")
-      span {{ comment._payout_value | currency }}
-        u-comments-payout-popover(:comment="comment", :showing="showingPayout", @hide="hidePayout")
+      // comment payout.
+      div.action-item.payout(@click="showPayout = true", :class="comment._payout_declined ? 'declined' : 'not-declined'")
+        q-icon(name="mdi-currency-usd")
+        span {{ comment._payout_value | currency }}
+          u-comments-payout-popover(:comment="comment", :showing="showingPayout", @hide="hidePayout")
+
+    // reply box
+    div.flex
+      // reply item.
+      div.action-item.action-reply.reply()
+        q-btn(@click="toggleReplyBox", label="Reply", icon="mdi-comment-outline", flat)
+
+  // reply box.
+  div.flex.actions-line.actions-reply(v-if="replying")
+    div.row.fit
+      // editor reply section.
+      div.col-12
+        q-field.reply-editor(label="Reply Body", orientation="vertical")
+          q-input(
+          id="description"
+          v-model="replyBody",
+          type="textarea",
+          placeholder="Give people a sense about your project…",
+          @keyup.enter="submit")
+
+      // preview reply section.
+      div.col-12
+        q-field.reply-preview(label="Preview", orientation="vertical")
+          div(v-html="replyPreview")
+
+      // action buttons reply section.
+      div.col-12.reply-buttons
+        q-btn(color="primary", label="Reply", icon="mdi-comment", @click="doReply")
+        q-btn(flat="", label="Cancel", @click="toggleReplyBox")

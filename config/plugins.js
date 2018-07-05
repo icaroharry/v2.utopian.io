@@ -1,4 +1,5 @@
 module.exports = [
+  'steem',
   'vuelidate',
   'db',
   'i18n',
