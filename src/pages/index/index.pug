@@ -2,11 +2,11 @@ div
   div.header.q-pb-lg
     q-page-container.container
       div.gt-sm.row.justify-center.q-my-lg.q-pb-lg.menu
-        router-link(:to="{ name: 'home' }") PROJECTS
         router-link(:to="{ name: 'contributions' }") CONTRIBUTIONS
-        router-link(:to="{ name: 'home' }") WALLET
-        router-link(:to="{ name: 'home' }") SPONSORS
-        router-link(:to="{ name: 'home' }") MODERATORS
+        a(href="https://join.utopian.io/sponsors/" target="_blank") SPONSORS
+        router-link(:to="{ name: 'home' }", disabled) PROJECTS
+        router-link(:to="{ name: 'home' }", disabled) WALLET
+        router-link(:to="{ name: 'home' }", disabled) MODERATORS
       div.row
         div.col-lg-6.offset-lg-1.projects-slider
           q-carousel.project-images(color="white", ref="mainCarousel")

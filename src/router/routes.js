@@ -11,6 +11,7 @@ export default [
         name: 'profile',
         component: () => import('src/pages/profile/profile'),
         children: [
+          {path: '/', redirect: 'contributions'},
           {path: 'contributions', name: 'profile.contributions', component: () => import('src/pages/profile/contributions/contributions')}
         ]
       }
