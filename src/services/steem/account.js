@@ -23,9 +23,24 @@ export const formatReputation = (reputationPoints) => {
   return formatter.reputation(reputationPoints)
 }
 
+export const getFollowCount = (user) => {
+  return api.getFollowCountAsync(user)
+}
+
+export const getFollowing = ({ follower, startFollowing = '', followType = 'blog', limit = 20 }) => {
+  return api.getFollowersAsync(follower, startFollowing, followType, limit)
+}
+
+export const getFollowers = ({ following, startFollower = '', followType = 'blog', limit = 20 }) => {
+  return api.getFollowersAsync(following, startFollower, followType, limit)
+}
+
 // default export.
 export default {
   getAccount,
   getHistory,
-  formatReputation
+  formatReputation,
+  getFollowCount,
+  getFollowing,
+  getFollowers
 }

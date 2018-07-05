@@ -1,0 +1,41 @@
+div
+  div.header
+    q-parallax(:src="coverImage", :height="300")
+      q-page-container.container
+        div.row
+          img(:src="userProfile.avatar").avatar
+          div.user-info.column.justify-center
+            div.row.items-center
+              span.text-white {{ userProfile.name || userAccount.name }}
+              span(v-if="userAccount._reputation").row.user-reputation.content-center.items-center {{ userAccount._reputation }}
+              q-btn.q-ml-md(color="primary", dense) Follow
+            span.text-grey-5.text-weight-light {{ '@' + userAccount.name }}
+            span.text-white
+              a(:href="userProfile.website")
+    div#u-profile-tabs.container.row
+      q-tabs.offset-3.col-9(color="black" inverted v-if="isMounted")
+        q-route-tab(:to="`/@${userAccount.name}/contributions`", name="tab-contributions", append, label="Contributions", slot="title", default)
+        // q-route-tab(:to="`/@${userAccount.name}/contributions`" name="tab-projects" append label="Projects" slot="title")
+        q-route-tab(:to="`/@${userAccount.name}/updates`", name="tab-followers", append, :label="followerCount + ' followers'", slot="title", disable)
+        q-route-tab(:to="`/@${userAccount.name}/task`", name="tab-following", append, :label="followingCount + ' following'", slot="title", disable)
+
+  div.main#u-profile-main
+    q-page-container.container.q-pt-none
+      u-layout-page
+        template(slot="meta")
+          div.row.column
+            span.q-title.uppercase.q-pb-md about me
+            q-list(separator).row.round-borders#u-about-me
+              q-item.col-12
+                q-item-main
+                  q-item-tile(sublabel) {{ userProfile.about }}
+              q-item.col-12
+                q-item-side(icon="mdi-map-marker" color="primary")
+                q-item-main
+                  q-item-tile(sublabel) {{ userProfile.location }}
+              q-item.col-12.u-no-separator
+                q-item-side(icon="mdi-link" color="primary")
+                q-item-main
+                  q-item-tile(sublabel).wrap {{ userProfile.website }}
+        template(slot="main")
+          router-view()

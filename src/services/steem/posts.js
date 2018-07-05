@@ -90,9 +90,14 @@ export const byOrder = (order = 'trending', query, last = null) => {
   })
 }
 
+export const byAuthor = ({ author, startPermlink = '', beforeDate = new Date().toJSON().substr(0, 19), limit = 20 }) => {
+  return api.getDiscussionsByAuthorBeforeDateAsync(author, startPermlink, beforeDate, limit).then((posts) => map(posts, parsePost))
+}
+
 // default export.
 export default {
   byCreated,
   byTrending,
-  byOrder
+  byOrder,
+  byAuthor
 }

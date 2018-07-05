@@ -57,5 +57,6 @@ module.exports = [
   'QProgress',
   'QChipsInput',
   'QUploader',
-  'QAutocomplete'
+  'QAutocomplete',
+  'QParallax'
 ]

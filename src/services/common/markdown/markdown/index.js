@@ -1,5 +1,5 @@
 // imports.
-import { each } from 'lodash-es'
+import { each, toString } from 'lodash-es'
 // import markdown-it plugins.
 import plugins from '../plugins'
 // import html sanitizer helpers.
@@ -32,7 +32,7 @@ const passThrough = (test = true, whenTrue) => (test === true ? whenTrue : dummy
 
 // async markdown render function.
 export const render = (markdown = '', sanitize = true) => {
-  return Promise.resolve(parser.render(markdown))
+  return Promise.resolve(parser.render(toString(markdown)))
     .then(passThrough(sanitize, sanitizer.sanitize))
 }
 

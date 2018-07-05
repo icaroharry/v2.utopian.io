@@ -67,7 +67,7 @@ export default {
       return this.linkGithubAccount()
         // handle errors.
         .catch((e) => {
-          this.showDialog({ title: 'foo', 'message': 'Error while linking Github Account.' })
+          this.showDialog({ title: 'Oops', 'message': 'Error while linking Github Account.' })
         })
         // finish by stop loading.
         .finally(() => {
@@ -90,7 +90,7 @@ export default {
         })
         // handle errors.
         .catch((e) => {
-          this.showDialog({ title: 'foo', 'message': 'An error occurred while trying to authenticate.' })
+          this.showDialog({ title: 'Oops', 'message': 'An error occurred while trying to authenticate.' })
         })
         // finish by stop loading.
         .finally(() => {
