@@ -1,11 +1,10 @@
 // import lodash helpers.
 import { get } from 'lodash-es'
-// import permlink helper.
-import { generateReplyPermlink, generateMetadata } from 'src/services/steem/connect/reply'
+// import comment helpers.
+import { slugifyTitle, generateMetadata } from 'src/services/steem/connect/comment'
 
 // broadcast a vote to steem through steem connect.
 export const comment = async ({ getters, dispatch, rootGetters }, {
-  category,
   title,
   permlink = null,
   tags = [],
@@ -18,10 +17,12 @@ export const comment = async ({ getters, dispatch, rootGetters }, {
   // generate the reply metadata.
   const metadata = generateMetadata(meta, tags)
 
+  // generate permlink from provided permlink or from title.
+  const finalPermlink = permlink || slugifyTitle(title)
+
   // prepare client.
   return dispatch('prepareClient')
     .then((client) => {
-      console.log(permlink, metadata, author, content)
-      return client.comment('', category, author, permlink, '', content, metadata)
+      return client.comment('', 'utopian-io', author, finalPermlink, '', content, metadata)
     })
 }

@@ -28,6 +28,7 @@ export default {
       projectSelector: null,
       // contribution data.
       contribution: {
+        category: 'development',
         title: '',
         body: '',
         projectId: null,
@@ -44,13 +45,26 @@ export default {
   // component methods.
   methods: {
 
+    // map steem store actions.
+    ...mapActions('steem', [
+      'comment'
+    ]),
+
     // map contributions store actions.
     ...mapActions('contributions', [
       'searchGithubRepository'
     ]),
 
     saveContribution () {
-
+      return this.comment({
+        title: get(this.contribution, 'title', null),
+        content: get(this.contribution, 'body', ''),
+        tags: get(this.contribution, 'tags', []),
+        meta: {
+          category: get(this.contribution, 'category', 'development'),
+          projectId: get(this.contribution, 'projectId', null)
+        }
+      }).catch(console.log)
     },
 
     // search github for repositories matching a given query.

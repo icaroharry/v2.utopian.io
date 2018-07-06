@@ -10,7 +10,7 @@ export const baseMetadata = {
 }
 
 // metadata generator.
-export const generateMetadata = (meta, tags) => merge(merge(baseMetadata, meta), tags)
+export const generateMetadata = (meta, tags) => merge(merge(baseMetadata, meta), { tags })
 
 // title slug.
-export const slugifyTitle = (title) => slugify(title)
+export const slugifyTitle = (title) => slugify(title, { lower: true })
