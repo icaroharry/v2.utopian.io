@@ -55,6 +55,7 @@ export default {
       'searchGithubRepository'
     ]),
 
+    // broadcast (save) the contribution / post on the blockchain.
     saveContribution () {
       return this.comment({
         title: get(this.contribution, 'title', null),
