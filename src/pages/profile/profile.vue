@@ -21,9 +21,12 @@ export default {
         'username',
         'avatar'
       ]),
-      userProfile: {},
+      ...mapGetters('users', [
+        'user'
+      ]),
+      userData: {},
       followerCount: 0,
-      followersCount: {},
+      followingCount: 0,
       userAccount: {},
       contributions: [],
       isMounted: false,
@@ -35,7 +38,8 @@ export default {
   methods: {
     ...mapActions({
       loadFirebaseAccount: 'auth/loadFirebaseAccount',
-      loadSteemAccount: 'steem/loadAccount'
+      loadSteemAccount: 'steem/loadAccount',
+      loadSteemAccountFollowCount: 'steem/loadAccountFollowCount'
     }),
     factoryProfile (data) {
       // extract meta information.
@@ -49,25 +53,19 @@ export default {
     },
     async loadInitial () {
       const username = this.$route.params['username']
+      this.userData = this.user()(username)
 
-      if (this.isOwnProfile) { // if the profile belongs to the current logged user, fetch data from vuex
-        this.userAccount = this.account()
-        this.userProfile = this.userAccount.profile
-        return this.userProfile
-      } else { // if it is not the logged user, try to fetch from firestore
-        this.loadFirebaseAccount(username).then((account) => {
-          if (account === null) { // if the user is not registered on firestore, fetch from the blockchain
-            this.loadSteemAccount(username).then((account) => {
-              this.userAccount = account
-              this.userProfile = this.factoryProfile(account)
-              return this.userProfile
-            })
-          } else {
-            this.userAccount = account
-            this.userProfile = account.profile
-            return this.userProfile
-          }
-        })
+      if (!this.userData) {
+        await Promise.all([
+          this.loadFirebaseAccount(username),
+          this.loadSteemAccount(username)
+        ])
+
+        this.userData = this.user()(username)
+      }
+
+      if (!this.userData.steemData.follow_count) {
+        await this.loadSteemAccountFollowCount(username)
       }
     },
     loadContributions (done) {
@@ -91,8 +89,8 @@ export default {
     },
     coverImage () {
       if (this.isMounted) {
-        if (this.userProfile.cover_image) {
-          return 'https://steemitimages.com/2048x512/' + this.userProfile.cover_image
+        if (this.userData.steemData._meta.profile.cover_image) {
+          return 'https://steemitimages.com/2048x512/' + this.userData.steemData._meta.profile.cover_image
         } else {
           return 'https://source.unsplash.com/2048x512/?coding,computer,tech'
         }

@@ -1,23 +1,23 @@
-div
+div(v-if="isMounted")
   div.header
     q-parallax(:src="coverImage", :height="300")
       q-page-container.container
         div.row
-          img(:src="userProfile.avatar").avatar
+          img(:src="'https://img.blocker.press/a/' + userData.steemData.name").avatar
           div.user-info.column.justify-center
             div.row.items-center
-              span.text-white {{ userProfile.name || userAccount.name }}
-              span(v-if="userAccount._reputation").row.user-reputation.content-center.items-center {{ userAccount._reputation }}
+              span.text-white {{ userData.steemData._name || userData.steemData.name }}
+              span(v-if="userData.steemData._reputation").row.user-reputation.content-center.items-center {{ userData.steemData._reputation }}
               q-btn.q-ml-md(color="primary", dense) Follow
-            span.text-grey-5.text-weight-light {{ '@' + userAccount.name }}
+            span.text-grey-5.text-weight-light {{ '@' + userData.steemData.name }}
             span.text-white
-              a(:href="userProfile.website")
+              a(:href="userData.steemData._meta.profile.website")
     div#u-profile-tabs.container.row
       q-tabs.offset-3.col-9(color="black" inverted v-if="isMounted")
-        q-route-tab(:to="`/@${userAccount.name}/contributions`", name="tab-contributions", append, label="Contributions", slot="title", default)
-        // q-route-tab(:to="`/@${userAccount.name}/contributions`" name="tab-projects" append label="Projects" slot="title")
-        q-route-tab(:to="`/@${userAccount.name}/updates`", name="tab-followers", append, :label="followerCount + ' followers'", slot="title", disable)
-        q-route-tab(:to="`/@${userAccount.name}/task`", name="tab-following", append, :label="followingCount + ' following'", slot="title", disable)
+        q-route-tab(:to="`/@${userData.steemData.name}/contributions`", name="tab-contributions", append, label="Contributions", slot="title", default)
+        // q-route-tab(:to="`/@${userData.steemData.name}/contributions`" name="tab-projects" append label="Projects" slot="title")
+        q-route-tab(:to="`/@${userData.steemData.name}/followers`", name="tab-followers", append, :label="followerCount + ' followers'", slot="title")
+        q-route-tab(:to="`/@${userData.steemData.name}/following`", name="tab-following", append, :label="followingCount + ' following'", slot="title")
 
   div.main#u-profile-main
     q-page-container.container.q-pt-none
@@ -28,14 +28,14 @@ div
             q-list(separator).row.round-borders#u-about-me
               q-item.col-12
                 q-item-main
-                  q-item-tile(sublabel) {{ userProfile.about }}
+                  q-item-tile(sublabel) {{ userData.steemData._about }}
               q-item.col-12
                 q-item-side(icon="mdi-map-marker" color="primary")
                 q-item-main
-                  q-item-tile(sublabel) {{ userProfile.location }}
+                  q-item-tile(sublabel) {{ userData.steemData._location }}
               q-item.col-12.u-no-separator
                 q-item-side(icon="mdi-link" color="primary")
                 q-item-main
-                  q-item-tile(sublabel).wrap {{ userProfile.website }}
+                  q-item-tile(sublabel).wrap {{ userData.steemData._website }}
         template(slot="main")
           router-view()

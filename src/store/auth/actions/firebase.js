@@ -48,6 +48,7 @@ export const loadFirebaseAccount = ({ getters, state, commit, dispatch }, uid) =
 
     // commit account data on store.
     commit('setAccount', accountData)
+    commit('users/setUserData', { username: accountData.name, path: 'firebaseData', value: accountData }, { root: true })
 
     // finish by returning the data itself.
     return accountData

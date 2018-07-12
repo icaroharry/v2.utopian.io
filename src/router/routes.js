@@ -12,7 +12,9 @@ export default [
         component: () => import('src/pages/profile/profile'),
         children: [
           {path: '/', redirect: 'contributions'},
-          {path: 'contributions', name: 'profile.contributions', component: () => import('src/pages/profile/contributions/contributions')}
+          {path: 'contributions', name: 'profile.contributions', component: () => import('src/pages/profile/contributions/contributions')},
+          {path: 'followers', name: 'profile.followers', component: () => import('src/pages/profile/follow/follow'), meta: {type: 'followers'}},
+          {path: 'following', name: 'profile.following', component: () => import('src/pages/profile/follow/follow'), meta: {type: 'following'}}
         ]
       }
     ]
