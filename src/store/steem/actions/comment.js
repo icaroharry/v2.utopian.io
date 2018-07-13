@@ -1,3 +1,5 @@
+// import firebase
+import firebase from 'firebase/app'
 // import lodash helpers.
 import { get } from 'lodash-es'
 // import comment helpers.
@@ -24,8 +26,16 @@ export const comment = async ({ getters, dispatch, rootGetters }, {
   const operations = generateOperations(author, title, finalPermlink, content, metadata)
   // prepare client.
   return dispatch('prepareClient')
-    .then((client) => {
-      // broadcast the operations.
-      return client.broadcast(operations)
-    })
+    // broadcast the operation,
+    .then((client) => client.broadcast(operations))
+    // save on database (call the API).
+    .then(() => dispatch('storeContribution', { author: author, permlink: finalPermlink }))
+}
+
+// broadcast a vote to steem through steem connect.
+export const storeContribution = async ({ getters, dispatch, rootGetters }, { author, permlink = null }) => {
+  // alias the backend method for saving the contribution
+  const saveContributionMethod = firebase.functions().httpsCallable('api/contributions/save')
+  // save the contribution.
+  return saveContributionMethod({ author, permlink })
 }
