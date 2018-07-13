@@ -1,5 +1,5 @@
 // import lodash helpers.
-import { merge } from 'lodash-es'
+import { get, merge, toNumber } from 'lodash-es'
 // slugify helper.
 import slugify from 'slugify'
 
@@ -26,6 +26,16 @@ export const generateOperations = (author, title, permlink = null, body = '', js
   // build comment operation array.
   const comment = ['comment', commentData]
 
+  // get the beneficiary account name and percent.
+  // defaults to the author.
+  const beneficiaryAccount = get(process.env, 'BENEFICIARY_ACCOUNT', author)
+  const beneficiaryPercent = toNumber(get(process.env, 'BENEFICIARY_PERCENT', '500'))
+
+  // build the beneficiaries array.
+  const beneficiaries = [
+    { account: beneficiaryAccount, weight: beneficiaryPercent }
+  ]
+
   // build comment options data array.
   const commentOptionsData = {
     author: author,
@@ -34,7 +44,9 @@ export const generateOperations = (author, title, permlink = null, body = '', js
     max_accepted_payout: '1000000.000 SBD',
     percent_steem_dollars: 10000,
     allow_curation_rewards: true,
-    extensions: [ [0, { beneficiaries: [{ account: 'utopian.pay', weight: 1500 }] }] ]
+    extensions: [
+      [0, { beneficiaries: beneficiaries }]
+    ]
   }
 
   // build comment options operation.
