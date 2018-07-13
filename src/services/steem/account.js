@@ -27,12 +27,12 @@ export const getFollowCount = (user) => {
   return api.getFollowCountAsync(user)
 }
 
-export const getFollowing = ({ follower, startFollowing = '', followType = 'blog', limit = 40 }) => {
-  return api.getFollowersAsync(follower, startFollowing, followType, limit)
+export const getFollowing = ({ username, startFollowing = '', followType = 'blog', limit = 40 }) => {
+  return api.getFollowingAsync(username, startFollowing, followType, limit)
 }
 
-export const getFollowers = ({ following, startFollower = '', followType = 'blog', limit = 40 }) => {
-  return api.getFollowersAsync(following, startFollower, followType, limit)
+export const getFollowers = ({ username, startFollower = '', followType = 'blog', limit = 40 }) => {
+  return api.getFollowersAsync(username, startFollower, followType, limit)
 }
 
 // default export.

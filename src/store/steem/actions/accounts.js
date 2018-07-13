@@ -36,20 +36,31 @@ export const loadAccountFollowCount = async ({ commit }, accountUser) => {
   }
 }
 
-// load a given account.
-export const loadAccountFollowing = ({ commit }, accountUser) => {
-  const username = accountUser.replace('@', '')
-  return remember(`${username}.following`, 10, () => getFollowing(username))
-    .then(account => {
-      return account
-    })
+export const loadAccountFollowing = async ({ commit }, { username, startFollowing = '' }) => {
+  username = username.replace('@', '')
+  const following = await getFollowing({ username, startFollowing })
+
+  commit('users/setUserData', {
+    username,
+    path: 'steemData.following',
+    value: following,
+    concat: true
+  }, { root: true })
+
+  return following
 }
 
-// load a given account.
-export const loadAccountFollowers = ({ commit }, accountUser) => {
-  const username = accountUser.replace('@', '')
-  return remember(`${username}.followers`, 10, () => getFollowers(username))
-    .then(account => {
-      return account
-    })
+// @TODO maybe cache on indexedDB and vuex as well?
+export const loadAccountFollowers = async ({ commit }, { username, startFollower = '' }) => {
+  username = username.replace('@', '')
+  const followers = await getFollowers({ username, startFollower })
+
+  commit('users/setUserData', {
+    username,
+    path: 'steemData.followers',
+    value: followers,
+    concat: true
+  }, { root: true })
+
+  return followers
 }

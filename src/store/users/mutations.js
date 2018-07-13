@@ -1,7 +1,9 @@
-import { set } from 'lodash'
+import { set, get } from 'lodash'
 
 // median feed price.
-export const setUserData = (state, { username, path = '', value }) => {
+export const setUserData = (state, { username, path = '', value, concat = false }) => {
   if (!state[username]) state[username] = {}
-  set(state[username], path, value)
+
+  const newValue = concat ? get(state[username], path, []).concat(value) : value
+  set(state[username], path, newValue)
 }

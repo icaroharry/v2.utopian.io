@@ -1,12 +1,12 @@
 u-layout-page.u-page-contributions(:meta="false")
   template(slot="main")
-    q-infinite-scroll(:handler="loadPostsScroll", ref="infiniteScroll")
+    q-infinite-scroll(:handler="loadUsersScroll", ref="infiniteScroll")
       q-list.flex.user-list(separator)
         q-item.col-12(v-for="user in this[route]")
-          q-item-side(:avatar="'https://img.blocker.press/a/' + user[route.slice(0, route.length - 1)]")
-          q-item-main(:label="user[route.slice(0, route.length - 1)]")
+          q-item-side(:avatar="'https://img.blocker.press/a/' + (user[route.slice(0, route.length - 1)] || user.following)")
+          q-item-main(:label="user[route.slice(0, route.length - 1)] || user.following")
           q-item-side(right)
             q-btn(color="primary") Follow
 
       // spinner for infinite scroll loading.
-      q-spinner-dots.justify-center(slot="message", :size="40", style="margin: 0 auto")
+      q-spinner-dots.justify-center.items-center(slot="message", :size="40", style="margin: 0 auto")
