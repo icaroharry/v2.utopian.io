@@ -3,7 +3,7 @@ import { remember } from 'src/database/cache'
 import { user } from 'src/database/tables'
 
 // import steem client account helper.
-import { getAccount, getFollowCount } from '../../../services/steem/account'
+import { getAccount, getFollowCount, getFollowers, getFollowing } from '../../../services/steem/account'
 
 // load a given account.
 export const loadAccount = ({ commit }, accountUser) => {
@@ -37,18 +37,18 @@ export const loadAccountFollowCount = async ({ commit }, accountUser) => {
 }
 
 // load a given account.
-export const loadAccountFollowing = (accountUser) => {
+export const loadAccountFollowing = ({ commit }, accountUser) => {
   const username = accountUser.replace('@', '')
-  return remember(username, 10, () => getAccount(username))
+  return remember(`${username}.following`, 10, () => getFollowing(username))
     .then(account => {
       return account
     })
 }
 
 // load a given account.
-export const loadAccountFollowers = (accountUser) => {
+export const loadAccountFollowers = ({ commit }, accountUser) => {
   const username = accountUser.replace('@', '')
-  return remember(username, 10, () => getAccount(username))
+  return remember(`${username}.followers`, 10, () => getFollowers(username))
     .then(account => {
       return account
     })

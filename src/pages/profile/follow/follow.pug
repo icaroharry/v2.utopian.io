@@ -1,15 +1,12 @@
 u-layout-page.u-page-contributions(:meta="false")
   template(slot="main")
-    div.row.reverse.categories-list
-      q-select.col-4(
-        v-model="currentCategory"
-        :options="categoryOptions"
-        hide-underline
-      )
     q-infinite-scroll(:handler="loadPostsScroll", ref="infiniteScroll")
-      q-list.flex.posts-list(padding, separator, sparse, no-border, multiline)
-        template(v-for="item in visiblePosts", v-if="item.parent_permlink === 'utopian-io' && item._category")
-          u-post-preview(:post="item")
+      q-list.flex.user-list(separator)
+        q-item.col-12(v-for="user in this[route]")
+          q-item-side(:avatar="'https://img.blocker.press/a/' + user[route.slice(0, route.length - 1)]")
+          q-item-main(:label="user[route.slice(0, route.length - 1)]")
+          q-item-side(right)
+            q-btn(color="primary") Follow
 
       // spinner for infinite scroll loading.
       q-spinner-dots.justify-center(slot="message", :size="40", style="margin: 0 auto")

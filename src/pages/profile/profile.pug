@@ -36,6 +36,6 @@ div(v-if="isMounted")
               q-item.col-12.u-no-separator
                 q-item-side(icon="mdi-link" color="primary")
                 q-item-main
-                  q-item-tile(sublabel).wrap {{ userData.steemData._website }}
+                  q-item-tile(sublabel).wrap {{ userData.steemData._meta.profile.website }}
         template(slot="main")
           router-view()
