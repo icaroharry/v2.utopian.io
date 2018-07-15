@@ -28,8 +28,9 @@ q-item.u-post-preview(:to="post.url", :link="false", :class="post._category")
         div.author
 
           div.author-details
-            div.name
-              span {{ '@' + post.author  }}
+            router-link.profile(:to="'/@' + post.author")
+              div.name
+                span {{ '@' + post.author  }}
               // span.reputation {{ post._author_reputation }}
             div.time-ago {{ post._time_created_from_now }}
           div.avatar

@@ -1,5 +1,5 @@
 // component wrapper.
-div.u-comments-author-header(@click.prevent="")
+div.u-comments-author-header()
   // flex container.
   div.flex.no-wrap.header-container(v-if="!loading && account !== null")
     div.avatar
@@ -8,7 +8,8 @@ div.u-comments-author-header(@click.prevent="")
       div.username.flex
         div.text()
           span.name(v-if="account._name") {{ account._name }}
-          span.username @{{ account.name }}
+          router-link.profile(:to="'/@' + account.name")
+            span.username @{{ account.name }}
         div.reputation
           span {{ account._reputation }}
 
