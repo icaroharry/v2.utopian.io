@@ -23,19 +23,27 @@ div(v-if="isMounted")
     q-page-container.container.q-pt-none
       u-layout-page
         template(slot="meta")
-          div.row.column
-            span.q-title.uppercase.q-pb-md about me
-            q-list(separator).row.round-borders#u-about-me
-              q-item.col-12
-                q-item-main
-                  q-item-tile(sublabel) {{ userData.steemData._about }}
-              q-item.col-12
-                q-item-side(icon="mdi-map-marker" color="primary")
-                q-item-main
-                  q-item-tile(sublabel) {{ userData.steemData._location }}
-              q-item.col-12.u-no-separator
-                q-item-side(icon="mdi-link" color="primary")
-                q-item-main
-                  q-item-tile(sublabel).wrap {{ userData.steemData._meta.profile.website }}
+          span.q-title.uppercase.q-pb-md about me
+          q-list(separator, multiline).round-borders#u-about-me
+            //- q-item(multiline)
+            //-   q-item-side(avatar="statics/boy-avatar.png")
+            //-   q-item-main
+            //-     label="Brunch this weekend? Brunch this weekend? Brunch this weekend?"
+            //-     label-lines="1"
+            //-     sublabel="John Doe John Doe John Doe John Doe John Doe John Doe John Doe John Doe John Doe"
+            //-     sublabel-lines="2"
+            //-   q-item-side(right)
+            //-     q-item-tile(stamp) 1 week ago
+            q-item
+              q-item-main
+                q-item-tile(sublabel) {{ userData.steemData._about }}
+            q-item
+              q-item-side(icon="mdi-map-marker" color="primary")
+              q-item-main(:sublabel="userData.steemData._location")
+            q-item().u-no-separator
+              q-item-side(icon="mdi-link" color="primary")  
+              q-item-main(multiline)
+                q-item-tile(sublabel, lines="3")
+                  a(:href="this.userData.steemData._meta.profile.website" target="_blank") {{ websiteDisplay }}
         template(slot="main")
           router-view()

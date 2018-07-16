@@ -87,6 +87,11 @@ export default {
     isOwnProfile () {
       return this.uid() === this.$route.params['username']
     },
+    websiteDisplay () {
+      if (this.isMounted && this.userData.steemData._meta.profile.website) {
+        return this.userData.steemData._meta.profile.website.split('//')[1]
+      }
+    },
     coverImage () {
       if (this.isMounted) {
         if (this.userData.steemData._meta.profile.cover_image) {

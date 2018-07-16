@@ -1,4 +1,4 @@
-u-layout-page.u-page-contributions(:meta="false")
+u-layout-page.u-page-follow(:meta="false")
   template(slot="main")
     q-infinite-scroll(:handler="loadUsersScroll", ref="infiniteScroll")
       q-list.flex.user-list(separator)
@@ -9,4 +9,5 @@ u-layout-page.u-page-contributions(:meta="false")
             q-btn(color="primary") Follow
 
       // spinner for infinite scroll loading.
-      q-spinner-dots.justify-center.items-center(slot="message", :size="40", style="margin: 0 auto")
+      div.row.justify-center(slot="message")
+        q-spinner-dots(slot="message", :size="40")
