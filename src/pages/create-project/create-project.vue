@@ -5,6 +5,7 @@ import * as GitHub from '@octokit/rest'
 import { required } from 'vuelidate/lib/validators'
 import UFileUploader from 'src/components/project/file-uploader/file-uploader'
 import { mapGetters } from 'vuex'
+import firebase from 'firebase/app'
 
 // create project component export.
 export default {
@@ -52,7 +53,7 @@ export default {
   validations: {
     project: {
       name: { required },
-      image: { required },
+      // image: { required },
       githubRepository: { required },
       shortDescription: { required },
       details: { required },
@@ -67,17 +68,39 @@ export default {
 
       this.project.image = this.projectImageUrl()
       this.project.slug = this.slug
-      if (this.$v.project.$error || !this.projectImageUrl()) {
+      if (this.$v.project.$error) {
         this.$q.notify('Please review the form.')
         return
       }
       this.loading = true
-      this.firestore.collection('projects').add(this.project).then(() => {
-        this.$router.push({ name: 'project.contributions', path: `/project/${this.project.slug}/contributions` })
-      }).catch((err) => {
-        this.loading = false
-        return err
-      })
+      const saveProjectMethod = firebase.functions().httpsCallable('api/projects/create')
+      return saveProjectMethod({
+        name: this.project.name, // project name.
+        description: this.project.shortDescription, // project description (short).
+        creator: 'test', // primary owner / creator of the project.
+        image: 'test', // project image
+        detail: this.project.details, // project detail
+        tags: this.project.tags, // project detail
+        blacklisted: false, // when blacklisted, no submissions should be made.
+        paused: false, // owners paused / suspended contributions by a given reason.
+        compliant: true, // does the project meets all criteria to be on utopian?.
+        github: {
+          id: null, // github organization id. (numeric).
+          repository: this.project.githubRepository // project slug (preferable to use github vendor/repo for slug).
+        },
+        slug: this.slug, // project slug (preferable to use github vendor/repo for slug).
+        website: null, // project website.
+        docs: null, // project documentation URL.
+        license: null, // project license code (lower case: mit, bsd, apache).
+        status: 'active' // owner or staff provided status (abandoned, active).
+      })      
+      
+      // this.firestore.collection('projects').add(this.project).then(() => {
+      //   this.$router.push({ name: 'project.contributions', path: `/project/${this.project.slug}/contributions` })
+      // }).catch((err) => {
+      //   this.loading = false
+      //   return err
+      // })
     },
     searchGithubRepos (query, done) {
       this.gh.search.repos({
