@@ -1,7 +1,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import ULayoutPage from 'src/layouts/parts/page/page'
-import { filter, debounce, uniqBy, attempt } from 'lodash-es'
+import { filter, debounce, uniqBy, attempt, last, concat } from 'lodash-es'
 import { format } from 'quasar'
 
 const { capitalize } = format
@@ -38,20 +38,32 @@ export default {
       if (!this[this.route]) {
         await this[`load${capitalize(this.route)}`]({ username })
         this[this.route] = this[`user${capitalize(this.route)}`]()(username)
+        if (this[this.route] < 40) {
+          this.$refs.infiniteScroll.stop()
+        }
       }
     },
     loadUsersScroll: debounce(function (index, done) {
       const username = this.$route.params['username']
       const vm = this
-      const lastUser = this[this.route].pop()
+      const lastUser = last(this[this.route])
 
       return this[`load${capitalize(this.route)}`]({
         username,
         startFollower: lastUser.follower || '',
         startFollowing: lastUser.following || ''
       }).then(function () {
-        vm[vm.route] = vm[`user${capitalize(vm.route)}`]()(username)
-        attempt(done)
+        const allFollowers = vm[`user${capitalize(vm.route)}`]()(username)
+        const newFollowers = allFollowers.slice(vm[vm.route].length, allFollowers.length)
+        
+        vm[vm.route] = concat(vm[vm.route], newFollowers)
+        if (newFollowers.length < 40) {
+          attempt(done)
+          vm.$refs.infiniteScroll.stop()
+        } else {
+          attempt(done)
+        }
+        return newFollowers
       }).catch((err) => {
         attempt(done)
         throw err

@@ -36,14 +36,19 @@ export const loadAccountFollowCount = async ({ commit }, accountUser) => {
   }
 }
 
-export const loadAccountFollowing = async ({ commit }, { username, startFollowing = '' }) => {
+export const loadAccountFollowing = async ({ commit }, { username, startFollowing = '', limit = 40 }) => {
   username = username.replace('@', '')
-  const following = await getFollowing({ username, startFollowing })
+  
+  // increases limit because the first user is repeated
+  if (startFollowing) {
+    limit++
+  }
+  const following = await getFollowing({ username, startFollowing, limit })
 
   commit('users/setUserData', {
     username,
     path: 'steemData.following',
-    value: following,
+    value: startFollowing ? following.slice(1, following.length) : following,
     concat: true
   }, { root: true })
 
@@ -51,14 +56,19 @@ export const loadAccountFollowing = async ({ commit }, { username, startFollowin
 }
 
 // @TODO maybe cache on indexedDB and vuex as well?
-export const loadAccountFollowers = async ({ commit }, { username, startFollower = '' }) => {
+export const loadAccountFollowers = async ({ commit }, { username, startFollower = '', limit = 40 }) => {
   username = username.replace('@', '')
-  const followers = await getFollowers({ username, startFollower })
+  // increases limit because the first user is repeated
+  if (startFollower) {
+    limit++
+  }
+  
+  const followers = await getFollowers({ username, startFollower, limit })
 
   commit('users/setUserData', {
     username,
     path: 'steemData.followers',
-    value: followers,
+    value: startFollower ? followers.slice(1, followers.length) : followers,
     concat: true
   }, { root: true })
 
