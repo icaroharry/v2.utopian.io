@@ -9,7 +9,7 @@ This repository is the home of the new Utopian.io frontend. Vue.JS & Quasar Fram
 
 ### Contributions.
 
-> **This is a early-stage project, meaning changes happens fast. Before putting work contributing, be sure to open a 
+> **This is a early-stage project, meaning changes happens fast. Before putting work contributing, be sure to open a
 proper issue to discuss your intention and receive proper advice.**
 
 ### Project Details.
@@ -18,30 +18,30 @@ Some information about this project.
 
 #### Architecture.
 
-So far, the frontend is completely client-side only, meaning no server is required to run the application. Anything that 
+So far, the frontend is completely client-side only, meaning no server is required to run the application. Anything that
 can be client-side, without server dependency, should be.
 
 #### Coding Standards.
 
 - Keep components minimal.
-- Security is the primary concent.
+- Security is the primary concern.
 - Javascript Standard Style (enforced by ESLint)
 - PUG (ex-Jade) templates.
 
 #### Security.
 
-The application, does not store credentials on server. Instead, SteemConnect implict grant is used and the token lives 
-on client-side only, and the client side is the soly responsible for broadcasting operations.
+The application, does not store credentials on server. Instead, SteemConnect implicit grant is used and the token lives
+on client-side only, and the client side is the solely responsible for broadcasting operations.
 
 Any sensitive data stored on browser is strongly encrypted with `AES-256-GCM` though WebCrypto API.
 
-A secret encryption key is handled by the browser, in a non-exportable manner, meaning the local encryption keys (which 
-are safely randomic) are not visible, not even for the application.
+A secret encryption key is handled by the browser, in a non-exportable manner, meaning the local encryption keys (which
+are safely random) are not visible, not even for the application.
 
 It means a browser security breach would be required to compromise the data.
 
-Also, care is taken on the actual token handling, SteemConnect and any other broadcasting drivers are deep cloned before 
-operations, and the cloned instances are destroyed after usafe (avoid having tokens on memory at any time, every action 
+Also, care is taken on the actual token handling, SteemConnect and any other broadcasting drivers are deep cloned before
+operations, and the cloned instances are destroyed after usage (avoid having tokens on memory at any time, every action
 requires decryption-usage-zeromem).
 
 PIN codes for PBKDF2 derivations are a secondary goal.

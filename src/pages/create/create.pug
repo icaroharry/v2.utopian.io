@@ -25,9 +25,9 @@ u-layout-page.u-page-index(:meta="false")
             q-field
 
               // tab format selection for categories.
-              q-tabs.u-tabs-categories(inverted, scrollable)
+              q-tabs.u-tabs-categories(v-model="contribution.category", inverted, scrollable)
                 // loop on each category to make the tabs.
-                q-tab(slot="title", v-for="category in categories", :key="category", scrollable)
+                q-tab(slot="title", v-for="category in categories", :name="category", :key="category", scrollable)
                   div.u-category-icons.row.justify-center.items-center(:class="'text-' + category")
                     q-icon(:class="'ut-' + category")
                   div.q-body.text-black {{ category }}

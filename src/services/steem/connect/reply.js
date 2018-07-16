@@ -29,5 +29,5 @@ export const generateReplyPermlink = (parentAuthor, parentPermlink, author) => {
   // generate the permlink string.
   const permlink = `re-${parentAuthor}-${parentPermlink}-by-${author}-${now}`
   // slugify and return the result.
-  return slugify(permlink)
+  return slugify(permlink, { lower: true })
 }

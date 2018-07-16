@@ -147,6 +147,7 @@ export default {
       'reply' // reply action.
     ]),
 
+    // creates the reply.
     doReply () {
       return this.reply({
         parentAuthor: this.author,
