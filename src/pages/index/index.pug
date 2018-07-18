@@ -48,7 +48,13 @@ div
 
   div.main
     q-page-container.container
-      div.q-title.q-my-lg RECENT CONTRIBUTIONS
+      div.flex.justify-between.contributions-header
+        div.q-title.q-my-lg RECENT CONTRIBUTIONS
+        router-link(:to="{ name: 'contributions' }") 
+          div.pt
+            div.text-right.mb See all
+            hr
+            div.mt Contributions  
       div.row.contributions.gutter-sm
         div.col-md-12.col-lg-4(v-for="(post, index) in visibleContributions", v-if="!loading")
           u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50")
