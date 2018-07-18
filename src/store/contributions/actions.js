@@ -8,7 +8,16 @@ export const loadDrafts = ({ commit, getters, dispatch, rootGetters }) => {
   // console.log(rootGetters)
 }
 
-// Github repository search.
+/**
+ * Github repository search.
+ *
+ * @TODO remove to a common / github only store.
+ *
+ * @param store
+ * @param query
+ *
+ * @return {Promise<T | Array>}
+ */
 export const searchGithubRepository = (store, query) => {
   return githubClient.search
     .repos(makeSearchOptions(query))
@@ -16,9 +25,17 @@ export const searchGithubRepository = (store, query) => {
     .catch(() => ([]))
 }
 
+/**
+ * Save contributions on database.
+ *
+ * @param store
+ * @param data
+ *
+ * @return {Promise<firebase.functions.HttpsCallableResult>}
+ */
 export const saveContribution = (store, data) => {
   // alias the api credentials to token callable method.
   const callSave = firebase.functions().httpsCallable('api/contributions/create')
   // call the api to validate the Github token.
-  return callSave(data)
+  return callSave({ contribution: data })
 }
