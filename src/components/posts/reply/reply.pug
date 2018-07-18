@@ -6,7 +6,8 @@ div.u-post-reply(:id="'@'+reply.author + '/' + reply.permlink")
     div.reply-content
       div.row.row-author-info
         div.name
-          span {{ reply.author }}
+          router-link.profile(:to="'/@'+reply.author")
+            span {{ reply.author }}
         div.reputation
           span {{ reply._author_reputation }}
         div.op(v-if="reply.author === reply.root_author")
