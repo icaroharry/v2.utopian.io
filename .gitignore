@@ -18,6 +18,7 @@ yarn.lock
 
 # Firebase
 .firebaserc
+.runtimeconfig.json
 
 # Editor directories and files
 .idea
