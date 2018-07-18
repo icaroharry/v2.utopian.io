@@ -4,5 +4,6 @@ module.exports = {
   FIREBASE_PROJECT_ID: (process.env.FIREBASE_PROJECT_ID || '"utopian-io"'),
   FIREBASE_AUTH_DOMAIN: (process.env.FIREBASE_AUTH_DOMAIN || '"auth.utopian.io"'),
   FIREBASE_MESSAGING_SENDER_ID: (process.env.FIREBASE_MESSAGING_SENDER_ID || 'null'),
+  FIREBASE_EMULATOR: (process.env.FIREBASE_EMULATOR || 'null'),
   STEEM_API: (process.env.STEEM_API || '"https://api.steemit.com"')
 }
