@@ -3,7 +3,6 @@ div.u-post-author(:class="{ reverse }")
   // text details
   div.author-details
     div.name
-      router-link.profile(:to="{ name: 'profile.contributions', params: { username: post.author } }")
       span {{ '@' + post.author }}
     div.reputation
       span {{ post._author_reputation }}
