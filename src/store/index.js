@@ -13,10 +13,11 @@ import common from './common'
 import auth from './auth'
 import steem from './steem'
 import project from './project'
+import users from './users'
 import contributions from './contributions'
 
 // join modules.
-const modules = { common, auth, steem, project, contributions }
+const modules = { common, auth, steem, project, users, contributions }
 
 // enable vuex.
 Vue.use(Vuex)

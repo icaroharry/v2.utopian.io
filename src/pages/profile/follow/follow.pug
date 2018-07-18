@@ -1,0 +1,13 @@
+u-layout-page.u-page-follow(:meta="false")
+  template(slot="main")
+    q-infinite-scroll(:handler="loadUsersScroll", ref="infiniteScroll")
+      q-list.flex.user-list(separator)
+        q-item.col-12(v-for="user in this[route]")
+          q-item-side(:avatar="'https://img.blocker.press/a/' + (user[route.slice(0, route.length - 1)] || user.following)")
+          q-item-main(:label="user[route.slice(0, route.length - 1)] || user.following")
+          q-item-side(right)
+            q-btn(color="primary") Follow
+
+      // spinner for infinite scroll loading.
+      div.row.justify-center(slot="message")
+        q-spinner-dots(slot="message", :size="40")
