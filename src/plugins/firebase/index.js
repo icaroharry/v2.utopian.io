@@ -16,6 +16,8 @@ import configureAuth from './auth'
 import configureFirestore from './firestore'
 // import storage configuration.
 import configureStorage from './storage'
+// import functions configuration.
+import configureFunctions from './functions'
 
 /**
  * Firebase plugin.
@@ -36,4 +38,7 @@ export default ({ store, Vue }) => {
 
   // configure storage.
   configureStorage(firebaseApp, Vue)
+
+  // configure firebase functions.
+  configureFunctions(firebaseApp)
 }
