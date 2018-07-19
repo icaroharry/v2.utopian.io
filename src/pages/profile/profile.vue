@@ -85,9 +85,9 @@ export default {
       })
     },
     followUser (following) {
-      this.waitingFollow = true
-      return this.followUser({ username: this.$route.params['username'], following }).then(() => {
-        this.waitingFollow = false
+      this.waitingFollow = following
+      return this.steemFollowUser({ username: this.$route.params['username'], following }).then(() => {
+        this.waitingFollow = ''
       })
     }
   },
