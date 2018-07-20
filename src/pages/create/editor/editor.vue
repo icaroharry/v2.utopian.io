@@ -1,8 +1,8 @@
-]<script>
+<script>
 import ace from 'brace'
 import UPostPreview from 'src/components/post-preview/post-preview'
-import { categories, categoryOptions } from 'src/services/utopian/categories'
-import { map, get } from 'lodash-es'
+// import { categories, categoryOptions } from 'src/services/utopian/categories'
+import { get } from 'lodash-es'
 import ULayoutPage from 'src/layouts/parts/page/page'
 import { render } from 'src/services/steem/markdown'
 
@@ -51,15 +51,6 @@ export default {
     },
     isMobile () {
       return get(this.$q, 'platform.is.mobile', false)
-    },
-    categories () {
-      return categories
-    },
-    categoryOptions () {
-      return map(categoryOptions, (option) => {
-        option.label = option.label.toUpperCase()
-        return option
-      })
     }
   },
   beforeDestroy () {

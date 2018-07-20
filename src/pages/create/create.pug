@@ -44,11 +44,13 @@ u-layout-page.u-page-index(:meta="false")
                   q-input(v-model="contribution.title",
                     :error="errors['title']")
 
-                // contribution details (aka body).
                 q-field(label="Contribution Details", orientation="vertical")
+                div.editor-container#editor-container
+                // contribution details (aka body).
+                // q-field(label="Contribution Details", orientation="vertical")
                   q-input(id="details", v-model="contribution.body",
                     type="textarea", placeholder="Write everything about your contribution…",
-                    :error="errors['body']")
+                    // :error="errors['body']")
 
               // right side fields.
               div.col-3
