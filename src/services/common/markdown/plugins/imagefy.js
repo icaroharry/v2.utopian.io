@@ -15,9 +15,10 @@ const urlRegex = new RegExp(url, 'ig')
 // default options.
 const defaultOptions = {
   // image proxy URL prefix.
-  proxyURL: 'https://steemitimages.com/0x0/',
+  proxyURL: 'https://steemitimages.com/0x0/'
   // wrap image elements by double new lines to avoid parsing errors.
-  wrapper: '\n\n'
+  // wrapper: '\n\n'
+  // removed wrapper for the sake of table for now.
 }
 
 /**
