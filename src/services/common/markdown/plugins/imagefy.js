@@ -28,10 +28,10 @@ const defaultOptions = {
  */
 export default function (md, options = {}) {
   // parse plugin options.
-  const { proxyURL, wrapper } = Object.assign({}, defaultOptions, options)
+  const { proxyURL } = Object.assign({}, defaultOptions, options)
 
   // wrap new line elements around the value.
-  const generateImageElement = (imageURL = '') => `${wrapper}![](${imageURL})${wrapper}`
+  const generateImageElement = (imageURL = '') => `![](${imageURL})`
 
   // proxy the image using steem images.
   const proxyImage = (toProxy = '') => `${proxyURL}${toProxy}`
