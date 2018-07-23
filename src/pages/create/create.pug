@@ -44,8 +44,12 @@ u-layout-page.u-page-index(:meta="false")
                   q-input(v-model="contribution.title",
                     :error="errors['title']")
 
-                q-field(label="Contribution Details", orientation="vertical")
-                div.editor-container#editor-container
+                q-field.field-editor(label="Contribution Details", orientation="vertical")
+                  div.editor-container#editor-container
+                  // div.side-editor(:style="editorStyle")
+                    div.flex.fit.editor
+                      div.editor-container#editor-container
+                // div.editor-container#editor-container
                 // contribution details (aka body).
                 // q-field(label="Contribution Details", orientation="vertical")
                   q-input(id="details", v-model="contribution.body",
