@@ -167,10 +167,6 @@ export default {
     editor.on('change', () => {
       // assign the editor content as body.
       this.body = editor.getValue()
-      // // render the markdown preview and assign.
-      // return render(this.body).then((result) => {
-      //   this.preview = result
-      // })
     })
 
     // set editor style options.
@@ -178,7 +174,7 @@ export default {
       fontFamily: 'Roboto Mono',
       fontSize: '12pt',
       showLineNumbers: true,
-      // completion features are tempory disabled.
+      // completion features are temporary disabled.
       enableEmmet: true,
       enableBasicAutocompletion: true,
       enableSnippets: true,

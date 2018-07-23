@@ -1,5 +1,5 @@
 // main contribution creation wrapper.
-u-layout-page.u-page-index(:meta="false")
+u-layout-page.u-page-contribution-form(:meta="false")
 
   // main content wrapper.
   div.row.flex.justify-center(slot="main")
@@ -49,6 +49,8 @@ u-layout-page.u-page-index(:meta="false")
                   // div.side-editor(:style="editorStyle")
                     div.flex.fit.editor
                       div.editor-container#editor-container
+                q-field.field-preview(label="Contribution Preview", orientation="vertical")
+                  div.post-body.markdown-content(v-html="preview")
                 // div.editor-container#editor-container
                 // contribution details (aka body).
                 // q-field(label="Contribution Details", orientation="vertical")

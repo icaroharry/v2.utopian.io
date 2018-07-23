@@ -99,9 +99,9 @@ export default {
       // assign the editor content as body.
       this.body = editor.getValue()
       // // render the markdown preview and assign.
-      // return render(this.body).then((result) => {
-      //   this.preview = result
-      // })
+      return render(this.body).then((result) => {
+        this.preview = result
+      })
     })
 
     // set editor style options.
