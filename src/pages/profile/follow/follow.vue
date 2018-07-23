@@ -18,7 +18,9 @@ export default {
       ...mapGetters('users', [
         'userFollowers',
         'userFollowing'
-      ])
+      ]),
+      waitingFollow: '', // falsy
+      waitingUnfollow: '' // falsy
     }
   },
   filters: {
@@ -26,7 +28,9 @@ export default {
   methods: {
     ...mapActions({
       loadFollowing: 'steem/loadAccountFollowing',
-      loadFollowers: 'steem/loadAccountFollowers'
+      loadFollowers: 'steem/loadAccountFollowers',
+      steemFollowUser: 'steem/followUser',
+      steemUnfollowUser: 'steem/unfollowUser'
     }),
     async loadInitial () {
       this.loading = true
@@ -68,7 +72,19 @@ export default {
         attempt(done)
         throw err
       })
-    }, 3000)
+    }, 3000),
+    followUser (following) {
+      this.waitingFollow = following
+      return this.steemFollowUser({ username: this.$route.params['username'], following }).then(() => {
+        this.waitingFollow = ''
+      })
+    },
+    unfollowUser (follower) {
+      this.waitingUnfollow = follower
+      return this.steemUnfollowUser({ username: this.$route.params['username'], follower }).then(() => {
+        this.waitingUnfollow = ''
+      })
+    }
   },
   computed: {
     // route === 'following' or route === 'followers'

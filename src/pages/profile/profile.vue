@@ -30,7 +30,8 @@ export default {
       userAccount: {},
       contributions: [],
       isMounted: false,
-      loading: false
+      loading: false,
+      waitingFollow: false
     }
   },
   filters: {
@@ -39,7 +40,8 @@ export default {
     ...mapActions({
       loadFirebaseAccount: 'auth/loadFirebaseAccount',
       loadSteemAccount: 'steem/loadAccount',
-      loadSteemAccountFollowCount: 'steem/loadAccountFollowCount'
+      loadSteemAccountFollowCount: 'steem/loadAccountFollowCount',
+      followUser: 'steem/followUser'
     }),
     factoryProfile (data) {
       // extract meta information.
@@ -80,6 +82,12 @@ export default {
       return getFollowCount(this.$route.params['username']).then((result) => {
         this.followerCount = result.follower_count
         this.followingCount = result.following_count
+      })
+    },
+    followUser (following) {
+      this.waitingFollow = following
+      return this.steemFollowUser({ username: this.$route.params['username'], following }).then(() => {
+        this.waitingFollow = ''
       })
     }
   },

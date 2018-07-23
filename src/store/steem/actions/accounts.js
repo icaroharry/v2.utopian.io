@@ -74,3 +74,9 @@ export const loadAccountFollowers = async ({ commit }, { username, startFollower
 
   return followers
 }
+
+export const followUser = async ({ dispatch }, { username, following }) =>
+  dispatch('prepareClient').then((client) => client.follow(username, following))
+
+export const unfollowUser = async ({ dispatch }, { username, follower }) => 
+  dispatch('prepareClient').then((client) => client.unfollow(username, follower))
