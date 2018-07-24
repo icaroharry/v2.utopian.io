@@ -1,7 +1,7 @@
 u-layout-page.u-page-create-project(reverse=true)
 
   div.row.flex.justify-center(slot="main")
-    q-spinner-dots(v-if="loading" :size="40", style="margin: 0 auto")
+    q-spinner-dots(v-if="loading", :size="40", style="margin: 0 auto")
     div(v-if="!loading")
       p.q-headline Let's create your project
       p.q-title Make a great first impression with all the project information filled and great images about your project.
@@ -24,7 +24,7 @@ u-layout-page.u-page-create-project(reverse=true)
 
           div.col-12
             q-field(label="Github Repository", orientation="vertical")
-              q-search(@blur="$v.project.githubRepository.$touch", v-model="project.githubRepository", placeholder="e.g dtube/dtube")
+              q-search(@blur="$v.project.githubRepository.$touch", v-model="project.githubRepository", placeholder="e.g dtube/dtube", icon="mdi-github-circle")
                 q-autocomplete(@search="searchGithubRepos", :min-characters="3", ref="autocomplete",
                 :debounce="500", separator)
 
@@ -57,10 +57,3 @@ u-layout-page.u-page-create-project(reverse=true)
                 placeholder="e.g: Dtube,"
               )
         q-btn.full-width(color="primary", label="Create", @click="checkProjectOwner")
-
-
-
-
-
-
-

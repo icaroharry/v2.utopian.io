@@ -17,13 +17,16 @@ export const searchGithubRepository = (store, query) => {
     .catch(() => ([]))
 }
 
-export const checkProjectCollaborator = (store, { owner, repo, username }) => {
+export const checkProjectCollaborator = async (store, { owner, repo, username }) => {
+  if (!isAuthenticated) {
+    await store.dispatch('authenticate')
+  }
   return githubClient.repos
     .reviewUserPermissionLevel({ owner, repo, username })
     .catch((err) => console.log(err))
 }
 
-export let isAuthenticated = false
+let isAuthenticated = false
 
 export const authenticate = async ({ dispatch }, token = '') => {
   if (!token) {

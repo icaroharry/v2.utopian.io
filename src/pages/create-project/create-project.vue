@@ -110,7 +110,6 @@ export default {
       const repo = splittedGithubRepository.pop()
       const owner = splittedGithubRepository.pop()
       const username = this.github().username
-      await this.authenticate()
       const result = await this.checkProjectCollaborator({ owner, repo, username })
       console.log(result)
     },
