@@ -51,7 +51,7 @@ export default {
     ]),
 
     // map contributions store actions.
-    ...mapActions('contributions', [
+    ...mapActions('github', [
       'searchGithubRepository'
     ]),
 

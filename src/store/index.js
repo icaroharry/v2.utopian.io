@@ -15,9 +15,10 @@ import steem from './steem'
 import project from './project'
 import users from './users'
 import contributions from './contributions'
+import github from './github'
 
 // join modules.
-const modules = { common, auth, steem, project, users, contributions }
+const modules = { common, auth, steem, project, users, contributions, github }
 
 // enable vuex.
 Vue.use(Vuex)
