@@ -8,7 +8,7 @@ const blockExpression = /^(<(h[0-9]|div|hr|p|center|ul|li|a)([^>]+)?>)/gim
 // fix a block contents.
 const fixBlockState = (state) => {
   // wrap block elements tags with new lines.
-  state.src = state.src.replace(blockExpression, (match) => `${match}\n`)
+  state.src = state.src.replace(blockExpression, (match) => `${match}\n\n`)
 }
 
 // plugin apply method.
