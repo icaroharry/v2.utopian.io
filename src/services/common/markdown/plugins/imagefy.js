@@ -31,7 +31,8 @@ export default function (md, options = {}) {
   // parse plugin options.
   const { proxyURL } = Object.assign({}, defaultOptions, options)
 
-  // wrap new line elements around the value.
+  // wrap new line elements around the value
+  // wrappers removed to stop parser from pulling multiple URLs into the same image tag
   const generateImageElement = (imageURL = '') => `![](${imageURL})`
 
   // proxy the image using steem images.
