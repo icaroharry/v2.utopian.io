@@ -11,7 +11,7 @@ const breaksExpresson = /^(<\/ ?b>)+/gim
 // fix a block contents.
 const fixBlockState = (state) => {
   // wrap block elements tags with new lines.
-  state.src = state.src.replace(breaksExpresson, (math) => '')
+  state.src = state.src.replace(breaksExpresson, (match) => '')
   state.src = state.src.replace(blockExpression, (match) => `${match}\n\n`)
 }
 
