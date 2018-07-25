@@ -3,7 +3,7 @@
  */
 
 // regex for matching HTML blocks.
-const blockExpression = /^(<(h[0-9]|div|hr|p|center|ul|li|a)([^>]+)?>)/gim
+const blockExpression = /^(<(h[0-9]|div|hr|p|center|ul|li|a|b)([^>]+)?>)/gim
 
 // fix a block contents.
 const fixBlockState = (state) => {
