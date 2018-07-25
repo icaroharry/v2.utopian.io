@@ -6,6 +6,7 @@ import { required } from 'vuelidate/lib/validators'
 import UFileUploader from 'src/components/project/file-uploader/file-uploader'
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase/app'
+import { uniq } from 'lodash-es'
 
 // create project component export.
 export default {
@@ -119,6 +120,12 @@ export default {
 
   // component methods.
   methods: {
+    ...mapActions([
+      'showDialog',
+      'startLoading',
+      'updateLoading',
+      'stopLoading'
+    ]),
     ...mapActions({
       loadCredentials: 'auth/loadCredentials',
       searchGithubRepository: 'github/searchGithubRepository',
@@ -133,15 +140,15 @@ export default {
       this.project.image = 'test.jpg'
 
       if (!this.project.slug) {
-        this.$q.notify('An error occured. Please review the form.')
+        this.showDialog({ title: 'Oops', message: 'An error occured. Please review the form.' })
         return
       }
       if (this.$v.project.$error) {
-        this.$q.notify('Please review the form.')
+        this.showDialog({ title: 'Oops', message: 'Please review the form.' })
         return
       }
       if (this.project.platforms.github.repository && !(await this.isProjectOwner())) {
-        this.$q.notify('You must be the owner of the GitHub project.')
+        this.showDialog({ title: 'Oops', message: 'You must be the owner of the GitHub project.' })
         return
       }
       if (!this.project.platforms.githubRepository) {
@@ -180,7 +187,7 @@ export default {
       const vm = this
       if (vm.project.tags.length === 1) {
         setTimeout(() => {
-          vm.project.tags = vm.project.tags[0].split(',')
+          vm.project.tags = uniq(vm.project.tags[0].split(',').map(tag => tag.trim()))
         }, 0)
       }
     },
@@ -207,6 +214,14 @@ export default {
     }
   },
   computed: {
+    closedSource: {
+      get () {
+        return !this.project.openSource
+      },
+      set () {
+        this.project.openSource = !this.project.openSource
+      }
+    }
   },
   mounted () {
     this.gh = new GitHub()

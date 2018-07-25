@@ -11,16 +11,19 @@ u-layout-page.u-page-create-project(reverse=true)
         div.row.row-fields.general
           div.col-12
             // project name.
-            q-field(label="Project Name", orientation="vertical")
+            q-field(label="Project Name*", orientation="vertical")
               q-input(v-model="project.name", :error="$v.project.name.$error", placeholder="e.g DTube", @keyup.enter="submit")
+        div.row.row-fields.general
+          div.col-12
 
         // github fields.
         div.row.row-fields.github
           div.col-12
             q-field(label="Github Repository", orientation="vertical")
-              q-search(v-model="project.platforms.github.repository", placeholder="e.g dtube/dtube", icon="mdi-github-circle")
+              q-search(v-model="project.platforms.github.repository", placeholder="e.g dtube/dtube", icon="mdi-github-circle", :disable="closedSource")
                 q-autocomplete(@search="searchGithubRepos", :min-characters="3", ref="autocomplete",
-                :debounce="500", separator)
+                  :debounce="500", separator)
+              q-checkbox(v-model.boolean="closedSource", label="My project is not Open Source", left-label)
 
         div.row.row-fields.general
           div.col-12
@@ -34,17 +37,17 @@ u-layout-page.u-page-create-project(reverse=true)
 
         div.row.row-fields.general
           div.col-12
-            q-field(label="License", orientation="vertical")
+            q-field(label="License*", orientation="vertical")
               q-select(label="License", v-model="project.license", :error="$v.project.license.$error",
-                placeholder="MIT", :options="licenseOptions", :before="[{ icon: 'mdi-file-outline' }]")
+                placeholder="MIT", :options="licenseOptions", :before="[{ icon: 'mdi-file-outline' }]", filter, autofocus-filter)
 
         div.row.row-fields.files
           div.col-12
-            q-field(label="Project Images", orientation="vertical")
+            q-field(label="Project Images*", orientation="vertical")
               u-file-uploader(ref="uploader", id="upload")
 
           div.col-12
-            q-field(label="Short description", :count="250", orientation="vertical")
+            q-field(label="Short description*", :count="250", orientation="vertical")
               q-input(
                 id="description"
                 v-model="project.description",
@@ -55,16 +58,17 @@ u-layout-page.u-page-create-project(reverse=true)
                 @keyup.enter="submit"
               )
           div.col-12
-            q-field(label="Details / About the Project", orientation="vertical")
-              q-input(id="details", v-model="project.detail", type="textarea", placeholder="Write everything about your project…", :error="$v.project.detail.$error",)
+            q-field(label="Details / About the Project*", orientation="vertical")
+              q-input(id="details", v-model="project.detail", type="textarea",
+                placeholder="Write everything about your project…", :error="$v.project.detail.$error")
 
           div.col-12
-            q-field(label="Project Tags", orientation="vertical")
+            q-field(label="Project Tags*", orientation="vertical", helper="Type tags separated by comma and hit enter to confirm")
               q-chips-input(
                 id="tags"
                 v-model="project.tags"
                 placeholder="e.g: video, decentralized, ipfs",
-                clearable
-                @keyup.enter="splitTags"
+                clearable,
+                @keyup.enter="splitTags",
               )
         q-btn.full-width(color="primary", label="Create", @click="submit")
