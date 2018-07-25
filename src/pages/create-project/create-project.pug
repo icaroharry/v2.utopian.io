@@ -11,23 +11,32 @@ u-layout-page.u-page-create-project(reverse=true)
         div.row.row-fields.general
           div.col-12
             // project name.
-            q-field(label="Project Name", :helper="'slug:' + slug", orientation="vertical")
+            q-field(label="Project Name", orientation="vertical")
               q-input(v-model="project.name", :error="$v.project.name.$error", placeholder="e.g DTube", @keyup.enter="submit")
-
-          // div.col-12
-            // project slug.
-            q-field.q-field-disabled(disabled="", label="Project Slug Name", orientation="vertical")
-              q-input(v-model="slug", placeholder="e.g: Dtube", readonly)
 
         // github fields.
         div.row.row-fields.github
-
           div.col-12
             q-field(label="Github Repository", orientation="vertical")
-              q-search(@blur="$v.project.githubRepository.$touch", v-model="project.githubRepository", placeholder="e.g dtube/dtube", icon="mdi-github-circle")
+              q-search(v-model="project.platforms.github.repository", placeholder="e.g dtube/dtube", icon="mdi-github-circle")
                 q-autocomplete(@search="searchGithubRepos", :min-characters="3", ref="autocomplete",
                 :debounce="500", separator)
 
+        div.row.row-fields.general
+          div.col-12
+            q-field(label="Web page", orientation="vertical")
+              q-input(v-model="project.website", placeholder="https://d.tube", @keyup.enter="submit")
+
+        div.row.row-fields.general
+          div.col-12
+            q-field(label="Documentation page", orientation="vertical")
+              q-input(v-model="project.docs", placeholder="https://docs.d.tube", @keyup.enter="submit")
+
+        div.row.row-fields.general
+          div.col-12
+            q-field(label="License", orientation="vertical")
+              q-select(label="License", v-model="project.license", :error="$v.project.license.$error",
+                placeholder="MIT", :options="licenseOptions", :before="[{ icon: 'mdi-file-outline' }]")
 
         div.row.row-fields.files
           div.col-12
@@ -38,22 +47,24 @@ u-layout-page.u-page-create-project(reverse=true)
             q-field(label="Short description", :count="250", orientation="vertical")
               q-input(
                 id="description"
-                v-model="project.shortDescription",
+                v-model="project.description",
                 type="textarea",
                 maxlength="250",
                 placeholder="Give people a sense about your project…",
-                :error="$v.project.shortDescription.$error",
+                :error="$v.project.description.$error",
                 @keyup.enter="submit"
               )
           div.col-12
             q-field(label="Details / About the Project", orientation="vertical")
-              q-input(id="details", v-model="project.details", type="textarea", placeholder="Write everything about your project…")
+              q-input(id="details", v-model="project.detail", type="textarea", placeholder="Write everything about your project…", :error="$v.project.detail.$error",)
 
           div.col-12
             q-field(label="Project Tags", orientation="vertical")
               q-chips-input(
                 id="tags"
                 v-model="project.tags"
-                placeholder="e.g: Dtube,"
+                placeholder="e.g: video, decentralized, ipfs",
+                clearable
+                @keyup.enter="splitTags"
               )
-        q-btn.full-width(color="primary", label="Create", @click="checkProjectOwner")
+        q-btn.full-width(color="primary", label="Create", @click="submit")

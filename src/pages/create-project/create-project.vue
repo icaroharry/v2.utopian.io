@@ -35,13 +35,63 @@ export default {
 
       // project internal data.
       project: {
+        id: 'random-id',
         name: '',
-        githubRepository: '',
+        description: '',
+        creator: '',
         image: '',
-        shortDescription: '',
-        details: '',
-        tags: []
+        detail: '',
+        tags: [],
+        platforms: {
+          github: {
+            id: null,
+            repository: ''
+          }
+        },
+        slug: '',
+        website: '',
+        docs: '',
+        license: '',
+        blacklisted: false,
+        openSource: true,
+        status: 'active'
       },
+
+      licenseOptions: [
+        { label: 'Academic Free License v3.0', value: 'afl-3.0' },
+        { label: 'Apache license 2.0', value: 'apache-2.0' },
+        { label: 'Artistic license 2.0', value: 'artistic-2.0' },
+        { label: 'Boost Software License 1.0', value: 'bs1-1.0' },
+        { label: 'BSD 2-clause "Simplified" license', value: 'bsd-2-clause' },
+        { label: 'BSD 3-clause "New" or "Revised" license', value: 'bsd-3-clause' },
+        { label: 'BSD 3-clause Clear license', value: 'bsd-3-clause-clear' },
+        { label: 'Creative Commons license family', value: 'cc' },
+        { label: 'Creative Commons Zero v1.0 Universal', value: 'cc0-1.0' },
+        { label: 'Creative Commons Attribution 4.0', value: 'cc-by-4.0' },
+        { label: 'Creative Commons Attribution Share Alike 4.0', value: 'cc-by-sa-4.0' },
+        { label: 'Do What The F*ck You Want To Public License', value: 'wtfpl' },
+        { label: 'Educational Community License v2.0', value: 'ecl-2.0' },
+        { label: 'Eclipse Public License 1.0', value: 'epl-1.0' },
+        { label: 'European Union Public License 1.1', value: 'eupl-1.1' },
+        { label: 'GNU Affero General Public License v3.0', value: 'agpl-3.0' },
+        { label: 'GNU General Public License family', value: 'gpl' },
+        { label: 'GNU General Public License v2.0', value: 'gpl-2.0' },
+        { label: 'GNU General Public License v3.0', value: 'gpl-3.0' },
+        { label: 'GNU Lesser General Public License family', value: 'lgpl' },
+        { label: 'GNU Lesser General Public License v2.1', value: 'lgpl-2.1' },
+        { label: 'GNU Lesser General Public License v3.0', value: 'lgpl-3.0' },
+        { label: 'ISC', value: 'isc' },
+        { label: 'LaTeX Project Public License v1.3c', value: 'lppl-1.3c' },
+        { label: 'Microsoft Public License', value: 'ms-pl' },
+        { label: 'MIT', value: 'mit' },
+        { label: 'Mozilla Public License 2.0', value: 'mpl-2.0' },
+        { label: 'Open Software License 3.0', value: 'osl-3.0' },
+        { label: 'PostgreSQL License', value: 'postgresql' },
+        { label: 'SIL Open Font License 1.1', value: 'ofl-1.1' },
+        { label: 'University of Illinois/NCSA Open Source License', value: 'ncsa' },
+        { label: 'The Unlicense', value: 'unlicense' },
+        { label: 'zLib License', value: 'zlib' }
+      ],
 
       // github placeholder.
       gh: {},
@@ -58,11 +108,12 @@ export default {
   validations: {
     project: {
       name: { required },
+      description: { required },
+      creator: { required },
       // image: { required },
-      githubRepository: { required },
-      shortDescription: { required },
-      details: { required },
-      tags: { required }
+      detail: { required },
+      slug: { required },
+      license: { required }
     }
   },
 
@@ -74,56 +125,64 @@ export default {
       checkProjectCollaborator: 'github/checkProjectCollaborator',
       authenticate: 'github/authenticate'
     }),
-    submit () {
+    async submit () {
       this.$v.project.$touch()
 
-      this.project.image = this.projectImageUrl()
-      this.project.slug = this.slug
+      this.project.slug = this.getProjectSlug()
+      this.project.creator = this.username()
+      this.project.image = 'test.jpg'
+
+      if (!this.project.slug) {
+        this.$q.notify('An error occured. Please review the form.')
+        return
+      }
       if (this.$v.project.$error) {
         this.$q.notify('Please review the form.')
         return
       }
+      if (this.project.platforms.github.repository && !(await this.isProjectOwner())) {
+        this.$q.notify('You must be the owner of the GitHub project.')
+        return
+      }
+      if (!this.project.platforms.githubRepository) {
+        this.project.openSource = false
+      }
       this.loading = true
       const saveProjectMethod = firebase.functions().httpsCallable('api/projects/create')
-      return saveProjectMethod({
-        name: this.project.name, // project name.
-        description: this.project.shortDescription, // project description (short).
-        creator: 'test', // primary owner / creator of the project.
-        image: 'test', // project image
-        detail: this.project.details, // project detail
-        tags: this.project.tags, // project detail
-        github: {
-          id: null, // github organization id. (numeric).
-          repository: this.project.githubRepository // project slug (preferable to use github vendor/repo for slug).
-        },
-        slug: this.slug, // project slug (preferable to use github vendor/repo for slug).
-        website: null, // project website.
-        docs: null, // project documentation URL.
-        license: null // project license code (lower case: mit, bsd, apache).
-      })
+      return saveProjectMethod(this.project)
+        .then(() => { this.loading = false })
+        .catch(() => { this.loading = false })
     },
     searchGithubRepos (query, done) {
       this.searchGithubRepository(query).then(done)
     },
-    async checkProjectOwner () {
-      const splittedGithubRepository = this.project.githubRepository.split('/')
+    async isProjectOwner () {
+      const splittedGithubRepository = this.project.platforms.github.repository.split('/')
       const repo = splittedGithubRepository.pop()
       const owner = splittedGithubRepository.pop()
       const username = this.github().username
-      const result = await this.checkProjectCollaborator({ owner, repo, username })
-      console.log(result)
+
+      let userPermision = 'none'
+      try {
+        userPermision = (await this.checkProjectCollaborator({ owner, repo, username })).data.permission
+      } catch (err) {
+        return false
+      }
+
+      return userPermision === 'admin'
     },
     selectGithubRepo (repo) {
       this.project.githubRepository = repo
       this.$refs.autocomplete.setValue(repo)
       this.checkProjectOwner()
     },
-    factoryRepos (repos) {
-      return repos.map(item => ({
-        value: item.url,
-        label: item.full_name,
-        avatar: item.owner.avatar_url
-      }))
+    splitTags () {
+      const vm = this
+      if (vm.project.tags.length === 1) {
+        setTimeout(() => {
+          vm.project.tags = vm.project.tags[0].split(',')
+        }, 0)
+      }
     },
     slugify (str) {
       str = str.replace(/^\s+|\s+$/g, '') // trim
@@ -141,12 +200,13 @@ export default {
         .replace(/-+/g, '-') // collapse dashes
 
       return str
+    },
+    getProjectSlug () {
+      return this.project.platforms.github
+        ? this.project.platforms.github.repository : `${this.username()}/${this.slugify(this.project.name)}`
     }
   },
   computed: {
-    slug () {
-      return this.slugify(this.project.name)
-    }
   },
   mounted () {
     this.gh = new GitHub()
