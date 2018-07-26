@@ -39,7 +39,6 @@ export default {
     },
     upload () {
       const vm = this
-      this.$emit('cuzao', 'asd')
       vm.uploadTask = vm.$firebaseStorage.child(`images/${Date.now()}`).put(vm.$refs.fileUploader.files.item(0))
       vm.uploadTask.then(function (snapshot) {
         vm.uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
