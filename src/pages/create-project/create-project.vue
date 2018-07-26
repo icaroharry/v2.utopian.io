@@ -216,7 +216,7 @@ export default {
     },
     userHasScrolled (ev) {
       if (ev.position >= 50) {
-        this.scrollPosition = 645 + ev.position
+        this.scrollPosition = 694 + ev.position
       } else {
         this.scrollPosition = 134 + ev.position
       }
@@ -231,6 +231,10 @@ export default {
         this.project.openSource = !this.project.openSource
       }
     }
+    // formPercentage () {
+    //   const projectFields = Object.keys(this.project)
+    //   const totalOfFields = projectFields.length
+    // }
   },
   mounted () {
     this.gh = new GitHub()
