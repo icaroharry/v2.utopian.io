@@ -11,8 +11,8 @@ u-layout-page.u-page-create-project(reverse=true)
         div.row.row-fields.general
           div.col-12
             // project name.
-            q-field(label="Project Name*", orientation="vertical")
-              q-input(v-model="project.name", :error="$v.project.name.$error", placeholder="e.g DTube", @keyup.enter="submit")
+            q-field(label="Project Name*", orientation="vertical", :error="$v.project.name.$error")
+              q-input(v-model.trim="project.name", placeholder="e.g DTube", @blur="updateFormPercentage('name')")
 
         div.row.row-fields.general
           div.col-12
@@ -20,27 +20,30 @@ u-layout-page.u-page-create-project(reverse=true)
         // github fields.
         div.row.row-fields.github
           div.col-12
-            q-field(label="Github Repository", orientation="vertical")
-              q-search(v-model="project.platforms.github.repository", placeholder="e.g dtube/dtube", icon="mdi-github-circle", :disable="closedSource")
+            q-field(label="Github Repository", orientation="vertical", :error="$v.project.platforms.$error")
+              q-search(v-model="project.platforms.github.repository", placeholder="e.g dtube/dtube",
+                icon="mdi-github-circle", :disable="closedSource", @blur="updateFormPercentage('platforms')")
                 q-autocomplete(@search="searchGithubRepos", :min-characters="3", ref="autocomplete",
                   :debounce="500", separator)
-              q-checkbox(v-model.boolean="closedSource", label="My project is not Open Source", left-label)
+              q-checkbox(v-model.boolean="closedSource", label="My project is not Open Source",
+                left-label, @blur="updateFormPercentage('platforms')", @input="checkGithubField")
 
         div.row.row-fields.general
           div.col-12
             q-field(label="Web page", orientation="vertical")
-              q-input(v-model="project.website", placeholder="https://d.tube", @keyup.enter="submit")
+              q-input(v-model="project.website", placeholder="https://d.tube", @keyup.enter="submit", @blur="updateFormPercentage('website')")
 
         div.row.row-fields.general
           div.col-12
             q-field(label="Documentation page", orientation="vertical")
-              q-input(v-model="project.docs", placeholder="https://docs.d.tube", @keyup.enter="submit")
+              q-input(v-model="project.docs", placeholder="https://docs.d.tube", @keyup.enter="submit", @blur="updateFormPercentage('docs')")
 
         div.row.row-fields.general
           div.col-12
             q-field(label="License*", orientation="vertical")
               q-select(label="License", v-model="project.license", :error="$v.project.license.$error",
-                placeholder="MIT", :options="licenseOptions", :before="[{ icon: 'mdi-file-outline' }]", filter, autofocus-filter)
+                placeholder="MIT", :options="licenseOptions", :before="[{ icon: 'mdi-file-outline' }]", filter,
+                autofocus-filter, @blur="updateFormPercentage('license')")
 
         div.row.row-fields.files
           div.col-12
@@ -57,11 +60,12 @@ u-layout-page.u-page-create-project(reverse=true)
                 placeholder="Give people a sense about your project…",
                 :error="$v.project.description.$error",
                 @keyup.enter="submit"
+                @blur="updateFormPercentage('description')"
               )
           div.col-12
             q-field(label="Details / About the Project*", orientation="vertical")
-              q-input(id="details", v-model="project.detail", type="textarea",
-                placeholder="Write everything about your project…", :error="$v.project.detail.$error")
+              q-input(id="details", v-model="project.details", type="textarea",
+                placeholder="Write everything about your project…", :error="$v.project.details.$error", @blur="updateFormPercentage('details')")
 
           div.col-12
             q-field(label="Project Tags*", orientation="vertical", helper="Type tags separated by comma and hit enter to confirm")
@@ -71,6 +75,7 @@ u-layout-page.u-page-create-project(reverse=true)
                 placeholder="e.g: video, decentralized, ipfs",
                 clearable,
                 @keyup.enter="splitTags",
+                @blur="updateFormPercentage('tags')"
               )
 
   template(slot="meta")
@@ -79,10 +84,10 @@ u-layout-page.u-page-create-project(reverse=true)
         q-item.col-12
           q-item-main
             q-item-tile.row.reverse
-              span.progress-text.lowercase 30% completed
+              span.progress-text.lowercase {{ formPercentage }}% completed
             q-item-tile.row
               q-progress(
-                :percentage="30"
+                :percentage="formPercentage"
                 height="10px"
               )
         q-item.col-12

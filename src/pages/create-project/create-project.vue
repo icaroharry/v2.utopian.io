@@ -34,30 +34,6 @@ export default {
         'username'
       ]),
 
-      // project internal data.
-      project: {
-        id: 'random-id',
-        name: '',
-        description: '',
-        creator: '',
-        image: '',
-        detail: '',
-        tags: [],
-        platforms: {
-          github: {
-            id: null,
-            repository: ''
-          }
-        },
-        slug: '',
-        website: '',
-        docs: '',
-        license: '',
-        blacklisted: false,
-        openSource: true,
-        status: 'active'
-      },
-
       licenseOptions: [
         { label: 'Academic Free License v3.0', value: 'afl-3.0' },
         { label: 'Apache license 2.0', value: 'apache-2.0' },
@@ -103,7 +79,35 @@ export default {
       // loading state indicator.
       loading: false,
 
-      scrollPosition: 134
+      // used to set the sidebox position
+      scrollPosition: 134,
+
+      formPercentage: 0,
+
+      // project internal data.
+      project: {
+        id: '', // auto generated
+        name: '', // project name.
+        description: '', // project description (short).
+        featured: false, // should project be featured in homepage
+        creator: '', // primary owner / creator of the project.
+        images: [], // project image
+        details: '', // project detail
+        tags: [], // project tags
+        blacklisted: false, // when blacklisted, no submissions should be made.
+        openSource: true, // is project open source or not?.
+        platforms: {
+          github: {
+            id: null,
+            repository: ''
+          }
+        }, // on which platform is the project
+        slug: '', // project slug (preferable to use github vendor/repo for slug).
+        website: '', // project website.
+        docs: '', // project documentation URL.
+        license: '', // project license code (lower case: mit, bsd, apache).
+        status: 'active' // owner or staff provided status (abandoned, active).
+      }
     }
   },
 
@@ -112,11 +116,15 @@ export default {
     project: {
       name: { required },
       description: { required },
-      creator: { required },
-      // image: { required },
-      detail: { required },
-      slug: { required },
-      license: { required }
+      images: {},
+      details: { required },
+      license: { required },
+      tags: {},
+      platforms: {
+        github: (value, vm) => vm.openSource ? value.github.repository !== '' : true
+      },
+      website: {},
+      docs: {}
     }
   },
 
@@ -220,6 +228,24 @@ export default {
       } else {
         this.scrollPosition = 134 + ev.position
       }
+    },
+    updateFormPercentage (field) {
+      this.$v.project[field].$touch()
+      const fields = Object.keys(this.$v.project.$params)
+      console.log(fields)
+      const totalOfFields = fields.length
+      let completed = 0
+      for (let key in this.$v.project.$params) {
+        if (this.$v.project[key].$dirty && !(this.$v.project[key].$invalid || this.$v.project[key].$error)) {
+          completed++
+        }
+      }
+      this.formPercentage = Math.round(completed / totalOfFields * 100)
+    },
+    checkGithubField () {
+      if (this.closedSource) {
+        this.project.platforms.github = { id: null, repository: '' }
+      }
     }
   },
   computed: {
@@ -231,10 +257,6 @@ export default {
         this.project.openSource = !this.project.openSource
       }
     }
-    // formPercentage () {
-    //   const projectFields = Object.keys(this.project)
-    //   const totalOfFields = projectFields.length
-    // }
   },
   mounted () {
     this.gh = new GitHub()
