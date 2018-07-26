@@ -101,7 +101,9 @@ export default {
       ghRepos: [],
 
       // loading state indicator.
-      loading: false
+      loading: false,
+
+      scrollPosition: 134
     }
   },
 
@@ -211,6 +213,13 @@ export default {
     getProjectSlug () {
       return this.project.platforms.github
         ? this.project.platforms.github.repository : `${this.username()}/${this.slugify(this.project.name)}`
+    },
+    userHasScrolled (ev) {
+      if (ev.position >= 50) {
+        this.scrollPosition = 645 + ev.position
+      } else {
+        this.scrollPosition = 134 + ev.position
+      }
     }
   },
   computed: {
@@ -225,6 +234,7 @@ export default {
   },
   mounted () {
     this.gh = new GitHub()
+    this.$parent.$parent.$on('scroll', this.userHasScrolled)
   },
   watch: {
   }

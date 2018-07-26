@@ -13,6 +13,7 @@ u-layout-page.u-page-create-project(reverse=true)
             // project name.
             q-field(label="Project Name*", orientation="vertical")
               q-input(v-model="project.name", :error="$v.project.name.$error", placeholder="e.g DTube", @keyup.enter="submit")
+
         div.row.row-fields.general
           div.col-12
 
@@ -71,4 +72,19 @@ u-layout-page.u-page-create-project(reverse=true)
                 clearable,
                 @keyup.enter="splitTags",
               )
-        q-btn.full-width(color="primary", label="Create", @click="submit")
+
+  template(slot="meta")
+    div.side-box(v-bind:style="{ marginTop: (scrollPosition) + 'px' }", ref="sideBox")
+      q-list(separator).row
+        q-item.col-12
+          q-item-main
+            q-item-tile.row.reverse
+              span.progress-text.lowercase 30% completed
+            q-item-tile.row
+              q-progress(
+                :percentage="30"
+                height="10px"
+              )
+        q-item.col-12
+          q-item-main.row
+            q-btn.full-width(color="primary", label="Create", @click="submit")

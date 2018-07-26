@@ -59,5 +59,6 @@ module.exports = [
   'QUploader',
   'QAutocomplete',
   'QParallax',
-  'QCheckbox'
+  'QCheckbox',
+  'QScrollObservable'
 ]
