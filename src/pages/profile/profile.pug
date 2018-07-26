@@ -36,12 +36,17 @@ div(v-if="isMounted")
             //-     q-item-tile(stamp) 1 week ago
             q-item
               q-item-main
-                q-item-tile(sublabel) {{ userData.steemData._about }}
-            q-item
+                //- conditional for about me block
+                q-item-tile(sublabel, v-if="userData.steemData._about") {{ userData.steemData._about }}
+                q-item-title(sublabel, v-else) There is no information about the user
+            q-item(v-if="userData.steemData._location")
+              //- add conditional for location (if location is empty do not display the block)
               q-item-side(icon="mdi-map-marker" color="primary")
               q-item-main(:sublabel="userData.steemData._location")
-            q-item().u-no-separator
-              q-item-side(icon="mdi-link" color="primary")  
+
+            //- add conditional for website (if website is empty do not display the block)
+            q-item().u-no-separator(v-if="userData.steemData._meta.profile.website")
+              q-item-side(icon="mdi-link" color="primary")
               q-item-main(multiline)
                 q-item-tile(sublabel, lines="3")
                   a(:href="this.userData.steemData._meta.profile.website" target="_blank") {{ websiteDisplay }}
