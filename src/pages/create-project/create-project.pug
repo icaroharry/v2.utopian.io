@@ -31,7 +31,7 @@ u-layout-page.u-page-create-project(reverse=true)
 
         div.row.row-fields.files
           div.col-12
-            q-field(label="Project Images", orientation="vertical", :error="$v.project.image.$error")
+            q-field(label="Project Images", orientation="vertical")
               u-file-uploader(ref="uploader", id="upload")
 
           div.col-12
@@ -39,10 +39,10 @@ u-layout-page.u-page-create-project(reverse=true)
               q-input(
                 id="description"
                 v-model="project.shortDescription",
+                :error="$v.project.shortDescription.$error",
                 type="textarea",
                 maxlength="250",
                 placeholder="Give people a sense about your project…",
-                :error="$v.project.shortDescription.$error",
                 @keyup.enter="submit"
               )
           div.col-12
