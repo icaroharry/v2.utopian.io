@@ -1,6 +1,6 @@
 // post preview wrapper.
 // q-item.u-post-preview(:class="post._category")
-q-item.u-post-preview(:to="post.url", :link="false", :class="post._category")
+q-item.u-post-preview(:to="post.url", :link="false", :class="post._category ? post._category : post._task")
 
   q-item-main(v-if="loading")
     div.row.col-12.justify-center.items-center
@@ -13,6 +13,8 @@ q-item.u-post-preview(:to="post.url", :link="false", :class="post._category")
         div.item-category(v-if="post._category !== null")
           q-icon(:class="'ut-' + post._category")
           span {{ post._category }}
+        div.item-category(v-if="post._task !== null")
+          span {{ post._task }}
 
         // div.q-item-body
 
