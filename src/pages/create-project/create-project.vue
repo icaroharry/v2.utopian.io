@@ -146,6 +146,8 @@ export default {
       this.$v.project.$touch()
 
       this.project.slug = this.getProjectSlug()
+      this.project.id = this.slugify(this.project.slug)
+      console.log(this.project.id)
       this.project.creator = this.username()
       this.project.image = 'test.jpg'
 
@@ -219,7 +221,7 @@ export default {
       return str
     },
     getProjectSlug () {
-      return this.project.platforms.github
+      return this.project.platforms.github.repository
         ? this.project.platforms.github.repository : `${this.username()}/${this.slugify(this.project.name)}`
     },
     userHasScrolled (ev) {
@@ -232,7 +234,6 @@ export default {
     updateFormPercentage (field) {
       this.$v.project[field].$touch()
       const fields = Object.keys(this.$v.project.$params)
-      console.log(fields)
       const totalOfFields = fields.length
       let completed = 0
       for (let key in this.$v.project.$params) {
