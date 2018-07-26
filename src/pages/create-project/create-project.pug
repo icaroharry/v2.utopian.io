@@ -24,14 +24,14 @@ u-layout-page.u-page-create-project(reverse=true)
 
           div.col-12
             q-field(label="Github Repository", orientation="vertical")
-              q-search(@blur="$v.project.githubRepository.$touch", v-model="project.githubRepository", placeholder="e.g dtube/dtube")
+              q-search(@blur="$v.project.githubRepository.$touch", v-model="project.githubRepository", :error="$v.project.githubRepository.$error", placeholder="e.g dtube/dtube")
                 q-autocomplete(@search="searchGithubRepos", :min-characters="3", ref="autocomplete",
                 :debounce="500", separator)
 
 
         div.row.row-fields.files
           div.col-12
-            q-field(label="Project Images", orientation="vertical")
+            q-field(label="Project Images", orientation="vertical", :error="$v.project.image.$error")
               u-file-uploader(ref="uploader", id="upload")
 
           div.col-12
@@ -47,13 +47,14 @@ u-layout-page.u-page-create-project(reverse=true)
               )
           div.col-12
             q-field(label="Details / About the Project", orientation="vertical")
-              q-input(id="details", v-model="project.details", type="textarea", placeholder="Write everything about your project…")
+              q-input(id="details", v-model="project.details", :error="$v.project.details.$error", type="textarea", placeholder="Write everything about your project…")
 
           div.col-12
             q-field(label="Project Tags", orientation="vertical")
               q-chips-input(
                 id="tags"
                 v-model="project.tags"
+                :error="$v.project.tags.$error"
                 placeholder="e.g: Dtube,"
               )
         q-btn.full-width(color="primary", label="Create", @click="submit")
