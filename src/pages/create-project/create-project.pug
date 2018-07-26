@@ -24,7 +24,7 @@ u-layout-page.u-page-create-project(reverse=true)
 
           div.col-12
             q-field(label="Github Repository", orientation="vertical")
-              q-search(@blur="$v.project.githubRepository.$touch", v-model="project.githubRepository", placeholder="e.g dtube/dtube")
+              q-search(@blur="$v.project.githubRepository.$touch", v-model="project.githubRepository", :error="$v.project.githubRepository.$error", placeholder="e.g dtube/dtube")
                 q-autocomplete(@search="searchGithubRepos", :min-characters="3", ref="autocomplete",
                 :debounce="500", separator)
 
@@ -39,21 +39,22 @@ u-layout-page.u-page-create-project(reverse=true)
               q-input(
                 id="description"
                 v-model="project.shortDescription",
+                :error="$v.project.shortDescription.$error",
                 type="textarea",
                 maxlength="250",
                 placeholder="Give people a sense about your project…",
-                :error="$v.project.shortDescription.$error",
                 @keyup.enter="submit"
               )
           div.col-12
             q-field(label="Details / About the Project", orientation="vertical")
-              q-input(id="details", v-model="project.details", type="textarea", placeholder="Write everything about your project…")
+              q-input(id="details", v-model="project.details", :error="$v.project.details.$error", type="textarea", placeholder="Write everything about your project…")
 
           div.col-12
             q-field(label="Project Tags", orientation="vertical")
               q-chips-input(
                 id="tags"
                 v-model="project.tags"
+                :error="$v.project.tags.$error"
                 placeholder="e.g: Dtube,"
               )
         q-btn.full-width(color="primary", label="Create", @click="submit")
