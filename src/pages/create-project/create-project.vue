@@ -76,9 +76,6 @@ export default {
       // github repositories.
       ghRepos: [],
 
-      // loading state indicator.
-      loading: false,
-
       // used to set the sidebox position
       scrollPosition: 134,
 
@@ -147,7 +144,6 @@ export default {
 
       this.project.slug = this.getProjectSlug()
       this.project.id = this.slugify(this.project.slug)
-      console.log(this.project.id)
       this.project.creator = this.username()
       this.project.image = 'test.jpg'
 
@@ -166,11 +162,14 @@ export default {
       if (!this.project.platforms.githubRepository) {
         this.project.openSource = false
       }
-      this.loading = true
+      this.startLoading('Saving your project')
       const saveProjectMethod = firebase.functions().httpsCallable('api/projects/create')
       return saveProjectMethod(this.project)
-        .then(() => { this.loading = false })
-        .catch(() => { this.loading = false })
+        .then(() => { this.stopLoading() })
+        .catch(() => {
+          this.stopLoading()
+          this.showDialog({ title: 'Oops :(', message: 'We couldn\'t save your project. Please try again' })
+        })
     },
     searchGithubRepos (query, done) {
       this.searchGithubRepository(query).then(done)
