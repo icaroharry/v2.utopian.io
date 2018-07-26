@@ -39,8 +39,8 @@ div(v-if="isMounted")
                 //- conditional for about me block
                 q-item-tile(sublabel, v-if="userData.steemData._about") {{ userData.steemData._about }}
                 q-item-title(sublabel, v-else) There is no information about the user
+            //- add conditional for location (if location is empty do not display the block)
             q-item(v-if="userData.steemData._location")
-              //- add conditional for location (if location is empty do not display the block)
               q-item-side(icon="mdi-map-marker" color="primary")
               q-item-main(:sublabel="userData.steemData._location")
 
