@@ -10,12 +10,13 @@ q-item.u-post-preview(:to="post.url", :link="false", :class="post._category ? po
     div.row.post-preview-row
       div.col-6
 
-        div.item-category(v-if="post._category !== null && 'utopian-io'")
+        div.item-category(v-if="post._category !== null")
           q-icon(:class="'ut-' + post._category")
           span {{ post._category }}
         // boolean logic for tasks
-        div.item-category(v-if="post._task !== null && post._category === null || 'utopian-io'")
-          q-icon(:class="'ut-' + post._task.substr('task-'.length)")
+        div.item-category(v-if="post._task !== null")
+          // apply formatTasks to the post._task string
+          q-icon(v-bind:class="post._task | formatTasks")
           span {{ post._task }}
 
         // div.q-item-body
