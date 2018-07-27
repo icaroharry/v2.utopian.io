@@ -30,6 +30,7 @@ export default ({ store, Vue }) => {
   const firebaseApp = firebase.initializeApp(config)
   // set on vue prototype.
   Vue.prototype.firebase = firebaseApp
+  window.firebase = firebaseApp
   // configure authentication.
   configureAuth(firebaseApp, store)
 

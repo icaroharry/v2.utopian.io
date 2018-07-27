@@ -78,7 +78,7 @@ export default [
       {
         path: 'create',
         name: 'create',
-        component: () => import('src/pages/create/create'),
+        component: () => import('src/pages/contributions/create/create'),
         meta: {weight: 10}
       },
       {

@@ -37,5 +37,5 @@ export const storeContribution = async ({ getters, dispatch, rootGetters }, { au
   // alias the backend method for saving the contribution
   const saveContributionMethod = firebase.functions().httpsCallable('api/contributions/save')
   // save the contribution.
-  return saveContributionMethod({ author, permlink })
+  return saveContributionMethod({ contribution: { author, permlink } })
 }

@@ -1,41 +1,111 @@
-]<script>
-import ace from 'brace'
-import UPostPreview from 'src/components/post-preview/post-preview'
-import { categories, categoryOptions } from 'src/services/utopian/categories'
-import { map, get } from 'lodash-es'
+<script>
+// imports.
 import ULayoutPage from 'src/layouts/parts/page/page'
+// import { required } from 'vuelidate/lib/validators'
+import UFileUploader from 'src/components/project/file-uploader/file-uploader'
+import { mapActions } from 'vuex'
+import { get, map } from 'lodash'
+import ace from 'brace'
+import { categories, categoryOptions } from 'src/services/utopian/categories'
 import { render } from 'src/services/steem/markdown'
+import UPostPreview from 'src/components/post-preview/post-preview'
 
+// create contribution component.
 export default {
-  name: 'PageEditor',
+
+  // component name.
+  name: 'u-page-create',
+
+  // children components.
   components: {
     UPostPreview,
-    ULayoutPage // ,
-    // editor: require('vue2-ace-editor')
+    ULayoutPage,
+    UFileUploader
   },
+
+  // component data.
   data () {
     return {
+      // errors list (API returned, not frontend UX helper).
+      errors: {},
+      // temporary field for the repository selector field.
+      projectSelector: null,
+      // contribution data.
+      contribution: {
+        category: 'development',
+        title: '',
+        body: '',
+        projectId: null,
+        rewards: [0.5, 0.5],
+        tags: []
+      },
       editor: null,
       contentBackup: '',
-      gists: '',
-      screenWidth: (() => { return window.innerWidth })(),
-      screenHeight: (() => { return window.innerHeight })(),
-      body: '',
-      preview: ''
+      // rendered contribution preview (html).
+      preview: null,
+      // loading state indicator.
+      loading: false,
+      body: ''
     }
   },
-  computed: {
-    previewStyle () {
-      if (!this.isMobile && this.screenWidth > 992) {
-        return {
-          // 'height': (this.screenHeight - 62 - 48) + 'px',
-          // 'max-height': (this.screenHeight - 62 - 48) + 'px',
-          'overflow-y': 'auto'
-        }
-      }
 
-      return {}
+  // component methods.
+  methods: {
+
+    // map steem store actions.
+    ...mapActions('steem', [
+      'comment'
+    ]),
+
+    // map contributions store actions.
+    ...mapActions('contributions', [
+      'searchGithubRepository'
+    ]),
+
+    // broadcast (save) the contribution / post on the blockchain.
+    saveContribution () {
+      return this.comment({
+        title: get(this.contribution, 'title', null),
+        content: get(this.contribution, 'body', ''),
+        tags: get(this.contribution, 'tags', []),
+        meta: {
+          category: get(this.contribution, 'category', 'development'),
+          projectId: get(this.contribution, 'projectId', null)
+        }
+      }).catch(console.log)
     },
+
+    // search github for repositories matching a given query.
+    searchGithubRepos (query, done) {
+      this.searchGithubRepository(query).then(done)
+    },
+
+    categoryOptions () {
+      return map(categoryOptions, (option) => {
+        option.label = option.label.toUpperCase()
+        return option
+      })
+    },
+
+    // set repository ID on the contribution data.
+    setRepository (repository) {
+      this.contribution.projectId = get(repository, 'id', null)
+    }
+  },
+
+  // computed properties.
+  computed: {
+
+    // @TODO remove this.
+    slug () {
+      return this.slugify(this.project.name)
+    },
+
+    // categories list.
+    categories () {
+      return categories
+    },
+
     editorStyle () {
       if (!this.isMobile && this.screenWidth > 992) {
         return {}
@@ -48,24 +118,14 @@ export default {
           'overflow-y': 'auto'
         }
       }
-    },
-    isMobile () {
-      return get(this.$q, 'platform.is.mobile', false)
-    },
-    categories () {
-      return categories
-    },
-    categoryOptions () {
-      return map(categoryOptions, (option) => {
-        option.label = option.label.toUpperCase()
-        return option
-      })
     }
   },
+
   beforeDestroy () {
     this.editor.destroy()
     this.editor.container.remove()
   },
+
   mounted () {
     // require a ton of plugins to initialize ace.
     require('emmet-core/emmet')
@@ -107,10 +167,6 @@ export default {
     editor.on('change', () => {
       // assign the editor content as body.
       this.body = editor.getValue()
-      // // render the markdown preview and assign.
-      // return render(this.body).then((result) => {
-      //   this.preview = result
-      // })
     })
 
     // set editor style options.
@@ -118,7 +174,7 @@ export default {
       fontFamily: 'Roboto Mono',
       fontSize: '12pt',
       showLineNumbers: true,
-      // completion features are tempory disabled.
+      // completion features are temporary disabled.
       enableEmmet: true,
       enableBasicAutocompletion: true,
       enableSnippets: true,
@@ -138,6 +194,6 @@ export default {
 }
 </script>
 
-<style lang="stylus" src="./editor.styl"></style>
+<style lang="stylus" src="./create.styl"></style>
 
-<template lang="pug" src="./editor.pug"></template>
+<template lang="pug" src="./create.pug"></template>
