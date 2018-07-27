@@ -171,8 +171,10 @@ export default {
       this.startLoading('Saving your project')
       const saveProjectMethod = firebase.functions().httpsCallable('api/projects/create')
       return saveProjectMethod(this.project)
-        .then(() => { this.stopLoading() })
-        .catch(() => {
+        .then(() => {
+          this.stopLoading()
+          return this.$router.push({ name: 'project.details', params: { name: this.project.id } })
+        }).catch(() => {
           this.stopLoading()
           this.showDialog({ title: 'Oops :(', message: 'We couldn\'t save your project. Please try again' })
         })

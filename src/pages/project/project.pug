@@ -16,7 +16,7 @@ div
                   img.project-owner-avatar(:src="'https://steemitimages.com/u/' + project.creator + '/avatar'")
                   span.project-created-by created by
                   span.q-body-1.text-black {{project.creator}}
-            div.row.project-title.inline.nowrap.items-center
+            div.row.project-title.inline.nowrap.items-center.project-stats
               div.row.column.col-md-12.items-start(v-if="project.website")
                 span.q-body-1.uppercase.text-grey webpage
                 span.q-headline
