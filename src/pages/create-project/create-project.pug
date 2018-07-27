@@ -1,9 +1,8 @@
 u-layout-page.u-page-create-project(reverse=true)
 
   div.row.flex.justify-center(slot="main")
-    q-spinner-dots(v-if="loading" :size="40", style="margin: 0 auto")
-    div(v-if="!loading")
-      p.q-headline Let's create your project
+    div
+      p.q-headline Bring your project to Utopian.io
       p.q-title Make a great first impression with all the project information filled and great images about your project.
 
       div.create-project-form
@@ -11,57 +10,86 @@ u-layout-page.u-page-create-project(reverse=true)
         div.row.row-fields.general
           div.col-12
             // project name.
-            q-field(label="Project Name", :helper="'slug:' + slug", orientation="vertical")
-              q-input(v-model="project.name", :error="$v.project.name.$error", placeholder="e.g DTube", @keyup.enter="submit")
+            q-field(label="Project Name*", orientation="vertical", :error="$v.project.name.$error")
+              q-input(v-model.trim="project.name", placeholder="e.g DTube", @blur="updateFormPercentage('name')")
 
-          // div.col-12
-            // project slug.
-            q-field.q-field-disabled(disabled="", label="Project Slug Name", orientation="vertical")
-              q-input(v-model="slug", placeholder="e.g: Dtube", readonly)
+        div.row.row-fields.general
+          div.col-12
 
         // github fields.
         div.row.row-fields.github
-
           div.col-12
-            q-field(label="Github Repository", orientation="vertical")
-              q-search(@blur="$v.project.githubRepository.$touch", v-model="project.githubRepository", :error="$v.project.githubRepository.$error", placeholder="e.g dtube/dtube")
+            q-field(label="Github Repository", orientation="vertical", :error="$v.project.platforms.$error")
+              q-search(v-model="project.platforms.github.repository", placeholder="e.g dtube/dtube",
+                icon="mdi-github-circle", :disable="closedSource", @blur="updateFormPercentage('platforms')")
                 q-autocomplete(@search="searchGithubRepos", :min-characters="3", ref="autocomplete",
-                :debounce="500", separator)
+                  :debounce="500", separator)
+              q-checkbox(v-model.boolean="closedSource", label="My project is not Open Source",
+                left-label, @blur="updateFormPercentage('platforms')", @input="checkGithubField")
 
+        div.row.row-fields.general
+          div.col-12
+            q-field(label="Web page", orientation="vertical")
+              q-input(v-model="project.website", placeholder="https://d.tube", @keyup.enter="submit", @blur="updateFormPercentage('website')")
+
+        div.row.row-fields.general
+          div.col-12
+            q-field(label="Documentation page", orientation="vertical")
+              q-input(v-model="project.docs", placeholder="https://docs.d.tube", @keyup.enter="submit", @blur="updateFormPercentage('docs')")
+
+        div.row.row-fields.general
+          div.col-12
+            q-field(label="License*", orientation="vertical")
+              q-select(label="License", v-model="project.license", :error="$v.project.license.$error",
+                placeholder="MIT", :options="licenseOptions", :before="[{ icon: 'mdi-file-outline' }]", filter,
+                autofocus-filter, @blur="updateFormPercentage('license')")
 
         div.row.row-fields.files
           div.col-12
-            q-field(label="Project Images", orientation="vertical")
-              u-file-uploader(ref="uploader", id="upload")
+            q-field(label="Project Image*", orientation="vertical")
+              u-file-uploader(ref="uploader", id="upload", @upload="handleImageUpload", :error="$v.project.images.$error")
 
           div.col-12
-            q-field(label="Short description", :count="250", orientation="vertical")
+            q-field(label="Short description*", :count="250", orientation="vertical")
               q-input(
                 id="description"
-                v-model="project.shortDescription",
-                :error="$v.project.shortDescription.$error",
+                v-model="project.description",
                 type="textarea",
                 maxlength="250",
                 placeholder="Give people a sense about your project…",
+                :error="$v.project.description.$error",
                 @keyup.enter="submit"
+                @blur="updateFormPercentage('description')"
               )
           div.col-12
-            q-field(label="Details / About the Project", orientation="vertical")
-              q-input(id="details", v-model="project.details", :error="$v.project.details.$error", type="textarea", placeholder="Write everything about your project…")
+            q-field(label="Details / About the Project*", orientation="vertical")
+              q-input(id="details", v-model="project.details", type="textarea",
+                placeholder="Write everything about your project…", :error="$v.project.details.$error", @blur="updateFormPercentage('details')")
 
           div.col-12
-            q-field(label="Project Tags", orientation="vertical")
+            q-field(label="Project Tags*", orientation="vertical", helper="Type tags separated by comma and hit enter to confirm.")
               q-chips-input(
                 id="tags"
                 v-model="project.tags"
+                placeholder="e.g: video, decentralized, ipfs",
+                clearable,
+                @keyup.enter="splitTags",
+                @blur="updateFormPercentage('tags')"
                 :error="$v.project.tags.$error"
-                placeholder="e.g: Dtube,"
               )
-        q-btn.full-width(color="primary", label="Create", @click="submit")
 
-
-
-
-
-
-
+  template(slot="meta")
+    div.side-box(v-bind:style="{ marginTop: (scrollPosition) + 'px' }", ref="sideBox")
+      q-list(separator).row
+        q-item.col-12
+          q-item-main
+            q-item-tile.row.reverse
+              span.progress-text.lowercase {{ formPercentage }}% completed
+            q-item-tile.row
+              q-progress(
+                :percentage="formPercentage"
+                height="10px"
+              )
+        q-item.col-12
+          q-item-main.row
+            q-btn.full-width(color="primary", label="Create", @click="submit")

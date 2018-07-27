@@ -8,6 +8,7 @@ export const getProvider = () => {
 
   // add public organization read-only access.
   githubProvider.addScope('read:org')
+  githubProvider.addScope('repo')
 
   // return the build provider.
   return githubProvider

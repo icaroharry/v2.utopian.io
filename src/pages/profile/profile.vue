@@ -49,7 +49,7 @@ export default {
       // extract profile from meta.
       const profile = get(meta, 'profile', {})
       // assign avatar field on the profile.
-      profile.avatar = 'https://img.blocker.press/a/' + data.name
+      profile.avatar = 'https://steemitimages.com/u/' + data.name + '/avatar'
       // return the prepared object.
       return profile
     },
