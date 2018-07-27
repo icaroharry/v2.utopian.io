@@ -41,7 +41,7 @@ export default {
   },
   // filters
   filters: {
-    // add a filter to properly format the task string for the Icon class.
+    // add a filter to properly format the task and category strings used in the Icon classes.
     formatIconClasses (value) {
       if (!value) return ''
       if (value.includes('task-')) {
