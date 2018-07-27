@@ -145,7 +145,7 @@ export default {
       this.$v.project.$touch()
 
       this.project.slug = this.getProjectSlug()
-      this.project.id = this.slugify(this.project.slug)
+      this.project.id = this.project.slug.split('/').pop()
       this.project.creator = this.username()
 
       if (!this.project.slug) {
