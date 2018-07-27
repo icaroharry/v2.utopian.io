@@ -1,6 +1,6 @@
 // imports.
 import { get, attempt, find, filter, map } from 'lodash-es'
-import { categories } from 'src/services/utopian/categories'
+import { categories, tasks } from 'src/services/utopian/categories'
 import { parseCurrencyString } from 'src/services/currencies/formatter'
 import { formatReputation } from 'src/services/steem/account'
 import moment from 'moment'
@@ -26,12 +26,15 @@ export const parsePost = (post) => {
   // parse category.
   post._category = find(post._tags, (tag) => categories.indexOf(tag) !== -1)
 
+  // parse task-category
+  post._task = find(post._tags, (tag) => tasks.includes(tag))
+
   // parse a tag list on format object.
   post._tags_list = map(post._tags, tagString => ({ id: tagString, label: tagString }))
 
   // visible post tags.
   post._visible_tags = filter(post._tags_list, (tag) => {
-    return (tag.label !== 'utopian-io') && (categories.indexOf(tag.label) === -1)
+    return (tag.label !== 'utopian-io') && (categories.indexOf(tag.label) === -1) && (!tasks.includes(tag.label))
   })
 
   // pending payout.

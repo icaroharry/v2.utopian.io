@@ -46,9 +46,9 @@ export default {
       isMounted: false,
       loading: false,
       emptyContributions: [
-        {_category: 'development'},
-        {_category: 'graphics'},
-        {_category: 'tutorials'}
+        { _category: 'development' },
+        { _category: 'graphics' },
+        { _category: 'tutorials' }
       ]
     }
   },
@@ -115,7 +115,7 @@ export default {
     //  && post._category - Many of the _categories for these objects are either 'utopian-io' or undefined.
 
     visibleTaskRequests () {
-      const filteredTaskRequests = filter(this.taskRequests, (post) => ((post['parent_permlink'] === 'utopian-io')))
+      const filteredTaskRequests = filter(this.taskRequests, (post) => ((post['parent_permlink'] === 'utopian-io') && post._task))
       return filteredTaskRequests.slice(0, filteredTaskRequests.length > 3 ? 3 : filteredTaskRequests.length)
     }
   },
