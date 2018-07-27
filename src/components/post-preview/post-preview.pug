@@ -15,7 +15,7 @@ q-item.u-post-preview(:to="post.url", :link="false", :class="post._category ? po
           span {{ post._category }}
         // boolean logic for tasks (might be better to use v-if-else)
         div.item-category(v-if="post._task !== null")
-          // No icon
+          q-icon(:class="'ut-' + post._task.substr('task-'.length)")
           span {{ post._task }}
 
         // div.q-item-body
