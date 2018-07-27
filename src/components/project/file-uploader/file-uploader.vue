@@ -9,14 +9,14 @@
       :value="fileName"
       :after="[{icon: 'mdi-library-plus'}]"
       stack-label="Select file to upload"
+      @blur="blur"
     )
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
-
 export default {
   name: 'u-file-uploader',
+  props: ['blur'],
   data () {
     return {
       progressUpload: 0,
@@ -27,7 +27,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('project', ['setProjectImageUrl']),
     detectFiles (fileList) {
       this.fileName = this.$refs.fileUploader.files.item(0).name
       Array.from(Array(fileList.length).keys()).map(x => {
@@ -43,7 +42,7 @@ export default {
       vm.uploadTask.then(function (snapshot) {
         vm.uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
           vm.downloadURL = downloadURL
-          vm.$store.commit('project/setProjectImageUrl', vm.downloadURL)
+          vm.$emit('upload', downloadURL)
         }).catch((err) => {
           vm.$q.notify(err.message)
         })

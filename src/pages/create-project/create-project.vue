@@ -1,9 +1,9 @@
 <script>
 // imports.
 import ULayoutPage from 'src/layouts/parts/page/page'
+import UFileUploader from 'src/components/project/file-uploader/file-uploader'
 import * as GitHub from '@octokit/rest'
 import { required } from 'vuelidate/lib/validators'
-import UFileUploader from 'src/components/project/file-uploader/file-uploader'
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase/app'
 import { uniq } from 'lodash-es'
@@ -23,11 +23,6 @@ export default {
   // component data.
   data () {
     return {
-
-      // map project store getters.
-      ...mapGetters('project', [
-        'projectImageUrl'
-      ]),
       // map project store getters.
       ...mapGetters('auth', [
         'github',
@@ -131,7 +126,8 @@ export default {
       'showDialog',
       'startLoading',
       'updateLoading',
-      'stopLoading'
+      'stopLoading',
+      'decrypt'
     ]),
     ...mapActions({
       loadCredentials: 'auth/loadCredentials',
@@ -145,23 +141,28 @@ export default {
       this.project.slug = this.getProjectSlug()
       this.project.id = this.slugify(this.project.slug)
       this.project.creator = this.username()
-      this.project.image = 'test.jpg'
+      this.project.image = this.projectImageUrl()
 
       if (!this.project.slug) {
-        this.showDialog({ title: 'Oops', message: 'An error occured. Please review the form.' })
+        this.showDialog({ title: 'Oops :(', message: 'An error occured. Please review the form.' })
         return
       }
       if (this.$v.project.$error) {
-        this.showDialog({ title: 'Oops', message: 'Please review the form.' })
+        this.showDialog({ title: 'Oops :(', message: 'Please review the form.' })
         return
       }
       if (this.project.platforms.github.repository && !(await this.isProjectOwner())) {
-        this.showDialog({ title: 'Oops', message: 'You must be the owner of the GitHub project.' })
+        this.showDialog({ title: 'Oops :(', message: 'You must be the owner of the GitHub project.' })
         return
       }
-      if (!this.project.platforms.githubRepository) {
+      if (!this.project.platforms.github.repository) {
         this.project.openSource = false
+      } else {
+        // send token to validate repo ownership in the backend. token is not stored
+        const encryptedToken = await this.loadCredentials('github')
+        this.project.platforms.github.token = await this.decrypt(encryptedToken.secret)
       }
+
       this.startLoading('Saving your project')
       const saveProjectMethod = firebase.functions().httpsCallable('api/projects/create')
       return saveProjectMethod(this.project)
@@ -246,6 +247,10 @@ export default {
       if (this.closedSource) {
         this.project.platforms.github = { id: null, repository: '' }
       }
+    },
+    handleImageUpload (uploadUrl) {
+      this.updateFormPercentage('images')
+      this.project.images = [uploadUrl]
     }
   },
   computed: {
