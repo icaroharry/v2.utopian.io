@@ -7,9 +7,10 @@
       label="Upload picture"
       @click="trigger"
       :value="fileName"
-      :after="[{icon: 'mdi-library-plus'}]"
+      :after="[{icon, handler: trigger}]"
       stack-label="Select file to upload"
       :error="error"
+      :loading="loading"
     )
 </template>
 
@@ -23,7 +24,9 @@ export default {
       file: File,
       uploadTask: '',
       downloadURL: '',
-      fileName: ''
+      fileName: '',
+      loading: false,
+      icon: 'mdi-library-plus'
     }
   },
   methods: {
@@ -38,26 +41,35 @@ export default {
     },
     upload () {
       const vm = this
-      vm.uploadTask = vm.$firebaseStorage.child(`images/${Date.now()}`).put(vm.$refs.fileUploader.files.item(0))
+      vm.uploadTask = vm.$firebaseStorage.child(`images/projects/${Date.now()}`).put(vm.$refs.fileUploader.files.item(0))
+      vm.loading = true
       vm.uploadTask.then(function (snapshot) {
         vm.uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
           vm.downloadURL = downloadURL
+          vm.loading = false
           vm.$emit('upload', downloadURL)
         }).catch((err) => {
+          vm.loading = false
           vm.$q.notify(err.message)
         })
       }).catch((err) => {
+        vm.loading = false
         vm.$q.notify(err.message)
       })
     }
   },
   mounted () {
   },
+  computed: {
+  },
   watch: {
     uploadTask () {
       this.uploadTask.on('state_changed', function (sp) {
         this.progressUpload = Math.floor(sp.bytesTransferred / sp.totalBytes * 100)
       })
+    },
+    loading () {
+      this.loading ? this.icon = '' : this.icon = 'mdi-library-plus'
     }
   }
 }
