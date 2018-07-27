@@ -64,7 +64,7 @@ export default {
       return get(this.$q, 'platform.is.mobile', false)
     }
   },
-  mounted () {
+  created () {
     this.renderPreview()
   }
 }
