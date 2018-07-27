@@ -3,7 +3,7 @@
 import ULayoutPage from 'src/layouts/parts/page/page'
 import UFileUploader from 'src/components/project/file-uploader/file-uploader'
 import * as GitHub from '@octokit/rest'
-import { required } from 'vuelidate/lib/validators'
+import { required, minLength } from 'vuelidate/lib/validators'
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase/app'
 import { uniq } from 'lodash-es'
@@ -108,10 +108,16 @@ export default {
     project: {
       name: { required },
       description: { required },
-      images: {},
+      images: {
+        required,
+        minLength: minLength(1)
+      },
       details: { required },
       license: { required },
-      tags: {},
+      tags: {
+        required,
+        minLength: minLength(3)
+      },
       platforms: {
         github: (value, vm) => vm.openSource ? value.github.repository !== '' : true
       },
@@ -141,7 +147,6 @@ export default {
       this.project.slug = this.getProjectSlug()
       this.project.id = this.slugify(this.project.slug)
       this.project.creator = this.username()
-      this.project.image = this.projectImageUrl()
 
       if (!this.project.slug) {
         this.showDialog({ title: 'Oops :(', message: 'An error occured. Please review the form.' })

@@ -2,7 +2,7 @@ u-layout-page.u-page-create-project(reverse=true)
 
   div.row.flex.justify-center(slot="main")
     div
-      p.q-headline Let's create your project
+      p.q-headline Bring your project to Utopian.io
       p.q-title Make a great first impression with all the project information filled and great images about your project.
 
       div.create-project-form
@@ -46,8 +46,8 @@ u-layout-page.u-page-create-project(reverse=true)
 
         div.row.row-fields.files
           div.col-12
-            q-field(label="Project Images*", orientation="vertical")
-              u-file-uploader(ref="uploader", id="upload", @upload="handleImageUpload")
+            q-field(label="Project Image*", orientation="vertical")
+              u-file-uploader(ref="uploader", id="upload", @upload="handleImageUpload", :error="$v.project.images.$error")
 
           div.col-12
             q-field(label="Short description*", :count="250", orientation="vertical")
@@ -67,7 +67,7 @@ u-layout-page.u-page-create-project(reverse=true)
                 placeholder="Write everything about your project…", :error="$v.project.details.$error", @blur="updateFormPercentage('details')")
 
           div.col-12
-            q-field(label="Project Tags*", orientation="vertical", helper="Type tags separated by comma and hit enter to confirm")
+            q-field(label="Project Tags*", orientation="vertical", helper="Type tags separated by comma and hit enter to confirm.")
               q-chips-input(
                 id="tags"
                 v-model="project.tags"
@@ -75,6 +75,7 @@ u-layout-page.u-page-create-project(reverse=true)
                 clearable,
                 @keyup.enter="splitTags",
                 @blur="updateFormPercentage('tags')"
+                :error="$v.project.tags.$error"
               )
 
   template(slot="meta")

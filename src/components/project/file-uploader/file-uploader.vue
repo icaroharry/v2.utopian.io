@@ -9,14 +9,14 @@
       :value="fileName"
       :after="[{icon: 'mdi-library-plus'}]"
       stack-label="Select file to upload"
-      @blur="blur"
+      :error="error"
     )
 </template>
 
 <script>
 export default {
   name: 'u-file-uploader',
-  props: ['blur'],
+  props: ['error'],
   data () {
     return {
       progressUpload: 0,
