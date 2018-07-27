@@ -27,14 +27,14 @@ export const parsePost = (post) => {
   post._category = find(post._tags, (tag) => categories.indexOf(tag) !== -1)
 
   // parse task-category
-  post._task = find(post._tags, (tag) => tasks.indexOf(tag) !== -1)
+  post._task = find(post._tags, (tag) => tasks.includes(tag))
 
   // parse a tag list on format object.
   post._tags_list = map(post._tags, tagString => ({ id: tagString, label: tagString }))
 
   // visible post tags.
   post._visible_tags = filter(post._tags_list, (tag) => {
-    return (tag.label !== 'utopian-io') && (categories.indexOf(tag.label) === -1) && (tasks.indexOf(tag.label) === -1)
+    return (tag.label !== 'utopian-io') && (categories.indexOf(tag.label) === -1) && (!tasks.includes(tag.label))
   })
 
   // pending payout.
