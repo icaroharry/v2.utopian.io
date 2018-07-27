@@ -17,7 +17,7 @@ const urlSet = ({ domain = domainPath, path } = {}) => {
 // simple image URL pattern.
 export const image = urlSet({ domain: domainPath, path: imagePath })
 // markdown image pattern (this pattern also matches non-markdown image URLs).
-export const markdownImage = '(?:!\\[(?:.+)?\\]\\()?(' + image + ')(?:\\))?'
+export const markdownImage = '(?:!\\[[^\\]]*\\]\\()?(' + image + ')(?:\\))?'
 // html image pattern.
 export const htmlImage = '<img\\s+[^>]*src="(' + image + ')"[^>]*>'
 // simple URL pattern.

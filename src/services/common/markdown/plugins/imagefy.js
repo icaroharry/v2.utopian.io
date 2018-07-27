@@ -15,9 +15,10 @@ const urlRegex = new RegExp(url, 'ig')
 // default options.
 const defaultOptions = {
   // image proxy URL prefix.
-  proxyURL: 'https://steemitimages.com/0x0/',
+  proxyURL: 'https://steemitimages.com/0x0/'
   // wrap image elements by double new lines to avoid parsing errors.
-  wrapper: '\n\n'
+  // wrapper: '\n\n'
+  // removed wrapper for the sake of table for now.
 }
 
 /**
@@ -28,10 +29,11 @@ const defaultOptions = {
  */
 export default function (md, options = {}) {
   // parse plugin options.
-  const { proxyURL, wrapper } = Object.assign({}, defaultOptions, options)
+  const { proxyURL } = Object.assign({}, defaultOptions, options)
 
-  // wrap new line elements around the value.
-  const generateImageElement = (imageURL = '') => `${wrapper}![](${imageURL})${wrapper}`
+  // wrap new line elements around the value
+  // wrappers removed to stop parser from pulling multiple URLs into the same image tag
+  const generateImageElement = (imageURL = '') => `![](${imageURL})`
 
   // proxy the image using steem images.
   const proxyImage = (toProxy = '') => `${proxyURL}${toProxy}`

@@ -5,10 +5,15 @@
 // regex for matching HTML blocks.
 const blockExpression = /^(<(h[0-9]|div|hr|p|center|ul|li|a)([^>]+)?>)/gim
 
+// remove </b> tags to ensure parsing of text.
+const boldExpression = /^(<\/ ?b>)+/gim
+
 // fix a block contents.
 const fixBlockState = (state) => {
+  // convert </b> tags to empty strings.
+  state.src = state.src.replace(boldExpression, (_) => '')
   // wrap block elements tags with new lines.
-  state.src = state.src.replace(blockExpression, (match) => `${match}\n`)
+  state.src = state.src.replace(blockExpression, (match) => `${match}\n\n`)
 }
 
 // plugin apply method.
