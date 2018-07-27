@@ -42,9 +42,11 @@ export default {
   // filters
   filters: {
     // add a filter to properly format the task string for the Icon class.
-    formatTasks (value) {
+    formatIconClasses (value) {
       if (!value) return ''
-      value = value.substr('task-'.length)
+      if (value.includes('task-')) {
+        value = value.substr('task-'.length)
+      }
       return 'ut-' + value
     }
   },
