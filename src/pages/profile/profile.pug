@@ -3,7 +3,7 @@ div(v-if="isMounted")
     q-parallax(:src="coverImage", :height="300")
       q-page-container.container
         div.row
-          img(:src="'https://img.blocker.press/a/' + userData.steemData.name").avatar
+          img(:src="'https://steemitimages.com/u/' + userData.steemData.name + '/avatar'").avatar
           div.user-info.column.justify-center
             div.row.items-center
               span.text-white {{ userData.steemData._name || userData.steemData.name }}

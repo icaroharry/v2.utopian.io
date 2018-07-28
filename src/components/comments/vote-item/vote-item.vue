@@ -41,7 +41,7 @@ export default {
 
     // voter avatar.
     avatar () {
-      return `https://img.blocker.press/a/${this.voter}`
+      return `https://steemitimages.com/u/${this.voter}/avatar`
     },
 
     // vote reward shares.

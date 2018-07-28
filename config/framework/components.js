@@ -58,5 +58,7 @@ module.exports = [
   'QChipsInput',
   'QUploader',
   'QAutocomplete',
-  'QParallax'
+  'QParallax',
+  'QCheckbox',
+  'QScrollObservable'
 ]
