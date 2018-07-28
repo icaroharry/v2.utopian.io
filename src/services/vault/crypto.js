@@ -1,12 +1,11 @@
 // imports.
 import { makeAESParams, randomData, subtle } from './common'
-import { polyTextEncoder, polyTextDecoder } from './utils/polyfill'
 
 // text encoder instance.
-const encoder = typeof TextEncoder === 'undefined' ? polyTextEncoder : new TextDecoder()
+const encoder = new TextEncoder()
 
 // text decoder instance.
-const decoder = typeof TextDecoder === 'undefined' ? polyTextDecoder : new TextDecoder()
+const decoder = new TextDecoder()
 
 /**
  * Encrypt any data and return.
