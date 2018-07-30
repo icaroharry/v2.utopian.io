@@ -82,7 +82,7 @@ u-layout-page.u-page-crud-project(reverse=true)
               )
 
   template(slot="meta")
-    div.side-box.fixed(v-bind:class="scrolledEnough ? 'scroll-bottom' : 'scroll-top'", ref="sideBox")
+    div.side-box.fixed(v-bind:class="scrolledEnough ? 'scroll-bottom' : 'scroll-top'", ref="sideBox", v-if="isEditing && isAllowed")
       q-list(separator).row
         q-item.col-12
           q-item-main

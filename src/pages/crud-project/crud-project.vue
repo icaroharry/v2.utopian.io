@@ -289,22 +289,30 @@ export default {
 
   },
   watch: {
-    async github () {
-      if (this.github.username) {
-        this.isAllowed = true // await this.checkProjectOwner()
-      }
-    }
+    // async github () {
+    //   if (this.github.username) {
+    //     this.isAllowed = await this.checkProjectOwner()
+    //   }
+    // }
   },
   async mounted () {
     this.gh = new GitHub()
     this.$parent.$parent.$on('scroll', this.userHasScrolled)
 
     if (this.isEditing) {
-      await this.loadProject(this.$route.params.name)
-    }
-
-    if (this.github && this.github.username) {
-      this.isAllowed = true // await this.checkProjectOwner()
+      try {
+        await this.loadProject(this.$route.params.name)
+        if (this.github && this.github.username) {
+          this.isAllowed = await this.checkProjectOwner()
+          if (!this.isAllowed) {
+            this.showDialog({ title: 'Oops :(', message: 'You don\'t have permision to edit this project.' })
+            return this.$router.push({ name: 'not-found' })
+          }
+        }
+      } catch (err) {
+        this.showDialog({ title: 'Oops :(', message: 'You don\'t have permision to edit this project.' })
+        return this.$router.push({ name: 'not-found' })
+      }
     }
   }
 }

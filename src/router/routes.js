@@ -107,6 +107,7 @@ export default [
   },
   { // Always leave this as last one
     path: '*',
+    name: 'not-found',
     component: () => import('src/pages/404/404')
   }
 ]
