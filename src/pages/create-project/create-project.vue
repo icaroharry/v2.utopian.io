@@ -72,7 +72,7 @@ export default {
       ghRepos: [],
 
       // used to set the sidebox position
-      scrollPosition: 134,
+      scrolledEnough: false,
 
       formPercentage: 0,
 
@@ -232,11 +232,7 @@ export default {
         ? this.project.platforms.github.repository : `${this.username()}/${this.slugify(this.project.name)}`
     },
     userHasScrolled (ev) {
-      if (ev.position >= 50) {
-        this.scrollPosition = 694 + ev.position
-      } else {
-        this.scrollPosition = 134 + ev.position
-      }
+      this.scrolledEnough = ev.position >= 50
     },
     updateFormPercentage (field) {
       this.$v.project[field].$touch()

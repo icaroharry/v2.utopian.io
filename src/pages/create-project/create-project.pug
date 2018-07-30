@@ -79,7 +79,7 @@ u-layout-page.u-page-create-project(reverse=true)
               )
 
   template(slot="meta")
-    div.side-box(v-bind:style="{ marginTop: (scrollPosition) + 'px' }", ref="sideBox")
+    div.side-box.fixed(v-bind:class="scrolledEnough ? 'scroll-bottom' : 'scroll-top'", ref="sideBox")
       q-list(separator).row
         q-item.col-12
           q-item-main
