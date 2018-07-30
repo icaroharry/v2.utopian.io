@@ -36,6 +36,12 @@ export default [
         meta: {}
       },
       {
+        path: 'project/search',
+        name: 'project.search',
+        component: () => import('src/pages/project-search/project-search'),
+        meta: {}
+      },
+      {
         path: 'project/:name',
         name: 'project',
         component: () => import('src/pages/project/project'),
