@@ -1,8 +1,13 @@
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'PageProject',
   data () {
     return {
+      ...mapGetters('auth', [
+        'account'
+      ]),
       project: {},
       loading: true
       // contributors: [
@@ -38,6 +43,9 @@ export default {
     },
     contribute () {
       return this.$router.push({ name: 'create' })
+    },
+    goToEditPage () {
+      return this.$router.push({ name: 'project.edit', params: { name: this.project.id } })
     }
   },
   created () {

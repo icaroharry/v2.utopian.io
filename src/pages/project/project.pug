@@ -7,9 +7,10 @@ div
             img.project-image(:src="project.images[0]")
           div.project-description.col-md-4.column.justify-between
             div
-              div.row.project-title.inline.nowrap.items-center
+              div.row.project-title.inline.no-wrap.items-center
                 img.project-avatar(:src="project.images[0]")
                 span.q-headline.project-name {{ project.name }}
+                q-btn(@click="goToEditPage" v-if="project.creator === account().name", flat round color="primary" icon="mdi-pencil")
               p {{ project.description }}
               p.q-caption.text-grey
                 span.row.items-center.justify-start.project-separator
@@ -49,6 +50,7 @@ div
     q-route-tab(:to="`/project/${project.id}/task`" name="tab-task-requests" append label="Task Requests" slot="title" exact disabled)
     // q-route-tab(:to="`/project/${project.id}/contributors`" name="tab-contributors" append label="Contributors" slot="title" exact disabled)
     // q-route-tab(:to="`/project/${project.id}/sponsors`" name="tab-sponsors" append label="Sponsors" slot="title" exact disabled)
+
 
   u-layout-page.u-page-project-tabs(:meta="false")
     //- template(slot="meta")
