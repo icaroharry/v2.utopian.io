@@ -14,7 +14,7 @@ u-layout-page.u-page-project-search
         q-input(v-model.trim="search" placeholder="e.g d.tube", @keyup="searchProjects")
     q-infinite-scroll(:handler="loadProjectsScroll", ref="infiniteScroll")
       div.row.inline.projects.gutter-sm
-        div(v-for="(project, index) in projects").col-md-12.col-lg-6
+        div(v-for="(project, index) in projects", v-if="!loading").col-md-12.col-lg-6
           q-card.inline.round-borders(color="white", text-color="grey-7")
             q-card-media(:style="'background-image: url(' + getProjectImage(project) + ')'")
             q-card-title {{project.name}}
