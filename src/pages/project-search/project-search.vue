@@ -86,8 +86,10 @@ export default {
     },
     async searchProjects (ev) {
       if (ev.keyCode === 13) {
+        this.loading = true
         const listProjects = firebase.functions().httpsCallable(`api/projects/list?q=${this.search}&opensource=${this.openSource}`)
         this.projects = (await listProjects()).data.map(project => project.data)
+        this.loading = false
       }
     },
     goToProjectPage (name) {

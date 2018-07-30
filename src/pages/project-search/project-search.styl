@@ -43,6 +43,62 @@ div.q-layout-page.u-page.u-page-search, main.q-layout-page.u-page.u-page-search 
       padding 0 5px
     }
   }
+
+  .projects {
+    .q-card-title {
+      line-height 1em
+      font-size 1.2em
+      color $grey-9
+    }
+    .q-card-media {
+      height 210px
+      background-size cover
+      background-position center center
+    }
+    .q-card {
+      min-height 420px
+      box-shadow none
+      border solid 1px #e0e2e5
+    }
+    .q-card-main {
+      font-size 1rem
+    }
+    .short-description {
+      height 75px
+    }
+    .tags {
+      white-space word-wrap
+      padding-bottom 10px
+    }
+    .tag {
+      color $grey-7 !important
+      background-color $grey-3 !important
+      border none !important
+      margin-right 5px
+      &:last-child {
+        margin-right 0
+      }
+    }
+    .author {
+      display flex
+      font-weight 600
+      .author-details {
+        .name {
+          line-height 14px
+          font-size 14px
+          vertical-align middle
+        }
+      }
+    }
+    .avatar {
+      margin-right 5px
+      img {
+        width 28px
+        height 28px
+        border-radius 4px
+      }
+    }
+  }
   .u-filters {
     .q-field-label-inner {
       font-size 15px

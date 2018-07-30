@@ -1,7 +1,7 @@
 u-layout-page.u-page-crud-project(reverse=true)
 
   div.row.flex.justify-center(slot="main")
-    div(v-if="isEditing && isAllowed")
+    div(v-if="(isEditing && isAllowed) || !this.isEditing")
       div(v-if="!isEditing")
         p.q-headline Bring your project to Utopian.io
         p.q-title Make a great first impression with all the project information filled and great images about your project.
@@ -82,7 +82,7 @@ u-layout-page.u-page-crud-project(reverse=true)
               )
 
   template(slot="meta")
-    div.side-box.fixed(v-bind:class="scrolledEnough ? 'scroll-bottom' : 'scroll-top'", ref="sideBox", v-if="isEditing && isAllowed")
+    div.side-box.fixed(v-bind:class="scrolledEnough ? 'scroll-bottom' : 'scroll-top'", ref="sideBox", v-if="(isEditing && isAllowed) || !this.isEditing")
       q-list(separator).row
         q-item.col-12
           q-item-main
