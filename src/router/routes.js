@@ -26,7 +26,7 @@ export default [
       {
         path: 'project/create',
         name: 'project.create',
-        component: () => import('src/pages/create-project/create-project'),
+        component: () => import('src/pages/crud-project/crud-project'),
         meta: {weight: 50}
       },
       {

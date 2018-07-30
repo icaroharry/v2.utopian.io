@@ -12,7 +12,7 @@ import { uniq } from 'lodash-es'
 export default {
 
   // component name.
-  name: 'u-page-create-project',
+  name: 'u-page-crud-project',
 
   // child components.
   components: {
@@ -275,6 +275,6 @@ export default {
 }
 </script>
 
-<style lang="stylus" src="./create-project.styl"></style>
+<style lang="stylus" src="./crud-project.styl"></style>
 
-<template lang="pug" src="./create-project.pug"></template>
+<template lang="pug" src="./crud-project.pug"></template>
