@@ -15,7 +15,7 @@ u-layout-page.u-page-project-search
     q-infinite-scroll(:handler="loadProjectsScroll", ref="infiniteScroll")
       div.row.inline.projects.gutter-sm
         div(v-for="(project, index) in projects", v-if="!loading").col-md-12.col-lg-6
-          q-card.inline.round-borders(color="white", text-color="grey-7")
+          q-card.inline.round-borders(color="white", text-color="grey-7", @click.native="goToProjectPage(project.id)")
             q-card-media(:style="'background-image: url(' + getProjectImage(project) + ')'")
             q-card-title {{project.name}}
             q-card-main
