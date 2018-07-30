@@ -1,11 +1,14 @@
-u-layout-page.u-page-create-project(reverse=true)
+u-layout-page.u-page-crud-project(reverse=true)
 
   div.row.flex.justify-center(slot="main")
-    div
-      p.q-headline Bring your project to Utopian.io
-      p.q-title Make a great first impression with all the project information filled and great images about your project.
+    div(v-if="isEditing && isAllowed")
+      div(v-if="!isEditing")
+        p.q-headline Bring your project to Utopian.io
+        p.q-title Make a great first impression with all the project information filled and great images about your project.
+      div(v-if="isEditing")
+        p.q-headline Edit your project
 
-      div.create-project-form
+      div.crud-project-form
         // general fields.
         div.row.row-fields.general
           div.col-12
@@ -79,7 +82,7 @@ u-layout-page.u-page-create-project(reverse=true)
               )
 
   template(slot="meta")
-    div.side-box(v-bind:style="{ marginTop: (scrollPosition) + 'px' }", ref="sideBox")
+    div.side-box.fixed(v-bind:class="scrolledEnough ? 'scroll-bottom' : 'scroll-top'", ref="sideBox", v-if="isEditing && isAllowed")
       q-list(separator).row
         q-item.col-12
           q-item-main
@@ -92,4 +95,4 @@ u-layout-page.u-page-create-project(reverse=true)
               )
         q-item.col-12
           q-item-main.row
-            q-btn.full-width(color="primary", label="Create", @click="submit")
+            q-btn.full-width(color="primary", :label="isEditing ? 'Save' : 'Create'", @click="submit")

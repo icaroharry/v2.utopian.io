@@ -45,7 +45,7 @@ div(v-if="isMounted")
               q-item-main(:sublabel="userData.steemData._location")
 
             //- add conditional for website (if website is empty do not display the block)
-            q-item().u-no-separator(v-if="userData.steemData._meta.profile.website")
+            q-item.u-no-separator(v-if="userData.steemData._meta.profile.website")
               q-item-side(icon="mdi-link" color="primary")
               q-item-main(multiline)
                 q-item-tile(sublabel, lines="3")

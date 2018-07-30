@@ -12,7 +12,7 @@ import { uniq } from 'lodash-es'
 export default {
 
   // component name.
-  name: 'u-page-create-project',
+  name: 'u-page-crud-project',
 
   // child components.
   components: {
@@ -25,7 +25,7 @@ export default {
     return {
       // map project store getters.
       ...mapGetters('auth', [
-        'github',
+        'account',
         'username'
       ]),
 
@@ -72,9 +72,11 @@ export default {
       ghRepos: [],
 
       // used to set the sidebox position
-      scrollPosition: 134,
+      scrolledEnough: false,
 
       formPercentage: 0,
+
+      isAllowed: false,
 
       // project internal data.
       project: {
@@ -156,7 +158,7 @@ export default {
         this.showDialog({ title: 'Oops :(', message: 'Please review the form.' })
         return
       }
-      if (this.project.platforms.github.repository && !(await this.isProjectOwner())) {
+      if (this.project.platforms.github.repository && !this.isAllowed) {
         this.showDialog({ title: 'Oops :(', message: 'You must be the owner of the GitHub project.' })
         return
       }
@@ -169,8 +171,10 @@ export default {
       }
 
       this.startLoading('Saving your project')
-      const saveProjectMethod = firebase.functions().httpsCallable('api/projects/create')
-      return saveProjectMethod(this.project)
+      const method = this.isEditing ? 'edit' : 'create' 
+      
+      const call = firebase.functions().httpsCallable(`api/projects/${method}`)
+      return call(this.project)
         .then(() => {
           this.stopLoading()
           return this.$router.push({ name: 'project.details', params: { name: this.project.id } })
@@ -182,11 +186,11 @@ export default {
     searchGithubRepos (query, done) {
       this.searchGithubRepository(query).then(done)
     },
-    async isProjectOwner () {
+    async checkProjectOwner () {
       const splittedGithubRepository = this.project.platforms.github.repository.split('/')
       const repo = splittedGithubRepository.pop()
       const owner = splittedGithubRepository.pop()
-      const username = this.github().username
+      const username = this.github.username
 
       let userPermision = 'none'
       try {
@@ -232,11 +236,7 @@ export default {
         ? this.project.platforms.github.repository : `${this.username()}/${this.slugify(this.project.name)}`
     },
     userHasScrolled (ev) {
-      if (ev.position >= 50) {
-        this.scrollPosition = 694 + ev.position
-      } else {
-        this.scrollPosition = 134 + ev.position
-      }
+      this.scrolledEnough = ev.position >= 50
     },
     updateFormPercentage (field) {
       this.$v.project[field].$touch()
@@ -258,6 +258,17 @@ export default {
     handleImageUpload (uploadUrl) {
       this.updateFormPercentage('images')
       this.project.images = [uploadUrl]
+    },
+    loadProject () {
+      const projectsRef = this.firestore.collection('projects')
+
+      return projectsRef.where('id', '==', this.$route.params.name)
+        .get()
+        .then((querySnapshot) => {
+          this.project = querySnapshot.docs[0].data()
+          
+          this.project.tags = Object.values(this.project.tags)
+        })
     }
   },
   computed: {
@@ -268,17 +279,45 @@ export default {
       set () {
         this.project.openSource = !this.project.openSource
       }
-    }
-  },
-  mounted () {
-    this.gh = new GitHub()
-    this.$parent.$parent.$on('scroll', this.userHasScrolled)
+    },
+    isEditing () {
+      return this.$route.params.name
+    },
+    ...mapGetters('auth', [
+      'github'
+    ])
+
   },
   watch: {
+    // async github () {
+    //   if (this.github.username) {
+    //     this.isAllowed = await this.checkProjectOwner()
+    //   }
+    // }
+  },
+  async mounted () {
+    this.gh = new GitHub()
+    this.$parent.$parent.$on('scroll', this.userHasScrolled)
+
+    if (this.isEditing) {
+      try {
+        await this.loadProject(this.$route.params.name)
+        if (this.github && this.github.username) {
+          this.isAllowed = await this.checkProjectOwner()
+          if (!this.isAllowed) {
+            this.showDialog({ title: 'Oops :(', message: 'You don\'t have permision to edit this project.' })
+            return this.$router.push({ name: 'not-found' })
+          }
+        }
+      } catch (err) {
+        this.showDialog({ title: 'Oops :(', message: 'You don\'t have permision to edit this project.' })
+        return this.$router.push({ name: 'not-found' })
+      }
+    }
   }
 }
 </script>
 
-<style lang="stylus" src="./create-project.styl"></style>
+<style lang="stylus" src="./crud-project.styl"></style>
 
-<template lang="pug" src="./create-project.pug"></template>
+<template lang="pug" src="./crud-project.pug"></template>

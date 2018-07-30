@@ -26,8 +26,20 @@ export default [
       {
         path: 'project/create',
         name: 'project.create',
-        component: () => import('src/pages/create-project/create-project'),
-        meta: {weight: 50}
+        component: () => import('src/pages/crud-project/crud-project'),
+        meta: {}
+      },
+      {
+        path: 'project/:name/edit',
+        name: 'project.edit',
+        component: () => import('src/pages/crud-project/crud-project'),
+        meta: {}
+      },
+      {
+        path: 'project/search',
+        name: 'project.search',
+        component: () => import('src/pages/project-search/project-search'),
+        meta: {}
       },
       {
         path: 'project/:name',
@@ -101,6 +113,7 @@ export default [
   },
   { // Always leave this as last one
     path: '*',
+    name: 'not-found',
     component: () => import('src/pages/404/404')
   }
 ]
