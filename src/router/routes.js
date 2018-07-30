@@ -36,7 +36,7 @@ export default [
         meta: {}
       },
       {
-        path: 'project/search',
+        path: 'projects',
         name: 'project.search',
         component: () => import('src/pages/project-search/project-search'),
         meta: {}
