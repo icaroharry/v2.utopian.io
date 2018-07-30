@@ -72,7 +72,7 @@ export default {
 
     // load posts main method.
     async loadProjects (done) {
-      const listProjects = firebase.functions().httpsCallable(`api/projects/list`)
+      const listProjects = firebase.functions().httpsCallable(`api/projects/list?q=${this.search}&openSource=${this.openSource}`)
       this.projects = (await listProjects()).data.map(project => project.data)
       if (this.projects.length < 10) {
         attempt(done)
@@ -84,9 +84,11 @@ export default {
     getProjectImage (project) {
       return project.images && project.images.length > 0 ? project.images[0] : 'statics/img/fallback.jpg'
     },
-    async searchProjects () {
-      const listProjects = firebase.functions().httpsCallable(`api/projects/list?q=${this.search}&openSource=${this.openSource}`)
-      this.projects = (await listProjects()).data.map(project => project.data)
+    async searchProjects (ev) {
+      if (ev.keyCode === 13) {
+        const listProjects = firebase.functions().httpsCallable(`api/projects/list?q=${this.search}&openSource=${this.openSource}`)
+        this.projects = (await listProjects()).data.map(project => project.data)
+      }
     },
     goToProjectPage (name) {
       return this.$router.push({ name: 'project.details', params: { name } })
