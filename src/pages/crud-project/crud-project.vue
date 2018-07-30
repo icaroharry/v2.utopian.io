@@ -25,7 +25,7 @@ export default {
     return {
       // map project store getters.
       ...mapGetters('auth', [
-        'github',
+        'account',
         'username'
       ]),
 
@@ -75,6 +75,8 @@ export default {
       scrolledEnough: false,
 
       formPercentage: 0,
+
+      isAllowed: false,
 
       // project internal data.
       project: {
@@ -156,7 +158,7 @@ export default {
         this.showDialog({ title: 'Oops :(', message: 'Please review the form.' })
         return
       }
-      if (this.project.platforms.github.repository && !(await this.isProjectOwner())) {
+      if (this.project.platforms.github.repository && !this.isAllowed) {
         this.showDialog({ title: 'Oops :(', message: 'You must be the owner of the GitHub project.' })
         return
       }
@@ -169,8 +171,10 @@ export default {
       }
 
       this.startLoading('Saving your project')
-      const saveProjectMethod = firebase.functions().httpsCallable('api/projects/create')
-      return saveProjectMethod(this.project)
+      const method = this.isEditing ? 'edit' : 'create' 
+      
+      const call = firebase.functions().httpsCallable(`api/projects/${method}`)
+      return call(this.project)
         .then(() => {
           this.stopLoading()
           return this.$router.push({ name: 'project.details', params: { name: this.project.id } })
@@ -182,11 +186,11 @@ export default {
     searchGithubRepos (query, done) {
       this.searchGithubRepository(query).then(done)
     },
-    async isProjectOwner () {
+    async checkProjectOwner () {
       const splittedGithubRepository = this.project.platforms.github.repository.split('/')
       const repo = splittedGithubRepository.pop()
       const owner = splittedGithubRepository.pop()
-      const username = this.github().username
+      const username = this.github.username
 
       let userPermision = 'none'
       try {
@@ -254,6 +258,17 @@ export default {
     handleImageUpload (uploadUrl) {
       this.updateFormPercentage('images')
       this.project.images = [uploadUrl]
+    },
+    loadProject () {
+      const projectsRef = this.firestore.collection('projects')
+
+      return projectsRef.where('id', '==', this.$route.params.name)
+        .get()
+        .then((querySnapshot) => {
+          this.project = querySnapshot.docs[0].data()
+          
+          this.project.tags = Object.values(this.project.tags)
+        })
     }
   },
   computed: {
@@ -264,13 +279,33 @@ export default {
       set () {
         this.project.openSource = !this.project.openSource
       }
-    }
-  },
-  mounted () {
-    this.gh = new GitHub()
-    this.$parent.$parent.$on('scroll', this.userHasScrolled)
+    },
+    isEditing () {
+      return this.$route.params.name
+    },
+    ...mapGetters('auth', [
+      'github'
+    ])
+
   },
   watch: {
+    async github () {
+      if (this.github.username) {
+        this.isAllowed = true // await this.checkProjectOwner()
+      }
+    }
+  },
+  async mounted () {
+    this.gh = new GitHub()
+    this.$parent.$parent.$on('scroll', this.userHasScrolled)
+
+    if (this.isEditing) {
+      await this.loadProject(this.$route.params.name)
+    }
+
+    if (this.github && this.github.username) {
+      this.isAllowed = true // await this.checkProjectOwner()
+    }
   }
 }
 </script>

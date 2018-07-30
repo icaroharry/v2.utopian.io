@@ -40,11 +40,7 @@ export default {
       return this.$router.push({ name: 'create' })
     }
   },
-  activated () {
-    console.log('test')
-  },
   created () {
-    console.log(this.project)
     this.loadProject()
   },
   watch: {
