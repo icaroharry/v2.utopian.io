@@ -12,35 +12,7 @@ export default {
   },
   data () {
     return {
-      projects: [
-        {
-          details: ['Basically it\'s the Steem interface you get used to but with additional handy options. Everything works out faster and easier with eSteem Mobile and eSteem Surfer applications. You can create your own posts, surf your friends feed or trending/hot/etc pages, upvote what you like, write comments, read replies, do all major Steem functions in your daily social surfing as well as wallet actions and of course few extras: search, discover different tags etc.'],
-          github_repository: 'https://github.com/esteemapp/esteem',
-          images: ['https://steemitimages.com/0x0/https://cdn.steemitimages.com/DQmYqaw1KBYfZDpGEcCS4FgztNoEvNAEBrfwDawePWQhXtJ/esteem.png'],
-          name: 'eSteem',
-          short_description: 'eSteem is a Steem interface with additional handy options. Everything works out faster and easier with eSteem Mobile and eSteem Surfer applications.',
-          tags: ['steem', 'interface', 'mobile'],
-          owner: 'good-karma'
-        },
-        {
-          details: ['D.Tube aims to become an alternative to YouTube that allows you to watch or upload videos on IPFS and share or comment about it on the immutable STEEM Blockchain, while earning cryptocurrency doing it.'],
-          github_repository: 'https://github.com/dtube/dtube',
-          images: ['https://steemitimages.com/DQmT7Ru1AmvYAXUwT3LrNt2kbySXbiyDVjYXoC3zfz95W95/dtube.png'],
-          name: 'd.tube',
-          short_description: 'D.Tube is the first crypto-decentralized video platform, built on top of the STEEM Blockchain and the IPFS peer-to-peer network.',
-          tags: ['steem', 'video', 'youtube'],
-          owner: 'dtube'
-        },
-        {
-          details: ['Steemblr is a microblogging platform written in javascript. It allows user to post and explore content which is smaller and more frivolous in its nature. Currently app is in development stage and you can see every posts from steemit. In the future it will show posts relative to steemblr app.'],
-          github_repository: 'https://github.com/snwolak/steemblr',
-          images: ['https://steemitimages.com/0x0/http://steemimages.com/images/2018/06/03/logo.png'],
-          name: 'Steemblr',
-          short_description: 'Steemblr is a microblogging platform written in javascript. It allows user to post and explore content which is smaller and more frivolous in its nature.',
-          tags: ['steem', 'tumblr', 'blogging'],
-          owner: 'snwolak'
-        }
-      ],
+      projects: [],
       contributions: [],
       taskRequests: [],
       isMounted: false,
@@ -68,13 +40,40 @@ export default {
 
       Promise.all([
         this.loadContributions(),
-        this.loadTaskRequests()
+        this.loadTaskRequests(),
+        this.loadProjects()
       ]).then((result) => {
         if (this.visibleContributions.length >= 3 && this.visibleTaskRequests.length >= 3) {
           this.loading = false
         }
         return result
       })
+    },
+    loadProjects (done) {
+      const projectsRef = this.firestore.collection('projects')
+      this.projects = []
+      let res = []
+      projectsRef.where('featured', '==', true)
+        .get()
+        .then((result) => {
+          result.forEach(doc => {
+            res.push({
+              id: doc.id,
+              data: doc.data()
+            })
+            console.log(res)
+          })
+        })
+      res.sort(function (a, b) {
+        return b.data.featured_order - a.data.featured_order
+      })
+      this.projects = res
+      console.log(res)
+      console.log(this.projects)
+      attempt(done)
+    },
+    goToProjectPage (name) {
+      return this.$router.push({ name: 'project.details', params: { name } })
     },
     loadContributions (done) {
       return byOrder('trending', { tag: 'utopian-io', limit: 10 }, last(this.posts))

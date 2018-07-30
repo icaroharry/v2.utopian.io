@@ -10,20 +10,20 @@ div
       div.row
         div.col-lg-6.offset-lg-1.projects-slider
           q-carousel.project-images(color="white", ref="mainCarousel")
-            q-carousel-slide(v-for="project in projects", :img-src="project.images[0]", :key="project.name")
+            q-carousel-slide(v-for="project in projects", :img-src="project.data.images[0]", :key="project.id" v-if="project.data.featured_order < 4")
         div.col-lg-4.text-center
           q-carousel.project-info(color="white", ref="infoCarousel", no-swipe)
-            q-carousel-slide(v-for="project in projects", :key="project.name")
+            q-carousel-slide(v-for="project in projects", :key="project.id")
               q-card.project-card
                 q-card-title
-                  | {{ project.name }}
+                  | {{ project.data.name }}
                   span(slot="subtitle")
                     | {{ 'by ' }}
-                    span.text-dark.q-subheading {{ project.owner }}
+                    span.text-dark.q-subheading {{ project.data.creator }}
                 q-card-main.q-title.text-weight-light.text-dusk
-                  | {{ project.short_description }}
+                  | {{ project.data.description }}
                 q-card-actions(align="center")
-                  q-btn(label="Contribute to this project", color="primary")
+                  q-btn(label="Contribute to this project", color="primary" @click="goToProjectPage(project.id)")
 
           q-btn.carousel-arrow(
             flat,
@@ -76,21 +76,21 @@ div
             hr
             div.mt Projects
       div.row.inline.projects.gutter-sm
-        div(v-for="(project, index) in projects").col-md-12.col-lg-4
+        div(v-for="(project, index) in projects" v-if="project.data.featured_order > 3").col-md-12.col-lg-4
           q-card.inline.round-borders(color="white", text-color="grey-7")
-            q-card-media(:style="'background-image: url(' + project.images[0] + ')'")
-            q-card-title {{project.name}}
+            q-card-media(:style="'background-image: url(' + project.data.images[0] + ')'")
+            q-card-title {{project.data.name}}
             q-card-main
-              p.short-description {{project.short_description}}
+              p.short-description {{project.data.description}}
               p
-                q-btn.tag(color="tertiary", dense, size="", outline, :key="tag", v-for="tag in project.tags")
+                q-btn.tag(color="tertiary", dense, size="", outline, :key="tag", v-for="tag in project.data.tags")
                   | {{tag}}
               div.author.items-center
                 div.avatar
-                  img.align-bottom(:src="'https://steemitimages.com/u/' + project.owner +'/avatar'")
+                  img.align-bottom(:src="'https://steemitimages.com/u/' + project.data.owner +'/avatar'")
                 div.author-details
                   div.name
-                    span {{ '@' + project.owner  }}
+                    span {{ '@' + project.data.creator  }}
 
       div.row.submit-project.round-borders.justify-between.items-center.q-mt-lg
         div.row.no-wrap.items-center
