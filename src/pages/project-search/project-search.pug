@@ -13,20 +13,22 @@ u-layout-page.u-page-project-search
       q-field.u-search-field.items-center(orientation="vertical", icon="mdi-magnify")
         q-input(v-model.trim="search" placeholder="e.g d.tube", @keyup="searchProjects")
     q-infinite-scroll(:handler="loadProjectsScroll", ref="infiniteScroll")
-      q-list.row.q-pa-sm(no-border)
-        q-card-media.shadow-4.col-12.q-mb-md.q-pr-sm(v-for="project in projects")
-          img.col-3(:src="getProjectImage(project)")
-
-          div.col-9.row.column.justify-between
+      div.row.inline.projects.gutter-sm
+        div(v-for="(project, index) in projects").col-md-12.col-lg-6
+          q-card.inline.round-borders(color="white", text-color="grey-7")
+            q-card-media(:style="'background-image: url(' + getProjectImage(project) + ')'")
             q-card-title {{project.name}}
-              span.row.items-center.justify-start(slot="subtitle")
-                img.project-owner-avatar(:src="'https://steemitimages.com/u/' + project.creator + '/avatar'")
-                span.project-created-by created by
-                span.q-body-1.text-black {{project.creator}}
             q-card-main
-              p {{project.description}}
-            q-card-actions.justify-end
-              q-btn(color="primary" @click="goToProjectPage(project.id)") Contribute
+              p.short-description {{project.description}}
+              p
+                q-btn.tag(color="tertiary", dense, size="", outline, :key="tag", v-for="tag in project.tags")
+                  | {{tag}}
+              div.author.items-center
+                div.avatar
+                  img.align-bottom(:src="'https://steemitimages.com/u/' + project.owner +'/avatar'")
+                div.author-details
+                  div.name
+                    span {{ '@' + project.creator  }}
 
       // spinner for infinite scroll loading.
       q-spinner-dots(slot="message", :size="40", style="margin: 0 auto; top: 100px")
