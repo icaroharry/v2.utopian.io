@@ -39,6 +39,17 @@ export default {
       default: false
     }
   },
+  // filters
+  filters: {
+    // add a filter to properly format the task and category strings used in the Icon classes.
+    formatIconClasses (value) {
+      if (!value) return ''
+      if (value.includes('task-')) {
+        value = value.substr('task-'.length)
+      }
+      return 'ut-' + value
+    }
+  },
 
   // component data.
   data () {
