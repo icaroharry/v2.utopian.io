@@ -72,7 +72,7 @@ export default {
 
     // load posts main method.
     async loadProjects (done) {
-      const listProjects = firebase.functions().httpsCallable(`api/projects/list?q=${this.search}&openSource=${this.openSource}`)
+      const listProjects = firebase.functions().httpsCallable(`api/projects/list?q=${this.search}&openSource=${this.opensource}`)
       this.projects = (await listProjects()).data.map(project => project.data)
       if (this.projects.length < 10) {
         attempt(done)
@@ -86,7 +86,7 @@ export default {
     },
     async searchProjects (ev) {
       if (ev.keyCode === 13) {
-        const listProjects = firebase.functions().httpsCallable(`api/projects/list?q=${this.search}&openSource=${this.openSource}`)
+        const listProjects = firebase.functions().httpsCallable(`api/projects/list?q=${this.search}&opensource=${this.openSource}`)
         this.projects = (await listProjects()).data.map(project => project.data)
       }
     },
