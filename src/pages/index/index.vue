@@ -61,15 +61,11 @@ export default {
               id: doc.id,
               data: doc.data()
             })
-            console.log(res)
           })
         })
-      // res.sort(function (a, b) {
-      //   return b.data.featured_order - a.data.featured_order
-      // })
+
       this.projects = res
-      console.log(res)
-      console.log(this.projects)
+
       attempt(done)
     },
     goToProjectPage (name) {
