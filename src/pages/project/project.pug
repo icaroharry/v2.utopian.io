@@ -10,7 +10,7 @@ div
               div.row.project-title.inline.no-wrap.items-center
                 img.project-avatar(:src="project.images[0]")
                 span.q-headline.project-name {{ project.name }}
-                q-btn(@click="goToEditPage" v-if="project.creator === account().name", flat round color="primary" icon="mdi-pencil")
+                q-btn(@click="goToEditPage" v-if="account() && project.creator === account().name", flat round color="primary" icon="mdi-pencil")
               p {{ project.description }}
               p.q-caption.text-grey
                 span.row.items-center.justify-start.project-separator
