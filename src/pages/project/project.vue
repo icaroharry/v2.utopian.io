@@ -9,7 +9,7 @@ export default {
         'account'
       ]),
       project: {},
-      loading: true
+      loading: false
       // contributors: [
       //   { id: 1, name: 'icaro', numberOfContributions: 17 },
       //   { id: 2, name: 'hernandev', numberOfContributions: 23 },
@@ -28,15 +28,14 @@ export default {
   filters: {
   },
   methods: {
-    loadProject () {
+    async loadProject () {
+      this.loading = true
       const projectsRef = this.firestore.collection('projects')
 
-      projectsRef.where('id', '==', this.$route.params.name)
-        .get()
-        .then((querySnapshot) => {
-          this.project = querySnapshot.docs[0].data()
-          this.loading = false
-        })
+      const querySnapshot = await projectsRef.where('id', '==', this.$route.params.name).get()
+
+      this.project = querySnapshot.docs[0].data()
+      this.loading = false
     },
     goToRepo () {
       window.open(`https://github.com/${this.project.platforms.github.repository}`, '_blank')
@@ -50,9 +49,6 @@ export default {
   },
   created () {
     this.loadProject()
-  },
-  watch: {
-
   }
 }
 </script>
