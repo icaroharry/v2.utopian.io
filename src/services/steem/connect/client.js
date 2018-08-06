@@ -17,6 +17,7 @@ export const callbackURL = getCallbackURL()
 
 // start a steem connect sdk client instance and export.
 export const client = sdk.Initialize({
+  baseURL: 'https://steemconnect.com',
   app: clientId,
   callbackURL,
   scopes

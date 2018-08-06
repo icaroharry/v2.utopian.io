@@ -41,7 +41,7 @@ function poll (popup, resolve, reject) {
   let intervalId = setInterval(function polling () {
     if (popup.closed) {
       clearInterval(intervalId)
-      return reject(new Error('closed'))
+      return resolve()
     }
     const { documentOrigin, popupWindowOrigin } = attempt(() => {
       try {

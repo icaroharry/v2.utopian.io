@@ -14,6 +14,7 @@ export * from './github'
  * it to a custom firebase token, authenticate on firebase, then store locally, encrypted.
  */
 export const login = ({ dispatch, commit }, steemConnectData) => {
+  if (!steemConnectData) return
   // parse SteemConnect callback data.
   const data = parseSteemConnectCallback(steemConnectData)
 
