@@ -1,8 +1,6 @@
 // import lodash helpers.
 import { get, merge, toNumber } from 'lodash-es'
-// slugify helper.
-import slugify from 'slugify'
-
+import { slugify } from 'src/services/common/string'
 // base metadata fields.
 export const baseMetadata = {
   app: 'utopian/2.0',
@@ -10,7 +8,7 @@ export const baseMetadata = {
 }
 
 // metadata generator.
-export const generateMetadata = (meta, tags) => merge(merge(baseMetadata, meta), { tags })
+export const generateMetadata = (meta, tags) => merge(merge(baseMetadata, { utopian: meta }), { tags })
 
 export const generateOperations = (author, title, permlink = null, body = '', jsonMetadata = {}) => {
   // build comment data.
@@ -57,5 +55,23 @@ export const generateOperations = (author, title, permlink = null, body = '', js
   // return this.broadcast([['comment', params]], cb);
 }
 
+export const generateUpdateOperations = (author, title, permlink = null, body = '', jsonMetadata = {}) => {
+  // build comment data.
+  let commentData = {
+    parent_author: '',
+    parent_permlink: 'utopian-io',
+    author: author,
+    permlink: permlink,
+    title: title,
+    body: body,
+    json_metadata: JSON.stringify(jsonMetadata)
+  }
+  // build comment operation array.
+  const comment = ['comment', commentData]
+
+  // return both operations to be broadcast at once.
+  return [comment]
+}
+
 // title slug.
-export const slugifyTitle = (title) => slugify(title, { lower: true })
+export const slugifyTitle = (title) => slugify(title)

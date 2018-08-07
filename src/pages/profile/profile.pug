@@ -11,7 +11,7 @@ div(v-if="isMounted")
               q-btn.q-ml-md(color="primary", dense, @click="followUser(userData.steemData.name)", :disabled="isOwnProfile") Follow
             span.text-grey-5.text-weight-light {{ '@' + userData.steemData.name }}
             span.text-white
-              a(:href="userData.steemData._meta.profile.website")
+              a(:href="website")
     div#u-profile-tabs.container.row
       q-tabs.offset-3.col-9(color="black" inverted v-if="isMounted")
         q-route-tab(:to="`/@${userData.steemData.name}/contributions`", name="tab-contributions", append, label="Contributions", slot="title", default)
@@ -45,10 +45,10 @@ div(v-if="isMounted")
               q-item-main(:sublabel="userData.steemData._location")
 
             //- add conditional for website (if website is empty do not display the block)
-            q-item.u-no-separator(v-if="userData.steemData._meta.profile.website")
+            q-item.u-no-separator(v-if="website")
               q-item-side(icon="mdi-link" color="primary")
               q-item-main(multiline)
                 q-item-tile(sublabel, lines="3")
-                  a(:href="this.userData.steemData._meta.profile.website" target="_blank") {{ websiteDisplay }}
+                  a(:href="website" target="_blank") {{ websiteDisplay }}
         template(slot="main")
           router-view()

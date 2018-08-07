@@ -54,17 +54,18 @@ export default {
 
     // map steem store actions.
     ...mapActions('steem', [
-      'comment'
+      'updateComment'
     ]),
 
     // map contributions store actions.
     ...mapActions('contributions', [
+      'getContribution',
       'searchGithubRepository'
     ]),
 
     // broadcast (save) the contribution / post on the blockchain.
     saveContribution () {
-      return this.comment({
+      return this.updateComment({
         title: get(this.contribution, 'title', null),
         content: get(this.contribution, 'body', ''),
         tags: get(this.contribution, 'tags', []),
@@ -73,6 +74,25 @@ export default {
           projectId: get(this.contribution, 'projectId', null)
         }
       }).catch(console.log)
+    },
+
+    loadContribution () {
+      // get author and permlink from route.
+      const author = get(this.$route.params, 'author')
+      const permlink = get(this.$route.params, 'permlink')
+
+      // get contribution data from database.
+      return this.getContribution({ author, permlink })
+        .then((contributionData) => {
+          // assign title.
+          this.contribution.title = contributionData.title
+          // assign contribution body.
+          this.contribution.body = contributionData.body
+          // contribution tags.
+          this.contribution.tags = contributionData.tags
+          // resolve the promise.
+          return Promise.resolve(contributionData)
+        })
     },
 
     // search github for repositories matching a given query.
@@ -127,59 +147,63 @@ export default {
   },
 
   mounted () {
-    // require a ton of plugins to initialize ace.
-    require('emmet-core/emmet')
-    require('brace/ext/emmet')
-    require('brace/ext/language_tools')
-    require('brace/ext/textarea')
-    require('brace/mode/html')
-    require('brace/mode/php')
-    require('brace/mode/javascript')
-    require('brace/mode/markdown')
-    require('brace/theme/chrome')
-    require('brace/ext/statusbar')
-    require('brace/ext/searchbox')
-    require('brace/ext/settings_menu')
-    require('brace/ext/modelist')
+    // load contribution from database.
+    this.loadContribution()
+      .then(contributionData => {
+        // require a ton of plugins to initialize ace.
+        require('emmet-core/emmet')
+        require('brace/ext/emmet')
+        require('brace/ext/language_tools')
+        require('brace/ext/textarea')
+        require('brace/mode/html')
+        require('brace/mode/php')
+        require('brace/mode/javascript')
+        require('brace/mode/markdown')
+        require('brace/theme/chrome')
+        require('brace/ext/statusbar')
+        require('brace/ext/searchbox')
+        require('brace/ext/settings_menu')
+        require('brace/ext/modelist')
 
-    // create an ace editor instance.
-    const editor = this.editor = ace.edit('editor-container')
+        // create an ace editor instance.
+        const editor = this.editor = ace.edit('editor-container')
 
-    // Markdown snippets
-    // @TODO needs refactor to a separate module.
-    ace.define('ace/snippets/markdown', ['require', 'exports', 'module'], function (e, t, n) {
-      'use strict'
-      /* eslint-disable-next-line */
-      t.snippetText = '# Markdown\nsnippet link\n\t[${1:text}](https://${2:address})\nsnippet image\n\t![${1:description}](https://${2:address})\n\nsnippet bold\n\t**${1:text}**\n\nsnippet code\n\t```${1:lang}\n\t${2:code}\n\t```\n\n'
-      t.scope = 'markdown'
-    })
+        // Markdown snippets
+        // @TODO needs refactor to a separate module.
+        ace.define('ace/snippets/markdown', ['require', 'exports', 'module'], function (e, t, n) {
+          'use strict'
+          /* eslint-disable-next-line */
+          t.snippetText = '# Markdown\nsnippet link\n\t[${1:text}](https://${2:address})\nsnippet image\n\t![${1:description}](https://${2:address})\n\nsnippet bold\n\t**${1:text}**\n\nsnippet code\n\t```${1:lang}\n\t${2:code}\n\t```\n\n'
+          t.scope = 'markdown'
+        })
 
-    // editor scroll style.
-    editor.$blockScrolling = Infinity
-    // set markdown as the language for the editor.
-    editor.getSession().setMode('ace/mode/markdown')
-    // set chrome as the color theme.
-    editor.setTheme('ace/theme/chrome')
-    // init the editor content.
-    editor.setValue(this.body, 1)
+        // editor scroll style.
+        editor.$blockScrolling = Infinity
+        // set markdown as the language for the editor.
+        editor.getSession().setMode('ace/mode/markdown')
+        // set chrome as the color theme.
+        editor.setTheme('ace/theme/chrome')
+        // init the editor content.
+        editor.setValue(this.contribution.body, 1)
 
-    // listen for editor changes, to update the preview.
-    editor.on('change', () => {
-      // assign the editor content as body.
-      this.body = editor.getValue()
-    })
+        // listen for editor changes, to update the preview.
+        editor.on('change', () => {
+          // assign the editor content as body.
+          this.body = editor.getValue()
+        })
 
-    // set editor style options.
-    editor.setOptions({
-      fontFamily: 'Roboto Mono',
-      fontSize: '12pt',
-      showLineNumbers: true,
-      // completion features are temporary disabled.
-      enableEmmet: true,
-      enableBasicAutocompletion: true,
-      enableSnippets: true,
-      enableLiveAutocompletion: false
-    })
+        // set editor style options.
+        editor.setOptions({
+          fontFamily: 'Roboto Mono',
+          fontSize: '12pt',
+          showLineNumbers: true,
+          // completion features are temporary disabled.
+          enableEmmet: true,
+          enableBasicAutocompletion: true,
+          enableSnippets: true,
+          enableLiveAutocompletion: false
+        })
+      })
   },
 
   // watch for body changes, to trigger rending the preview.

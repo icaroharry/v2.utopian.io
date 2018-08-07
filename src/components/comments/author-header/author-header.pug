@@ -8,7 +8,7 @@ div.u-comments-author-header(@click.self.prevent="")
       div.username.flex
         div.text()
           span.name(v-if="account._name") {{ account._name }}
-          router-link.profile(:to="{ name: 'profile.contributions', params: { username: account.name } }")
+          router-link.profile(:to="{ name: 'profile.contributions', params: { username: account.name, category: 'all' } }")
             span.username @{{ account.name }}
         div.reputation
           span {{ account._reputation }}

@@ -13,7 +13,7 @@ export default {
     UPostPreview
   },
   data () {
-    return {    
+    return {
       // auth store getters.
       ...mapGetters('auth', [
         'uid',
@@ -95,14 +95,22 @@ export default {
     isOwnProfile () {
       return this.uid() === this.$route.params['username']
     },
+    website () {
+      if (this.isMounted && this.userData.steemData._meta.profile && this.userData.steemData._meta.profile.website) {
+        return this.userData.steemData._meta.profile.website
+      }
+    },
     websiteDisplay () {
-      if (this.isMounted && this.userData.steemData._meta.profile.website) {
-        return this.userData.steemData._meta.profile.website.split('//')[1]
+      if (this.isMounted && this.userData.steemData._meta.profile && this.userData.steemData._meta.profile.website) {
+        return this.userData.steemData._meta.profile.website.replace(
+          /https?:\/\/(?:www\.|(?!www))|www\.|https?:\/\/(?:www\.|(?!www))|www\./,
+          ''
+        )
       }
     },
     coverImage () {
       if (this.isMounted) {
-        if (this.userData.steemData._meta.profile.cover_image) {
+        if (this.userData.steemData._meta.profile && this.userData.steemData._meta.profile.cover_image) {
           return 'https://steemitimages.com/2048x512/' + this.userData.steemData._meta.profile.cover_image
         } else {
           return 'https://source.unsplash.com/2048x512/?coding,computer,tech'

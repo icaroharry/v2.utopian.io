@@ -56,17 +56,17 @@ div
             hr
             div.mt Contributions  
       div.row.contributions.gutter-sm
-        div.col-md-12.col-lg-4(v-for="(post, index) in visibleContributions", v-if="!loading")
+        div.col-md-12.col-lg-4(v-for="(post, index) in contributions", v-if="!loading")
           u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50")
         div.col-md-12.col-lg-4(v-for="(post, index) in emptyContributions", v-if="loading")
-          u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50", :loading="true")
+          u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50", :loading="loading")
 
-      div.q-title.q-my-lg.q-pt-lg RECENT TASK REQUESTS
-      div.row.contributions.gutter-sm
-        div.col-md-12.col-lg-4(v-for="(post, index) in visibleTaskRequests", v-if="!loading")
-          u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50")
-        div.col-md-12.col-lg-4(v-for="(post, index) in emptyContributions", v-if="loading")
-          u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50", :loading="true")
+      //- div.q-title.q-my-lg.q-pt-lg RECENT TASK REQUESTS
+      //- div.row.contributions.gutter-sm
+      //-   div.col-md-12.col-lg-4(v-for="(post, index) in visibleTaskRequests", v-if="!loading")
+      //-     u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50")
+      //-   div.col-md-12.col-lg-4(v-for="(post, index) in emptyContributions", v-if="loading")
+      //-     u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50", :loading="loading")
 
       div.flex.justify-between.contributions-header
         div.q-title.q-my-lg.q-pt-lg POPULAR PROJECTS

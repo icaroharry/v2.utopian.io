@@ -44,9 +44,9 @@ div
               q-btn.col-md-6(dense, color="primary", @click="contribute") Contribute
               q-btn.col-md-6(dense, icon="mdi-github-circle", size="12px", outline, color="dark", reverse, @click="goToRepo") Github Repository
   q-tabs(color="black" inverted v-if="!loading" align="justify")
-    q-route-tab(:to="`/project/${project.id}/contributions`" name="tab-contributions" append label="Contributions" slot="title" exact)
+    q-route-tab(:to="`/project/${project.id}/contributions`" name="tab-contributions" append label="Contributions" slot="title")
     q-route-tab(:to="`/project/${project.id}/details`" name="tab-details" append label="Details" slot="title" exact)
-    q-route-tab(:to="`/project/${project.id}/updates`" name="tab-updates" append label="Updates" slot="title" exact disabled)
+    q-route-tab(:to="`/project/${project.id}/updates`" name="tab-updates" append label="Updates" slot="title" exact)
     q-route-tab(:to="`/project/${project.id}/task`" name="tab-task-requests" append label="Task Requests" slot="title" exact disabled)
     // q-route-tab(:to="`/project/${project.id}/contributors`" name="tab-contributors" append label="Contributors" slot="title" exact disabled)
     // q-route-tab(:to="`/project/${project.id}/sponsors`" name="tab-sponsors" append label="Sponsors" slot="title" exact disabled)
@@ -81,7 +81,7 @@ div
     //-             q-btn.col-12(color="primary") see all
 
     template(slot="main")
-      router-view(v-if="project.details", :details="project.details")
+      router-view(v-if="project.details", :details="project.details", :project="project")
 
 
 

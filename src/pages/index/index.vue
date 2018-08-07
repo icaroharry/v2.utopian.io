@@ -1,8 +1,8 @@
 <script>
 import ULayoutPage from 'src/layouts/parts/page/page'
 import UPostPreview from 'src/components/post-preview/post-preview'
-import { byOrder } from 'src/services/steem/posts'
-import { concat, last, attempt, filter, map } from 'lodash-es'
+import { attempt } from 'lodash-es'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'PageIndex',
@@ -27,6 +27,9 @@ export default {
   filters: {
   },
   methods: {
+    ...mapActions('contributions', [
+      'getContributions'
+    ]),
     carouselNext () {
       this.$refs.mainCarousel.next()
       this.$refs.infoCarousel.next()
@@ -40,12 +43,9 @@ export default {
 
       Promise.all([
         this.loadContributions(),
-        this.loadTaskRequests(),
         this.loadProjects()
       ]).then((result) => {
-        if (this.visibleContributions.length >= 3 && this.visibleTaskRequests.length >= 3) {
-          this.loading = false
-        }
+        this.loading = false
         return result
       })
     },
@@ -53,7 +53,7 @@ export default {
       const projectsRef = this.firestore.collection('projects')
       this.projects = []
       let res = []
-      projectsRef.where('featured', '==', true)
+      return projectsRef.where('featured', '==', true)
         .get()
         .then((result) => {
           result.forEach(doc => {
@@ -62,36 +62,32 @@ export default {
               data: doc.data()
             })
           })
+          this.projects = res
+          attempt(done)
+          return this.projects
         })
-
-      this.projects = res
-
-      attempt(done)
     },
     goToProjectPage (name) {
       return this.$router.push({ name: 'project.details', params: { name } })
     },
-    loadContributions (done) {
-      return byOrder('trending', { tag: 'utopian-io', limit: 10 }, last(this.posts))
-        .then((result) => {
-          this.contributions = concat(this.contributions, result)
-          attempt(done)
-          return result
-        })
+    async loadContributions (done) {
+      try {
+        this.contributions = await this.getContributions({ orderBy: 'trending', limit: 3 })
+        return this.contributions
+      } catch (err) {
+        console.err(err)
+      }
     },
-    loadTaskRequests (done) {
-      const filterTags = ['task-bug-hunting', 'task-analysis', 'task-social',
-        'task-development', 'task-documentation', 'task-copywriting', 'task-graphics']
+    // loadTaskRequests (done) {
+    //   const filterTags = ['task-bug-hunting', 'task-analysis', 'task-social',
+    //     'task-development', 'task-documentation', 'task-copywriting', 'task-graphics']
 
-      //  map over the task tags and grab associated tasks.
-      //  lowering limit reduces the potential for multiple tasks by same author to appear on the carousel
-
-      return map(filterTags, (tag) => byOrder('trending', { tag: tag, limit: 2 }, last(this.posts)).then((result) => {
-        this.taskRequests = concat(this.taskRequests, result)
-        attempt(done)
-        return result
-      }))
-    },
+    //   return map(filterTags, (tag) => byOrder('trending', { tag: tag, limit: 2 }, last(this.posts)).then((result) => {
+    //     this.taskRequests = concat(this.taskRequests, result)
+    //     attempt(done)
+    //     return result
+    //   }))
+    // },
     redirectToCreateProject () {
       return this.$router.push({ name: 'project.create' })
     }
@@ -102,16 +98,6 @@ export default {
     },
     carouselCanGoToPrevious () {
       return this.isMounted ? this.$refs.mainCarousel.canGoToPrevious : false
-    },
-    visibleContributions () {
-      const filteredContributions = filter(this.contributions, (post) => ((post['parent_permlink'] === 'utopian-io' && post._category)))
-      return filteredContributions.slice(0, filteredContributions.length > 3 ? 3 : filteredContributions.length)
-    },
-    //  && post._category - Many of the _categories for these objects are either 'utopian-io' or undefined.
-
-    visibleTaskRequests () {
-      const filteredTaskRequests = filter(this.taskRequests, (post) => ((post['parent_permlink'] === 'utopian-io') && post._task))
-      return filteredTaskRequests.slice(0, filteredTaskRequests.length > 3 ? 3 : filteredTaskRequests.length)
     }
   },
   mounted () {
@@ -119,16 +105,6 @@ export default {
     this.loadInitial()
   },
   watch: {
-    visibleContributions () {
-      if (this.visibleContributions.length < 3) {
-        this.loadInitial()
-      }
-    },
-    visibleTaskRequests () {
-      if (this.visibleTaskRequests.length < 3) {
-        this.loadInitial()
-      }
-    }
   }
 }
 </script>

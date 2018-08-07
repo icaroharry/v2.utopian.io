@@ -1,19 +1,16 @@
 u-layout-page.u-page-contributions(:meta="false")
   template(slot="main")
-    div.row.categories-list
+    div.row.reverse.categories-list
       q-select.col-4(
-        v-model="currentCategory"
+        ref="categoryList"
+        v-model="category"
         :options="categoryOptions"
         hide-underline
+        @input="triggerCategoryRoute"
+        v-if="isMounted"
       )
-    q-infinite-scroll(:handler="loadPostsScroll", ref="infiniteScroll")
-      q-list.flex.posts-list(padding, separator, sparse, no-border, multiline)
-        template(v-for="item in visiblePosts", v-if="item.parent_permlink === 'utopian-io' && item._category")
-          u-post-preview(:post="item")
+    u-contribution-list(orderBy="new", :category="category", v-if="isMounted", :author="author")
 
-      // spinner for infinite scroll loading.
-      div.row.justify-center(slot="message")
-        q-spinner-dots(slot="message", :size="40")
 
 
 

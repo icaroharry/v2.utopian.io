@@ -33,7 +33,7 @@ q-item.u-post-preview(:to="post.url", :link="false", :class="post._category ? po
         div.author
 
           div.author-details
-            router-link.profile(:to="{ name: 'profile.contributions', params: { username: post.author } }")
+            router-link.profile(:to="{ name: 'profile.contributions', params: { username: post.author, category: 'all' } }")
               div.name
                 span {{ '@' + post.author  }}
               // span.reputation {{ post._author_reputation }}

@@ -7,11 +7,11 @@ u-layout-page.u-page-index
 
         div.col-md-12
 
-            q-field.field-order(label="Sort by", orientation="vertical")
-              q-btn-dropdown(:label='sortBy', flat, dense, no-ripple)
+            q-field.field-order(label="Order by", orientation="vertical")
+              q-btn-dropdown(:label='orderBy', flat, dense, no-ripple)
                 // dropdown content
                 q-list(link='')
-                  q-item(v-for="option in sortOptions", :key="option.value", :to="{ name: 'posts.' + option.value, params: { category }  }")
+                  q-item(v-for="option in orderOptions", :key="option.value", :to="{ name: 'posts.' + option.value, params: { category }  }")
                     q-item-main
                       q-item-tile(label='') {{ option.label }}
 
@@ -24,13 +24,13 @@ u-layout-page.u-page-index
             q-list.full-width.categories-list(no-border, multiline)
 
 
-              q-item(:to="{ name: ('posts.' + sortBy), params: { category: 'utopian-io' } }", :exact="true")
+              q-item(:to="{ name: ('posts.' + orderBy), params: { category: 'all' } }", :exact="true")
                 q-item-side(style="min-width: 20px")
                   q-icon.ut-utopian
                 q-item-main
                   .q-item-label All
               template(v-for="category in categoryOptions", separator)
-                q-item(:to="{ name: ('posts.' + sortBy), params: { category: category.value } }")
+                q-item(:to="{ name: ('posts.' + orderBy), params: { category: category.value } }")
                   q-item-side(style="min-width: 20px")
                     q-icon(:class="'ut-' + category.value")
 
@@ -40,13 +40,7 @@ u-layout-page.u-page-index
 
 
   template(slot="main")
-    q-infinite-scroll(:handler="loadPostsScroll", ref="infiniteScroll")
-      q-list.flex.posts-list(padding, separator, sparse, no-border, multiline)
-        template(v-for="item in visiblePosts", v-if="item.parent_permlink === 'utopian-io' && item._category")
-          u-post-preview.shadow-2(:post="item")
-
-      // spinner for infinite scroll loading.
-      q-spinner-dots(slot="message", :size="40", style="margin: 0 auto")
+    u-contribution-list(:category="currentCategory", :orderBy="orderBy", v-if="isMounted")
 
 
 
