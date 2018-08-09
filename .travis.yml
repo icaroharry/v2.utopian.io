@@ -22,14 +22,18 @@ before_deploy:
 
 ## deployment stage.
 deploy:
-  # firebase deployment strategy.
+  # deploys to prod
   provider: firebase
-  # skip cleanup so built artifacts are not lost.
   skip_cleanup: true
-  # firebase authentication token.
   token: $FIREBASE_TOKEN
-  # project id
   project: $FIREBASE_DEPLOY_PROJECT_ID
-  # deployments for master branch only (production).
   on:
     branch: master
+
+  # deploys to dev
+  provider: firebase
+  skip_cleanup: true
+  token: $FIREBASE_TOKEN
+  project: $FIREBASE_DEPLOY_DEV_PROJECT_ID
+  on:
+    branch: develop
