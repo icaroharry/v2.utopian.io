@@ -69,5 +69,3 @@ npm run dev
 ```shell
 npm run build
 ```
-
-trigger build
