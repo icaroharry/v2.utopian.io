@@ -13,13 +13,6 @@ cache:
 # build script
 script: npm run build
 
-# pre deployment scripts.
-before_deploy:
-  # install firebase tools (cli).
-  - npm install -g firebase-tools
-  # enable the firebase project to be used for deployment.
-  - firebase use --add $FIREBASE_DEPLOY_PROJECT_ID --alias default
-
 ## deployment stage.
 deploy:
   # deploys to prod
