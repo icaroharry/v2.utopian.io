@@ -3,6 +3,7 @@ require('dotenv').config()
 
 // quasar / app config.
 module.exports = function (ctx) {
+  console.log(ctx)
   // return config
   return {
     supportIE: false,
@@ -26,7 +27,7 @@ module.exports = function (ctx) {
     ],
     // build configuration.
     build: {
-      env: ctx.dev ? {
+      env: (ctx.debug || ctx.dev) ? {
         SC2_APP: (process.env.SC2_APP_DEV || '"utopian.signin"'),
         FIREBASE_API_KEY: (process.env.FIREBASE_API_KEY_DEV || 'null'),
         FIREBASE_PROJECT_ID: (process.env.FIREBASE_PROJECT_ID_DEV || '"utopian-io"'),
