@@ -9,6 +9,7 @@
   "license": "MIT",
   "scripts": {
     "build": "cross-env quasar build -m pwa -t mat",
+    "build.dev": "cross-env quasar build -m pwa -t mat -d",
     "dev": "cross-env quasar dev -m pwa -t mat",
     "lint": "eslint --ext .js,.vue src",
     "test": "echo \"No test specified\" && exit 0"

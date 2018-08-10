@@ -11,7 +11,11 @@ cache:
     - node_modules
 
 # build script
-script: npm run build
+script:
+  - if [ "$TRAVIS_BRANCH" = "develop" ];
+    then npm run build.dev;
+    else npm run build;
+    fi
 
 ## deployment stage.
 deploy:
