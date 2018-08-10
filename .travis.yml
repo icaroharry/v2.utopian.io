@@ -13,6 +13,10 @@ cache:
 # build script
 script: npm run build
 
+# pre deployment scripts.
+before_deploy:
+  npm run deployOpenPullRequests
+
 ## deployment stage.
 deploy:
   # deploys to prod

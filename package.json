@@ -11,7 +11,8 @@
     "build": "cross-env quasar build -m pwa -t mat",
     "dev": "cross-env quasar dev -m pwa -t mat",
     "lint": "eslint --ext .js,.vue src",
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "deployOpenPullRequests": "node scripts/deployOpenPullRequests"
   },
   "dependencies": {
     "@octokit/rest": "^15.8.2",
@@ -64,6 +65,7 @@
     "markdown-it-task-lists": "^2.1.1",
     "mdurl": "^1.0.1",
     "node-fetch": "^2.1.2",
+    "nodegit": "^0.22.2",
     "oauth-open": "^1.0.3",
     "object-assign": "^4.1.1",
     "object-hash": "^1.3.0",
