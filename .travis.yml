@@ -12,8 +12,10 @@ cache:
 
 # build script
 script:
-  - if [ "$TRAVIS_BRANCH" = "develop" ]; then npm run build.dev; fi
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then npm run build; fi
+  - if [ "$TRAVIS_BRANCH" = "develop" ];
+    then npm run build.dev;
+    else npm run build;
+    fi
 
 ## deployment stage.
 deploy:
