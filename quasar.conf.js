@@ -3,7 +3,6 @@ require('dotenv').config()
 
 // quasar / app config.
 module.exports = function (ctx) {
-  console.log(ctx)
   // return config
   return {
     supportIE: false,
