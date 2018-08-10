@@ -11,11 +11,9 @@ cache:
     - node_modules
 
 # build script
-script: npm run build
-
-# pre deployment scripts.
-before_deploy:
-  npm run deployOpenPullRequests
+script:
+  - if [ "$TRAVIS_BRANCH" = "develop" ]; then npm run build.dev; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then npm run build; fi
 
 ## deployment stage.
 deploy:
