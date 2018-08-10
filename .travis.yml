@@ -15,21 +15,22 @@ script: npm run build
 
 # pre deployment scripts.
 before_deploy:
-  # install firebase tools (cli).
-  - npm install -g firebase-tools
-  # enable the firebase project to be used for deployment.
-  - firebase use --add $FIREBASE_DEPLOY_PROJECT_ID --alias default
+  npm run deployOpenPullRequests
 
 ## deployment stage.
 deploy:
-  # firebase deployment strategy.
+  # deploys to prod
   provider: firebase
-  # skip cleanup so built artifacts are not lost.
   skip_cleanup: true
-  # firebase authentication token.
   token: $FIREBASE_TOKEN
-  # project id
-  project: $FIREBASE_DEPLOY_PROJECT_ID
-  # deployments for master branch only (production).
+  project: $FIREBASE_PROJECT_ID
   on:
     branch: master
+
+  # deploys to dev
+  provider: firebase
+  skip_cleanup: true
+  token: $FIREBASE_TOKEN
+  project: $FIREBASE_DEV_PROJECT_ID
+  on:
+    branch: develop
