@@ -103,7 +103,7 @@ export default {
     websiteDisplay () {
       if (this.isMounted && this.userData.steemData._meta.profile && this.userData.steemData._meta.profile.website) {
         return this.userData.steemData._meta.profile.website.replace(
-          /https?:\/\/(?:www\.|(?!www))|www\.|https?:\/\/(?:www\.|(?!www))|www\./,
+          /https?:\/\//,
           ''
         )
       }
