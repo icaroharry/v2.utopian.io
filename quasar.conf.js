@@ -127,7 +127,7 @@ module.exports = function (ctx) {
         'QPullToRefresh',
         'QRouteTab',
         'QScrollArea',
-        'QScrollObservable'
+        'QScrollObservable',
         'QSearch',
         'QSelect',
         'QSlideTransition',
@@ -142,7 +142,7 @@ module.exports = function (ctx) {
         'QToolbarTitle',
         'QTooltip',
         'QUploader',
-        'QVideo',
+        'QVideo'
       ],
       directives: [
         'Ripple',
