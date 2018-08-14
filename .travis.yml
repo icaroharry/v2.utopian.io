@@ -11,25 +11,18 @@ cache:
     - node_modules
 
 # build script
-script: npm run build
-
-# pre deployment scripts.
-before_deploy:
-  # install firebase tools (cli).
-  - npm install -g firebase-tools
-  # enable the firebase project to be used for deployment.
-  - firebase use --add $FIREBASE_DEPLOY_PROJECT_ID --alias default
+script:
+  - if [ "$TRAVIS_BRANCH" = "develop" ];
+    then npm run build.dev;
+    else npm run build;
+    fi
 
 ## deployment stage.
 deploy:
-  # firebase deployment strategy.
+  # deploys to dev
   provider: firebase
-  # skip cleanup so built artifacts are not lost.
   skip_cleanup: true
-  # firebase authentication token.
   token: $FIREBASE_TOKEN
-  # project id
-  project: $FIREBASE_DEPLOY_PROJECT_ID
-  # deployments for master branch only (production).
+  project: $FIREBASE_DEV_PROJECT_ID
   on:
-    branch: master
+    branch: develop
