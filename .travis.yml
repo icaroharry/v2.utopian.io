@@ -19,14 +19,6 @@ script:
 
 ## deployment stage.
 deploy:
-  # deploys to prod
-  provider: firebase
-  skip_cleanup: true
-  token: $FIREBASE_TOKEN
-  project: $FIREBASE_PROJECT_ID
-  on:
-    branch: master
-
   # deploys to dev
   provider: firebase
   skip_cleanup: true
