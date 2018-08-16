@@ -6,29 +6,39 @@ div.u-comments-actions(@click.prevent="")
 
       // comment replies (count of replies on the comment).
       // only enabled for root comments (posts)
-      div.action-item.space-icon.replies(v-if="comment.depth === 0")
+      div.action-item.space-icon.replies(v-if="post.depth === 0")
         q-icon(name="mdi-comment-text-outline")
-        span {{ comment.children }}
-
-      // comment votes.
+        span {{ post.children }}
       div.action-item.space-icon.likes(@click="showVotes = true")
-
-        // simple loading indicator for upvote / downvote broadcasting.
         span(v-show="broadcasting")
           q-spinner(color="tertiary" :size="16")
-
         // upvote button.
         span(v-show="!broadcasting")
-          q-btn(dense, flat, :color="upvoteColor", @click="upvote", :icon="upvoteIcon")
-            q-tooltip {{ upvoteTooltip }}
-
+          q-btn(dense, flat, :color="upvoteColor", @click="displayVoteComponent", :icon="upvoteIcon")
+            q-tooltip(:style="toggleUpvoteTooltip") {{ upvoteTooltip }}
+            q-popover.voting-slider(v-model="showVoteComponent", :anchor-click="false", anchor="top middle", self="bottom middle")
+              div
+                q-slider(v-model="voteValue", @change="val => { voteValue = val }", :min="0", :max="100", :step="1", label, :label-value="`${voteValue}%`")
+                q-btn-group(push)
+                  q-btn(push, label="1%", @click="() => { voteValue = 1 }")
+                  q-btn(push, label="25%", @click="() => { voteValue = 25 }")
+                  q-btn(push, label="50%", @click="() => { voteValue = 50 }")
+                  q-btn(push, label="75%", @click="() => { voteValue = 75 }")
+                  q-btn(push, label="100%", @click="() => { voteValue = 100 }")
+                div.row.justify-between
+                  q-btn(label="Confirm", color="primary", @click="castVote(voteValue)", :loading="broadcasting")
+                    span(slot="loading")
+                      q-spinner
+                      | Confirm
+                  q-btn(label="Cancel", color="white", text-color="black", @click="showVoteComponent = false")
+                span.vote-worth Your vote will be worth ${{ voteDollarValue }}
         // vote counter (net votes).
         // only show for non-zero count comments.
         span.vote-count(v-show="!broadcasting && votesCount !== 0", :class="upvoteColor")
           // numeric display.
           span {{ votesCount }}
           // popover listing the actual votes.
-          u-comments-votes-popover(:comment="comment", :showing="showingVotes", @hide="hideVotes")
+          u-comments-votes-popover(:comment="post", :showing="showingVotes", @hide="hideVotes")
 
         // downvote button.
         span(v-show="!broadcasting")
@@ -36,10 +46,10 @@ div.u-comments-actions(@click.prevent="")
             q-tooltip {{ downvoteTooltip }}
 
       // comment payout.
-      div.action-item.payout(@click="showPayout = true", :class="comment._payout_declined ? 'declined' : 'not-declined'")
+      div.action-item.payout(@click="showPayout = true", :class="post._payout_declined ? 'declined' : 'not-declined'")
         q-icon(name="mdi-currency-usd")
-        span {{ comment._payout_value | currency }}
-          u-comments-payout-popover(:comment="comment", :showing="showingPayout", @hide="hidePayout")
+        span {{ post._payout_value | currency }}
+          u-comments-payout-popover(:comment="post", :showing="showingPayout", @hide="hidePayout")
 
     // reply box
     div.flex

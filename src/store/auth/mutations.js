@@ -1,7 +1,7 @@
 // auth store mutations.
 
 // import lodash helpers.
-import { get } from 'lodash-es'
+import { get, merge } from 'lodash-es'
 
 /**
  * User (Firebase) mutation.
@@ -13,6 +13,9 @@ export const setUser = (state, user = null) => {
   state.user = user ? JSON.parse(JSON.stringify(user)) : user
 }
 
+export const mergeSteemUser = (state, steemUser) => {
+  state.user = merge(state.user, steemUser)
+}
 /**
  * User Account (Firebase) mutation.
  *

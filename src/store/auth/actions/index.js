@@ -33,6 +33,12 @@ export const login = ({ dispatch, commit }, steemConnectData) => {
     // and the values are safely stored and retrieved.
     // this will populate the vuex store as well (commit data).
     .then(() => dispatch('loadCredentials', data.name))
+    .then(
+      () =>
+        dispatch('steem/prepareClient', null, { root: true })
+          .then(client => client.me())
+          .then(user => commit('auth/mergeSteemUser', user.account, { root: true }))
+    )
 }
 
 /**

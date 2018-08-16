@@ -14,6 +14,11 @@ const configureAuth = (firebase, store) => {
     if ((user && user.uid)) {
       // dispatch the account loading method, passing the actual UID.
       store.dispatch('auth/loadFirebaseAccount', (user.uid))
+        .then(() =>
+          store.dispatch('steem/prepareClient')
+            .then(client => client.me())
+            .then(user => store.commit('auth/mergeSteemUser', user.account))
+        )
     }
   })
 }
