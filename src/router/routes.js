@@ -45,10 +45,11 @@ export default [
         path: 'project/:name',
         component: () => import('src/pages/project/project'),
         children: [
-          {path: 'details', name: 'project.details', component: () => import('src/pages/project/details/details')},
           {path: '/', redirect: 'contributions/all'},
           {path: 'contributions', redirect: 'contributions/all'},
+          {path: 'details', name: 'project.details', component: () => import('src/pages/project/details/details')},
           {path: 'contributions/:category', name: 'project.contributions', component: () => import('src/pages/project/contributions/contributions')},
+          {path: 'contributors', name: 'project.contributors', component: () => import('src/pages/project/contributors/contributors')},
           {path: 'tasks', name: 'project.tasks', component: () => import('src/pages/project/tasks/tasks')},
           {path: 'updates', name: 'project.updates', component: () => import('src/pages/project/updates/updates')}
         ]
