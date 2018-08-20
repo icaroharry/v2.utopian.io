@@ -8,7 +8,7 @@ div(v-if="isMounted")
             div.row.items-center
               span.text-white {{ userData.steemData._name || userData.steemData.name }}
               span(v-if="userData.steemData._reputation").row.user-reputation.content-center.items-center {{ userData.steemData._reputation }}
-              q-btn.q-ml-md(color="primary", dense, @click="followUser(userData.steemData.name)", :disabled="isOwnProfile") Follow
+              q-btn.q-ml-md(v-if="!isOwnProfile", color="primary", dense, @click="profileFollowSteemUser") Follow
             span.text-grey-5.text-weight-light {{ '@' + userData.steemData.name }}
             span.text-white
               a(:href="website")

@@ -85,6 +85,7 @@ module.exports = function (ctx) {
         'QAutocomplete',
         'QBtn',
         'QBtnDropdown',
+        'QBtnGroup',
         'QBtnToggle',
         'QCard',
         'QCardActions',

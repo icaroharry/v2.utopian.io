@@ -5,7 +5,7 @@ import { mapGetters, mapActions } from 'vuex'
 import { get, find, cloneDeep } from 'lodash-es'
 import { parseCurrencyString } from 'src/services/currencies/formatter'
 import { render } from 'src/services/common/markdown/markdown'
-import { popupLogin } from 'src/services/steem/connect/auth'
+import { openSteemConnectLogin } from 'src/services/steem/connect/auth'
 import { getContent } from 'src/services/steem/posts'
 
 export default {
@@ -55,20 +55,21 @@ export default {
   },
   computed: {
     ...mapGetters('auth', [
-      'username',
       'guest',
+      'hasCredential',
       'user'
     ]),
     ...mapGetters('steem', [
       'recentClaims',
       'rewardBalance',
-      'baseFeedPrice'
+      'baseFeedPrice',
+      'userDetails'
     ]),
     currentVote () {
-      if (!this.username) {
+      if (!this.userDetails) {
         return null
       }
-      return find(get(this.post, 'active_votes'), (vote) => (vote.voter === this.username))
+      return find(get(this.post, 'active_votes'), (vote) => (vote.voter === this.userDetails.name))
     },
     votesCount () {
       return get(this.post, 'net_votes', 0)
@@ -97,12 +98,6 @@ export default {
     downvoted () {
       return get(this.currentVote, 'percent', 0) < 0
     },
-    author () {
-      return get(this.post, 'author')
-    },
-    permlink () {
-      return get(this.post, 'permlink')
-    },
     toggleUpvoteTooltip () {
       return {
         'display': this.showVoteComponent ? 'none' : 'block'
@@ -121,12 +116,13 @@ export default {
       'reply'
     ]),
     ...mapActions('auth', [
-      'login'
+      'login',
+      'linkSteemAccount'
     ]),
     doReply () {
       return this.reply({
-        parentAuthor: this.author,
-        parentPermlink: this.permlink,
+        parentAuthor: this.post.author,
+        parentPermlink: this.post.permlink,
         content: this.replyBody,
         meta: {}
       }).then(r => {
@@ -191,18 +187,18 @@ export default {
         })
     },
     displayVoteComponent () {
-      if (this.guest) {
-        this.startPopup()
+      if (this.guest || !this.hasCredential('steem')) {
+        this.startSteemConnectLogin()
       } else {
         this.showVoteComponent = true
       }
     },
-    startPopup () {
+    startSteemConnectLogin () {
       this.startLoading('Awaiting authorization...')
-      return popupLogin()
+      return openSteemConnectLogin()
         .then((result) => {
           this.startLoading('Processing login...')
-          return this.login(result)
+          return this.linkSteemAccount(result)
         })
         .catch((e) => {
           this.showDialog({ title: 'Oops', 'message': 'An error occurred while trying to authenticate.' })
@@ -212,9 +208,9 @@ export default {
         })
     },
     getVoteDollarValue (vp) {
-      const vests = parseFloat(this.user.vesting_shares) +
-        parseFloat(this.user.received_vesting_shares) +
-        -parseFloat(this.user.delegated_vesting_shares)
+      const vests = parseFloat(this.userDetails.account.vesting_shares) +
+        parseFloat(this.userDetails.account.received_vesting_shares) -
+        parseFloat(this.userDetails.account.delegated_vesting_shares)
       const vestingShares = parseInt(vests * 1e6, 10)
       const power = vp * 100 / 50
       const rewardShares = power * vestingShares / 10000

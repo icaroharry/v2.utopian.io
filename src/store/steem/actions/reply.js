@@ -6,7 +6,7 @@ import { generateReplyPermlink, generateMetadata } from 'src/services/steem/conn
 // broadcast a vote to steem through steem connect.
 export const reply = async ({ getters, commit, dispatch, rootGetters }, { parentAuthor, parentPermlink, content = '', meta = {} }) => {
   // get username from root store.
-  const author = get(rootGetters, 'auth/username')
+  const author = get(rootGetters, 'steem/steemUser')
 
   // generate the reply permlink.
   const permlink = generateReplyPermlink(parentAuthor, parentPermlink, author)

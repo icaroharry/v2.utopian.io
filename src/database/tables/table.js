@@ -134,6 +134,10 @@ class Model {
     // delete matching records.
     return this.table.where(params).delete()
   }
+
+  clear () {
+    return this.table.clear()
+  }
 }
 
 // default model export.

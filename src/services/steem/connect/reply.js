@@ -27,7 +27,7 @@ export const generateReplyPermlink = (parentAuthor, parentPermlink, author) => {
   // unix timestamp.
   const now = moment.utc().unix()
   // generate the permlink string.
-  const permlink = `re-${parentAuthor}-${parentPermlink}-by-${author}-${now}`
+  const permlink = `re-${parentAuthor.replace(new RegExp('\\.', 'g'), '')}-${parentPermlink}-by-${author.replace(new RegExp('\\.', 'g'), '')}-${now}`
   // slugify and return the result.
   return slugify(permlink, { lower: true })
 }

@@ -80,3 +80,7 @@ export const followUser = async ({ dispatch }, { username, following }) =>
 
 export const unfollowUser = async ({ dispatch }, { username, follower }) => 
   dispatch('prepareClient').then((client) => client.unfollow(username, follower))
+
+export const setUserDetails = ({ commit }, userDetails) => {
+  commit('setUserDetails', userDetails)
+}

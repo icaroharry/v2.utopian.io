@@ -1,14 +1,10 @@
-// imports.
 import { client } from './client'
-import open from './popup'
+import open from '../../common/popup'
 
-// redirect to login page.
 export const redirectToLogin = () => {
-  // redirect to login (browser location change).
   window.location = client.getLoginURL()
 }
 
-// login with popup.
-export const popupLogin = () => {
+export const openSteemConnectLogin = () => {
   return open(client.getLoginURL(), { width: 450, height: 745 })
 }

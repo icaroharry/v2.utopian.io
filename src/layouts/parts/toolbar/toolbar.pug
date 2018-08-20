@@ -1,72 +1,29 @@
-// header toolbar wrapper.
 q-toolbar.u-toolbar(color='tertiary', :class="{ desktop: isDesktop }")
-  // wrapper container.
   div.container.toolbar-container
-
-    // left side
-
-    // brand / logo element.
     router-link(:to="{ name: 'home' }")
-      // mobile only logo.
       img.u-logo.mobile-only(src="~assets/img/logo-icon.svg")
-      // desktop only logo.
       img.u-logo.desktop-only(src="~assets/img/logo-white.svg")
 
-    // right side
-
-    // right side menu items for guests.
     div.u-toolbar-right.u-toolbar-right-guest(v-if="guest === true")
-      // login button.
-      // q-btn(@click="startPopup", label="Login")
-      // q-btn(@click="loginWithGithub", label="Login Github")
-      q-btn(@click.native="startPopup", label="Login")
+      q-btn(@click.native="startGithubLogin", label="Login")
 
-    // right side menu items for users.
     div.u-toolbar-right.u-toolbar-right-user(v-if="!guest")
-      // q-btn(@click.native="linkGithubAccount", link, label="Login Github")
       q-btn.u-add(no-ripple, dense, color="primary", :label="createLabel", icon="mdi-plus", @click="redirectToCreate")
-      // q-icon(name="mdi-bell-outline")
       span.avatar-wrapper
         img.avatar(:src="avatar")
         q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]")
           q-list(dense, :link="true", separator)
-            // q-list-header.flex.justify-between(v-if="guestOnGithub !== true")
-              q-icon(name="mdi-github-circle")
-              span Github Account
-            // q-item(v-if="guestOnGithub !== true")
-              q-item-side(:avatar="githubAvatar")
-              q-item-main(:label="githubUsername")
-              q-item-side(side="right", icon="mdi-github-circle")
-            // q-item()
-            // q-item-separator
-            // q-item(@click.native="startPopup", link, v-if="guestOnSteem === true")
-              q-item-side
-                q-icon.ut-steem
-              q-item-main(label="Connect Steem Account", sublabel="123")
-              // q-item-side(side="right", avatar="https://steemitimages.com/u/blocker.press/avatar")
-
-            // q-item(@click.native="logoutFromSteem", link, v-if="guestOnSteem !== true")
-              q-item-side(icon="mdi-check")
-              q-item-main(label="Logout from Steem")
-              q-item-side(side="right", :avatar="steemAvatar")
-            // item to display steem username.
-            q-item
+            q-item(v-if="!hasCredential('steem')", @click.native="startSteemConnectLogin")
               q-item-side
                 q-icon.q-item-icon.ut-steem
-              q-item-main(:label="username", sublabel="via SteemConnect")
-            // item to display github data.
-            q-item(v-if="githubUsername")
-              q-item-side(icon="mdi-github-circle")
-              q-item-main(:label="githubUsername", sublabel="Linked Github Account")
-            q-item(v-if="!githubUsername", @click.native="startGithubLink")
-              q-item-side(icon="mdi-github-circle")
-              q-item-main(label="Link Github Account", sublabel="Click to verify.")
-              q-item-side(side="right", icon="mdi-alert-circle-outline", text-color="red")
-            // menu link to settings.
+              q-item-main(label="Link your Steem account")
+            q-item(v-if="hasCredential('steem')", :to="`/@${steemUser}`")
+              q-item-side
+                q-icon.q-item-icon.ut-steem
+              q-item-main(:label="getCredentialAccountName('steem')")
             q-item(:to="{ name: 'settings' }")
               q-item-side(icon="mdi-settings")
               q-item-main(label="Settings")
-            // menu link to logout.
             q-item(:to="{ name: 'auth.logout' }")
               q-item-side(icon="mdi-logout")
               q-item-main(label="Logout")

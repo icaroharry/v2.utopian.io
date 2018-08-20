@@ -16,13 +16,13 @@ export default {
     return {
       // auth store getters.
       ...mapGetters('auth', [
-        'uid',
-        'account',
-        'username',
         'avatar'
       ]),
       ...mapGetters('users', [
         'user'
+      ]),
+      ...mapGetters('steem', [
+        'steemUser'
       ]),
       userData: {},
       followerCount: 0,
@@ -38,7 +38,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      loadFirebaseAccount: 'auth/loadFirebaseAccount',
       loadSteemAccount: 'steem/loadAccount',
       loadSteemAccountFollowCount: 'steem/loadAccountFollowCount',
       followUser: 'steem/followUser'
@@ -58,11 +57,7 @@ export default {
       this.userData = this.user()(username)
 
       if (!this.userData) {
-        await Promise.all([
-          this.loadFirebaseAccount(username),
-          this.loadSteemAccount(username)
-        ])
-
+        await this.loadSteemAccount(username)
         this.userData = this.user()(username)
       }
 
@@ -84,16 +79,16 @@ export default {
         this.followingCount = result.following_count
       })
     },
-    followUser (following) {
+    profileFollowSteemUser (following) {
       this.waitingFollow = following
-      return this.steemFollowUser({ username: this.$route.params['username'], following }).then(() => {
+      return this.followUser({ username: this.steemUser(), following: this.userData.steemData.name }).then(() => {
         this.waitingFollow = ''
       })
     }
   },
   computed: {
     isOwnProfile () {
-      return this.uid() === this.$route.params['username']
+      return this.steemUser() === this.$route.params['username']
     },
     website () {
       if (this.isMounted && this.userData.steemData._meta.profile && this.userData.steemData._meta.profile.website) {

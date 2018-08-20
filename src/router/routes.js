@@ -8,7 +8,6 @@ export default [
       {path: '', name: 'home', component: () => import('src/pages/index/index'), meta: {weight: 10}},
       {
         path: '@:username',
-        name: 'profile',
         component: () => import('src/pages/profile/profile'),
         children: [
           {path: '/', redirect: 'contributions'},
@@ -44,7 +43,6 @@ export default [
       },
       {
         path: 'project/:name',
-        name: 'project',
         component: () => import('src/pages/project/project'),
         children: [
           {path: 'details', name: 'project.details', component: () => import('src/pages/project/details/details')},
@@ -115,10 +113,9 @@ export default [
     path: '/auth',
     component: () => import('src/layouts/guest'),
     children: [
-      {path: 'login', name: 'auth.login', component: () => import('src/pages/auth/login'), meta: {weight: 10}},
-      {path: 'logout', name: 'auth.logout', component: () => import('src/pages/auth/logout'), meta: {weight: 10}},
-      {path: 'callback', name: 'auth.callback', component: () => import('src/pages/auth/callback'), meta: {weight: 10}},
-      {path: 'github', name: 'auth.github', component: () => import('src/pages/auth/github'), meta: {weight: 10}}
+      {path: 'login', name: 'auth.login', component: () => import('src/pages/auth/steemconnect/login'), meta: {weight: 10}},
+      {path: 'logout', name: 'auth.logout', component: () => import('src/pages/auth/steemconnect/logout'), meta: {weight: 10}},
+      {path: 'callback', name: 'auth.callback', component: () => import('src/pages/auth/steemconnect/callback'), meta: {weight: 10}}
     ]
   },
   { // Always leave this as last one
