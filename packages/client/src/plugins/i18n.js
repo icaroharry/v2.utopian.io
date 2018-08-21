@@ -1,5 +1,5 @@
 // imports.
-import Quasar from 'quasar'
+import { Quasar } from 'quasar'
 import VueI18n from 'vue-i18n'
 import moment from 'moment'
 import { toString } from 'lodash-es'
