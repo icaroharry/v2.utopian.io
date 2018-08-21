@@ -1,6 +1,8 @@
-const Glue = require('glue');
+require('dotenv').config()
 
-const manifest = require('./config/manifest');
+const Glue = require('glue')
+const manifest = require('./config/manifest')
+require('./config/db')
 
 const startServer = async () => {
   const server = await Glue.compose(
@@ -8,8 +10,8 @@ const startServer = async () => {
     {
       relativeTo: __dirname
     }
-  );
-  await server.start();
-};
+  )
+  await server.start()
+}
 
-startServer();
+startServer()

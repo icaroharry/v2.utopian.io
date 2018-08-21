@@ -9,9 +9,11 @@
   "private": true,
   "scripts": {
     "dev": "nodemon --delay 2500ms --watch modules index.js",
-    "lint": "eslint --ext .js modules"
+    "lint": "eslint --ext .js modules config",
+    "lintfix": "eslint --fix --ext .js modules config"
   },
   "dependencies": {
+    "dotenv": "^6.0.0",
     "glob": "^7.1.2",
     "glue": "^5.0.0",
     "good": "^8.1.1",
@@ -21,12 +23,18 @@
     "inert": "^5.1.0",
     "joi": "^13.6.0",
     "lodash": "^4.17.10",
+    "mongoose": "^5.2.9",
     "vision": "^5.3.3"
   },
   "devDependencies": {
     "eslint": "^5.4.0",
     "eslint-config-hapi": "^12.0.0",
+    "eslint-config-standard": "^11.0.0",
     "eslint-plugin-hapi": "^4.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.0",
+    "eslint-plugin-standard": "^3.1.0",
     "nodemon": "^1.18.3"
   }
 }

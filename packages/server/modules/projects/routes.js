@@ -1,9 +1,7 @@
-'use strict';
+const Handlers = require('./handlers')
+const Validate = require('./validate')
 
-const Handlers = require('./handlers');
-const Validate = require('./validate');
-
-const routes = [];
+const routes = []
 
 routes.push([
   {
@@ -22,7 +20,16 @@ routes.push([
       tags: ['api'],
       validate: Validate.getProjectById
     }
+  },
+  {
+    method: 'POST',
+    path: '/api/v1/project',
+    handler: (req, h, next) => Handlers.saveProject(req, h, next),
+    options: {
+      tags: ['api'],
+      validate: Validate.saveProject
+    }
   }
-]);
+])
 
-module.exports = routes;
+module.exports = routes

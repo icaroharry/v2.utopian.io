@@ -1,5 +1,11 @@
 {
-  "extends": "hapi",
+  "extends": [
+    "hapi",
+    "standard"
+  ],
+  "env": {
+    "node": true
+  },
   "rules": {
     "indent": [2, 2],
     "hapi/hapi-scope-start": 0

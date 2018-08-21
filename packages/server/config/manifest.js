@@ -1,8 +1,18 @@
-'use strict';
-
 module.exports = {
   server: {
     port: process.env.PORT || 5000,
+    routes: {
+      validate: {
+        failAction: (request, h, err) => {
+          if (process.env.NODE_ENV === 'production') {
+            throw h.response(`Invalid request payload input`).code(400)
+          } else {
+            console.error(err)
+            throw err
+          }
+        }
+      }
+    }
   },
   register: {
     plugins: [
@@ -16,7 +26,7 @@ module.exports = {
           }
         }
       },
-      { plugin: 'inert'},
+      { plugin: 'inert' },
       { plugin: 'vision' },
       {
         plugin: 'hapi-swagger',
@@ -26,7 +36,7 @@ module.exports = {
           }
         }
       },
-      { plugin: './routes'}
+      { plugin: './routes' }
     ]
   }
-};
+}
