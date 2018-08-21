@@ -213,7 +213,14 @@ import FastClick from 'fastclick'
 
 
 
+Vue.config.devtools = true
+Vue.config.performance = true
+Vue.config.productionTip = false
 
+
+
+console.info('[Quasar] Running PWA with MAT theme.')
+console.info('[Quasar] Forcing PWA into the network-first approach to not break Hot Module Replacement while developing.')
 
 
 const { app, store, router } = createApp()
