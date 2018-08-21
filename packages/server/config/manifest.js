@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
   server: {
     port: process.env.PORT || 5000,
@@ -13,9 +15,18 @@ module.exports = {
             }, 'stdout']
           }
         }
-      }, {
-        plugin: './routes'
-      }
+      },
+      { plugin: 'inert'},
+      { plugin: 'vision' },
+      {
+        plugin: 'hapi-swagger',
+        options: {
+          info: {
+            title: 'Utopian API Documentation'
+          }
+        }
+      },
+      { plugin: './routes'}
     ]
   }
 };

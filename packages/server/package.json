@@ -11,11 +11,6 @@
     "dev": "nodemon --delay 2500ms --watch modules index.js",
     "lint": "eslint --ext .js modules"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm lint"
-    }
-  },
   "dependencies": {
     "glob": "^7.1.2",
     "glue": "^5.0.0",
@@ -23,14 +18,15 @@
     "good-console": "^7.1.0",
     "hapi": "^17.5.3",
     "hapi-swagger": "^9.1.1",
+    "inert": "^5.1.0",
     "joi": "^13.6.0",
-    "lodash": "^4.17.10"
+    "lodash": "^4.17.10",
+    "vision": "^5.3.3"
   },
   "devDependencies": {
     "eslint": "^5.4.0",
     "eslint-config-hapi": "^12.0.0",
     "eslint-plugin-hapi": "^4.1.0",
-    "husky": "^0.14.3",
     "nodemon": "^1.18.3"
   }
 }
