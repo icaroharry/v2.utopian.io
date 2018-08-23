@@ -22,14 +22,6 @@ routes.push([
     }
   },
   {
-    path: '/api/v1/project/{id}',
-    handler: (req, h, next) => Handlers.getProjectById(req, h, next),
-    options: {
-      tags: ['api'],
-      validate: Validate.getProjectById
-    }
-  },
-  {
     method: 'POST',
     path: '/api/v1/project',
     handler: (req, h, next) => Handlers.saveProject(req, h, next),

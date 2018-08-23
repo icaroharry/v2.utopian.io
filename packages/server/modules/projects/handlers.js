@@ -6,11 +6,6 @@ const getProjects = async (req, h) => {
   return h.response({ data: projects })
 }
 
-const getProjectById = async (req, h) => {
-  const project = await Project.findById(req.params.id)
-  return h.response({ data: project })
-}
-
 const getProjectBySlug = async (req, h) => {
   const project = await Project.find({ slug: req.params.slug })
   return h.response({ data: project })
@@ -44,7 +39,6 @@ const saveProject = async (req, h) => {
 
 module.exports = {
   getProjects,
-  getProjectById,
   saveProject,
   getProjectBySlug
 }

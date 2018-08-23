@@ -1,11 +1,5 @@
 const Joi = require('joi')
 
-const getProjectById = {
-  params: {
-    id: Joi.string().trim().required()
-  }
-}
-
 const getProjectBySlug = {
   params: {
     slug: Joi.string().trim().required()
@@ -32,7 +26,6 @@ const saveProject = {
 }
 
 module.exports = {
-  getProjectById,
   saveProject,
   getProjectBySlug
 }
