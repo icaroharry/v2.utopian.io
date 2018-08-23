@@ -14,11 +14,11 @@ routes.push([
   },
   {
     method: 'GET',
-    path: '/api/v1/project/{id}',
-    handler: (req, h, next) => Handlers.getProjectById(req, h, next),
+    path: '/api/v1/project/{slug}',
+    handler: (req, h, next) => Handlers.getProjectBySlug(req, h, next),
     options: {
       tags: ['api'],
-      validate: Validate.getProjectById
+      validate: Validate.getProjectBySlug
     }
   },
   {
