@@ -2,7 +2,34 @@ const Project = require('./project.model')
 const helper = require('../../utils/helpers')
 
 const getProjects = async (req, h) => {
-  const projects = await Project.find({})
+  const query = req.query
+  let q = query.q
+  let opensource = query.opensource
+  let featured = query.featured
+  console.log(query)
+  if (typeof q === 'undefined') {
+    q = ''
+  }
+
+  if (typeof opensource === 'undefined' || opensource === 'any' || opensource === 'true') {
+    opensource = true
+  } else {
+    opensource = false
+  }
+
+  const reg = new RegExp(q, 'i')
+  if ((typeof featured === 'undefined')) {
+    const projects = await Project.find({ $or: [{ $text: { $search: q } }, { name: { $regex: reg }, openSource: opensource }] })
+    return h.response({ data: projects })
+  } else {
+    if (featured === 'true') {
+      featured = true
+    } else if (featured === 'false') {
+      featured = false
+    }
+  }
+
+  const projects = await Project.find({ $or: [{ $text: { $search: q } }, { name: { $regex: reg }, openSource: opensource , featured }] })
   return h.response({ data: projects })
 }
 
@@ -17,6 +44,7 @@ const deleteProjectBySlug = async (req, h) => {
     if (response.n === 1) {
       return h.response({ message: 'Deleted Successfully' })
     }
+
     console.log(response)
     return h.response({ message: 'Document not exists' })
   } catch (e) {
