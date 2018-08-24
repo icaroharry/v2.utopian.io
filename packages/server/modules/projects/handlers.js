@@ -1,5 +1,5 @@
 const Project = require('./project.model')
-const slugify = require('../../utils/helpers')
+const helper = require('../../utils/helpers')
 
 const getProjects = async (req, h) => {
   const projects = await Project.find({})
@@ -9,6 +9,19 @@ const getProjects = async (req, h) => {
 const getProjectBySlug = async (req, h) => {
   const project = await Project.find({ slug: req.params.slug })
   return h.response({ data: project })
+}
+
+const deleteProjectBySlug = async (req, h) => {
+  try {
+    const response = await Project.updateOne({ slug: req.params.slug }, { $set: { status: 'deleted' } })
+    if (response.n === 1) {
+      return h.response({ message: 'Deleted Successfully' })
+    }
+    console.log(response)
+    return h.response({ message: 'Document not exists' })
+  } catch (e) {
+    return h.response({ message: 'Operation unsucessful' })
+  }
 }
 
 const saveProject = async (req, h) => {
@@ -23,7 +36,7 @@ const saveProject = async (req, h) => {
     tags: req.payload.tags,
     openSource: req.payload.openSource,
     platforms: req.payload.platforms,
-    slug: slugify(`${req.params.creator}-${req.params.name}`),
+    slug: helper.slugify(`${req.payload.creator}-${req.payload.name}`),
     website: req.payload.website,
     docs: req.payload.docs,
     license: req.payload.license,
@@ -40,5 +53,6 @@ const saveProject = async (req, h) => {
 module.exports = {
   getProjects,
   saveProject,
-  getProjectBySlug
+  getProjectBySlug,
+  deleteProjectBySlug
 }

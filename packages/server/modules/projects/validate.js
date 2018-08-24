@@ -6,11 +6,17 @@ const getProjectBySlug = {
   }
 }
 
+const deleteProjectBySlug = {
+  params: {
+    slug: Joi.string().trim().required()
+  }
+}
+
 const saveProject = {
   payload: {
     creator: Joi.string().trim(),
     description: Joi.string().trim(),
-    details: [Joi.string(), Joi.any().optional()],
+    details: Joi.string().required(),
     name: Joi.string().trim().required(),
     images: Joi.array().required(),
     featured: Joi.boolean(),
@@ -27,5 +33,6 @@ const saveProject = {
 
 module.exports = {
   saveProject,
-  getProjectBySlug
+  getProjectBySlug,
+  deleteProjectBySlug
 }

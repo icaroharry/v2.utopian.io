@@ -22,6 +22,15 @@ routes.push([
     }
   },
   {
+    method: 'DELETE',
+    path: '/api/v1/project/{slug}',
+    handler: (req, h, next) => Handlers.deleteProjectBySlug(req, h, next),
+    options: {
+      tags: ['api'],
+      validate: Validate.deleteProjectBySlug
+    }
+  },
+  {
     method: 'POST',
     path: '/api/v1/project',
     handler: (req, h, next) => Handlers.saveProject(req, h, next),
