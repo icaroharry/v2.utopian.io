@@ -19,7 +19,7 @@ const getProjects = async (req, h) => {
 
   const reg = new RegExp(q, 'i')
   if ((typeof featured === 'undefined')) {
-    const projects = await Project.find({ $or: [{ $text: { $search: q } }, { name: { $regex: reg }, openSource: opensource }] })
+    const projects = await Project.find({ $or: [{ $text: { $search: q } }, { name: { $regex: reg }, openSource: opensource, blacklisted: false }] })
     return h.response({ data: projects })
   } else {
     if (featured === 'true') {
@@ -29,7 +29,7 @@ const getProjects = async (req, h) => {
     }
   }
 
-  const projects = await Project.find({ $or: [{ $text: { $search: q } }, { name: { $regex: reg }, openSource: opensource , featured }] })
+  const projects = await Project.find({ $or: [{ $text: { $search: q } }, { name: { $regex: reg }, openSource: opensource , featured, blacklisted: false }] })
   return h.response({ data: projects })
 }
 
@@ -42,13 +42,13 @@ const deleteProjectBySlug = async (req, h) => {
   try {
     const response = await Project.updateOne({ slug: req.params.slug }, { $set: { status: 'deleted' } })
     if (response.n === 1) {
-      return h.response({ message: 'Deleted Successfully' })
+      return h.response({ message: 'Deleted successfully' })
     }
 
     console.log(response)
-    return h.response({ message: 'Document not exists' })
+    return h.response({ message: 'Document does not exist' })
   } catch (e) {
-    return h.response({ message: 'Operation unsucessful' })
+    return h.response({ message: 'Operation unsuccessful' })
   }
 }
 
@@ -56,12 +56,12 @@ const editProjectBySlug = async (req, h) => {
   try {
     const response = await Project.updateOne({ slug: req.params.slug }, req.payload )
     if (response.n === 1) {
-      return h.response({ message: 'Updated Successfully' })
+      return h.response({ message: 'Updated successfully' })
     }
     console.log(response)
-    return h.response({ message: 'Document not exists' })
+    return h.response({ message: 'Document does not exist' })
   } catch (e) {
-    return h.response({ message: 'Operation unsucessful' })
+    return h.response({ message: 'Operation unsuccessful' })
   }
 }
 
