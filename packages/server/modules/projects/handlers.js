@@ -24,6 +24,19 @@ const deleteProjectBySlug = async (req, h) => {
   }
 }
 
+const editProjectBySlug = async (req, h) => {
+  try {
+    const response = await Project.updateOne({ slug: req.params.slug }, req.payload )
+    if (response.n === 1) {
+      return h.response({ message: 'Updated Successfully' })
+    }
+    console.log(response)
+    return h.response({ message: 'Document not exists' })
+  } catch (e) {
+    return h.response({ message: 'Operation unsucessful' })
+  }
+}
+
 const saveProject = async (req, h) => {
   const newProject = new Project({
     creator: req.payload.creator,
@@ -54,5 +67,6 @@ module.exports = {
   getProjects,
   saveProject,
   getProjectBySlug,
-  deleteProjectBySlug
+  deleteProjectBySlug,
+  editProjectBySlug
 }

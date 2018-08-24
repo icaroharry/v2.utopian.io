@@ -31,6 +31,15 @@ routes.push([
     }
   },
   {
+    method: 'PUT',
+    path: '/api/v1/project/{slug}',
+    handler: (req, h, next) => Handlers.editProjectBySlug(req, h, next),
+    options: {
+      tags: ['api'],
+      validate: Validate.editProjectBySlug
+    }
+  },
+  {
     method: 'POST',
     path: '/api/v1/project',
     handler: (req, h, next) => Handlers.saveProject(req, h, next),
