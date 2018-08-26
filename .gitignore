@@ -5,3 +5,4 @@
 /packages/*/dist
 /packages/*/service-account.json
 /packages/*/*.log*
+node_modules

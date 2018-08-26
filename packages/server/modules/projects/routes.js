@@ -5,11 +5,12 @@ const routes = []
 
 routes.push([
   {
-    method: 'GET',
+    method: 'POST',
     path: '/api/v1/projects',
     handler: (req, h, next) => Handlers.getProjects(req, h, next),
     options: {
-      tags: ['api']
+      tags: ['api'],
+      validate: Validate.getProjects
     }
   },
   {
