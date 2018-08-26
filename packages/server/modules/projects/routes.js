@@ -15,6 +15,14 @@ routes.push([
   },
   {
     method: 'GET',
+    path: '/api/v1/projects/featured',
+    handler: (req, h, next) => Handlers.getFeaturedProjects(req, h, next),
+    options: {
+      tags: ['api']
+    }
+  },
+  {
+    method: 'GET',
     path: '/api/v1/project/{slug}',
     handler: (req, h, next) => Handlers.getProjectBySlug(req, h, next),
     options: {
