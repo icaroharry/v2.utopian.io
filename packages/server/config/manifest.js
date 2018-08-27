@@ -36,7 +36,8 @@ module.exports = {
           }
         }
       },
-      { plugin: './routes' }
+      { plugin: './config/plugins/jwt-auth' },
+      { plugin: './config/plugins/routes' }
     ]
   }
 }

@@ -1,7 +1,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { openSteemConnectLogin } from 'src/services/steem/connect/auth'
-import { githubLogin } from 'src/services/firebase/auth'
 
 export default {
   name: 'u-layout-toolbar',
@@ -42,7 +41,7 @@ export default {
       'linkSteemAccount'
     ]),
     startGithubLogin () {
-      githubLogin()
+      window.location = `https://github.com/login/oauth/authorize?scope=read:user,repo&client_id=${process.env.GITHUB_CLIENT_ID}`
     },
     startSteemConnectLogin () {
       this.startLoading('Awaiting authorization...')

@@ -203,6 +203,8 @@ import pFirebaseindex from 'src/plugins/firebase/index'
 
 
 
+import { addPreFetchHooks } from './client-prefetch.js'
+
 
 
 import FastClick from 'fastclick'
@@ -252,6 +254,8 @@ if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && window.n
 
 
 
+
+addPreFetchHooks(router, store)
 
 
 

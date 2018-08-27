@@ -1,5 +1,5 @@
 const Project = require('./project.model')
-const slugify = require('slugify')
+const Slugify = require('slugify')
 
 const getProjects = async (req, h) => {
   const { q } = req.payload
@@ -35,7 +35,7 @@ const deleteProjectBySlug = async (req, h) => {
 
 const editProjectBySlug = async (req, h) => {
   try {
-    const response = await Project.updateOne({ slug: req.params.slug }, req.payload )
+    const response = await Project.updateOne({ slug: req.params.slug }, req.payload)
     if (response.n === 1) {
       return h.response({ message: 'Updated successfully' })
     }
@@ -50,7 +50,7 @@ const saveProject = async (req, h) => {
   const newProject = new Project({
     ...req.payload,
     creator: req.payload.name,
-    slug: slugify(`${req.payload.name}-${req.payload.name}`)
+    slug: Slugify(`${req.payload.name}-${req.payload.name}`)
   })
 
   const data = await newProject.save()

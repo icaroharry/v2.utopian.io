@@ -5,6 +5,7 @@ require('dotenv').config()
 module.exports = function (ctx) {
   // return config
   return {
+    preFetch: true,
     supportIE: false,
     // list of animations to load.
     animations: 'all', // animations: []
@@ -27,6 +28,7 @@ module.exports = function (ctx) {
     // build configuration.
     build: {
       env: (ctx.debug || ctx.dev) ? {
+        GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
         SC2_APP: (process.env.SC2_APP_DEV || '"utopian.signin"'),
         FIREBASE_API_KEY: (process.env.FIREBASE_API_KEY_DEV || 'null'),
         FIREBASE_PROJECT_ID: (process.env.FIREBASE_PROJECT_ID_DEV || '"develop-utopian-io"'),
@@ -35,6 +37,7 @@ module.exports = function (ctx) {
         FIREBASE_EMULATOR: (process.env.FIREBASE_EMULATOR_DEV || 'null'),
         STEEM_API: (process.env.STEEM_API_DEV || '"https://api.steemit.com"')
       } : {
+        GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
         SC2_APP: (process.env.SC2_APP || '"utopian.signin"'),
         FIREBASE_API_KEY: (process.env.FIREBASE_API_KEY || 'null'),
         FIREBASE_PROJECT_ID: (process.env.FIREBASE_PROJECT_ID || '"utopian-io"'),
@@ -75,7 +78,11 @@ module.exports = function (ctx) {
     // dev server configuration.
     devServer: {
       port: 8080,
-      open: false // no auto browser.
+      open: false, // no auto browser.
+      proxy: [{
+        context: ['/oauth', '/api'],
+        target: 'http://localhost:5000',
+      }]
     },
     // framework configuration.
     framework: {
@@ -151,6 +158,7 @@ module.exports = function (ctx) {
         'BackToTop'
       ],
       plugins: [
+        'Cookies',
         'Dialog',
         'Loading',
         'Notify',

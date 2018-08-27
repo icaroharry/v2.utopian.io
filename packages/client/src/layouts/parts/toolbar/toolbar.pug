@@ -5,7 +5,7 @@ q-toolbar.u-toolbar(color='tertiary', :class="{ desktop: isDesktop }")
       img.u-logo.desktop-only(src="~assets/img/logo-white.svg")
 
     div.u-toolbar-right.u-toolbar-right-guest(v-if="guest === true")
-      q-btn(@click.native="startGithubLogin", label="Login")
+      q-btn(@click.native="startGithubLogin", color="primary", icon="mdi-github-circle", label="Login with GitHub")
 
     div.u-toolbar-right.u-toolbar-right-user(v-if="!guest")
       q-btn.u-add(no-ripple, dense, color="primary", :label="createLabel", icon="mdi-plus", @click="redirectToCreate")
