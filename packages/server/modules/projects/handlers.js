@@ -1,3 +1,4 @@
+const Boom = require('boom')
 const Project = require('./project.model')
 const Slugify = require('slugify')
 
@@ -21,29 +22,20 @@ const getFeaturedProjects = async (req, h) => {
 
 const deleteProjectBySlug = async (req, h) => {
   // TODO Only creator should be able to delete a project
-  try {
-    const response = await Project.updateOne({ slug: req.params.slug }, { $set: { status: 'deleted', deletedAt: Date.now() } })
-    if (response.n === 1) {
-      return h.response({ message: 'Deleted successfully' })
-    }
-
-    return h.response({ message: 'Document does not exist' })
-  } catch (e) {
-    return h.response({ message: 'Operation unsuccessful' })
+  const response = await Project.updateOne({ slug: req.params.slug }, { $set: { status: 'deleted', deletedAt: Date.now() } })
+  if (response.n === 1) {
+    return h.response({ message: 'delete-success' })
   }
+
+  throw Boom.badData('document-does-not-exist')
 }
 
 const editProjectBySlug = async (req, h) => {
-  try {
-    const response = await Project.updateOne({ slug: req.params.slug }, req.payload)
-    if (response.n === 1) {
-      return h.response({ message: 'Updated successfully' })
-    }
-
-    return h.response({ message: 'Document does not exist' })
-  } catch (e) {
-    return h.response({ message: 'Operation unsuccessful' })
+  const response = await Project.updateOne({ slug: req.params.slug }, req.payload)
+  if (response.n === 1) {
+    return h.response({ message: 'update-success' })
   }
+  throw Boom.badData('document-does-not-exist')
 }
 
 const saveProject = async (req, h) => {
