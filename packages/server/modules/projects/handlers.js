@@ -15,7 +15,7 @@ const getProjectBySlug = async (req, h) => {
 }
 
 const getFeaturedProjects = async (req, h) => {
-  const projects = await Project.find({ featured: true }).select('images tags createdAt creator description details name platforms website license docs featured_order slug')
+  const projects = await Project.find({ featured: true }).select('images tags createdAt creator description details name platforms website license docs featured_order slug').sort({ featured_order: 1 })
   return h.response({ data: projects })
 }
 
@@ -48,16 +48,9 @@ const editProjectBySlug = async (req, h) => {
 
 const saveProject = async (req, h) => {
   const newProject = new Project({
-    description: req.payload.description,
-    details: req.payload.details,
-    name: req.payload.name,
-    images: req.payload.images,
-    tags: req.payload.tags,
-    platforms: req.payload.platforms,
-    slug: slugify(`${req.payload.creator}-${req.payload.name}`),
-    website: req.payload.website,
-    docs: req.payload.docs,
-    license: req.payload.license,
+    ...req.payload,
+    creator: req.payload.name,
+    slug: slugify(`${req.payload.name}-${req.payload.name}`)
   })
 
   const data = await newProject.save()
