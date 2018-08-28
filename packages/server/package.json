@@ -9,6 +9,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon --delay 2500ms --watch ./",
+    "precommit": "lint-staged",
     "lint": "eslint --ext .js modules config",
     "lintfix": "eslint --fix --ext .js modules config"
   },
@@ -40,6 +41,7 @@
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^4.0.0",
     "eslint-plugin-standard": "^3.1.0",
+    "lint-staged": "^7.2.2",
     "nodemon": "^1.18.3"
   }
 }

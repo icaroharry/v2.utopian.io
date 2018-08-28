@@ -11,6 +11,7 @@
     "build": "cross-env quasar build -m pwa -t mat",
     "build.dev": "cross-env quasar build -m pwa -t mat -d",
     "dev": "cross-env quasar dev -m pwa -t mat",
+    "precommit": "lint-staged",
     "lint": "eslint --ext .js,.vue src",
     "test": "echo \"No test specified\" && exit 0"
   },
@@ -58,6 +59,7 @@
     "highlight.js": "^9.12.0",
     "jsonwebtoken": "^8.3.0",
     "langmap": "0.0.16",
+    "lint-staged": "^7.2.2",
     "loader-utils": "^1.1.0",
     "lodash-es": "^4.17.10",
     "markdown-it": "^8.4.1",
