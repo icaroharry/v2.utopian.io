@@ -1,3 +1,4 @@
+const Boom = require('boom')
 const Axios = require('axios')
 const User = require('../users/user.model')
 const RefreshToken = require('./refreshtoken.model')
@@ -29,7 +30,7 @@ const requestGitHubAccessToken = async (code) => {
     return response.data.access_token
   }
 
-  throw new Error('github-access_token-error')
+  throw Boom.badData('github-get-access-token')
 }
 
 const getUserInformation = async (token) => {
@@ -45,7 +46,7 @@ const getUserInformation = async (token) => {
     return githubResponse.data.data.viewer
   }
 
-  throw new Error('github-get-user-data')
+  throw Boom.internal('github-get-user-data')
 }
 
 const getToken = async (req, h) => {
@@ -89,10 +90,10 @@ const revokeToken = async (req, h) => {
       return h.response()
     }
 
-    throw new Error('wrong-owner')
+    throw Boom.unauthorized()
   }
 
-  throw new Error('token-does-not-exist')
+  throw Boom.badData('token-does-not-exist')
 }
 
 module.exports = {
