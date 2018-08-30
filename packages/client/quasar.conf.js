@@ -64,14 +64,9 @@ module.exports = function (ctx) {
           exclude: /(node_modules|quasar)/
         })
       
-        // pug loader settings.
         cfg.module.rules.push({
-          enforce: 'pre',
           test: /\.pug$/,
-          oneOf: [
-            { resourceQuery: /^\?vue/, use: ['pug-plain-loader'] },
-            { use: ['raw-loader', 'pug-plain-loader'] }
-          ]
+          loader: 'pug-plain-loader'
         })
       }
     },
@@ -169,14 +164,6 @@ module.exports = function (ctx) {
 
     // quasar modes.
     pwa: {
-      workboxPluginMode: 'InjectManifest',
-      workboxOptions: {
-        importScripts: [
-          // import firebase messaging (FCM) scripts.
-          'https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js',
-          'https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js'
-        ]
-      },
       manifest: {
         name: 'Utopian.io',
         short_name: 'Utopian.io',

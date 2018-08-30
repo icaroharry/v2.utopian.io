@@ -1,6 +1,5 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { openSteemConnectLogin } from 'src/services/steem/connect/auth'
 
 export default {
   name: 'u-layout-toolbar',
@@ -44,18 +43,7 @@ export default {
       window.location = `https://github.com/login/oauth/authorize?scope=read:user,repo&client_id=${process.env.GITHUB_CLIENT_ID}`
     },
     startSteemConnectLogin () {
-      this.startLoading('Awaiting authorization...')
-      return openSteemConnectLogin()
-        .then((result) => {
-          this.startLoading('Processing login...')
-          return this.linkSteemAccount(result)
-        })
-        .catch((e) => {
-          this.showDialog({ title: 'Oops', 'message': 'An error occurred while trying to authenticate.' })
-        })
-        .finally(() => {
-          this.stopLoading()
-        })
+      // TODO link steem account
     },
     redirectToCreate () {
       return this.$router.push({ name: 'create' })

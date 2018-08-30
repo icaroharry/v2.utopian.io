@@ -5,7 +5,6 @@ import { mapGetters, mapActions } from 'vuex'
 import { get, find, cloneDeep } from 'lodash-es'
 import { parseCurrencyString } from 'src/services/currencies/formatter'
 import { render } from 'src/services/common/markdown/markdown'
-import { openSteemConnectLogin } from 'src/services/steem/connect/auth'
 import { getContent } from 'src/services/steem/posts'
 
 export default {
@@ -188,24 +187,10 @@ export default {
     },
     displayVoteComponent () {
       if (this.guest || !this.hasCredential('steem')) {
-        this.startSteemConnectLogin()
+        // TODO link steem account
       } else {
         this.showVoteComponent = true
       }
-    },
-    startSteemConnectLogin () {
-      this.startLoading('Awaiting authorization...')
-      return openSteemConnectLogin()
-        .then((result) => {
-          this.startLoading('Processing login...')
-          return this.linkSteemAccount(result)
-        })
-        .catch((e) => {
-          this.showDialog({ title: 'Oops', 'message': 'An error occurred while trying to authenticate.' })
-        })
-        .finally(() => {
-          this.stopLoading()
-        })
     },
     getVoteDollarValue (vp) {
       const vests = parseFloat(this.userDetails.account.vesting_shares) +
