@@ -35,6 +35,7 @@ const editProjectBySlug = async (req, h) => {
   if (response.n === 1) {
     return h.response({ message: 'update-success' })
   }
+
   throw Boom.badData('document-does-not-exist')
 }
 

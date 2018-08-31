@@ -50,36 +50,52 @@ const getUserInformation = async (token) => {
 }
 
 const getToken = async (req, h) => {
-  const gitHubToken = await requestGitHubAccessToken(req.payload.code)
-  const githubUser = await getUserInformation(gitHubToken)
-  const user = await User.findOne({ authProviders: { $elemMatch: { type: 'github', username: githubUser.login } } })
+  if (req.payload.grant_type === 'authorization_code') {
+    const gitHubToken = await requestGitHubAccessToken(req.payload.code)
+    const githubUser = await getUserInformation(gitHubToken)
+    const user = await User.findOne({ authProviders: { $elemMatch: { type: 'github', username: githubUser.login } } })
 
-  // The user doesn't exist so will generate a temporary token that will only allow
-  // him to create his account
-  if (!user) {
-    const token = getAccessToken('newcomer', ['createAccount'], 1)
+    // The user doesn't exist so will generate a temporary token that will only allow
+    // him to create his account
+    if (!user) {
+      const token = getAccessToken('newcomer', ['createAccount'], 1)
+      return h.response({
+        token_type: 'bearer',
+        access_token: token,
+        expires_in: 1
+      })
+    }
+
+    const refreshToken = getRefreshToken()
+    const newRefreshToken = new RefreshToken({
+      refreshToken,
+      scope: 'app',
+      user: user._id
+    })
+    await newRefreshToken.save()
+
+    const accessToken = getAccessToken(user.username)
     return h.response({
       token_type: 'bearer',
-      access_token: token,
-      expires_in: 1
+      access_token: accessToken,
+      expires_in: 30,
+      refresh_token: refreshToken
     })
+  } else if (req.payload.grant_type === 'refresh_token') {
+    const refreshToken = await RefreshToken.findOne({ refreshToken: req.payload.code }).populate('users')
+    if (refreshToken) {
+      const accessToken = getAccessToken(refreshToken.user.username)
+      return h.response({
+        token_type: 'bearer',
+        access_token: accessToken,
+        expires_in: 30
+      })
+    }
+
+    throw Boom.badData('refresh_token-does-not-exist')
   }
 
-  const refreshToken = getRefreshToken()
-  const newRefreshToken = new RefreshToken({
-    refreshToken,
-    scope: 'app',
-    user: user._id
-  })
-  await newRefreshToken.save()
-
-  const accessToken = getAccessToken(user.username)
-  return h.response({
-    token_type: 'bearer',
-    access_token: accessToken,
-    expires_in: 30,
-    refresh_token: refreshToken
-  })
+  throw Boom.badData('bad-grant_type')
 }
 
 const revokeToken = async (req, h) => {

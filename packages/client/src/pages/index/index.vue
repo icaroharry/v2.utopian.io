@@ -1,10 +1,12 @@
 <script>
 import ULayoutPage from 'src/layouts/parts/page/page'
 import UPostPreview from 'src/components/post-preview/post-preview'
-import { attempt } from 'lodash-es'
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  preFetch ({ store }) {
+    return store.dispatch('projects/getFeaturedProjects')
+  },
   name: 'PageIndex',
   components: {
     ULayoutPage,
@@ -12,7 +14,6 @@ export default {
   },
   data () {
     return {
-      projects: [],
       contributions: [],
       taskRequests: [],
       isMounted: false,
@@ -42,30 +43,11 @@ export default {
       this.loading = true
 
       Promise.all([
-        this.loadContributions(),
-        this.loadProjects()
+        this.loadContributions()
       ]).then((result) => {
         this.loading = false
         return result
       })
-    },
-    loadProjects (done) {
-      const projectsRef = this.firestore.collection('projects')
-      this.projects = []
-      let res = []
-      return projectsRef.where('featured', '==', true)
-        .get()
-        .then((result) => {
-          result.forEach(doc => {
-            res.push({
-              id: doc.id,
-              data: doc.data()
-            })
-          })
-          this.projects = res
-          attempt(done)
-          return this.projects
-        })
     },
     goToProjectPage (name) {
       return this.$router.push({ name: 'project.details', params: { name } })
@@ -93,6 +75,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('projects', [
+      'featuredProjects'
+    ]),
     carouselCanGoToNext () {
       return this.isMounted ? this.$refs.mainCarousel.canGoToNext : false
     },

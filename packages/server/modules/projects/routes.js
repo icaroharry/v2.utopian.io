@@ -9,6 +9,7 @@ routes.push([
     path: '/api/v1/projects',
     handler: (req, h, next) => Handlers.getProjects(req, h, next),
     options: {
+      auth: false,
       tags: ['api'],
       validate: Validate.getProjects
     }
@@ -18,6 +19,7 @@ routes.push([
     path: '/api/v1/projects/featured',
     handler: (req, h, next) => Handlers.getFeaturedProjects(req, h, next),
     options: {
+      auth: false,
       tags: ['api']
     }
   },
@@ -26,6 +28,7 @@ routes.push([
     path: '/api/v1/project/{slug}',
     handler: (req, h, next) => Handlers.getProjectBySlug(req, h, next),
     options: {
+      auth: false,
       tags: ['api'],
       validate: Validate.getProjectBySlug
     }
