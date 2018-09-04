@@ -28,6 +28,20 @@ routes.push([
       tags: ['api'],
       validate: Validate.revokeToken
     }
+  },
+  {
+    method: 'GET',
+    path: '/api/me',
+    handler: (req, h, next) => Handlers.me(req, h, next),
+    options: {
+      auth: {
+        strategy: 'jwt',
+        access: {
+          scope: 'app'
+        }
+      },
+      tags: ['api']
+    }
   }
 ])
 

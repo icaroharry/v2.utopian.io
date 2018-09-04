@@ -21,6 +21,9 @@ export default {
           accessToken: res.data.access_token,
           refreshToken: res.data.refresh_token
         })
+        if (token.scopes.includes('app')) {
+          await store.dispatch('auth/me')
+        }
         if (token.username === 'newcomer') {
           redirect('/create-account')
         }
@@ -30,10 +33,12 @@ export default {
         ? Cookies.parseSSR(ssrContext)
         : Cookies
 
-      return store.dispatch('api/setTokens', {
-        accessToken: cookies.get('access_token'),
-        refreshToken: cookies.get('refresh_token')
-      })
+      if (cookies.get('access_token')) {
+        return store.dispatch('api/setTokens', {
+          accessToken: cookies.get('access_token'),
+          refreshToken: cookies.get('refresh_token')
+        }).then(() => store.dispatch('auth/me'))
+      }
     }
   }
 }

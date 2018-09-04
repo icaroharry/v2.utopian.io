@@ -1,7 +1,17 @@
 import moment from 'moment/moment'
+import API from 'src/services/api'
 import firebase from 'firebase/app'
 import { parseSteemConnectCallback } from 'src/services/steem/connect/parseCallback'
 import credentialsModel from 'src/database/tables/credentials'
+
+export const me = async (context) => {
+  const payload = await API.call({
+    context,
+    method: 'get',
+    url: '/me'
+  })
+  context.commit('setUser', payload)
+}
 
 export const storeCredentials = ({ state, commit, dispatch }, { name, secret = null, meta = null, expiration = null }) => {
   return dispatch('encrypt', secret, { root: true })

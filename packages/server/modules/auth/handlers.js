@@ -112,7 +112,20 @@ const revokeToken = async (req, h) => {
   throw Boom.badData('token-does-not-exist')
 }
 
+const me = async (req, h) => {
+  const data = await User.findOne({ username: req.auth.credentials.username })
+    .select('avatarUrl username -_id')
+  if (data) {
+    return h.response({
+      data
+    })
+  }
+
+  throw Boom.badData('user-does-not-exist')
+}
+
 module.exports = {
   getToken,
-  revokeToken
+  revokeToken,
+  me
 }

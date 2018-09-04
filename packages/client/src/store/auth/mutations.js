@@ -1,5 +1,5 @@
 export const setUser = (state, user = null) => {
-  state.user = user ? JSON.parse(JSON.stringify(user)) : user
+  state.user = user
 }
 
 export const setCredentials = (state, credentials = null) => {

@@ -13,7 +13,6 @@ export default {
       'guest',
       'user',
       'displayName',
-      'avatar',
       'hasCredential',
       'getCredentialAccountName'
     ]),
