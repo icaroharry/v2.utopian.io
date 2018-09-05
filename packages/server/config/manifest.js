@@ -14,6 +14,9 @@ module.exports = {
       {
         plugin: 'good',
         options: {
+          ops: {
+            interval: 300000
+          },
           reporters: {
             console: [{
               module: 'good-console'

@@ -19,12 +19,6 @@ routes.push([
     path: '/oauth/revoke',
     handler: (req, h, next) => Handlers.revokeToken(req, h, next),
     options: {
-      auth: {
-        strategy: 'jwt',
-        access: {
-          scope: 'app'
-        }
-      },
       tags: ['api'],
       validate: Validate.revokeToken
     }
@@ -34,12 +28,6 @@ routes.push([
     path: '/api/me',
     handler: (req, h, next) => Handlers.me(req, h, next),
     options: {
-      auth: {
-        strategy: 'jwt',
-        access: {
-          scope: 'app'
-        }
-      },
       tags: ['api']
     }
   }
