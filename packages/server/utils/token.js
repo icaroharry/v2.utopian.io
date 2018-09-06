@@ -1,23 +1,25 @@
 const JWT = require('jsonwebtoken')
 const crypto = require('crypto')
 
-const getAccessToken = (username, scopes = ['app'], expiresIn = 30) => {
-  return JWT.sign({
-      iss: 'utopian.io',
-      aud: 'utopian.io',
-      iat: Date.now(),
-      username,
-      scopes
-    },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: `${expiresIn} days`
-    }
-  )
+const getAccessToken = ({ username = '', scopes = ['app'], providerToken = '', providerType = '', expiresIn = 30 }) => {
+  const tokenObj = {
+    iss: 'utopian.io',
+    aud: 'utopian.io',
+    iat: Date.now(),
+    scopes
+  }
+
+  if (username) tokenObj.username = username
+  if (providerToken) tokenObj.providerToken = providerToken
+  if (providerType) tokenObj.providerType = providerType
+
+  return JWT.sign(tokenObj, process.env.JWT_SECRET, {
+    expiresIn: `${expiresIn} days`
+  })
 }
 
 const getRefreshToken = () => {
-  const buf = crypto.randomBytes(256);
+  const buf = crypto.randomBytes(256)
   return crypto
     .createHash('sha1')
     .update(buf)

@@ -1,4 +1,4 @@
-export const setTokens = (state, tokens = {}) => {
-  state.accessToken = tokens.accessToken
-  state.refreshToken = tokens.refreshToken
+export const setTokens = (state, { accessToken, refreshToken }) => {
+  state.accessToken = accessToken
+  state.refreshToken = refreshToken
 }

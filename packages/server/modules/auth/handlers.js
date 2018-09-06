@@ -1,64 +1,26 @@
 const Boom = require('boom')
-const Axios = require('axios')
 const User = require('../users/user.model')
 const RefreshToken = require('./refreshtoken.model')
 const { getAccessToken, getRefreshToken } = require('../../utils/token')
-
-const query = `
-  query {
-    viewer {
-      login
-      avatarUrl
-    }
-  }
-  `
-
-const requestGitHubAccessToken = async (code) => {
-  const response = await Axios({
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json'
-    },
-    url: 'https://github.com/login/oauth/access_token',
-    data: {
-      client_id: process.env.GITHUB_CLIENT_ID,
-      client_secret: process.env.GITHUB_CLIENT_SECRET,
-      code
-    }
-  })
-  if (response.status === 200 && response.data.access_token) {
-    return response.data.access_token
-  }
-
-  throw Boom.badData('github-get-access-token')
-}
-
-const getUserInformation = async (token) => {
-  const githubResponse = await Axios({
-    method: 'POST',
-    headers: {
-      'Authorization': `bearer ${token}`
-    },
-    url: 'https://api.github.com/graphql',
-    data: { query }
-  })
-  if (githubResponse.status === 200 && githubResponse.data) {
-    return githubResponse.data.data.viewer
-  }
-
-  throw Boom.internal('github-get-user-data')
-}
+const { requestGitHubAccessToken, getUserInformation } = require('../../utils/github')
 
 const getToken = async (req, h) => {
   if (req.payload.grant_type === 'authorization_code') {
-    const gitHubToken = await requestGitHubAccessToken(req.payload.code)
-    const githubUser = await getUserInformation(gitHubToken)
+    const githubToken = await requestGitHubAccessToken(req.payload.code)
+    const githubUser = await getUserInformation(githubToken)
     const user = await User.findOne({ authProviders: { $elemMatch: { type: 'github', username: githubUser.login } } })
 
     // The user doesn't exist so will generate a temporary token that will only allow
     // him to create his account
+    // The github token is passed in the token so we can store it in the database once the account is created
     if (!user) {
-      const token = getAccessToken('newcomer', ['createAccount'], 1)
+      const token = getAccessToken({
+        scopes: ['createAccount'],
+        expiresIn: 1,
+        providerToken: githubToken,
+        providerType: 'github'
+      })
+
       return h.response({
         token_type: 'bearer',
         access_token: token,
@@ -74,7 +36,7 @@ const getToken = async (req, h) => {
     })
     await newRefreshToken.save()
 
-    const accessToken = getAccessToken(user.username)
+    const accessToken = getAccessToken({ username: user.username })
     return h.response({
       token_type: 'bearer',
       access_token: accessToken,
@@ -84,7 +46,7 @@ const getToken = async (req, h) => {
   } else if (req.payload.grant_type === 'refresh_token') {
     const refreshToken = await RefreshToken.findOne({ refreshToken: req.payload.code }).populate('users')
     if (refreshToken) {
-      const accessToken = getAccessToken(refreshToken.user.username)
+      const accessToken = getAccessToken({ username: refreshToken.user.username })
       return h.response({
         token_type: 'bearer',
         access_token: accessToken,

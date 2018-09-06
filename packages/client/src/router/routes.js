@@ -119,6 +119,13 @@ export default [
       {path: 'callback', name: 'auth.callback', component: () => import('src/pages/auth/steemconnect/callback'), meta: {weight: 10}}
     ]
   },
+  {
+    path: '/users',
+    component: () => import('src/layouts/guest'),
+    children: [
+      {path: 'create', name: 'users.create', component: () => import('src/pages/users/create/create')}
+    ]
+  },
   { // Always leave this as last one
     path: '*',
     name: 'not-found',

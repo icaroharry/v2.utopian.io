@@ -1,6 +1,5 @@
 import { set, get } from 'lodash'
 
-// median feed price.
 export const setUserData = (state, { username, path = '', value, concat = false }) => {
   if (!state[username]) state[username] = {}
 

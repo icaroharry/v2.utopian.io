@@ -1,6 +1,10 @@
 import moment from 'moment/moment'
 import API from 'src/services/api'
 import firebase from 'firebase/app'
+import axios from 'axios'
+import jwt from 'jsonwebtoken'
+import { Cookies } from 'quasar'
+
 import { parseSteemConnectCallback } from 'src/services/steem/connect/parseCallback'
 import credentialsModel from 'src/database/tables/credentials'
 
@@ -54,4 +58,42 @@ export const logout = ({ dispatch, commit }) => {
       await dispatch('steem/setUserDetails', null, { root: true })
       await credentialsModel.clear()
     })
+}
+
+export const authorize = async ({ dispatch }, { code = '', ssrContext, redirect, store }) => {
+  const cookies = process.env.SERVER
+    ? Cookies.parseSSR(ssrContext)
+    : Cookies
+
+  if (code) {
+    const { access_token: accessToken, refresh_token: refreshToken } = (await axios.post('/oauth/token', {
+      grant_type: 'authorization_code', 
+      code
+    })).data
+
+    const token = jwt.decode(accessToken)
+    cookies.set('access_token', accessToken)
+    cookies.set('refresh_token', refreshToken)
+
+    await store.dispatch('api/setTokens', {
+      accessToken,
+      refreshToken
+    })
+
+    if (!token.username) {
+      redirect('/users/create')
+    } else if (token.scopes.includes('app')) {
+      await store.dispatch('auth/me')
+    }
+  } else if (cookies.get('access_token')) {
+    await store.dispatch('api/setTokens', {
+      accessToken: cookies.get('access_token'),
+      refreshToken: cookies.get('refresh_token')
+    })
+
+    await store.dispatch('auth/me')
+  } else {
+    // if there's no valid accessToken, the user will be redirected to the homepage and will be able to sign in again
+    redirect('/')
+  }
 }

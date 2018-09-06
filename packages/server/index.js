@@ -2,6 +2,7 @@ require('dotenv').config()
 
 const Glue = require('glue')
 const manifest = require('./config/manifest')
+
 require('./config/db')
 
 const startServer = async () => {
@@ -15,4 +16,7 @@ const startServer = async () => {
 }
 
 startServer()
-process.on('SIGINT', () => { console.log("Bye bye!"); process.exit(); });
+process.on('SIGINT', () => {
+  console.log('Bye bye!')
+  process.exit()
+})

@@ -12,13 +12,18 @@ const register = (server) => {
           }
         }
 
-        return {
+        const returnObj = {
           isValid: true,
           credentials: {
-            scope: decoded.scopes,
-            username: decoded.username
+            scope: decoded.scopes
           }
         }
+
+        if (decoded.username) returnObj.credentials.username = decoded.username
+        if (decoded.providerToken) returnObj.credentials.providerToken = decoded.providerToken
+        if (decoded.providerType) returnObj.credentials.providerType = decoded.providerType
+
+        return returnObj
       },
       verifyOptions: { algorithms: ['HS256'] }
     })
