@@ -13,14 +13,14 @@ q-toolbar.u-toolbar(color='tertiary', :class="{ desktop: isDesktop }")
         img.avatar(:src="user.avatarUrl")
         q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]")
           q-list(dense, :link="true", separator)
-            q-item(v-if="!hasCredential('steem')", @click.native="startSteemConnectLogin")
+            q-item(v-if="!steemUser", @click.native="startSteemConnectLogin")
               q-item-side
                 q-icon.q-item-icon.ut-steem
               q-item-main(label="Link your Steem account")
-            q-item(v-if="hasCredential('steem')", :to="`/@${steemUser}`")
+            q-item(v-if="steemUser", :to="`/@${steemUser}`")
               q-item-side
                 q-icon.q-item-icon.ut-steem
-              q-item-main(:label="getCredentialAccountName('steem')")
+              q-item-main(:label="`@${steemUser}`")
             q-item(:to="{ name: 'settings' }")
               q-item-side(icon="mdi-settings")
               q-item-main(label="Settings")

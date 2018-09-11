@@ -5,6 +5,7 @@ export default {
   name: 'u-layout-toolbar',
   data () {
     return {
+      steemUser: null,
       overlay: null
     }
   },
@@ -12,18 +13,12 @@ export default {
     ...mapGetters('auth', [
       'guest',
       'user',
-      'displayName',
-      'hasCredential',
-      'getCredentialAccountName'
+      'getBlockchainActiveAccount'
     ]),
     ...mapGetters('common', [
       'isMobile',
       'isDesktop'
     ]),
-    ...mapGetters('steem', [
-      'steemUser'
-    ]),
-
     createLabel () {
       return this.isDesktop ? 'Contribution' : ''
     }
@@ -39,14 +34,21 @@ export default {
       'linkSteemAccount'
     ]),
     startGithubLogin () {
-      window.location = `https://github.com/login/oauth/authorize?scope=read:user,repo&client_id=${process.env.GITHUB_CLIENT_ID}`
+      window.location = `https://github.com/login/oauth/authorize?scope=read:user,repo&client_id=${process.env.GITHUB_CLIENT_ID}&state=githublogin`
     },
     startSteemConnectLogin () {
-      // TODO link steem account
+      let callbackURL = ''
+      if (typeof window !== 'undefined') {
+        callbackURL = `${window.location.protocol}//${window.location.host}`
+      }
+      window.location = `https://steemconnect.com/oauth2/authorize?client_id=${process.env.STEEMCONNECT_CLIENT_ID}&redirect_uri=${callbackURL}&response_type=code&scope=offline,comment,vote,comment_options,custom_json&state=steemconnectlogin`
     },
     redirectToCreate () {
       return this.$router.push({ name: 'create' })
     }
+  },
+  mounted () {
+    this.steemUser = this.getBlockchainActiveAccount('steem')
   }
 }
 </script>

@@ -1,13 +1,10 @@
 <script>
+import authPlugin from 'src/plugins/auth'
+
 export default {
   name: 'u-app',
   async preFetch ({ currentRoute, store, redirect, ssrContext }) {
-    await store.dispatch('auth/authorize', {
-      code: currentRoute.query.code,
-      redirect,
-      ssrContext,
-      store
-    })
+    await authPlugin({ currentRoute, store, redirect, ssrContext })
   }
 }
 </script>

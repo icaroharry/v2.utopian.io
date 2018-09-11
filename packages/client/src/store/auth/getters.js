@@ -14,3 +14,12 @@ export const getCredentialAccountName = state => name => {
   }
   return ''
 }
+export const getBlockchainActiveAccount = state => blockchain => {
+  if (state.user && state.user.blockchainAccounts) {
+    const blockchainAccount = state.user.blockchainAccounts.find(obj => obj.blockchain === blockchain && obj.active)
+    if (blockchainAccount) {
+      return blockchainAccount.address
+    }
+  }
+  return null
+}

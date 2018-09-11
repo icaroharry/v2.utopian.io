@@ -18,9 +18,21 @@ import projects from './projects'
 import users from './users'
 import contributions from './contributions'
 import github from './github'
+import blockchainSteem from './blockchains/steem'
 
 // join modules.
-const modules = { api, common, auth, steem, project, projects, users, contributions, github }
+const modules = {
+  api,
+  common,
+  auth,
+  blockchainSteem,
+  steem,
+  project,
+  projects,
+  users,
+  contributions,
+  github
+}
 
 // enable vuex.
 Vue.use(Vuex)

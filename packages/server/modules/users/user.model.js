@@ -4,9 +4,12 @@ const Schema = Mongoose.Schema
 
 const users = new Schema({
   username: { type: String, required: true, index: { unique: true } },
+  avatarUrl: { type: String },
   authProviders: [{
+    _id: false,
     type: {
       type: String,
+      enum: ['github'],
       required: true
     },
     username: {
@@ -17,7 +20,23 @@ const users = new Schema({
       type: String
     }
   }],
-  avatarUrl: { type: String },
+  blockchainAccounts: [{
+    _id: false,
+    blockchain: {
+      type: String,
+      enum: ['steem'],
+      required: true
+    },
+    address: {
+      type: String,
+      required: true
+    },
+    active: {
+      type: Boolean,
+      default: false
+    },
+    data: { type: Object }
+  }],
   createdAt: { type: Date, default: Date.now() },
   updatedAt: { type: Date },
   deletedAt: { type: Date }

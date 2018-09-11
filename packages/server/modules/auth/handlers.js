@@ -76,7 +76,7 @@ const revokeToken = async (req, h) => {
 
 const me = async (req, h) => {
   const data = await User.findOne({ username: req.auth.credentials.username })
-    .select('avatarUrl username -_id')
+    .select('avatarUrl username blockchainAccounts -_id')
   if (data) {
     return h.response({
       data

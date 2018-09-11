@@ -21,6 +21,7 @@ export default class API {
         Cookies.remove('access_token')
         Cookies.remove('refresh_token')
       }
+      return err.response.data
     }
     return null
   }

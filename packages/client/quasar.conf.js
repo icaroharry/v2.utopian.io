@@ -29,7 +29,7 @@ module.exports = function (ctx) {
     build: {
       env: (ctx.debug || ctx.dev) ? {
         GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
-        SC2_APP: (process.env.SC2_APP_DEV || '"utopian.signin"'),
+        STEEMCONNECT_CLIENT_ID: (process.env.STEEMCONNECT_CLIENT_ID || '"utopian.signin"'),
         FIREBASE_API_KEY: (process.env.FIREBASE_API_KEY_DEV || 'null'),
         FIREBASE_PROJECT_ID: (process.env.FIREBASE_PROJECT_ID_DEV || '"develop-utopian-io"'),
         FIREBASE_AUTH_DOMAIN: (process.env.FIREBASE_AUTH_DOMAIN_DEV || '"auth.utopian.io"'),
@@ -38,7 +38,7 @@ module.exports = function (ctx) {
         STEEM_API: (process.env.STEEM_API_DEV || '"https://api.steemit.com"')
       } : {
         GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
-        SC2_APP: (process.env.SC2_APP || '"utopian.signin"'),
+        STEEMCONNECT_CLIENT_ID: (process.env.STEEMCONNECT_CLIENT_ID || '"utopian.signin"'),
         FIREBASE_API_KEY: (process.env.FIREBASE_API_KEY || 'null'),
         FIREBASE_PROJECT_ID: (process.env.FIREBASE_PROJECT_ID || '"utopian-io"'),
         FIREBASE_AUTH_DOMAIN: (process.env.FIREBASE_AUTH_DOMAIN || '"auth.utopian.io"'),
