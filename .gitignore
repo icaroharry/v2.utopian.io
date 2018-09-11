@@ -2,6 +2,7 @@
 .idea
 /packages/*/node_modules
 /packages/*/.env
+/packages/*/.env.test
 /packages/*/dist
 /packages/*/service-account.json
 /packages/*/*.log*
