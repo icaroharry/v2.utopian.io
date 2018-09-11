@@ -9,7 +9,7 @@ export default class API {
       const response = await axios({
         headers,
         method,
-        url: `/api${url}`,
+        url: `${process.env.UTOPIAN_API}${url}`,
         data
       })
       if (response.status === 200 && response.data.data) {
@@ -37,7 +37,7 @@ export default class API {
       if (decodedToken.exp < Date.now()) {
         if (refreshToken) {
           try {
-            const response = await axios.post('/oauth/token', {
+            const response = await axios.post(`${process.env.UTOPIAN_API}/oauth/token`, {
               code: refreshToken,
               grant_type: 'refresh_token'
             })

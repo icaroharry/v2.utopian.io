@@ -2,7 +2,7 @@ const chai = require('chai')
 
 const { assert, expect } = chai
 
-const featuredEndpoint = { method: 'GET', url: '/api/v1/projects/featured' }
+const featuredEndpoint = { method: 'GET', url: '/v1/projects/featured' }
 
 describe('featured projects', () => {
   let featuredProjectsResponse

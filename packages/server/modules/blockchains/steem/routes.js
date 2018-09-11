@@ -5,7 +5,7 @@ const routes = []
 routes.push([
   {
     method: 'PUT',
-    path: '/api/v1/blockchains/steem/linkaccount',
+    path: '/v1/blockchains/steem/linkaccount',
     handler: (req, h, next) => Handlers.linkSteemAccount(req, h, next),
     options: {
       tags: ['api', 'blockchains', 'steem'],

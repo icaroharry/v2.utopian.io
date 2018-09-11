@@ -7,7 +7,7 @@ export default async ({ currentRoute, store, redirect, ssrContext }) => {
   if (code) {
     const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
     // TODO handle errors
-    const { access_token: accessToken, refresh_token: refreshToken } = (await axios.post('/oauth/token', {
+    const { access_token: accessToken, refresh_token: refreshToken } = (await axios.post(`${process.env.UTOPIAN_API}/oauth/token`, {
       grant_type: 'authorization_code',
       code
     })).data

@@ -6,7 +6,7 @@ const routes = []
 routes.push([
   {
     method: 'POST',
-    path: '/api/v1/projects',
+    path: '/v1/projects',
     handler: (req, h, next) => Handlers.getProjects(req, h, next),
     options: {
       auth: false,
@@ -16,7 +16,7 @@ routes.push([
   },
   {
     method: 'GET',
-    path: '/api/v1/projects/featured',
+    path: '/v1/projects/featured',
     handler: (req, h, next) => Handlers.getFeaturedProjects(req, h, next),
     options: {
       auth: false,
@@ -25,7 +25,7 @@ routes.push([
   },
   {
     method: 'GET',
-    path: '/api/v1/project/{slug}',
+    path: '/v1/project/{slug}',
     handler: (req, h, next) => Handlers.getProjectBySlug(req, h, next),
     options: {
       auth: false,
@@ -35,7 +35,7 @@ routes.push([
   },
   {
     method: 'DELETE',
-    path: '/api/v1/project/{slug}',
+    path: '/v1/project/{slug}',
     handler: (req, h, next) => Handlers.deleteProjectBySlug(req, h, next),
     options: {
       tags: ['api', 'projects'],
@@ -44,7 +44,7 @@ routes.push([
   },
   {
     method: 'PUT',
-    path: '/api/v1/project/{slug}',
+    path: '/v1/project/{slug}',
     handler: (req, h, next) => Handlers.editProjectBySlug(req, h, next),
     options: {
       tags: ['api', 'projects'],
@@ -53,7 +53,7 @@ routes.push([
   },
   {
     method: 'POST',
-    path: '/api/v1/project',
+    path: '/v1/project',
     handler: (req, h, next) => Handlers.saveProject(req, h, next),
     options: {
       tags: ['api', 'projects'],

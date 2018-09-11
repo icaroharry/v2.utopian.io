@@ -6,7 +6,7 @@ const routes = []
 routes.push([
   {
     method: 'GET',
-    path: '/api/v1/user/{username}',
+    path: '/v1/user/{username}',
     handler: (req, h, next) => Handlers.getUserByUsername(req, h, next),
     options: {
       auth: false,
@@ -16,7 +16,7 @@ routes.push([
   },
   {
     method: 'GET',
-    path: '/api/v1/user/{username}/available',
+    path: '/v1/user/{username}/available',
     handler: (req, h, next) => Handlers.isUsernameAvailable(req, h, next),
     options: {
       auth: false,
@@ -26,7 +26,7 @@ routes.push([
   },
   {
     method: 'DELETE',
-    path: '/api/v1/user/{username}',
+    path: '/v1/user/{username}',
     handler: (req, h, next) => Handlers.deleteUserByUsername(req, h, next),
     options: {
       tags: ['api', 'users'],
@@ -35,7 +35,7 @@ routes.push([
   },
   {
     method: 'PUT',
-    path: '/api/v1/user/{username}',
+    path: '/v1/user/{username}',
     handler: (req, h, next) => Handlers.editUserByUsername(req, h, next),
     options: {
       tags: ['api', 'users'],
@@ -44,7 +44,7 @@ routes.push([
   },
   {
     method: 'POST',
-    path: '/api/v1/user',
+    path: '/v1/user',
     handler: (req, h, next) => Handlers.saveUser(req, h, next),
     options: {
       auth: {

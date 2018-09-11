@@ -28,6 +28,7 @@ module.exports = function (ctx) {
     // build configuration.
     build: {
       env: (ctx.debug || ctx.dev) ? {
+        UTOPIAN_API: process.env.UTOPIAN_API,
         GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
         STEEMCONNECT_CLIENT_ID: (process.env.STEEMCONNECT_CLIENT_ID || '"utopian.signin"'),
         FIREBASE_API_KEY: (process.env.FIREBASE_API_KEY_DEV || 'null'),
@@ -37,6 +38,7 @@ module.exports = function (ctx) {
         FIREBASE_EMULATOR: (process.env.FIREBASE_EMULATOR_DEV || 'null'),
         STEEM_API: (process.env.STEEM_API_DEV || '"https://api.steemit.com"')
       } : {
+        UTOPIAN_API: process.env.UTOPIAN_API,
         GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
         STEEMCONNECT_CLIENT_ID: (process.env.STEEMCONNECT_CLIENT_ID || '"utopian.signin"'),
         FIREBASE_API_KEY: (process.env.FIREBASE_API_KEY || 'null'),
@@ -75,8 +77,11 @@ module.exports = function (ctx) {
       port: 8080,
       open: false, // no auto browser.
       proxy: [{
-        context: ['/oauth', '/api'],
+        context: ['/api'],
         target: 'http://localhost:5000',
+        pathRewrite: {
+          '^/api': ''
+        }
       }]
     },
     // framework configuration.

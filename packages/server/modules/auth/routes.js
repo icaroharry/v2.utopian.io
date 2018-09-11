@@ -31,7 +31,7 @@ routes.push([
   },
   {
     method: 'GET',
-    path: '/api/me',
+    path: '/me',
     handler: (req, h, next) => Handlers.me(req, h, next),
     options: {
       tags: ['api']
