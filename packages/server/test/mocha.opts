@@ -1,0 +1,4 @@
+--require ./test/setup
+--recursive
+--timeout 50000
+--globals server

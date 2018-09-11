@@ -4,10 +4,12 @@
     "standard"
   ],
   "env": {
-    "node": true
+    "node": true,
+    "mocha": true
   },
   "rules": {
     "indent": [2, 2],
-    "hapi/hapi-scope-start": 0
+    "hapi/hapi-scope-start": 0,
+    "hapi/hapi-capitalize-modules": 0
   }
 }

@@ -10,8 +10,10 @@
   "scripts": {
     "dev": "nodemon --delay 2500ms --watch ./",
     "precommit": "lint-staged",
-    "lint": "eslint --ext .js modules config",
-    "lintfix": "eslint --fix --ext .js modules config"
+    "lint": "eslint --ext .js modules config test",
+    "lintfix": "eslint --fix --ext .js modules config",
+    "test": "nyc --reporter=html mocha test",
+    "coverage": "nyc report"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -33,6 +35,7 @@
     "vision": "^5.3.3"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
     "eslint": "^5.4.0",
     "eslint-config-hapi": "^12.0.0",
     "eslint-config-standard": "^11.0.0",
@@ -42,6 +45,8 @@
     "eslint-plugin-promise": "^4.0.0",
     "eslint-plugin-standard": "^3.1.0",
     "lint-staged": "^7.2.2",
-    "nodemon": "^1.18.3"
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.3",
+    "nyc": "^13.0.1"
   }
 }
