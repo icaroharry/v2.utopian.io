@@ -9,8 +9,15 @@ export const linkAccount = async (context, data) => {
     data
   })
   if (payload.username) {
-    localStorage.setItem(`steemConnect${payload.username}AccessToken`, payload.accessToken)
-    localStorage.setItem(`steemConnect${payload.username}RefreshToken`, payload.refreshToken)
+    context.commit('utils/pushLocalStorageValues', [
+      {
+        key: `steemConnect${payload.username}AccessToken`,
+        value: payload.accessToken
+      }, {
+        key: `steemConnect${payload.username}RefreshToken`,
+        value: payload.refreshToken
+      }
+    ], { root: true })
   }
   Notify.create({
     type: payload.message === 'link-account-success' ? 'positive' : 'negative',

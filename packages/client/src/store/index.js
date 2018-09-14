@@ -19,6 +19,7 @@ import users from './users'
 import contributions from './contributions'
 import github from './github'
 import blockchainSteem from './blockchains/steem'
+import utils from './utils'
 
 // join modules.
 const modules = {
@@ -31,20 +32,21 @@ const modules = {
   projects,
   users,
   contributions,
-  github
+  github,
+  utils
 }
 
 // enable vuex.
 Vue.use(Vuex)
 
-// create the store object.
-const store = new Vuex.Store({
-  state,
-  getters,
-  mutations,
-  actions,
-  modules
-})
+export default function () {
+  const store = new Vuex.Store({
+    state,
+    getters,
+    mutations,
+    actions,
+    modules
+  })
 
-// main export.
-export default store
+  return store
+}

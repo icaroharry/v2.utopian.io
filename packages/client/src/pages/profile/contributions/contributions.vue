@@ -4,7 +4,7 @@ import UContributionList from 'src/components/contribution-list/contribution-lis
 import ULayoutPage from 'src/layouts/parts/page/page'
 import { categories, categoryOptions } from 'src/services/utopian/categories'
 import { format } from 'quasar'
-import { get } from 'lodash-es'
+import { get } from 'lodash'
 
 const { capitalize } = format
 

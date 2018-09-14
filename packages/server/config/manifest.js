@@ -2,6 +2,7 @@ module.exports = {
   server: {
     port: process.env.PORT || 5000,
     routes: {
+      cors: true,
       validate: {
         failAction: (request, h, err) => {
           return err

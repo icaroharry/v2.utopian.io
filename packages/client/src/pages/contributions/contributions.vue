@@ -2,7 +2,7 @@
 <script>
 // imports.
 import moment from 'moment'
-import { map, get } from 'lodash-es'
+import { map, get } from 'lodash'
 import UContributionList from 'src/components/contribution-list/contribution-list'
 import ULayoutPage from 'src/layouts/parts/page/page'
 import { categories, categoryOptions } from 'src/services/utopian/categories'

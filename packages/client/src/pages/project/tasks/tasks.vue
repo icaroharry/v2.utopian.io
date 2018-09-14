@@ -1,10 +1,9 @@
 <script>
-import { byOrder } from 'src/services/steem/posts'
 import moment from 'moment'
 import UPostPreview from 'src/components/post-preview/post-preview'
 import ULayoutPage from 'src/layouts/parts/page/page'
 import { categories, categoryOptions } from 'src/services/utopian/categories'
-import { map, concat, get, last, filter, attempt, debounce } from 'lodash-es'
+import { map, get, filter, debounce } from 'lodash'
 
 export default {
   name: 'PageProjectTasks',
@@ -41,9 +40,11 @@ export default {
     loadPostsScroll: debounce(function (index, done) {
       return this.loadPosts(done)
     }, 3000),
-    loadPosts (done) {
-      const order = get(this.$route, 'meta.order', 'trending')
-      const tag = get(this.$route, 'params.category', 'utopian-io')
+    loadPosts () {
+      // const order = get(this.$route, 'meta.order', 'trending')
+      // const tag = get(this.$route, 'params.category', 'utopian-io')
+      // TODO utopian posts
+      /*
       return byOrder(order, { tag, limit: 40 }, last(this.posts))
         .then((result) => {
           this.posts = concat(this.posts, result)
@@ -55,6 +56,7 @@ export default {
           }
           return result
         })
+        */
     }
   },
   computed: {

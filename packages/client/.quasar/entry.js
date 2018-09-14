@@ -68,9 +68,6 @@ plugins.push(pluginVuexroutersync)
 import pluginBootstrap from 'src/plugins/bootstrap'
 plugins.push(pluginBootstrap)
 
-import pluginFirebaseindex from 'src/plugins/firebase/index'
-plugins.push(pluginFirebaseindex)
-
 plugins.forEach(plugin => plugin({ app, router, store, Vue }))
 
 

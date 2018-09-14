@@ -1,4 +1,4 @@
-import { get } from 'lodash-es'
+import { get } from 'lodash'
 
 export const rewardFund = ({ rewardFund }) => rewardFund
 export const dynamicProperties = ({ dynamicProperties }) => dynamicProperties

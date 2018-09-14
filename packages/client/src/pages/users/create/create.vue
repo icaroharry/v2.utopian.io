@@ -19,8 +19,9 @@ export default {
     ULayoutPage
   },
   
-  preFetch ({ redirect }) {
-    let scopes = jwt.decode(Cookies.get('access_token')).scopes
+  preFetch ({ redirect, ssrContext }) {
+    const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
+    let scopes = jwt.decode(cookies.get('access_token')).scopes
 
     if (!scopes.includes('createAccount')) {
       redirect('/')

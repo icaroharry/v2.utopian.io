@@ -1,7 +1,7 @@
 <script>
 // imports.
 import { mapGetters } from 'vuex'
-import { get } from 'lodash-es'
+import { get } from 'lodash'
 import { parseCurrencyString } from 'src/services/currencies/formatter'
 
 // post author component (author avatar box).

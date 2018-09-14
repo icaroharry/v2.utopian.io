@@ -5,8 +5,7 @@ export default {
   name: 'u-layout-toolbar',
   data () {
     return {
-      steemUser: null,
-      overlay: null
+      steemUser: null
     }
   },
   computed: {
@@ -18,17 +17,9 @@ export default {
     ...mapGetters('common', [
       'isMobile',
       'isDesktop'
-    ]),
-    createLabel () {
-      return this.isDesktop ? 'Contribution' : ''
-    }
+    ])
   },
   methods: {
-    ...mapActions([
-      'showDialog',
-      'startLoading',
-      'stopLoading'
-    ]),
     ...mapActions('auth', [
       'logout',
       'linkSteemAccount'

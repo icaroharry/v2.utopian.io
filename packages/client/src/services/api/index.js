@@ -1,6 +1,6 @@
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
-import { Cookies } from 'quasar'
+// import { Cookies } from 'quasar'
 
 export default class API {
   static async call ({ context, method, url, data }) {
@@ -18,8 +18,8 @@ export default class API {
     } catch (err) {
       if (err.response.status === 401) {
         // TODO bad token remove logged user and token from store
-        Cookies.remove('access_token')
-        Cookies.remove('refresh_token')
+        // Cookies.remove('access_token')
+        // Cookies.remove('refresh_token')
       }
       return err.response.data
     }
@@ -34,7 +34,7 @@ export default class API {
     if (accessToken) {
       const decodedToken = jwt.decode(accessToken)
       // The access token has expired
-      if (decodedToken.exp < Date.now()) {
+      if (decodedToken.exp < Date.now() / 1000) {
         if (refreshToken) {
           try {
             const response = await axios.post(`${process.env.UTOPIAN_API}/oauth/token`, {
@@ -50,8 +50,8 @@ export default class API {
             }
           } catch (err) {
             // TODO unlog the user from the store and destroy all the tokens
-            Cookies.remove('access_token')
-            Cookies.remove('refresh_token')
+            // Cookies.remove('access_token')
+            // Cookies.remove('refresh_token')
           }
         }
       } else {

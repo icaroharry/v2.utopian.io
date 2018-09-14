@@ -1,13 +1,11 @@
 <script>
-import { getState } from 'src/services/steem/posts'
 import UPostPreview from 'src/components/post-preview/post-preview'
 import UCommentsAuthorHeader from 'src/components/comments/author-header/author-header'
 import UCommentsVoteItem from 'src/components/comments/vote-item/vote-item'
 import UPostAuthor from 'src/components/posts/author/author'
 import UPostReply from 'src/components/posts/reply/reply'
-import { map, get, orderBy } from 'lodash-es'
+import { map, get, orderBy } from 'lodash'
 import UCommentsActions from 'src/components/comments/actions/actions'
-import { render } from 'src/services/steem/markdown'
 
 export default {
   name: 'PagePost',
@@ -37,7 +35,8 @@ export default {
     loadContent () {
       this.author = get(this.$route, 'params.author', null)
       this.permlink = get(this.$route, 'params.permlink', null)
-
+      // TODO utopian code
+      /*
       return getState(this.author, this.permlink)
         .then((result) => {
           this.feed = parseFloat(result.feed_price.base)
@@ -53,6 +52,7 @@ export default {
               return data
             })
         })
+        */
     }
   },
 

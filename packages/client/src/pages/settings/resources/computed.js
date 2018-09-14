@@ -1,6 +1,6 @@
 // imports.
 import langmap from 'langmap'
-import { map, get, find } from 'lodash-es'
+import { map, get, find } from 'lodash'
 
 // component computed properties.
 export default {

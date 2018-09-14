@@ -13,13 +13,14 @@ export default async ({ currentRoute, store, redirect, ssrContext }) => {
     })).data
 
     const token = jwt.decode(accessToken)
-    cookies.set('access_token', accessToken, {
-      expires: 365
-    })
     cookies.set('refresh_token', refreshToken, {
+      path: '/',
       expires: 365
     })
-
+    cookies.set('access_token', accessToken, {
+      path: '/',
+      expires: 365
+    })
     await store.dispatch('api/setTokens', {
       accessToken,
       refreshToken

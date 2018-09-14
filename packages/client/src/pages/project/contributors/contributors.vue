@@ -1,6 +1,5 @@
 <script>
 import ULayoutPage from 'src/layouts/parts/page/page'
-import firebase from 'firebase/app'
 
 export default {
   name: 'PageProjectContributors',
@@ -16,11 +15,7 @@ export default {
   methods: {
     async loadInitial () {
       this.loading = true
-      await firebase.functions().httpsCallable(`/api/projects/contributors?q=${this.$route.params.name}`)()
-        .then((result) => {
-          this.contributors = result.data
-        })
-        .catch((err) => console.log(err))
+      // TODO call store action
     }
   },
   mounted () {

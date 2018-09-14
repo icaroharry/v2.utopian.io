@@ -1,7 +1,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import ULayoutPage from 'src/layouts/parts/page/page'
-import { filter, debounce, uniqBy, attempt, last, concat } from 'lodash-es'
+import { filter, debounce, uniqBy, attempt, last, concat } from 'lodash'
 import { format } from 'quasar'
 
 const { capitalize } = format

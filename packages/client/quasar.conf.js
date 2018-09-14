@@ -16,37 +16,19 @@ module.exports = function (ctx) {
     extras: ['roboto-font', 'mdi'],
     // quasar plugins.
     plugins: [
-      'steem',
       'vuelidate',
-      'db',
       'i18n',
       'axios',
       'vuex-router-sync',
-      'bootstrap',
-      'firebase/index'
+      'bootstrap'
     ],
     // build configuration.
     build: {
-      env: (ctx.debug || ctx.dev) ? {
+      env: {
         UTOPIAN_API: process.env.UTOPIAN_API,
         GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
         STEEMCONNECT_CLIENT_ID: (process.env.STEEMCONNECT_CLIENT_ID || '"utopian.signin"'),
-        FIREBASE_API_KEY: (process.env.FIREBASE_API_KEY_DEV || 'null'),
-        FIREBASE_PROJECT_ID: (process.env.FIREBASE_PROJECT_ID_DEV || '"develop-utopian-io"'),
-        FIREBASE_AUTH_DOMAIN: (process.env.FIREBASE_AUTH_DOMAIN_DEV || '"auth.utopian.io"'),
-        FIREBASE_MESSAGING_SENDER_ID: (process.env.FIREBASE_MESSAGING_SENDER_ID_DEV || 'null'),
-        FIREBASE_EMULATOR: (process.env.FIREBASE_EMULATOR_DEV || 'null'),
         STEEM_API: (process.env.STEEM_API_DEV || '"https://api.steemit.com"')
-      } : {
-        UTOPIAN_API: process.env.UTOPIAN_API,
-        GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
-        STEEMCONNECT_CLIENT_ID: (process.env.STEEMCONNECT_CLIENT_ID || '"utopian.signin"'),
-        FIREBASE_API_KEY: (process.env.FIREBASE_API_KEY || 'null'),
-        FIREBASE_PROJECT_ID: (process.env.FIREBASE_PROJECT_ID || '"utopian-io"'),
-        FIREBASE_AUTH_DOMAIN: (process.env.FIREBASE_AUTH_DOMAIN || '"auth.utopian.io"'),
-        FIREBASE_MESSAGING_SENDER_ID: (process.env.FIREBASE_MESSAGING_SENDER_ID || 'null'),
-        FIREBASE_EMULATOR: (process.env.FIREBASE_EMULATOR || 'null'),
-        STEEM_API: (process.env.STEEM_API || '"https://api.steemit.com"')
       },
       scopeHoisting: true,
       vueRouterMode: 'history',
@@ -54,18 +36,15 @@ module.exports = function (ctx) {
   
       // webpack configuration.
       extendWebpack: function (cfg) {
-        // node mode.
-        cfg.node.process = true
-        cfg.node.setImmediate = true
-      
         // main loader / js config.
+        /*
         cfg.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules|quasar)/
         })
-      
+        */
         cfg.module.rules.push({
           test: /\.pug$/,
           loader: 'pug-plain-loader'
@@ -76,13 +55,6 @@ module.exports = function (ctx) {
     devServer: {
       port: 8080,
       open: false, // no auto browser.
-      proxy: [{
-        context: ['/api'],
-        target: 'http://localhost:5000',
-        pathRewrite: {
-          '^/api': ''
-        }
-      }]
     },
     // framework configuration.
     framework: {
@@ -208,7 +180,9 @@ module.exports = function (ctx) {
         ]
       }      
     },
-
+    ssr: {
+      pwa: true,
+    },
     starterKit: '1.0.2'
   }
 }

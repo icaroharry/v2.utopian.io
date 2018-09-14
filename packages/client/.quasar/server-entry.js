@@ -8,8 +8,6 @@
  * plugins: ['file', ...] // do not add ".js" extension to it.
  **/
 
-
-
 import 'quasar-extras/roboto-font/roboto-font.css'
 
 import 'quasar-extras/mdi/mdi.css'
@@ -177,94 +175,100 @@ import 'quasar-app-styl'
 import 'src/css/app.styl'
 
 
-import Vue from 'vue'
 import createApp from './app.js'
+import Vue from 'vue'
 
-
-import 'app/src-pwa/register-service-worker.js'
-
-
-
-import pVuelidate from 'src/plugins/vuelidate'
-
-import pI18n from 'src/plugins/i18n'
-
-import pAxios from 'src/plugins/axios'
-
-import pVuexroutersync from 'src/plugins/vuex-router-sync'
-
-import pBootstrap from 'src/plugins/bootstrap'
+import App from 'app/src/App.vue'
 
 
 
-import { addPreFetchHooks } from './client-prefetch.js'
+import pluginVuelidate from 'src/plugins/vuelidate'
+
+import pluginI18n from 'src/plugins/i18n'
+
+import pluginAxios from 'src/plugins/axios'
+
+import pluginVuexroutersync from 'src/plugins/vuex-router-sync'
+
+import pluginBootstrap from 'src/plugins/bootstrap'
 
 
+// This exported function will be called by `bundleRenderer`.
+// This is where we perform data-prefetching to determine the
+// state of our application before actually rendering it.
+// Since data fetching is async, this function is expected to
+// return a Promise that resolves to the app instance.
+export default context => {
+  return new Promise(async (resolve, reject) => {
+    const { app, store, router } = createApp(context)
 
-import FastClick from 'fastclick'
+    
+    ;[pluginVuelidate,pluginI18n,pluginAxios,pluginVuexroutersync,pluginBootstrap].forEach(plugin => {
+      plugin({
+        app,
+        router,
+        store,
+        Vue,
+        ssrContext: context
+      })
+    })
+    
 
+    const
+      { url } = context,
+      { fullPath } = router.resolve(url).route
 
+    if (fullPath !== url) {
+      return reject({ url: fullPath })
+    }
 
+    // set router's location
+    router.push(url)
 
+    // wait until router has resolved possible async hooks
+    router.onReady(() => {
+      const matchedComponents = router.getMatchedComponents()
+      // no matched routes
+      if (!matchedComponents.length) {
+        return reject({ code: 404 })
+      }
 
+      
 
+      let routeUnchanged = true
+      const redirect = url => {
+        routeUnchanged = false
+        reject({ url })
+      }
+      App.preFetch && matchedComponents.unshift(App)
 
-Vue.config.devtools = true
-Vue.config.performance = true
-Vue.config.productionTip = false
+      // Call preFetch hooks on components matched by the route.
+      // A preFetch hook dispatches a store action and returns a Promise,
+      // which is resolved when the action is complete and store state has been
+      // updated.
+      matchedComponents
+      .filter(c => c && c.preFetch)
+      .reduce(
+        (promise, c) => promise.then(() => routeUnchanged && c.preFetch({
+          store,
+          ssrContext: context,
+          currentRoute: router.currentRoute,
+          redirect
+        })),
+        Promise.resolve()
+      )
+      .then(() => {
+        if (!routeUnchanged) { return }
 
+        context.state = store.state
 
+        
+        resolve(new Vue(app))
+        
+      })
+      .catch(reject)
 
-console.info('[Quasar] Running SSR + PWA with MAT theme.')
-console.info('[Quasar] Forcing PWA into the network-first approach to not break Hot Module Replacement while developing.')
-
-
-const { app, store, router } = createApp()
-
-
-
-  // Needed only for iOS PWAs
-if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && window.navigator.standalone) {
-
-  document.addEventListener('DOMContentLoaded', () => {
-    FastClick.attach(document.body)
-  }, false)
-
-}
-
-
-
-
-;[pVuelidate,pI18n,pAxios,pVuexroutersync,pBootstrap].forEach(plugin => {
-  plugin({
-    app,
-    router,
-    store,
-    Vue,
-    ssrContext: null
+      
+    }, reject)
   })
-})
-
-
-
-
-  // prime the store with server-initialized state.
-// the state is determined during SSR and inlined in the page markup.
-
-if (window.__INITIAL_STATE__) {
-  store.replaceState(window.__INITIAL_STATE__)
 }
-
-
-const appInstance = new Vue(app)
-
-// wait until router has resolved all async before hooks
-// and async components...
-router.onReady(() => {
-  
-  addPreFetchHooks(router, store)
-  
-  appInstance.$mount('#q-app')
-})
-
-

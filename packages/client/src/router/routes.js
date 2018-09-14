@@ -3,7 +3,7 @@
 export default [
   {
     path: '/',
-    component: () => import('src/layouts/blankpage'),
+    component: () => import('src/layouts/main'),
     children: [
       {path: '', name: 'home', component: () => import('src/pages/index/index'), meta: {weight: 10}},
       {
@@ -108,15 +108,6 @@ export default [
         component: () => import('src/pages/settings/settings'),
         meta: {weight: 50}
       }
-    ]
-  },
-  {
-    path: '/auth',
-    component: () => import('src/layouts/guest'),
-    children: [
-      {path: 'login', name: 'auth.login', component: () => import('src/pages/auth/steemconnect/login'), meta: {weight: 10}},
-      {path: 'logout', name: 'auth.logout', component: () => import('src/pages/auth/steemconnect/logout'), meta: {weight: 10}},
-      {path: 'callback', name: 'auth.callback', component: () => import('src/pages/auth/steemconnect/callback'), meta: {weight: 10}}
     ]
   },
   {

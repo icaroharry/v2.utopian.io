@@ -16,13 +16,3 @@ script:
     then npm run build.dev;
     else npm run build;
     fi
-
-## deployment stage.
-deploy:
-  # deploys to dev
-  provider: firebase
-  skip_cleanup: true
-  token: $FIREBASE_TOKEN
-  project: $FIREBASE_DEV_PROJECT_ID
-  on:
-    branch: develop

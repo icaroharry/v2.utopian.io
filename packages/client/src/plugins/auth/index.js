@@ -16,24 +16,25 @@ import linkSteemAccount from './blockchains/steem'
  * @returns {Promise<void>}
  */
 export default async ({ currentRoute, store, redirect, ssrContext }) => {
+  const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
+
   // Login with any external provider
   const loginState = currentRoute.query.state
   if (loginState === 'githublogin') {
     await gitHubLogin({ currentRoute, store, redirect, ssrContext })
-  }
-
-  // Prepare the tokens to enable authenticated calls to the API
-  const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
-  if (cookies.get('access_token')) {
-    await store.dispatch('api/setTokens', {
-      accessToken: cookies.get('access_token'),
-      refreshToken: cookies.get('refresh_token')
-    })
+  } else {
+    // Prepare the tokens to enable authenticated calls to the API
+    if (cookies.get('access_token')) {
+      await store.dispatch('api/setTokens', {
+        accessToken: cookies.get('access_token'),
+        refreshToken: cookies.get('refresh_token')
+      })
+    }
   }
 
   // Link blockchain accounts
   if (loginState === 'steemconnectlogin') {
-    await linkSteemAccount({ currentRoute, store, redirect, ssrContext })
+    await linkSteemAccount({ currentRoute, store })
   }
 
   // Load the user information

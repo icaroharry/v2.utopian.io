@@ -5,8 +5,7 @@ import UFileUploader from 'src/components/project/file-uploader/file-uploader'
 import * as GitHub from '@octokit/rest'
 import { required, minLength } from 'vuelidate/lib/validators'
 import { mapGetters, mapActions } from 'vuex'
-import firebase from 'firebase/app'
-import { uniq } from 'lodash-es'
+import { uniq } from 'lodash'
 
 // create project component export.
 export default {
@@ -171,17 +170,8 @@ export default {
       }
 
       this.startLoading('Saving your project')
-      const method = this.isEditing ? 'edit' : 'create' 
-      
-      const call = firebase.functions().httpsCallable(`api/projects/${method}`)
-      return call(this.project)
-        .then(() => {
-          this.stopLoading()
-          return this.$router.push({ name: 'project.details', params: { name: this.project.id } })
-        }).catch(() => {
-          this.stopLoading()
-          this.showDialog({ title: 'Oops :(', message: 'We couldn\'t save your project. Please try again' })
-        })
+
+      // TODO call store action
     },
     searchGithubRepos (query, done) {
       this.searchGithubRepository(query).then(done)
@@ -260,15 +250,7 @@ export default {
       this.project.images = [uploadUrl]
     },
     loadProject () {
-      const projectsRef = this.firestore.collection('projects')
-
-      return projectsRef.where('id', '==', this.$route.params.name)
-        .get()
-        .then((querySnapshot) => {
-          this.project = querySnapshot.docs[0].data()
-          
-          this.project.tags = Object.values(this.project.tags)
-        })
+      // TODO call store action
     }
   },
   computed: {

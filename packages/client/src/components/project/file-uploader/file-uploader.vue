@@ -40,22 +40,7 @@ export default {
       this.$refs.fileUploader.click()
     },
     upload () {
-      const vm = this
-      vm.uploadTask = vm.$firebaseStorage.child(`images/projects/${Date.now()}`).put(vm.$refs.fileUploader.files.item(0))
-      vm.loading = true
-      vm.uploadTask.then(function (snapshot) {
-        vm.uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-          vm.downloadURL = downloadURL
-          vm.loading = false
-          vm.$emit('upload', downloadURL)
-        }).catch((err) => {
-          vm.loading = false
-          vm.$q.notify(err.message)
-        })
-      }).catch((err) => {
-        vm.loading = false
-        vm.$q.notify(err.message)
-      })
+      // TODO upload to IPFS
     }
   },
   mounted () {

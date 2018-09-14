@@ -2,7 +2,7 @@
 <script>
 // imports.
 import moment from 'moment'
-import { attempt, debounce, last, concat } from 'lodash-es'
+import { attempt, debounce, last, concat } from 'lodash'
 import { mapActions } from 'vuex'
 import UPostPreview from 'src/components/post-preview/post-preview'
 

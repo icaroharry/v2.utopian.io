@@ -7,7 +7,7 @@ import { mapActions } from 'vuex'
 import { get, map } from 'lodash'
 import ace from 'brace'
 import { categories, categoryOptions } from 'src/services/utopian/categories'
-import { render } from 'src/services/steem/markdown'
+import { render } from 'src/services/common/markdown/markdown'
 import UPostPreview from 'src/components/post-preview/post-preview'
 
 // create contribution component.

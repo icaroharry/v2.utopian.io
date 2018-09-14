@@ -1,7 +1,7 @@
 <script>
-import { get } from 'lodash-es'
+import { get } from 'lodash'
 import ULayoutPage from 'src/layouts/parts/page/page'
-import { render } from 'src/services/steem/markdown'
+import { render } from 'src/services/common/markdown/markdown'
 
 export default {
   name: 'PageCreate',

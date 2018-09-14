@@ -12,8 +12,6 @@ import App from 'app/src/App.vue'
 
 
 
-let appPrefetch = typeof App.preFetch === 'function'
-
 
 function getMatchedComponents (to, router) {
   const route = to
@@ -54,37 +52,36 @@ export function addPreFetchHooks (router, store) {
       .map(m => m.c)
 
     
-    if (appPrefetch) {
-      appPrefetch = false
-      components.unshift(App)
-    }
-    
 
     if (!components.length) { return next() }
 
-    let redirected = false
+    let routeUnchanged = true
     const redirect = url => {
-      redirected = true
+      routeUnchanged = false
       next(url)
     }
     const proceed = () => {
       
-      if (!redirected) { next() }
+      if (routeUnchanged) { next() }
     }
 
     
-    Promise.all(
-      components.map(c => {
-        if (redirected) { return }
-        return c.preFetch({
-          store,
-          currentRoute: to,
-          previousRoute: from,
-          redirect
-        })
-      })
+
+    components
+    .filter(c => c && c.preFetch)
+    .reduce(
+      (promise, c) => promise.then(() => routeUnchanged && c.preFetch({
+        store,
+        currentRoute: to,
+        previousRoute: from,
+        redirect
+      })),
+      Promise.resolve()
     )
     .then(proceed)
-    .catch(proceed)
+    .catch(e => {
+      console.error(e)
+      proceed()
+    })
   })
 }

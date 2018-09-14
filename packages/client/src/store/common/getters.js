@@ -1,5 +1,5 @@
 // imports.
-import { get } from 'lodash-es'
+import { get } from 'lodash'
 import { Platform } from 'quasar'
 
 // common store getters.

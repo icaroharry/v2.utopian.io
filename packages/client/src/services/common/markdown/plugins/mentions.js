@@ -1,9 +1,6 @@
 // import lodash get.
 import { get } from 'lodash'
 
-// try to parse the current origin.
-const origin = get((window || {}), 'origin', '/')
-
 // generator for the mention regular expression.
 const factoryMentionRegExp = (ZPCc) => new RegExp('^([a-zA-Z0-9_.-]){1,15}(?!_)(?=$|' + ZPCc + ')')
 
@@ -25,7 +22,7 @@ const validate = (text, position, self) => {
 // normalize the found mentions URL.
 const normalize = (match) => {
   // prepend the origin or base URL to avoid relative links.
-  match.url = (origin || '') + '/' + match.url
+  match.url = get((window || {}), 'origin', '') + '/' + match.url
 }
 
 /**

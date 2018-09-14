@@ -2,11 +2,10 @@
 <script>
 // imports.
 import moment from 'moment'
-import { map, get, filter, debounce, attempt } from 'lodash-es'
+import { map, get, filter, debounce } from 'lodash'
 import UPostPreview from 'src/components/post-preview/post-preview'
 import ULayoutPage from 'src/layouts/parts/page/page'
 import { categories, categoryOptions } from 'src/services/utopian/categories'
-import firebase from 'firebase/app'
 
 // default component export.
 export default {
@@ -72,14 +71,7 @@ export default {
 
     // load posts main method.
     async loadProjects (done) {
-      const listProjects = firebase.functions().httpsCallable(`api/projects/list?q=${this.search}&openSource=${this.opensource}`)
-      this.projects = (await listProjects()).data
-      if (this.projects.length < 10) {
-        attempt(done)
-        this.$refs.infiniteScroll.stop()
-      } else {
-        attempt(done)
-      }
+      // TODO call store action
     },
     getProjectImage (project) {
       return project.images && project.images.length > 0 ? project.images[0] : 'statics/img/fallback.jpg'
@@ -87,8 +79,7 @@ export default {
     async searchProjects (ev) {
       if (ev.keyCode === 13) {
         this.loading = true
-        const listProjects = firebase.functions().httpsCallable(`api/projects/list?q=${this.search}&opensource=${this.openSource}`)
-        this.projects = (await listProjects()).data
+        // TODO call store action
         this.loading = false
       }
     },

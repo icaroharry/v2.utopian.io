@@ -2,10 +2,9 @@
 import UCommentsVotesPopover from 'src/components/comments/votes-popover/votes-popover'
 import UCommentsPayoutPopover from 'src/components/comments/payout-popover/payout-popover'
 import { mapGetters, mapActions } from 'vuex'
-import { get, find, cloneDeep } from 'lodash-es'
+import { get, find, cloneDeep } from 'lodash'
 import { parseCurrencyString } from 'src/services/currencies/formatter'
 import { render } from 'src/services/common/markdown/markdown'
-import { getContent } from 'src/services/steem/posts'
 
 export default {
   name: 'u-comments-actions',
@@ -169,6 +168,8 @@ export default {
       return this.vote(voteOptions)
         .then(() => {
           this.emitVoted()
+          // TODO utopian vote
+          /*
           getContent(this.post.author, this.post.permlink)
             .then(post => {
               this.post = post
@@ -177,6 +178,7 @@ export default {
               this.broadcasting = false
               this.showVoteComponent = false
             })
+           */
         })
         .catch(e => {
           console.log(e)

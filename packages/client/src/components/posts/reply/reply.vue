@@ -1,12 +1,11 @@
 <script>
 import UPostAuthor from 'src/components/posts/author/author'
 import UCommentsVoteItem from 'src/components/comments/vote-item/vote-item'
-// import { parseAsHtml } from 'src/services/steem/parsers/markdown'
-import { get, find, orderBy, map } from 'lodash-es'
+import { get, find, orderBy, map } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 import UCommentsActions from 'src/components/comments/actions/actions'
 // import { parser, sanitizer } from 'src/services/workers/markdown'
-import { render } from 'src/services/steem/markdown'
+import { render } from 'src/services/common/markdown/markdown'
 // post author component (author avatar box).
 export default {
   // component name.

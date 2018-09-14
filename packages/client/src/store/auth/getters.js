@@ -1,4 +1,4 @@
-import { get } from 'lodash-es'
+import { get } from 'lodash'
 
 export const guest = ({ user }) => (user === null)
 export const user = ({ user }) => user

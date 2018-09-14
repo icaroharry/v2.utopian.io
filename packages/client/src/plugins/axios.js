@@ -1,6 +1,6 @@
 // imports.
 import axios from 'axios'
-import { get } from 'lodash-es'
+import { get } from 'lodash'
 
 // create an axios instance.
 export const http = axios.create()

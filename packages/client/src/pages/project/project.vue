@@ -1,6 +1,5 @@
 <script>
 import { mapGetters } from 'vuex'
-import firebase from 'firebase/app'
 
 export default {
   name: 'PageProject',
@@ -25,19 +24,11 @@ export default {
   methods: {
     async loadProject () {
       this.loading = true
-      const projectsRef = this.firestore.collection('projects')
-
-      const querySnapshot = await projectsRef.where('id', '==', this.$route.params.name).get()
-
-      this.project = querySnapshot.docs[0].data()
+      // TODO call store action
       this.loading = false
     },
     async loadContributors () {
-      await firebase.functions().httpsCallable(`/api/projects/contributors?q=${this.$route.params.name}`)()
-        .then((result) => {
-          this.contributors = result.data
-        })
-        .catch((err) => console.log(err))
+      // TODO call store action
     },
     goToRepo () {
       window.open(`https://github.com/${this.project.platforms.github.repository}`, '_blank')
@@ -50,6 +41,7 @@ export default {
     }
   },
   created () {
+    // TODO move to preFetch
     this.loadProject()
     this.loadContributors()
   }

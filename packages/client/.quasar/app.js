@@ -10,6 +10,8 @@
 import './import-quasar.js'
 
 
+import { Quasar } from 'quasar'
+
 
 import App from 'app/src/App.vue'
 
@@ -18,15 +20,15 @@ import createStore from 'app/src/store/index.js'
 
 import createRouter from 'app/src/router/index.js'
 
-export default function () {
+export default function (ssrContext) {
   // create store and router instances
   
   const store = typeof createStore === 'function'
-    ? createStore()
+    ? createStore({ ssrContext })
     : createStore
   
   const router = typeof createRouter === 'function'
-    ? createRouter({store})
+    ? createRouter({ssrContext, store})
     : createRouter
   
   // make router instance available in store
@@ -37,12 +39,14 @@ export default function () {
   // Here we inject the router, store to all child components,
   // making them available everywhere as `this.$router` and `this.$store`.
   const app = {
-    el: '#q-app',
+    
     router,
     store,
     render: h => h(App)
   }
 
+  
+  Quasar.ssrUpdate({ app, ssr: ssrContext })
   
 
   // expose the app, the router and the store.

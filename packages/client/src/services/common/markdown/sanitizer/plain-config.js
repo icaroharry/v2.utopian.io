@@ -1,5 +1,5 @@
 // imports.
-import { flow } from 'lodash-es'
+import { flow } from 'lodash'
 // replace maker.
 const replace = (expression, replacement = '') => (input) => (input.replace(expression, replacement))
 // remove HTML tags.

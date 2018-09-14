@@ -1,5 +1,5 @@
 // imports.
-import { each, toString } from 'lodash-es'
+import { each, toString } from 'lodash'
 // import markdown-it plugins.
 import plugins from '../plugins'
 // import html sanitizer helpers.

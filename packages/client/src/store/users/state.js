@@ -1,3 +1,3 @@
-// steem store state.
 export default {
+  user: null
 }

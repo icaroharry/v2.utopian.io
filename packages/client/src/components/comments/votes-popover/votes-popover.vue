@@ -1,6 +1,6 @@
 <script>
 // imports.
-import { get, map, orderBy, slice } from 'lodash-es'
+import { get, map, orderBy, slice } from 'lodash'
 import UCommentsVoteItem from 'src/components/comments/vote-item'
 
 // post author component (author avatar box).

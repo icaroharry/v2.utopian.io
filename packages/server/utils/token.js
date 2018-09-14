@@ -5,7 +5,6 @@ const getAccessToken = ({ username = '', scopes = ['app'], providerToken = '', p
   const tokenObj = {
     iss: 'utopian.io',
     aud: 'utopian.io',
-    iat: Date.now(),
     scopes
   }
 

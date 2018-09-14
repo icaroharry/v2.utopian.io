@@ -1,7 +1,6 @@
 // imports.
-import { attempt } from 'lodash-es'
+import { attempt } from 'lodash'
 import mdurl from 'mdurl'
-import punycode from 'punycode/punycode.es6'
 
 // general replacer for invalid links.
 const invalid = 'https://invalid-link'
@@ -25,9 +24,6 @@ const normalizeLink = (url) => {
     // also return the invalid link.
     return invalid
   }
-
-  // re-encode the hostname.
-  parsed.hostname = attempt(() => punycode.toASCII(parsed.hostname)) || null
 
   // return the encoded, normalized URL.
   return mdurl.encode(mdurl.format(parsed))

@@ -1,7 +1,6 @@
 <script>
 // imports.
 import { mapGetters, mapActions } from 'vuex'
-// import { toString } from 'lodash-es'
 
 // author header (post author header).
 export default {

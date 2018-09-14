@@ -1,7 +1,7 @@
 <script>
 // imports.
 import UCommentsActions from 'src/components/comments/actions/actions'
-import { renderText } from 'src/services/steem/markdown'
+import { renderText } from 'src/services/common/markdown/markdown'
 import { get } from 'lodash'
 
 // post preview component.
