@@ -37,14 +37,12 @@ module.exports = function (ctx) {
       // webpack configuration.
       extendWebpack: function (cfg) {
         // main loader / js config.
-        /*
         cfg.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules|quasar)/
         })
-        */
         cfg.module.rules.push({
           test: /\.pug$/,
           loader: 'pug-plain-loader'
