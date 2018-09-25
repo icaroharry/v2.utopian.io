@@ -8,7 +8,7 @@ q-toolbar.u-toolbar(color='tertiary', :class="{ desktop: isDesktop }")
       q-btn(@click.native="startGithubLogin", color="primary", icon="mdi-github-circle", label="Login with GitHub")
 
     div.u-toolbar-right.u-toolbar-right-user(v-if="!guest")
-      q-btn.u-add(no-ripple, dense, color="primary", label="Contribution", icon="mdi-plus", @click="redirectToCreate")
+      q-btn.u-add(no-ripple, dense, color="primary", :label="$tc('common.contribution', 1)", icon="mdi-plus", @click="redirectToCreate")
       span.avatar-wrapper
         img.avatar(:src="user.avatarUrl")
         q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]")
