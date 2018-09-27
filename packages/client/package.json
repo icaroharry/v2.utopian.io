@@ -20,7 +20,6 @@
     "axios": "^0.18.0",
     "fs": "0.0.1-security",
     "moment": "^2.22.1",
-    "utf-8-validate": "^4.0.1",
     "vue": "^2.5.16",
     "vue-class-component": "^6.2.0",
     "vue-router": "^3.0.1",
