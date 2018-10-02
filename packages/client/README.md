@@ -1,71 +1,84 @@
-# Utopian.io v2
-
+# Utopian.io Frontend v2
 <p align="center">
   <img src="https://cdn.steemitimages.com/DQmVV3aEvdcwPR6RuJebHWLmibTBtwsLQoc3AnD7RQFE9DA/utopian-post-banner.png" />
 </p>
 
-This repository is the home of the new Utopian.io frontend. Vue.JS & Quasar Framework based.
-
-
-### Contributions.
-
-> **This is a early-stage project, meaning changes happens fast. Before putting work contributing, be sure to open a
-proper issue to discuss your intention and receive proper advice.**
-
-### Project Details.
-
-Some information about this project.
-
-#### Architecture.
-
-So far, the frontend is completely client-side only, meaning no server is required to run the application. Anything that
-can be client-side, without server dependency, should be.
-
-#### Coding Standards.
-
-- Keep components minimal.
-- Security is the primary concern.
-- Javascript Standard Style (enforced by ESLint)
-- PUG (ex-Jade) templates.
-
-#### Security.
-
-The application, does not store credentials on server. Instead, SteemConnect implicit grant is used and the token lives
-on client-side only, and the client side is the solely responsible for broadcasting operations.
-
-Any sensitive data stored on browser is strongly encrypted with `AES-256-GCM` though WebCrypto API.
-
-A secret encryption key is handled by the browser, in a non-exportable manner, meaning the local encryption keys (which
-are safely random) are not visible, not even for the application.
-
-It means a browser security breach would be required to compromise the data.
-
-Also, care is taken on the actual token handling, SteemConnect and any other broadcasting drivers are deep cloned before
-operations, and the cloned instances are destroyed after usage (avoid having tokens on memory at any time, every action
-requires decryption-usage-zeromem).
-
-PIN codes for PBKDF2 derivations are a secondary goal.
-
-@TODO improve encryption process documentation.
+This repository is the home of the new Utopian.io frontend. [Vue.JS](https://vuejs.org/) & [Quasar Framework](https://quasar-framework.org/) based.
 
 ### Install
 
-Be sure to have a `.env` file on the project root folder. The same can be created using .env.example as base.
-
-##### Install dependencies.
-
+##### 1. Install dependencies
+You can skip this if you've bootstrapped the project with lerna  
 ```shell
-npm install
+yarn
 ```
 
-##### Run Development Server
+##### 2. Environment
+If you are part of the Utopian dev team, request the .env file and go to step 5. Otherwise copy/rename the .env.example to the .env file and follow the next steps.
 
-```shell
-npm run dev
+##### 3. Github OAuth App
+If you've already created the app, simply add the missing environment variables.
+
+Utopian uses GitHub accounts to log users in. Since we can't publish the OAuth Dev App Secret, you will need to create your own.
+Create the OAuth app [here](https://github.com/settings/applications/new) and fill the form with the following values: 
+* **Application name:** _My utopian oauth app_
+* **Homepage URL:** _http://localhost:8080_
+* **Application description:** _My utopian oauth app_
+* **Authorization callback URL:** _http://localhost:8080_
+
+When you click on the login button, you'll be redirected to your OAuth app. After authorizing this app, you'll be redirected to the dev website on localhost. 
+
+GitHub gives you a **Client ID** and a **Client Secret**. Set the client id in the .env file. The client secret is used in the server package.
+
+```
+GITHUB_CLIENT_ID='"CLIENT_ID"'
 ```
 
-##### Production Builds
+##### 4. SteemConnect App
+If you've already created the app, simply add the missing environment variables.
+
+Utopian offers the ability to interact with the [STEEM Blockchain](https://steem.io/) using [SteemConnect](https://steemconnect.com/). Much like in GitHub, we can't provide the client secret. You'll need your own app.
+The creation of a SteemConnect app costs 3 Steem (Oct 2018) but I'm sure your first contribution will cover the cost!
+
+To create a SteemConnect app, log in with your Steem account and go [there](https://steemconnect.com/apps/create).
+You can learn more about SteemConnect and how to use it by reading this [article](https://steemit.com/steemconnect/@noisy/how-to-configure-steemconnect-v2-and-use-it-with-your-application-how-it-works-and-how-it-is-different-from-v1). 
+
+Once you've created your app, fill the client id in the .env file. The client secret will be needed for the server package.
+
+```
+STEEMCONNECT_CLIENT_ID='"my-utopian-app"'
+```
+
+##### 5. Backend
+Refer to the [backend documentation](https://github.com/utopian-io/v2.utopian.io/tree/develop/packages/server/README.md) to finish setting up the project
+
+### Development
+In the root folder, run
+```shell
+yarn run dev
+```
+This will start the Quasar app on port 8080 and the backend server on port 5000. Please install the backend server before.
+
+### Tests
+Coming soon
+
+### Production
+
+##### Build
+To build the project for production, run the command below. This will compile the Quasar app in the dist folder.
 
 ```shell
-npm run build
+yarn run build
 ```
+##### Deploy
+Simply run
+
+```shell
+node ./dist/ssr-mat/index.js
+```
+We recommend using [pm2](http://pm2.keymetrics.io/)
+
+Or use [Docker](https://www.docker.com/)!
+
+### Contributions
+**This is a early-stage project, meaning changes happen fast. Before contributing to this project, get in touch with us on [Discord](https://discord.gg/CA9pqES).**
