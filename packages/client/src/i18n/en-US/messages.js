@@ -1,16 +1,29 @@
 export default {
   common: {
     back: 'back',
+    by: 'by',
     contribution: 'contribution | contributions',
+    contribute_to_project: 'contribute to this project',
     downvote: 'downvote',
     goBack: 'go back',
     language: 'Language',
+    list_on_utopian_text: 'List your Project on Utopian opensource platform.',
+    list_on_utopian_subtext: 'Utopian.io will reward contributors for the hard work in your project.',
+    moderator: 'moderator | moderators',
     nothingHere: 'nothing here',
+    popular_projects: 'popular projects',
     post: 'post',
+    project: 'project | projects',
+    recent_contributions: 'recent contributions',
     replied: 'replied',
     reply: 'reply',
+    see_all_contributions: 'See all contributions',
+    see_all_projects: 'See all projects',
     sorry: 'sorry',
-    upvote: 'upvote'
+    sponsor: 'sponsor | sponsors',
+    submit_my_project: 'Submit my project',
+    upvote: 'upvote',
+    wallet: 'wallet'
   },
   categories: {
     analysis: 'analysis',

@@ -2,28 +2,28 @@ div
   div.header.q-pb-lg
     q-page-container.container
       div.gt-sm.row.justify-center.q-my-lg.q-pb-lg.menu
-        router-link(:to="{ name: 'contributions' }") CONTRIBUTIONS
-        a(href="https://join.utopian.io/sponsors/" target="_blank") SPONSORS
-        router-link(:to="{ name: 'project.search' }") PROJECTS
-        router-link(:to="{ name: 'home' }", disabled) WALLET
-        router-link(:to="{ name: 'home' }", disabled) MODERATORS
+        router-link(:to="{ name: 'contributions' }") {{$tc('common.contribution', 2)}}
+        a(href="https://join.utopian.io/sponsors/" target="_blank") {{$tc('common.sponsor', 2)}}
+        router-link(:to="{ name: 'project.search' }") {{$tc('common.project', 2)}}
+        router-link(:to="{ name: 'home' }", disabled) {{$t('common.wallet')}}
+        router-link(:to="{ name: 'home' }", disabled) {{$tc('common.moderator', 2)}}
       div.row
         div.col-lg-6.offset-lg-1.projects-slider
           q-carousel.project-images(color="white", ref="mainCarousel")
-            q-carousel-slide(v-for="project in featuredProjects", :img-src="project.images[0]", :key="project.slug" v-if="project.featured_order <= 3")
+            q-carousel-slide(v-for="project in featuredProjects.slice(0, 3)", :img-src="project.images[0]", :key="project.slug")
         div.col-lg-4.text-center
           q-carousel.project-info(color="white", ref="infoCarousel", no-swipe)
-            q-carousel-slide(v-for="project in featuredProjects", :key="project.slug" v-if="project.featured_order <= 3")
+            q-carousel-slide(v-for="project in featuredProjects.slice(0, 3)", :key="project.slug")
               q-card.project-card
                 q-card-title
                   | {{ project.name }}
                   span(slot="subtitle")
-                    | {{ 'by ' }}
+                    | {{ $t('common.by') }}&nbsp;
                     span.text-dark.q-subheading {{ project.creator }}
                 q-card-main.q-title.text-weight-light.text-dusk
                   | {{ project.description }}
                 q-card-actions(align="center")
-                  q-btn(label="Contribute to this project", color="primary" @click="goToProjectPage(project.slug)")
+                  q-btn(:label="$t('common.contribute_to_project')", color="primary" @click="goToProjectPage(project.slug)")
 
           q-btn.carousel-arrow(
             flat,
@@ -49,12 +49,11 @@ div
   div.main
     q-page-container.container
       div.flex.justify-between.contributions-header
-        div.q-title.q-my-lg RECENT CONTRIBUTIONS
+        div.q-title.q-my-lg {{$t('common.recent_contributions')}}
         router-link(:to="{ name: 'contributions' }") 
           div.pt
-            div.text-right.mb See all
+            div.text-right.mb {{$t('common.see_all_contributions')}}
             hr
-            div.mt Contributions  
       div.row.contributions.gutter-sm
         div.col-md-12.col-lg-4(v-for="(post, index) in contributions", v-if="!loading")
           u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50")
@@ -69,13 +68,12 @@ div
       //-     u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50", :loading="loading")
 
       div.flex.justify-between.contributions-header
-        div.q-title.q-my-lg.q-pt-lg POPULAR PROJECTS
+        div.q-title.q-my-lg.q-pt-lg {{$t('common.popular_projects')}}
         router-link.q-pt-lg(:to="{ name: 'project.search' }") 
           div.pt
-            div.text-right.mb See all
+            div.text-right.mb {{$t('common.see_all_projects')}}
             hr
-            div.mt Projects
-      div.row.inline.projects.gutter-sm
+      div.row.projects.gutter-sm
         div(v-for="(project, index) in featuredProjects" v-if="project.featured_order >= 4").col-md-12.col-lg-4
           q-card.inline.round-borders(color="white", text-color="grey-7")
             q-card-media(:style="'background-image: url(' + project.images[0] + ')'" @click.native="goToProjectPage(project.id)")
@@ -96,8 +94,8 @@ div
         div.row.no-wrap.items-center
           img.blue-text(src="~assets/img/skyline.svg")
           div.row.column
-            p.blue-text.q-mb-sm List your Project on Utopian opensource platform.
-            p.q-mb-none Utopian.io will reward contributors for the hard work in your project.
+            p.blue-text.q-mb-sm {{$t('common.list_on_utopian_text')}}
+            p.q-mb-none {{$t('common.list_on_utopian_subtext')}}
         div
           q-btn(color="primary", @click="redirectToCreateProject")
-            | Submit my project
+            | {{$t('common.submit_my_project')}}
