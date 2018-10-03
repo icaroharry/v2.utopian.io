@@ -1,5 +1,5 @@
-import API from 'src/services/api'
 import { Notify } from 'quasar'
+import API from 'src/plugins/api'
 
 export const linkAccount = async (context, data) => {
   const payload = await API.call({

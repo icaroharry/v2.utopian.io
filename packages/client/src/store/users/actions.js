@@ -1,5 +1,5 @@
-import API from 'src/services/api'
 import { Cookies } from 'quasar'
+import API from 'src/plugins/api'
 
 export const isUsernameAvailable = async (context, username) => {
   const payload = await API.call({

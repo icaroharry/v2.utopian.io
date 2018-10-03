@@ -1,4 +1,4 @@
-import API from 'src/services/api'
+import API from 'src/plugins/api'
 
 export const me = async (context) => {
   const payload = await API.call({

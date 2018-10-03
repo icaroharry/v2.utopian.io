@@ -1,4 +1,4 @@
-import API from 'src/services/api'
+import API from 'src/plugins/api'
 
 export const getFeaturedProjects = async (context) => {
   const payload = await API.call({
