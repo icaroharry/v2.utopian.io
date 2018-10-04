@@ -1,3 +1,4 @@
+import { Cookies } from 'quasar'
 import API from 'src/plugins/api'
 
 export const me = async (context) => {
@@ -12,5 +13,7 @@ export const me = async (context) => {
 }
 
 export const logout = ({ dispatch, commit }) => {
-  // TODO proper logout
+  Cookies.remove('access_token')
+  Cookies.remove('refresh_token')
+  commit('clear')
 }
