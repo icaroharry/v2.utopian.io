@@ -1,4 +1,1 @@
-// common store state.
-export default {
-  //
-}
+export default () => ({ })

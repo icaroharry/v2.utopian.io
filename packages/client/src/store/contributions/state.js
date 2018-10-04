@@ -1,6 +1,1 @@
-// Contributions Store - State.
-
-// default export.
-export default {
-
-}
+export default () => ({ })
