@@ -15,7 +15,9 @@
   },
   "permissions": [
     "tabs",
-    "storage"
+    "storage",
+    "cookies",
+    "http://*.utopian.io/"
   ],
   "options_ui": {
     "page": "options.html"
