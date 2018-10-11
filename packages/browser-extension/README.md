@@ -1,3 +1,6 @@
+## Utopian Extension
+
+This is a browser extension which can be used to tip any creator of a github issue or pull request. It uses the webapp's login flow to get authenticated. Every Github User will have a unique account which will have a seperate virtual wallet. You can tip any issue or pull request using any Cryptocurrency. The currency will then be transferred to Utopian account as escrow, and the recipient will get notified by a comment under the issue or pull request. They can install the extension and claim the tip. Users can withdraw the tip to their steem account whenever they wishes.
 
 ## Installation
 1. Clone the repository `git clone https://github.com/EmailThis/extension-boilerplate.git`
