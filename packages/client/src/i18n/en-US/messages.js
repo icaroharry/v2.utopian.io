@@ -17,6 +17,7 @@ export default {
     recent_contributions: 'recent contributions',
     replied: 'replied',
     reply: 'reply',
+    save: 'Save',
     see_all_contributions: 'See all contributions',
     see_all_projects: 'See all projects',
     sorry: 'sorry',
@@ -38,5 +39,33 @@ export default {
     translations: 'translations',
     tutorials: 'tutorials',
     'video-tutorials': 'video-tutorials'
+  },
+  projects: {
+    'create-edit': {
+      completed: 'completed',
+      documentation_page: 'Documentation page',
+      images: 'Images',
+      images_help: 'This is the first thing that people will see when they come across your project. 2000x1130 ideal for hi-res. Select a maximum of 5 images.',
+      license: 'License',
+      not_opensource: 'The code of my project is closed',
+      project_details: 'Project details',
+      project_details_placeholder: 'Write everything about your project…',
+      project_name: 'Project name',
+      project_tags: 'Project tags',
+      project_tags_help: 'Please provide between 3 and 5 tags',
+      repositories: 'Repositories',
+      short_description: 'Short description',
+      short_description_help: 'Give people a sense about your project…',
+      subtitle: 'Make a great first impression with all the project information filled and great images about your project.',
+      title: 'Bring your project to Utopian.io',
+      web_page: 'Web page',
+      error: {
+        not_project_admin: 'You must be an admin of the project.',
+        project_exists: 'You already have a project with this name.'
+      }
+    }
+  },
+  errors: {
+    file_upload: 'An error occurred while uploading'
   }
 }

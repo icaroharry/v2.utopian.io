@@ -10,7 +10,7 @@ div
       div.row
         div.col-lg-6.offset-lg-1.projects-slider
           q-carousel.project-images(color="white", ref="mainCarousel")
-            q-carousel-slide(v-for="project in featuredProjects.slice(0, 3)", :img-src="project.images[0]", :key="project.slug")
+            q-carousel-slide(v-for="project in featuredProjects.slice(0, 3)", :img-src="project.medias[0]", :key="project.slug")
         div.col-lg-4.text-center
           q-carousel.project-info(color="white", ref="infoCarousel", no-swipe)
             q-carousel-slide(v-for="project in featuredProjects.slice(0, 3)", :key="project.slug")
@@ -76,7 +76,7 @@ div
       div.row.projects.gutter-sm
         div(v-for="(project, index) in featuredProjects" v-if="project.featured_order >= 4").col-md-12.col-lg-4
           q-card.inline.round-borders(color="white", text-color="grey-7")
-            q-card-media(:style="'background-image: url(' + project.images[0] + ')'" @click.native="goToProjectPage(project.id)")
+            q-card-media(:style="'background-image: url(' + project.medias[0] + ')'" @click.native="goToProjectPage(project.id)")
             q-card-title(@click.native="goToProjectPage(project.id)") {{project.name}}
             q-card-main
               p.short-description {{project.description}}

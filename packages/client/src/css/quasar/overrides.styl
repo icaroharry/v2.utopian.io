@@ -60,9 +60,10 @@
     padding-right 4px
     border-right 1px solid $neutral
   }
-
   .q-field-label {
-    font-size 14px
+    color #000
+    font-family 'Lato'
+    font-size 16px
     font-weight 600
   }
   .q-option-label {
@@ -70,22 +71,26 @@
     color #979797
   }
   .q-input-target {
-    line-height 1em
     overflow visible
+    font-size 12px
+    height 36px
+    font-family 'Noto Sans', sans-serif
   }
   margin: 0 0 28px 0
   .q-field-content {
     .q-if, .q-input, .q-chips-input {
       background white
-      border-left  1px solid $neutral
-      border-top 1px solid $neutral
-      border-right 1px solid $neutral
-      border-bottom none
+      border 1px solid $neutral
       border-radius 2px
     }
 
     .q-if {
-      padding 6px 8px 8px 8px
+      padding 6px 8px 8px 16px
+    }
+  }
+  .q-list {
+    &:not(:last-child) {
+      border-bottom none
     }
   }
 }

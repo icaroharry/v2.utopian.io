@@ -20,6 +20,11 @@ export default class API {
         // TODO bad token remove logged user and token from store
         // Cookies.remove('access_token')
         // Cookies.remove('refresh_token')
+      // Validation errors
+      } else if (err.response.status === 422) {
+        return {
+          error: err.response.data.message
+        }
       }
       return err.response.data
     }

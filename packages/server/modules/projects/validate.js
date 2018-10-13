@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const { licenses } = require('../../utils/constants')
 
 const getProjectBySlug = {
   params: {
@@ -18,40 +19,55 @@ const getProjects = {
   }
 }
 
-const saveProject = {
+const createProject = {
   payload: {
-    description: Joi.string().trim(),
-    details: Joi.string().required(),
     name: Joi.string().trim().required(),
-    images: Joi.array().required(),
-    tags: Joi.array().required(),
-    platforms: Joi.object(),
-    website: Joi.string().trim(),
-    docs: Joi.string().trim(),
-    license: Joi.string().trim().allow('afl-3.0', 'apache-2.0', 'artistic-2.0', 'bs1-1.0', 'bsd-2-clause', 'bsd-3-clause', 'bsd-3-clause-clear', 'cc', 'cc0-1.0', 'cc-by-4.0', 'cc-by-sa-4.0', 'wtfpl', 'ecl-2.0', 'epl-1.0', 'eupl-1.1', 'agpl-3.0', 'gpl', 'gpl-2.0', 'gpl-3.0', 'lgpl', 'lgpl-2.1', 'lgpl-3.0', 'isc', 'lppl-1.3c', 'ms-pl', 'mit', 'mpl-2.0', 'osl-3.0', 'postgresql', 'ofl-1.1', 'ncsa', 'unlicense', 'zlib')
+    repositories: Joi.array().unique().required(),
+    website: Joi.string().trim().uri(),
+    docs: Joi.string().trim().uri(),
+    license: Joi.string().trim().allow(licenses),
+    medias: Joi.array().required(),
+    description: Joi.string().trim().required(),
+    details: Joi.string().trim().required(),
+    tags: Joi.array().min(3).max(5).unique().items(Joi.string().trim().alphanum()).required()
   }
 }
 
-const editProjectBySlug = {
+const editProject = {
   payload: {
-    description: Joi.string().trim(),
-    details: Joi.string().required(),
+    _id: Joi.string().trim().required(),
     name: Joi.string().trim().required(),
-    images: Joi.array().required(),
-    tags: Joi.array().required(),
-    platforms: Joi.object(),
-    website: Joi.string().trim(),
-    docs: Joi.string().trim(),
-    license: Joi.string().trim().allow('afl-3.0', 'apache-2.0', 'artistic-2.0', 'bs1-1.0', 'bsd-2-clause', 'bsd-3-clause', 'bsd-3-clause-clear', 'cc', 'cc0-1.0', 'cc-by-4.0', 'cc-by-sa-4.0', 'wtfpl', 'ecl-2.0', 'epl-1.0', 'eupl-1.1', 'agpl-3.0', 'gpl', 'gpl-2.0', 'gpl-3.0', 'lgpl', 'lgpl-2.1', 'lgpl-3.0', 'isc', 'lppl-1.3c', 'ms-pl', 'mit', 'mpl-2.0', 'osl-3.0', 'postgresql', 'ofl-1.1', 'ncsa', 'unlicense', 'zlib'),
-    status: Joi.string().trim(),
-    updatedAt: Joi.date().required()
+    repositories: Joi.array().unique().required(),
+    website: Joi.string().optional().trim().uri(),
+    docs: Joi.string().optional().trim().uri(),
+    license: Joi.string().trim().allow(licenses),
+    medias: Joi.array().required(),
+    description: Joi.string().trim().required(),
+    details: Joi.string().trim().required(),
+    tags: Joi.array().min(3).max(5).unique().items(Joi.string().trim().alphanum()).required()
+  }
+}
+
+const isNameAvailable = {
+  payload: {
+    _id: Joi.string(),
+    name: Joi.string().trim().required()
+  }
+}
+
+const isProjectAdmin = {
+  payload: {
+    project: Joi.string().trim().required(),
+    type: Joi.string().trim().required()
   }
 }
 
 module.exports = {
-  saveProject,
-  editProjectBySlug,
+  createProject,
+  editProject,
   getProjectBySlug,
   deleteProjectBySlug,
-  getProjects
+  getProjects,
+  isNameAvailable,
+  isProjectAdmin
 }

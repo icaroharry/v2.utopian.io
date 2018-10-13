@@ -44,20 +44,38 @@ routes.push([
   },
   {
     method: 'PUT',
-    path: '/v1/project/{slug}',
-    handler: (req, h, next) => Handlers.editProjectBySlug(req, h, next),
+    path: '/v1/project',
+    handler: (req, h, next) => Handlers.editProject(req, h, next),
     options: {
       tags: ['api', 'projects'],
-      validate: Validate.editProjectBySlug
+      validate: Validate.editProject
     }
   },
   {
     method: 'POST',
     path: '/v1/project',
-    handler: (req, h, next) => Handlers.saveProject(req, h, next),
+    handler: (req, h, next) => Handlers.createProject(req, h, next),
     options: {
       tags: ['api', 'projects'],
-      validate: Validate.saveProject
+      validate: Validate.createProject
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/projects/isnameavailable',
+    handler: (req, h, next) => Handlers.isNameAvailable(req, h, next),
+    options: {
+      tags: ['api', 'projects'],
+      validate: Validate.isNameAvailable
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/projects/isprojectadmin',
+    handler: (req, h, next) => Handlers.isProjectAdmin(req, h, next),
+    options: {
+      tags: ['api', 'projects'],
+      validate: Validate.isProjectAdmin
     }
   }
 ])

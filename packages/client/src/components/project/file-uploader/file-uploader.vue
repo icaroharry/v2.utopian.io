@@ -21,7 +21,7 @@ export default {
   data () {
     return {
       progressUpload: 0,
-      file: File,
+      file: null,
       uploadTask: '',
       downloadURL: '',
       fileName: '',

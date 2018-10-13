@@ -29,6 +29,7 @@ export default ({app, Vue, ssrContext}) => {
   const locale = getDefaultLocale(ssrContext)
   Vue.use(VueI18n)
   app.i18n = new VueI18n({
+    silentTranslationWarn: true,
     locale,
     fallbackLocale: 'en-US',
     messages,

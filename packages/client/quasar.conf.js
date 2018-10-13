@@ -79,6 +79,7 @@ module.exports = function (ctx) {
         'QCollapsible',
         'QDatetime',
         'QDatetimePicker',
+        'QEditor',
         'QFab',
         'QFabAction',
         'QField',

@@ -1,0 +1,49 @@
+@import "~variables"
+.project-form-container {
+  margin-top 20px
+  .q-page-sticky {
+    > span {
+      width 100%
+    }
+  }
+  .create-edit-project-progress {
+    margin-top 28px
+    background #fff
+    @media (max-width $breakpoint-sm-max) {
+      margin-top 0
+    }
+    &.fixed {
+      top 45px
+      width inherit
+      max-width ($breakpoint-lg-max / 3 - 22)px
+      @media (min-width $breakpoint-md-min) and (max-width $breakpoint-md-max) {
+        max-width calc(33.3333% - 23px)
+      }
+      @media (max-width $breakpoint-sm-max) {
+        position  initial
+        max-width inherit
+      }
+    }
+    .q-list-header {
+      text-align right
+      text-transform uppercase
+      color #9d9d9d
+      font-family 'Noto Sans', sans-serif
+      padding-bottom 0
+      font-size 12px
+      min-height 12px
+      line-height 12px
+    }
+    .q-progress {
+      border-radius 5px
+      margin-bottom 20px
+      .q-progress-track {
+        background-color #e0e2e5
+        opacity 1
+      }
+    }
+    button {
+      margin-top 8px
+    }
+  }
+}

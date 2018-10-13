@@ -17,7 +17,7 @@ export const mapGithubResults = (result) => {
     return {
       id: get(item, 'id', null),
       label: get(item, 'full_name', null),
-      value: get(item, 'full_name', null),
+      value: get(item, 'html_url', null),
       avatar: get(item, 'owner.avatar_url', null)
     }
   })

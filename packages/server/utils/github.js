@@ -54,7 +54,37 @@ const getUserInformation = async (token) => {
   }
 }
 
+const getUserProjectPermission = async ({ token, owner, name }) => {
+  try {
+    const githubResponse = await Axios({
+      method: 'POST',
+      headers: {
+        'Authorization': `bearer ${token}`
+      },
+      url: 'https://api.github.com/graphql',
+      data: {
+        query: `
+        query {
+          repository(owner: "${owner}", name: "${name}") {
+            viewerPermission
+          }
+        }
+        `
+      }
+    })
+    if (githubResponse.status === 200 && githubResponse.data) {
+      return githubResponse.data.data.repository.viewerPermission
+    }
+
+    throw Boom.badData('github-get-user-permission')
+  } catch (err) {
+    console.log(err)
+    throw Boom.badData('github-get-user-permission')
+  }
+}
+
 module.exports = {
   getUserInformation,
-  requestGitHubAccessToken
+  requestGitHubAccessToken,
+  getUserProjectPermission
 }

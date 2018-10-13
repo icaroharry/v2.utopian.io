@@ -17,6 +17,7 @@ export default {
     recent_contributions: 'contributions récentes',
     replied: 'a répondu',
     reply: 'répondre',
+    save: 'enregistrer',
     see_all_contributions: 'Voir toutes les contributions',
     see_all_projects: 'Voir tous les projets',
     sorry: 'désolé',
@@ -38,5 +39,33 @@ export default {
     translations: 'traductions',
     tutorials: 'tutoriels',
     'video-tutorials': 'tutoriels vidéo'
+  },
+  projects: {
+    'create-edit': {
+      completed: 'complété',
+      documentation_page: 'Page de la documentation',
+      images: 'Images',
+      images_help: 'C\'est la première chose que les utilisateurs verront quand ils tomberont sur votre projet. 2000x1130 idéale pour la hi-res.',
+      license: 'License',
+      not_opensource: 'Le code de mon projet est pas Open Source',
+      project_details: 'Détails du project',
+      project_details_placeholder: 'Écrivez une description complète de votre projet…',
+      project_name: 'Nom du projet',
+      project_tags: 'Tags du projet',
+      project_tags_help: 'Veuillez saisir entre 3 et 5 tags',
+      repositories: 'Référentiels',
+      short_description: 'Description courte',
+      short_description_help: 'Donnez aux utilisateurs une idée de votre projet…',
+      subtitle: 'Faites bonne impression en renseignant toutes les informations du projet et choisissant de belles images. Choisissez jusque 5 images.',
+      title: 'Affichez votre projet sur Utopian.io',
+      web_page: 'Site internet',
+      error: {
+        not_project_admin: 'Vous devez être un admin du project.',
+        project_exists: 'Vous avez déjà un projet avec ce nom.'
+      }
+    }
+  },
+  errors: {
+    file_upload: 'Une erreur est survenue en chargeant'
   }
 }
