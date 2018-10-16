@@ -37,4 +37,26 @@ yarn run dev
 
 ### Contributions
 
-Refer to the contribution section of each project.
+If you want to help us build this great project, these are the steps you will have to take to get started.
+
+Please open the [issues page](https://github.com/utopian-io/v2.utopian.io/issues). 
+
+You can work on any issue that is prefixed with [OT] and is in the **To do column** of the [project board](https://github.com/orgs/utopian-io/projects/4).
+
+All issues have been assigned a difficulty score from 1 to 5. A score of 1 is an easy task that can be completed by a beginner. 5 is for experienced developers who have a good understanding of the project and the technologies we are using.
+
+You've picked one? Great.
+
+Now open the Jira link provided in the description. Make sure that the task is in the **READY FOR DEV** status and that all the linked issues in the _is blocked by_ section are in the **DONE** status. 
+
+Still good? Read the description carefully and check the zeplin links.
+
+Are you feeling up to the task? DM @gregory[mod] on the [utopian discord](https://discord.gg/CA9pqES) with the following message:
+> Hi,
+> I would like to start working on the task _JIRA_URL_.
+>
+> A little bit about me: _a short description of your experience as a developer_
+
+You will then join a dedicated discord channel and meet your fellow collaborators. **Please read the pinned messages of the channel before doing anything else.**
+
+Let's get to work!

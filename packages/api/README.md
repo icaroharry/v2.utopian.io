@@ -107,4 +107,4 @@ We recommend using [pm2](http://pm2.keymetrics.io/)
 Or use [Docker](https://www.docker.com/)!
 
 ### Contributions
-**This is a early-stage project, meaning changes happens fast. Before contributing to this project get in touch with us on [Discord](https://discord.gg/CA9pqES).**
+Please refer to the root [README.md](https://github.com/utopian-io/v2.utopian.io/blob/develop/README.md)
