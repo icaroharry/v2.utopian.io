@@ -1,12 +1,22 @@
 {
-  "name": "@utopian/utopian",
+  "name": "@utopian/client",
   "version": "2.0.0",
+  "license": "MIT",
+  "author": "Utopian Company SRLs",
   "description": "Utopian.io frontend.",
   "productName": "Utopian",
   "cordovaId": "io.utopian.app",
-  "author": "Utopian dev team <info@utopian.io>",
   "private": true,
-  "license": "MIT",
+  "engines": {
+    "node": ">= 10.0.0",
+    "npm": ">= 5.6.0",
+    "yarn": ">= 1.6.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 10"
+  ],
   "scripts": {
     "build": "quasar build -m ssr -t mat",
     "dev": "quasar dev -m ssr -t mat",
@@ -72,14 +82,5 @@
     "typeface-roboto-mono": "^0.0.54",
     "typeface-source-sans-pro": "0.0.54",
     "vue-i18n": "^7.7.0"
-  },
-  "engines": {
-    "node": ">= 8.9.0",
-    "npm": ">= 5.6.0"
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 10"
-  ]
+  }
 }

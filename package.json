@@ -1,6 +1,7 @@
 {
-  "name": "root",
+  "name": "@utopian/root",
   "private": true,
+  "license" : "MIT",
   "scripts": {
     "precommit": "lerna run --concurrency 1 --stream precommit",
     "dev": "lerna run dev --stream"

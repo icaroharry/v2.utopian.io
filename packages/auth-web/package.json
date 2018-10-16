@@ -1,11 +1,17 @@
 {
-  "name": "auth-web",
+  "name": "@utopian/auth",
   "version": "1.0.0",
+  "license": "MIT",
+  "author": "Utopian Company SRLs",
   "description": "An Authentication webapp for Utopian",
   "productName": "Authentication Webapp",
   "cordovaId": "org.cordova.quasar.app",
-  "author": "Mohit Sharma <msvbs98@gmail.com>",
   "private": true,
+  "engines": {
+    "node": ">= 10.0.0",
+    "npm": ">= 5.6.0",
+    "yarn": ">= 1.6.0"
+  },
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
     "test": "echo \"No test specified\" && exit 0"
@@ -27,11 +33,6 @@
     "eslint-plugin-vue": "^4.3.0",
     "quasar-cli": "^0.17.19",
     "strip-ansi": "=3.0.1"
-  },
-  "engines": {
-    "node": ">= 8.9.0",
-    "npm": ">= 5.6.0",
-    "yarn": ">= 1.6.0"
   },
   "browserslist": [
     "> 1%",
