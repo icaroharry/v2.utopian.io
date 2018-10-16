@@ -16,7 +16,7 @@ The project uses yarn. Refer to its [documentation](https://yarnpkg.com/en/docs/
 ##### Install lerna
 
 ```shell
-npm install -g lerna
+yarn global add lerna
 ```
 
 ##### Install dependencies of all the packages
