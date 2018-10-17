@@ -4,19 +4,19 @@ div
       template(slot="main")
         div.row(v-if="!loading")
           div.col-md-8
-            img.project-image(:src="project.images[0]")
+            img.project-image(:src="project.medias.find(m => m.type === 'image').src")
           div.project-description.col-md-4.column.justify-between
             div
               div.row.project-title.inline.no-wrap.items-center
-                img.project-avatar(:src="project.images[0]")
+                img.project-avatar(:src="project.medias.find(m => m.type === 'image').src")
                 span.q-headline.project-name {{ project.name }}
-                q-btn(@click="goToEditPage" v-if="account() && project.creator === account().name", flat round color="primary" icon="mdi-pencil")
+                q-btn(@click="goToEditPage" v-if="account() && project.owner === account().name", flat round color="primary" icon="mdi-pencil")
               p {{ project.description }}
               p.q-caption.text-grey
                 span.row.items-center.justify-start.project-separator
-                  img.project-owner-avatar(:src="'https://steemitimages.com/u/' + project.creator + '/avatar'")
+                  img.project-owner-avatar(:src="'https://steemitimages.com/u/' + project.owner + '/avatar'")
                   span.project-created-by created by
-                  span.q-body-1.text-black {{project.creator}}
+                  span.q-body-1.text-black {{project.owner}}
             div.row.project-title.inline.nowrap.items-center.project-stats
               div.row.column.col-md-12.items-start(v-if="project.website")
                 span.q-body-1.uppercase.text-grey webpage

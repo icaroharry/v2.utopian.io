@@ -31,7 +31,7 @@ export default {
       // TODO call store action
     },
     goToRepo () {
-      window.open(`https://github.com/${this.project.platforms.github.repository}`, '_blank')
+      window.open(this.project.repositories[0].value, '_blank')
     },
     contribute () {
       return this.$router.push({ name: 'create' })

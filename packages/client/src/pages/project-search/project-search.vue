@@ -74,7 +74,7 @@ export default {
       // TODO call store action
     },
     getProjectImage (project) {
-      return project.images && project.images.length > 0 ? project.images[0] : 'statics/img/fallback.jpg'
+      return project.medias.find(m => m.type === 'image').src
     },
     async searchProjects (ev) {
       if (ev.keyCode === 13) {

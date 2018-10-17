@@ -10,7 +10,7 @@ div
       div.row
         div.col-lg-6.offset-lg-1.projects-slider
           q-carousel.project-images(color="white", ref="mainCarousel")
-            q-carousel-slide(v-for="project in featuredProjects.slice(0, 3)", :img-src="project.medias[0]", :key="project.slug")
+            q-carousel-slide(v-for="project in featuredProjects.slice(0, 3)", :img-src="project.medias.find(m => m.type === 'image').src", :key="project.slug")
         div.col-lg-4.text-center
           q-carousel.project-info(color="white", ref="infoCarousel", no-swipe)
             q-carousel-slide(v-for="project in featuredProjects.slice(0, 3)", :key="project.slug")
@@ -19,7 +19,7 @@ div
                   | {{ project.name }}
                   span(slot="subtitle")
                     | {{ $t('common.by') }}&nbsp;
-                    span.text-dark.q-subheading {{ project.creator }}
+                    span.text-dark.q-subheading {{ project.owner }}
                 q-card-main.q-title.text-weight-light.text-dusk
                   | {{ project.description }}
                 q-card-actions(align="center")
@@ -60,13 +60,6 @@ div
         div.col-md-12.col-lg-4(v-for="(post, index) in emptyContributions", v-if="loading")
           u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50", :loading="loading")
 
-      //- div.q-title.q-my-lg.q-pt-lg RECENT TASK REQUESTS
-      //- div.row.contributions.gutter-sm
-      //-   div.col-md-12.col-lg-4(v-for="(post, index) in visibleTaskRequests", v-if="!loading")
-      //-     u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50")
-      //-   div.col-md-12.col-lg-4(v-for="(post, index) in emptyContributions", v-if="loading")
-      //-     u-post-preview.round-borders.items-stretch(:post="post", exceptSize="100", titleSize="50", :loading="loading")
-
       div.flex.justify-between.contributions-header
         div.q-title.q-my-lg.q-pt-lg {{$t('common.popular_projects')}}
         router-link.q-pt-lg(:to="{ name: 'project.search' }") 
@@ -74,10 +67,10 @@ div
             div.text-right.mb {{$t('common.see_all_projects')}}
             hr
       div.row.projects.gutter-sm
-        div(v-for="(project, index) in featuredProjects" v-if="project.featured_order >= 4").col-md-12.col-lg-4
+        div(v-for="project in featuredProjects" v-if="project.featured_order >= 4").col-md-12.col-lg-4
           q-card.inline.round-borders(color="white", text-color="grey-7")
-            q-card-media(:style="'background-image: url(' + project.medias[0] + ')'" @click.native="goToProjectPage(project.id)")
-            q-card-title(@click.native="goToProjectPage(project.id)") {{project.name}}
+            q-card-media(:style="'background-image: url(' + project.medias.find(m => m.type === 'image').src + ')'" @click.native="goToProjectPage(project.slug)")
+            q-card-title(@click.native="goToProjectPage(project.slug)") {{project.name}}
             q-card-main
               p.short-description {{project.description}}
               p
@@ -88,7 +81,7 @@ div
                   img.align-bottom(:src="'https://steemitimages.com/u/' + project.owner +'/avatar'")
                 div.author-details
                   div.name
-                    span {{ '@' + project.creator  }}
+                    span {{ '@' + project.owner  }}
 
       div.row.submit-project.round-borders.justify-between.items-center.q-mt-lg
         div.row.no-wrap.items-center

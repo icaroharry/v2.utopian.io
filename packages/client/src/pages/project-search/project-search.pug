@@ -28,7 +28,7 @@ u-layout-page.u-page-project-search
                   img.align-bottom(:src="'https://steemitimages.com/u/' + project.owner +'/avatar'")
                 div.author-details
                   div.name
-                    span {{ '@' + project.creator  }}
+                    span {{ '@' + project.owner  }}
 
       // spinner for infinite scroll loading.
       q-spinner-dots(slot="message", :size="40", style="margin: 0 auto; top: 100px")
