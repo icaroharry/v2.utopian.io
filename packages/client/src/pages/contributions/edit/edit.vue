@@ -73,7 +73,7 @@ export default {
           category: get(this.contribution, 'category', 'development'),
           projectId: get(this.contribution, 'projectId', null)
         }
-      }).catch(console.log)
+      }).catch()
     },
 
     loadContribution () {

@@ -78,7 +78,6 @@ const getUserProjectPermission = async ({ token, owner, name }) => {
 
     throw Boom.badData('github-get-user-permission')
   } catch (err) {
-    console.log(err)
     throw Boom.badData('github-get-user-permission')
   }
 }

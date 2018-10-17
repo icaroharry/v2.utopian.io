@@ -180,8 +180,7 @@ export default {
             })
            */
         })
-        .catch(e => {
-          console.log(e)
+        .catch(() => {
           this.showDialog({ title: 'Oops', 'message': 'An error occurred while voting.' })
           this.broadcasting = false
           this.showVoteComponent = false

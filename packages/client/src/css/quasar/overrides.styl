@@ -1,100 +1,29 @@
-// popover style overrides.
-.q-popover {
-  border-radius 4px
-  // inner popover q-list
-  .q-list {
-    padding-top 0
-    padding-bottom 0
-  }
-  .q-item {
-    min-height 1.4em
-    line-height 1.4em
-
-  }
-  .q-item-side {
-    min-width: 1px
-  }
-  .q-item-side, .q-item-main {
-    & > * {
-      min-height 1.2em
-    }
-    // display inline-block
-    line-height 1.2em
-    padding 4px 0
-  }
-
-}
-
-// primary button style
-.q-btn.bg-primary
-  box-shadow 0 4px 10px 0 rgba(71, 134, 255, 0.4)
-
-.q-btn.bg-primary:not(.disabled):not(.q-btn-flat):not(.q-btn-outline):not(.q-btn-push):active:before
-  box-shadow: 0 5px 5px -3px rgba(71, 134, 255, 0.2), 0 8px 10px 1px rgba(71, 134, 255, 0.2), 0 3px 14px 2px rgba(71, 134, 255, 0.2);
-  z-index 1
-
-// normalize icon size.
-.q-btn, .q-item {
-  .q-icon {
-    font-size 1em
-  }
-}
-
-// forms and fields overrides.
 .q-field {
-  &.disabled, &[disabled] {
-    opacity 1 !important
-    .q-field-label {
-
-    }
-    .q-field-content {
-      background $grey-2
-    }
-  }
-  .q-if-control {
-    min-width 24px
-    width auto
-  }
-  .q-if-control.q-if-control-before {
-    margin-right 6px
-    padding-right 4px
-    border-right 1px solid $neutral
-  }
+  margin-top: 10px
   .q-field-label {
     color #000
     font-family 'Lato'
     font-size 16px
     font-weight 600
   }
-  .q-option-label {
-    font-size 14px
-    color #979797
-  }
-  .q-input-target {
-    overflow visible
-    font-size 12px
-    height 36px
-    font-family 'Noto Sans', sans-serif
-  }
-  margin: 0 0 28px 0
   .q-field-content {
-    .q-if, .q-input, .q-chips-input {
+    .q-if, .q-input, .q-select, .q-chips-input {
       background white
       border 1px solid $neutral
       border-radius 2px
-    }
-
-    .q-if {
       padding 6px 8px 8px 16px
     }
-  }
-  .q-list {
-    &:not(:last-child) {
-      border-bottom none
+    .q-input-target {
+      overflow visible
+      font-size 12px
+      height 36px
+      font-family 'Noto Sans', sans-serif
+    }
+    .q-list {
+      background white
+      &:not(:last-child) {
+        border-bottom none
+      }
     }
   }
-}
-
-.q-field-vertical .q-field-label + .q-field-content {
-  padding-top 0
 }
