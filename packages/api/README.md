@@ -108,3 +108,7 @@ Or use [Docker](https://www.docker.com/)!
 
 ### Contributions
 Please refer to the root [README.md](https://github.com/utopian-io/v2.utopian.io/blob/develop/README.md)
+
+### License
+
+GPL-3.0 Copyright (c) 2018 Utopian Company SRLs.

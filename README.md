@@ -60,3 +60,7 @@ Are you feeling up to the task? DM @gregory[mod] on the [utopian discord](https:
 You will then join a dedicated discord channel and meet your fellow collaborators. **Please read the pinned messages of the channel before doing anything else.**
 
 Let's get to work!
+
+### License
+
+GPL-3.0 Copyright (c) 2018 Utopian Company SRLs.

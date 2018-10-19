@@ -1,7 +1,7 @@
 {
   "name": "@utopian/browser-extension",
   "version": "0.0.1",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "author": "Utopian Company SRLs",
   "description": "A cross browser extension for Utopian Bounties",
   "scripts": {

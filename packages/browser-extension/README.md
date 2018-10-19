@@ -28,3 +28,7 @@ The following tasks can be used when you want to start developing the extension 
 
 ## Packaging
 Run `yarn run dist` to create a zipped, production-ready extension for each browser. You can then upload that to the appstore.
+
+### License
+
+GPL-3.0 Copyright (c) 2018 Utopian Company SRLs.

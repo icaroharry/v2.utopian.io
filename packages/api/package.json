@@ -1,7 +1,7 @@
 {
   "name": "@utopian/api",
   "version": "1.0.0",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "author": "Utopian Company SRLs",
   "description": "Utopian API",
   "main": "index.js",
