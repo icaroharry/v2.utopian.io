@@ -188,10 +188,6 @@ import pluginI18n from 'src/plugins/i18n'
 
 import pluginAxios from 'src/plugins/axios'
 
-import pluginVuexroutersync from 'src/plugins/vuex-router-sync'
-
-import pluginBootstrap from 'src/plugins/bootstrap'
-
 
 // This exported function will be called by `bundleRenderer`.
 // This is where we perform data-prefetching to determine the
@@ -203,7 +199,7 @@ export default context => {
     const { app, store, router } = createApp(context)
 
     
-    ;[pluginVuelidate,pluginI18n,pluginAxios,pluginVuexroutersync,pluginBootstrap].forEach(plugin => {
+    ;[pluginVuelidate,pluginI18n,pluginAxios].forEach(plugin => {
       plugin({
         app,
         router,

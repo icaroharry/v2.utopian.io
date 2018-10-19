@@ -1,8 +1,0 @@
-div.top-contributors
-  span.q-title.uppercase top contributors
-  q-list(separator).row
-    q-item(v-for="contributor in contributors" :key="contributor.key").col-12
-      q-item-side(:avatar="`https://steemitimages.com/u/${contributor.key}/avatar`")
-      q-item-main
-        q-item-tile.row.items-center(label) {{ contributor.key }}
-        q-item-tile(sublabel) {{ contributor.doc_count }} contributions

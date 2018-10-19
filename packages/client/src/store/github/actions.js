@@ -1,5 +1,5 @@
 import API from 'src/plugins/api'
-import { githubClient, makeSearchOptions, mapGithubResults } from 'src/services/github'
+import { githubClient, makeSearchOptions, mapGithubResults } from 'src/plugins/github'
 
 /**
  * Github repository search.

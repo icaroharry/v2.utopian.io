@@ -18,9 +18,7 @@ module.exports = function (ctx) {
     plugins: [
       'vuelidate',
       'i18n',
-      'axios',
-      'vuex-router-sync',
-      'bootstrap'
+      'axios'
     ],
     // build configuration.
     build: {

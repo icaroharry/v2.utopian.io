@@ -10,13 +10,9 @@ import * as actions from './actions'
 
 // import store modules.
 import api from './api'
-import common from './common'
 import auth from './auth'
-import steem from './steem'
-import project from './project'
 import projects from './projects'
 import users from './users'
-import contributions from './contributions'
 import github from './github'
 import blockchainSteem from './blockchains/steem'
 import utils from './utils'
@@ -24,15 +20,11 @@ import utils from './utils'
 // join modules.
 const modules = {
   api,
-  common,
   auth,
   blockchainSteem,
-  steem,
-  project,
+  github,
   projects,
   users,
-  contributions,
-  github,
   utils
 }
 

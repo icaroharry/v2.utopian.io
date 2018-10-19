@@ -13,10 +13,6 @@ export default {
       'guest',
       'user',
       'getBlockchainActiveAccount'
-    ]),
-    ...mapGetters('common', [
-      'isMobile',
-      'isDesktop'
     ])
   },
   methods: {
@@ -35,7 +31,6 @@ export default {
       window.location = `https://steemconnect.com/oauth2/authorize?client_id=${process.env.STEEMCONNECT_CLIENT_ID}&redirect_uri=${callbackURL}&response_type=code&scope=offline,comment,vote,comment_options,custom_json&state=steemconnectlogin`
     },
     redirectToCreate () {
-      return this.$router.push({ name: 'create' })
     }
   },
   mounted () {

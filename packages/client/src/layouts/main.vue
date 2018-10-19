@@ -3,7 +3,7 @@
 <!-- component script -->
 <script>
 // imports.
-import ULayoutToolbar from 'src/layouts/parts/toolbar/toolbar'
+import ULayoutToolbar from 'src/components/layout/toolbar/toolbar'
 import { mapGetters } from 'vuex'
 
 // main layout component.

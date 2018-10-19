@@ -1,15 +1,15 @@
-q-toolbar.u-toolbar(color='tertiary', :class="{ desktop: isDesktop }")
+q-toolbar.u-toolbar(color='tertiary')
   div.container.toolbar-container
     router-link(:to="{ name: 'home' }")
       img.u-logo.mobile-only(src="~assets/img/logo-icon.svg")
       img.u-logo.desktop-only(src="~assets/img/logo-white.svg")
 
-    div.u-toolbar-right.u-toolbar-right-guest(v-if="guest === true")
+    div.u-toolbar-right(v-if="guest === true")
       q-btn(@click.native="startGithubLogin", color="primary", icon="mdi-github-circle", label="Login with GitHub")
 
-    div.u-toolbar-right.u-toolbar-right-user(v-if="!guest")
-      q-btn.u-add(no-ripple, dense, color="primary", :label="$tc('common.contribution', 1)", icon="mdi-plus", @click="redirectToCreate")
-      span.avatar-wrapper
+    div.u-toolbar-right(v-if="!guest")
+      q-btn(dense, color="primary", :label="$tc('common.contribution', 1)", icon="mdi-plus", @click="redirectToCreate")
+      span
         img.avatar(:src="user.avatarUrl")
         q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]")
           q-list(dense, :link="true", separator)

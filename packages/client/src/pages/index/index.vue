@@ -1,17 +1,11 @@
 <script>
-import ULayoutPage from 'src/layouts/parts/page/page'
-import UPostPreview from 'src/components/post-preview/post-preview'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   preFetch ({ store }) {
     return store.dispatch('projects/getFeaturedProjects')
   },
-  name: 'PageIndex',
-  components: {
-    ULayoutPage,
-    UPostPreview
-  },
+  name: 'u-page-index',
   data () {
     return {
       contributions: [],
@@ -28,9 +22,6 @@ export default {
   filters: {
   },
   methods: {
-    ...mapActions('contributions', [
-      'getContributions'
-    ]),
     carouselNext () {
       this.$refs.mainCarousel.next()
       this.$refs.infoCarousel.next()

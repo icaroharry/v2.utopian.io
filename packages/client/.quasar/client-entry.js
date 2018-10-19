@@ -191,10 +191,6 @@ import pI18n from 'src/plugins/i18n'
 
 import pAxios from 'src/plugins/axios'
 
-import pVuexroutersync from 'src/plugins/vuex-router-sync'
-
-import pBootstrap from 'src/plugins/bootstrap'
-
 
 
 import { addPreFetchHooks } from './client-prefetch.js'
@@ -210,7 +206,6 @@ import FastClick from 'fastclick'
 
 
 Vue.config.devtools = true
-Vue.config.performance = true
 Vue.config.productionTip = false
 
 
@@ -235,7 +230,7 @@ if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && window.n
 
 
 
-;[pVuelidate,pI18n,pAxios,pVuexroutersync,pBootstrap].forEach(plugin => {
+;[pVuelidate,pI18n,pAxios].forEach(plugin => {
   plugin({
     app,
     router,
