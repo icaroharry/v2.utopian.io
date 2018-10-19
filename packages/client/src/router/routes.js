@@ -109,6 +109,11 @@ export default [
     ]
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('src/pages/login/login')
+  },
+  {
     path: '/users',
     component: () => import('src/layouts/guest'),
     children: [

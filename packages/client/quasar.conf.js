@@ -33,7 +33,7 @@ module.exports = function (ctx) {
       scopeHoisting: true,
       vueRouterMode: 'history',
       useNotifier: false,
-  
+
       // webpack configuration.
       extendWebpack: function (cfg) {
         // main loader / js config.
@@ -97,6 +97,7 @@ module.exports = function (ctx) {
         'QLayoutHeader',
         'QList',
         'QListHeader',
+        'QNoSsr',
         'QPage',
         'QPageContainer',
         'QPageSticky',
@@ -126,7 +127,8 @@ module.exports = function (ctx) {
       directives: [
         'Ripple',
         'CloseOverlay',
-        'BackToTop'
+        'BackToTop',
+        'Platform'
       ],
       plugins: [
         'Cookies',
@@ -177,7 +179,7 @@ module.exports = function (ctx) {
             'type': 'image/png'
           }
         ]
-      }      
+      }
     },
     ssr: {
       pwa: true,

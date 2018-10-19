@@ -65,6 +65,14 @@ export default {
       }
     }
   },
+  login: {
+    button: {
+      login: 'login with github',
+      signUp: 'signup with github'
+    },
+    title: 'Don\'t you have an Utopian account yet?',
+    subtitle: 'Register on Utopian to empower your work and your open source projects.'
+  },
   errors: {
     file_upload: 'An error occurred while uploading'
   }
