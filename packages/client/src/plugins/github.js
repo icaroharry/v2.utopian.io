@@ -1,8 +1,5 @@
-// imports.
-import { get, map } from 'lodash'
 import * as GitHub from '@octokit/rest'
 
-// create a local github client instance.
 export const githubClient = new GitHub()
 
 export const makeSearchOptions = (query) => ({
@@ -12,13 +9,11 @@ export const makeSearchOptions = (query) => ({
   page: 1
 })
 
-export const mapGithubResults = (result) => {
-  return map(get(result, 'data.items'), (item) => {
-    return {
-      id: get(item, 'id', null),
-      label: get(item, 'full_name', null),
-      value: get(item, 'html_url', null),
-      avatar: get(item, 'owner.avatar_url', null)
-    }
+export const mapGithubResults = (result) => result.data.items.map(item =>
+  ({
+    id: item.id,
+    label: item.full_name,
+    value: item.html_url,
+    avatar: item.owner.avatar_url
   })
-}
+)

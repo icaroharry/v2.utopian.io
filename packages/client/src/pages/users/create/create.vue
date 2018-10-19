@@ -2,11 +2,8 @@
 import { required, minLength, maxLength, helpers } from 'vuelidate/lib/validators'
 import { mapGetters, mapActions } from 'vuex'
 import jwt from 'jsonwebtoken'
-import { Cookies } from 'quasar'
+import { Cookies, debounce } from 'quasar'
 
-import * as _ from 'lodash'
-
-// create user component export.
 export default {
   name: 'u-page-users-create',
   preFetch ({ redirect, ssrContext }) {
@@ -64,7 +61,7 @@ export default {
       this.user.usernameAvailable = 'checking'
       this.checkUsername()
     },
-    checkUsername: _.debounce(async function () {
+    checkUsername: debounce(async function () {
       const usernameValidator = this.$v.user.username
       this.$v.user.$touch()
       if (this.user.username.length > 2 && usernameValidator.minLength &&

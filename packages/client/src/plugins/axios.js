@@ -1,15 +1,13 @@
 // imports.
 import axios from 'axios'
-import { get } from 'lodash'
-
 // create an axios instance.
 export const http = axios.create()
 
 // flatten success responses body.
-const flattenSuccess = response => get(response, 'data', {})
+const flattenSuccess = response => response.data || {}
 
 // flatten error responses body.
-const flattenError = error => Promise.reject(get(error, 'response.data', {}))
+const flattenError = error => Promise.reject(error.response.data || {})
 
 // export plugin.
 export default ({ Vue }) => {
