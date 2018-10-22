@@ -103,7 +103,7 @@ export default {
           reject(file)
         } else {
           this.$axios.post(
-            'https://ipfs.utopian.io/storage/upload',
+            'https://img.utopian.io/upload/',
             data,
             {
               onUploadProgress: (progressEvent) => {
