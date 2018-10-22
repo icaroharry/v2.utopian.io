@@ -38,6 +38,7 @@ routes.push([
     path: '/v1/project/{slug}',
     handler: (req, h, next) => Handlers.deleteProjectBySlug(req, h, next),
     options: {
+      auth: { access: { scope: ['user'] } },
       tags: ['api', 'projects'],
       validate: Validate.deleteProjectBySlug
     }
@@ -47,6 +48,7 @@ routes.push([
     path: '/v1/project',
     handler: (req, h, next) => Handlers.editProject(req, h, next),
     options: {
+      auth: { access: { scope: ['user'] } },
       tags: ['api', 'projects'],
       validate: Validate.editProject
     }
@@ -56,6 +58,7 @@ routes.push([
     path: '/v1/project',
     handler: (req, h, next) => Handlers.createProject(req, h, next),
     options: {
+      auth: { access: { scope: ['user'] } },
       tags: ['api', 'projects'],
       validate: Validate.createProject
     }
@@ -65,6 +68,7 @@ routes.push([
     path: '/v1/projects/isnameavailable',
     handler: (req, h, next) => Handlers.isNameAvailable(req, h, next),
     options: {
+      auth: { access: { scope: ['user'] } },
       tags: ['api', 'projects'],
       validate: Validate.isNameAvailable
     }
@@ -74,6 +78,7 @@ routes.push([
     path: '/v1/projects/isprojectadmin',
     handler: (req, h, next) => Handlers.isProjectAdmin(req, h, next),
     options: {
+      auth: { access: { scope: ['user'] } },
       tags: ['api', 'projects'],
       validate: Validate.isProjectAdmin
     }

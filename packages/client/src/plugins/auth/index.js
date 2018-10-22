@@ -40,7 +40,7 @@ export default async ({ currentRoute, store, redirect, ssrContext }) => {
   // Load the user information
   if (cookies.get('access_token')) {
     const token = jwt.decode(cookies.get('access_token'))
-    if (token.scopes.includes('app')) {
+    if (token.scopes.includes('user')) {
       await store.dispatch('auth/me')
     }
   }

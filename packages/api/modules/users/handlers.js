@@ -54,12 +54,12 @@ const generateUserTokens = async (user) => {
   const refreshToken = getRefreshToken()
   const newRefreshToken = new RefreshToken({
     refreshToken,
-    scope: 'app',
+    scopes: user.scopes,
     user: user._id
   })
   await newRefreshToken.save()
 
-  const accessToken = getAccessToken({ username: user.username })
+  const accessToken = getAccessToken({ username: user.username, scopes: user.scopes })
   return {
     token_type: 'bearer',
     access_token: accessToken,
@@ -77,6 +77,7 @@ const saveUser = async (req, h) => {
   const newUser = new User({
     username: req.payload.username,
     avatarUrl: req.payload.avatarUrl || githubUser.avatarUrl,
+    scopes: ['user'],
     authProviders: [{
       type: req.auth.credentials.providerType,
       username: githubUser.login,

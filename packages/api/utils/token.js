@@ -1,7 +1,7 @@
 const JWT = require('jsonwebtoken')
 const crypto = require('crypto')
 
-const getAccessToken = ({ username = '', scopes = ['app'], providerToken = '', providerType = '', expiresIn = 30 }) => {
+const getAccessToken = ({ username = '', scopes = ['user'], providerToken = '', providerType = '', expiresIn = 30 }) => {
   const tokenObj = {
     iss: 'utopian.io',
     aud: 'utopian.io',

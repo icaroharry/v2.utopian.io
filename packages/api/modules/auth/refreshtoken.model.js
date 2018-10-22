@@ -8,8 +8,8 @@ const refreshTokens = new Schema({
     unique: true,
     required: true
   },
-  scope: {
-    type: String,
+  scopes: {
+    type: Array,
     required: true
   },
   user: { type: Schema.Types.ObjectId, ref: 'Users' }

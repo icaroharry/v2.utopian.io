@@ -31,12 +31,12 @@ const getToken = async (req, h) => {
     const refreshToken = getRefreshToken()
     const newRefreshToken = new RefreshToken({
       refreshToken,
-      scope: 'app',
+      scopes: user.scopes,
       user: user._id
     })
     await newRefreshToken.save()
 
-    const accessToken = getAccessToken({ username: user.username })
+    const accessToken = getAccessToken({ username: user.username, scopes: user.scopes })
     return h.response({
       token_type: 'bearer',
       access_token: accessToken,
@@ -46,7 +46,7 @@ const getToken = async (req, h) => {
   } else if (req.payload.grant_type === 'refresh_token') {
     const refreshToken = await RefreshToken.findOne({ refreshToken: req.payload.code }).populate('users')
     if (refreshToken) {
-      const accessToken = getAccessToken({ username: refreshToken.user.username })
+      const accessToken = getAccessToken({ username: refreshToken.user.username, scopes: refreshToken.scopes })
       return h.response({
         token_type: 'bearer',
         access_token: accessToken,
@@ -55,6 +55,27 @@ const getToken = async (req, h) => {
     }
 
     throw Boom.badData('refresh_token-does-not-exist')
+  } else if (req.payload.grant_type === 'password') {
+    const user = await User.findOne({ username: req.payload.username })
+    if (user && user.checkPassword(req.payload.password)) {
+      const refreshToken = getRefreshToken()
+      const newRefreshToken = new RefreshToken({
+        refreshToken,
+        scopes: user.scopes,
+        user: user._id
+      })
+      await newRefreshToken.save()
+
+      const accessToken = getAccessToken({ username: user.username, scopes: user.scopes })
+      return h.response({
+        token_type: 'bearer',
+        access_token: accessToken,
+        expires_in: 30,
+        refresh_token: refreshToken
+      })
+    }
+
+    throw Boom.badData('wrong-user-password')
   }
 
   throw Boom.badData('bad-grant_type')

@@ -26,7 +26,7 @@ const createProject = {
     website: Joi.string().trim().uri(),
     docs: Joi.string().trim().uri(),
     license: Joi.string().trim().allow(licenses),
-    medias: Joi.array().required(),
+    medias: Joi.array().optional(),
     description: Joi.string().trim().required(),
     details: Joi.string().trim().required(),
     tags: Joi.array().min(3).max(5).unique().items(Joi.string().trim().alphanum()).required()
