@@ -1,17 +1,12 @@
 {
-  "name": "@utopian/auth",
+  "name": "auth",
   "version": "1.0.0",
   "license": "GPL-3.0",
   "author": "Utopian Company SRLs",
   "description": "An Authentication webapp for Utopian",
-  "productName": "Authentication Webapp",
+  "productName": "Utopian Authentication",
   "cordovaId": "org.cordova.quasar.app",
   "private": true,
-  "engines": {
-    "node": ">= 10.0.0",
-    "npm": ">= 5.6.0",
-    "yarn": ">= 1.6.0"
-  },
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
     "test": "echo \"No test specified\" && exit 0"
@@ -31,8 +26,13 @@
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "eslint-plugin-vue": "^4.3.0",
-    "quasar-cli": "^0.17.19",
+    "quasar-cli": "^0.17.0",
     "strip-ansi": "=3.0.1"
+  },
+  "engines": {
+    "node": ">= 8.9.0",
+    "npm": ">= 5.6.0",
+    "yarn": ">= 1.6.0"
   },
   "browserslist": [
     "> 1%",

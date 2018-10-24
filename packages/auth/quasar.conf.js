@@ -17,7 +17,7 @@ module.exports = function (ctx) {
       // 'mdi',
       // 'fontawesome'
     ],
-    supportIE: false,
+    supportIE: true,
     build: {
       scopeHoisting: true,
       // vueRouterMode: 'history',
