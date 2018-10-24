@@ -1,0 +1,43 @@
+div.container {
+  width 100%
+  // max-width 80vw
+  max-width 1200px
+  margin 0 auto
+  padding 18px 18px
+}
+
+div.container.container-centered {
+  max-width 1024px
+}
+
+div.container.container-large {
+  max-width 100%
+  height 100%
+}
+
+// generic wrapper elements style.
+html, body, .u-app {
+  display flex
+  height 100%
+  content: " "
+  float left
+  width 100%
+}
+
+// scrollable content hack.
+.q-layout-page, q-layout-page-container {
+  height 100%
+}
+
+// scrollable content hack.
+.u-app {
+  height 100%
+  width 100%
+}
+
+blur(n)
+  -webkit-filter blur n
+  -moz-filter blur n
+  -o-filter blur n
+  -ms-filter blur n
+  filter blur n
