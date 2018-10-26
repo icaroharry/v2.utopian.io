@@ -188,6 +188,8 @@ import pluginI18n from 'src/plugins/i18n'
 
 import pluginAxios from 'src/plugins/axios'
 
+import pluginGoogleanalytics from 'src/plugins/google-analytics'
+
 
 // This exported function will be called by `bundleRenderer`.
 // This is where we perform data-prefetching to determine the
@@ -199,7 +201,7 @@ export default context => {
     const { app, store, router } = createApp(context)
 
     
-    ;[pluginVuelidate,pluginI18n,pluginAxios].forEach(plugin => {
+    ;[pluginVuelidate,pluginI18n,pluginAxios,pluginGoogleanalytics].forEach(plugin => {
       plugin({
         app,
         router,

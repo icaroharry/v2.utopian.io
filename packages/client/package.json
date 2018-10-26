@@ -80,6 +80,7 @@
     "typeface-noto-sans": "^0.0.54",
     "typeface-roboto-mono": "^0.0.54",
     "typeface-source-sans-pro": "0.0.54",
+    "vue-analytics": "^5.16.0",
     "vue-i18n": "^7.7.0"
   }
 }

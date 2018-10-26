@@ -191,6 +191,8 @@ import pI18n from 'src/plugins/i18n'
 
 import pAxios from 'src/plugins/axios'
 
+import pGoogleanalytics from 'src/plugins/google-analytics'
+
 
 
 import { addPreFetchHooks } from './client-prefetch.js'
@@ -230,7 +232,7 @@ if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && window.n
 
 
 
-;[pVuelidate,pI18n,pAxios].forEach(plugin => {
+;[pVuelidate,pI18n,pAxios,pGoogleanalytics].forEach(plugin => {
   plugin({
     app,
     router,
