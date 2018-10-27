@@ -23,10 +23,10 @@ const createProject = {
   payload: {
     name: Joi.string().trim().required(),
     repositories: Joi.array().unique().required(),
-    website: Joi.string().trim().uri(),
-    docs: Joi.string().trim().uri(),
-    license: Joi.string().trim().allow(licenses),
-    medias: Joi.array().optional(),
+    website: Joi.string().optional().trim().uri(),
+    docs: Joi.string().optional().trim().uri(),
+    license: Joi.string().trim().required().allow(licenses),
+    medias: Joi.array().required(),
     description: Joi.string().trim().required(),
     details: Joi.string().trim().required(),
     tags: Joi.array().min(3).max(5).unique().items(Joi.string().trim().alphanum()).required()
@@ -40,7 +40,7 @@ const editProject = {
     repositories: Joi.array().unique().required(),
     website: Joi.string().optional().trim().uri(),
     docs: Joi.string().optional().trim().uri(),
-    license: Joi.string().trim().allow(licenses),
+    license: Joi.string().trim().required().allow(licenses),
     medias: Joi.array().required(),
     description: Joi.string().trim().required(),
     details: Joi.string().trim().required(),

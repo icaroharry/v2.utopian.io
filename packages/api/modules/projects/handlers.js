@@ -20,7 +20,7 @@ const getProjectBySlug = async (req, h) => {
 }
 
 const getFeaturedProjects = async (req, h) => {
-  const projects = await Project.find({ featured: true, blacklisted: false }).select('description featured_order medias name owner slug tags -_id').sort({ featured_order: 1 })
+  const projects = await Project.find({ featured: true, blacklisted: false }).select('description medias name owner slug tags -_id')
   return h.response({ data: projects })
 }
 
