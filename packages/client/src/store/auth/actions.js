@@ -17,3 +17,11 @@ export const logout = ({ dispatch, commit }) => {
   Cookies.remove('refresh_token')
   commit('clear')
 }
+
+export const startSteemConnectLogin = () => {
+  let callbackURL = ''
+  if (typeof window !== 'undefined') {
+    callbackURL = `${window.location.protocol}//${window.location.host}`
+  }
+  window.location = `https://steemconnect.com/oauth2/authorize?client_id=${process.env.STEEMCONNECT_CLIENT_ID}&redirect_uri=${callbackURL}&response_type=code&scope=offline,comment,vote,comment_options,custom_json&state=steemconnectlogin`
+}

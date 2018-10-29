@@ -18,19 +18,12 @@ export default {
   methods: {
     ...mapActions('auth', [
       'logout',
-      'linkSteemAccount'
+      'linkSteemAccount',
+      'startGithubLogin',
+      'startSteemConnectLogin'
     ]),
-    startGithubLogin () {
-      window.location = `https://github.com/login/oauth/authorize?scope=read:user,repo&client_id=${process.env.GITHUB_CLIENT_ID}&state=githublogin`
-    },
-    startSteemConnectLogin () {
-      let callbackURL = ''
-      if (typeof window !== 'undefined') {
-        callbackURL = `${window.location.protocol}//${window.location.host}`
-      }
-      window.location = `https://steemconnect.com/oauth2/authorize?client_id=${process.env.STEEMCONNECT_CLIENT_ID}&redirect_uri=${callbackURL}&response_type=code&scope=offline,comment,vote,comment_options,custom_json&state=steemconnectlogin`
-    },
-    redirectToCreate () {
+    redirectToLogin () {
+      window.location = `${process.env.AUTH_DOMAIN}/login/?redirectUrl=${window.location.href}`
     }
   },
   mounted () {

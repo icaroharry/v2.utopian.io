@@ -1,0 +1,18 @@
+// 404 page template.
+
+// component wrapper div.
+div.page-404.fixed-center.text-center
+  // not found illustration.
+  p
+    // sad face icon.
+    img.sad-face(src="~assets/img/sad.svg")
+
+  // not found message.
+  p.text-faded
+    // translate the 'sorry' and 'nothing here' separately.
+    | {{ $t('common.sorry') }}, {{ $t('common.nothingHere') }}...
+
+  // back button.
+  q-btn.back-button(color="primary", @click="$router.push('/')")
+    // translate the button itself.
+    | {{ $t('common.goBack') }}

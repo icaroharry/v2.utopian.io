@@ -5,7 +5,7 @@ q-toolbar.u-toolbar(color='tertiary')
       img.u-logo.desktop-only(src="~assets/img/logo-white.svg")
 
     div.u-toolbar-right(v-if="guest === true")
-      q-btn(@click.native="startGithubLogin", color="primary", icon="mdi-github-circle", label="Login with GitHub")
+      q-btn(@click.native="redirectToLogin", color="primary", icon="mdi-account", label="$t(common.signIn)")
 
     div.u-toolbar-right(v-if="!guest")
       q-btn(dense, color="primary", :label="$tc('common.contribution', 1)", icon="mdi-plus", @click="redirectToCreate")

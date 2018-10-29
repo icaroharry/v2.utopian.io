@@ -2,8 +2,9 @@ import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import { Cookies } from 'quasar'
 
-export default async ({ currentRoute, store, redirect, ssrContext }) => {
+export default async ({ currentRoute, store, redirect, ssrContext, redirectUrl }) => {
   const code = currentRoute.query.code
+
   if (code) {
     const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
     // TODO handle errors
@@ -27,7 +28,9 @@ export default async ({ currentRoute, store, redirect, ssrContext }) => {
     })
 
     if (!token.username) {
-      redirect('/users/create')
+      redirect(`users/create/?redirectUrl=${redirectUrl}`)
+    } else {
+      redirect(`/?redirectUrl=${redirectUrl}`)
     }
   }
 }

@@ -1,21 +1,28 @@
+// import vue and vuex.
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import example from './module-example'
+// import store modules.
+import api from './api'
+import auth from './auth'
+import users from './users'
+import utils from './utils'
 
+// join modules.
+const modules = {
+  api,
+  auth,
+  users,
+  utils
+}
+
+// enable vuex.
 Vue.use(Vuex)
 
-/*
- * If not building with SSR mode, you can
- * directly export the Store instantiation
- */
-
-export default function (/* { ssrContext } */) {
-  const Store = new Vuex.Store({
-    modules: {
-      example
-    }
+export default function () {
+  const store = new Vuex.Store({
+    modules
   })
 
-  return Store
+  return store
 }

@@ -18,16 +18,6 @@ export default [
       }
     ]
   },
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import('src/pages/login/login')
-  },
-  {
-    path: '/users/create',
-    name: 'users.create',
-    component: () => import('src/pages/users/create/create')
-  },
   { // Always leave this as last one
     path: '*',
     name: 'not-found',

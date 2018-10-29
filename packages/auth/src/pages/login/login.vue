@@ -1,4 +1,6 @@
 <script>
+import { btoa } from 'b2a'
+
 export default {
   preFetch ({ store, redirect }) {
     if (store.state.auth.user) {
@@ -8,8 +10,8 @@ export default {
   name: 'u-page-login',
   methods: {
     startGithubLogin () {
-      const returnUrl = `${window.location.protocol}//${window.location.host}${this.$route.query.returnUrl}`
-      window.location = `https://github.com/login/oauth/authorize?scope=read:user,repo&client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${returnUrl}&state=githublogin`
+      const state = btoa(`githublogin::${this.$route.query.redirectUrl}`)
+      window.location = `https://github.com/login/oauth/authorize?scope=read:user,repo&client_id=${process.env.GITHUB_CLIENT_ID}&state=${state}`
     }
   }
 }

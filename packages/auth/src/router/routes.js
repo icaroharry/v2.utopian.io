@@ -2,10 +2,22 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MyLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/Index.vue') }
-    ]
+    name: 'home'
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('src/pages/login/login')
+  },
+  {
+    path: '/users/create',
+    name: 'users.create',
+    component: () => import('src/pages/users/create/create')
+  },
+  { // Always leave this as last one
+    path: '*',
+    name: 'not-found',
+    component: () => import('src/pages/404/404')
   }
 ]
 
@@ -13,7 +25,7 @@ const routes = [
 if (process.env.MODE !== 'ssr') {
   routes.push({
     path: '*',
-    component: () => import('pages/Error404.vue')
+    component: () => import('src/pages/404/404')
   })
 }
 

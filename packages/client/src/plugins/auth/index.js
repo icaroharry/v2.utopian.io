@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken'
 import { Cookies } from 'quasar'
-import gitHubLogin from './providers/github'
 import linkSteemAccount from './blockchains/steem'
 
 /**
@@ -20,18 +19,7 @@ export default async ({ currentRoute, store, redirect, ssrContext }) => {
 
   // Login with any external provider
   const loginState = currentRoute.query.state
-  if (loginState === 'githublogin') {
-    await gitHubLogin({ currentRoute, store, redirect, ssrContext })
-  } else {
-    // Prepare the tokens to enable authenticated calls to the API
-    if (cookies.get('access_token')) {
-      await store.dispatch('api/setTokens', {
-        accessToken: cookies.get('access_token'),
-        refreshToken: cookies.get('refresh_token')
-      })
-    }
-  }
-
+  // Prepare the tokens to enable authenticated calls to the API
   // Link blockchain accounts
   if (loginState === 'steemconnectlogin') {
     await linkSteemAccount({ currentRoute, store })
@@ -39,6 +27,11 @@ export default async ({ currentRoute, store, redirect, ssrContext }) => {
 
   // Load the user information
   if (cookies.get('access_token')) {
+    await store.dispatch('api/setTokens', {
+      accessToken: cookies.get('access_token'),
+      refreshToken: cookies.get('refresh_token')
+    })
+
     const token = jwt.decode(cookies.get('access_token'))
     if (token.scopes.includes('user')) {
       await store.dispatch('auth/me')

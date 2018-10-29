@@ -28,6 +28,7 @@
     "@octokit/rest": "^15.8.2",
     "@steemit/steem-js": "^0.7.1",
     "axios": "^0.18.0",
+    "b2a": "^1.0.10",
     "fs": "0.0.1-security",
     "moment": "^2.22.1",
     "vue": "^2.5.16",

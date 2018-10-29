@@ -3,7 +3,7 @@ q-layout.u-page-users-create
     div.create-user-form
       img.utopian-logo(src="~assets/img/logo-black.svg")
       p.q-title Please create a unique username to be used in Utopian.io
-      q-field.full-width.q-mb-xl(
+      q-field.full-width.q-mb-md(
         :error="$v.user.username.$error && user.usernameAvailable !== 'checking'",
         :error-label="getErrorLabel()"
       )
