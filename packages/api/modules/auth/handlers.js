@@ -1,3 +1,4 @@
+const JWT = require('jsonwebtoken')
 const Boom = require('boom')
 const User = require('../users/user.model')
 const RefreshToken = require('./refreshtoken.model')
@@ -28,10 +29,9 @@ const getToken = async (req, h) => {
       })
     }
 
-    const refreshToken = getRefreshToken()
+    const refreshToken = getRefreshToken({ uid: user._id })
     const newRefreshToken = new RefreshToken({
       refreshToken,
-      scopes: user.scopes,
       user: user._id
     })
     await newRefreshToken.save()
@@ -44,24 +44,28 @@ const getToken = async (req, h) => {
       refresh_token: refreshToken
     })
   } else if (req.payload.grant_type === 'refresh_token') {
-    const refreshToken = await RefreshToken.findOne({ refreshToken: req.payload.code }).populate('users')
-    if (refreshToken) {
-      const accessToken = getAccessToken({ username: refreshToken.user.username, scopes: refreshToken.scopes })
-      return h.response({
-        token_type: 'bearer',
-        access_token: accessToken,
-        expires_in: 30
-      })
+    try {
+      const decoded = JWT.verify(req.payload.code, process.env.JWT_SECRET)
+      const refreshToken = await RefreshToken.findOne({ refreshToken: req.payload.code, user: decoded.uid }).populate('user')
+      if (refreshToken) {
+        const accessToken = getAccessToken({ username: refreshToken.user.username, scopes: refreshToken.user.scopes })
+        return h.response({
+          token_type: 'bearer',
+          access_token: accessToken,
+          expires_in: 30
+        })
+      }
+    } catch (e) {
+      throw Boom.badData('refresh_token-does-not-exist')
     }
 
     throw Boom.badData('refresh_token-does-not-exist')
   } else if (req.payload.grant_type === 'password') {
     const user = await User.findOne({ username: req.payload.username })
     if (user && user.checkPassword(req.payload.password)) {
-      const refreshToken = getRefreshToken()
+      const refreshToken = getRefreshToken({ uid: user._id })
       const newRefreshToken = new RefreshToken({
         refreshToken,
-        scopes: user.scopes,
         user: user._id
       })
       await newRefreshToken.save()

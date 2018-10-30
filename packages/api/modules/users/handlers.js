@@ -51,10 +51,9 @@ const isUsernameAvailable = async (req, h) => {
 }
 
 const generateUserTokens = async (user) => {
-  const refreshToken = getRefreshToken()
+  const refreshToken = getRefreshToken({ uid: user._id })
   const newRefreshToken = new RefreshToken({
     refreshToken,
-    scopes: user.scopes,
     user: user._id
   })
   await newRefreshToken.save()

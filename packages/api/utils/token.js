@@ -1,5 +1,4 @@
 const JWT = require('jsonwebtoken')
-const crypto = require('crypto')
 
 const getAccessToken = ({ username = '', scopes = ['user'], providerToken = '', providerType = '', expiresIn = 30 }) => {
   const tokenObj = {
@@ -17,12 +16,13 @@ const getAccessToken = ({ username = '', scopes = ['user'], providerToken = '', 
   })
 }
 
-const getRefreshToken = () => {
-  const buf = crypto.randomBytes(256)
-  return crypto
-    .createHash('sha1')
-    .update(buf)
-    .digest('hex')
+const getRefreshToken = ({ uid }) => {
+  const tokenObj = {
+    iss: 'utopian.io',
+    aud: 'utopian.io',
+    uid
+  }
+  return JWT.sign(tokenObj, process.env.JWT_SECRET)
 }
 
 module.exports = {
