@@ -40,7 +40,7 @@ q-toolbar.u-toolbar(color='tertiary')
       img.u-logo.desktop-only(src="~assets/img/logo-white.svg")
 
     .u-toolbar-right(v-if="guest === true")
-      q-btn(@click.native="redirectToLogin", color="primary", icon="mdi-account", label="$t(common.signIn)")
+      q-btn(@click.native="redirectToLogin", color="primary", icon="mdi-account", :label="$t('common.signIn')")
 
     .u-toolbar-right(v-if="!guest")
       q-btn(dense, color="primary", :label="$tc('common.contribution', 1)", icon="mdi-plus")

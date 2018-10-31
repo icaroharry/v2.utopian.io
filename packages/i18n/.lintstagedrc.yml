@@ -1,0 +1,3 @@
+linters:
+  lib/*.js:
+  - eslint

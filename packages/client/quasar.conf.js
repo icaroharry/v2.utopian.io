@@ -18,8 +18,7 @@ module.exports = function (ctx) {
     plugins: [
       'vuelidate',
       'i18n',
-      'axios',
-      'google-analytics'
+      'axios'
     ],
     // build configuration.
     build: {
@@ -28,7 +27,7 @@ module.exports = function (ctx) {
         AUTH_DOMAIN: process.env.AUTH_DOMAIN,
         GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
         STEEMCONNECT_CLIENT_ID: (process.env.STEEMCONNECT_CLIENT_ID || '"utopian.signin"'),
-        GA_ID: process.env.GA_ID
+        STEEM_API: (process.env.STEEM_API_DEV || '"https://api.steemit.com"')
       },
       scopeHoisting: true,
       vueRouterMode: 'history',
@@ -56,6 +55,7 @@ module.exports = function (ctx) {
     },
     // framework configuration.
     framework: {
+      i18n: 'en-us',
       iconSet: 'mdi',
       components: [
         'QAjaxBar',
@@ -122,7 +122,12 @@ module.exports = function (ctx) {
         'QToolbarTitle',
         'QTooltip',
         'QUploader',
-        'QVideo'
+        'QVideo',
+        'QTable',
+        'QTh',
+        'QTr',
+        'QTd',
+        'QTableColumns'
       ],
       directives: [
         'Ripple',
@@ -143,6 +148,7 @@ module.exports = function (ctx) {
     // quasar modes.
     pwa: {
       manifest: {
+        htmlLang: 'de',
         name: 'Utopian.io',
         short_name: 'Utopian.io',
         description: 'Earn rewards by contributing to your favorite Open Source projects!',

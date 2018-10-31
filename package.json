@@ -2,9 +2,18 @@
   "name": "@utopian/root",
   "private": true,
   "license" : "GPL-3.0",
+  "author": "Utopian Company SRLs",
+  "homepage": "https://utopian.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/utopian-io/v2.utopian.io.git"
+  },
   "scripts": {
     "precommit": "lerna run --concurrency 1 --stream precommit",
-    "dev": "lerna run dev --stream"
+    "lint:fix": "lerna run --no-bail lint:fix",
+    "dev": "lerna run dev --stream",
+    "test": "lerna run test --no-bail",
+    "test:jest": "lerna run test:jest --no-bail"
   },
   "devDependencies": {
     "husky": "^0.14.3",
