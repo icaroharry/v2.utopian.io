@@ -230,7 +230,7 @@ if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && window.n
 
 
 
-[pVuelidate, pI18n, pAxios].forEach(plugin => {
+;[pVuelidate,pI18n,pAxios].forEach(plugin => {
   plugin({
     app,
     router,
@@ -256,9 +256,9 @@ const appInstance = new Vue(app)
 // wait until router has resolved all async before hooks
 // and async components...
 router.onReady(() => {
-
+  
   addPreFetchHooks(router, store)
-
+  
   appInstance.$mount('#q-app')
 })
 

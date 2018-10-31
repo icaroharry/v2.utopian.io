@@ -1,0 +1,29 @@
+.q-field {
+  margin-top: 10px
+  .q-field-label {
+    color #000
+    font-family 'Lato'
+    font-size 16px
+    font-weight 600
+  }
+  .q-field-content {
+    .q-if, .q-input, .q-select, .q-chips-input {
+      background white
+      border 1px solid $neutral
+      border-radius 2px
+      padding 6px 8px 8px 16px
+    }
+    .q-input-target {
+      overflow visible
+      font-size 12px
+      height 36px
+      font-family 'Noto Sans', sans-serif
+    }
+    .q-list {
+      background white
+      &:not(:last-child) {
+        border-bottom none
+      }
+    }
+  }
+}
