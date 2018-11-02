@@ -55,9 +55,9 @@ export default class API {
               headers['Authorization'] = response.data.access_token
             }
           } catch (err) {
-            // TODO unlog the user from the store and destroy all the tokens
-            // Cookies.remove('access_token')
-            // Cookies.remove('refresh_token')
+            Cookies.remove('access_token')
+            Cookies.remove('refresh_token')
+            context.commit('auth/clear', { root: true })
           }
         }
       } else {

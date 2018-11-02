@@ -12,10 +12,19 @@ export const me = async (context) => {
   }
 }
 
-export const logout = ({ dispatch, commit }) => {
+export const logout = async (context) => {
+  const token = Cookies.get('refresh_token')
+  if (token) {
+    await API.call({
+      context,
+      method: 'post',
+      url: '/oauth/revoke',
+      data: { token }
+    })
+  }
   Cookies.remove('access_token')
   Cookies.remove('refresh_token')
-  commit('clear')
+  context.commit('clear')
 }
 
 export const startSteemConnectLogin = () => {
