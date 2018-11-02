@@ -1,3 +1,3 @@
-export const setFeaturedProjects = (state, featuredProjects = []) => {
-  state.featuredProjects = featuredProjects
+export const setFeaturedProjects = (state, featuredProjects) => {
+  state.featuredProjects = featuredProjects || []
 }

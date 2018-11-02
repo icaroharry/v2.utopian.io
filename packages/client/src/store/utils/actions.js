@@ -4,3 +4,5 @@ export const transferToLocalStorage = ({ state, commit }) => {
   })
   commit('clearLocalStorageValues')
 }
+
+export const clearApiError = ({ commit }) => commit('setApiError', null)

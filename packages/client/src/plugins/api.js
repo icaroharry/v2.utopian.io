@@ -1,6 +1,6 @@
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
-// import { Cookies } from 'quasar'
+import { Cookies } from 'quasar'
 
 export default class API {
   static async call ({ context, method, url, data }) {
@@ -16,17 +16,18 @@ export default class API {
         return response.data.data
       }
     } catch (err) {
-      if (err.response.status === 401) {
-        // TODO bad token remove logged user and token from store
-        // Cookies.remove('access_token')
-        // Cookies.remove('refresh_token')
+      if (!err.response) {
+        context.commit('utils/setApiError', 'unexpected', { root: true })
+      // Token not valid anymore
+      } else if (err.response.data.statusCode === 401) {
+        Cookies.remove('access_token')
+        Cookies.remove('refresh_token')
+        context.commit('auth/clear', { root: true })
+        context.commit('utils/setApiError', 'unauthorized', { root: true })
       // Validation errors
-      } else if (err.response.status === 422) {
-        return {
-          error: err.response.data.message
-        }
+      } else if (err.response.data.statusCode === 422) {
+        context.commit('utils/setApiError', err.response.data.message, { root: true })
       }
-      return err.response.data
     }
     return null
   }
