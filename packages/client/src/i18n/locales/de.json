@@ -5,7 +5,10 @@
   "interaction": "Interaktion",
   "debug": "Debuggen",
   "GDPR": "GDPR Zustimmung",
-  "loginWithGithub": "Mit Github einloggen",
+  "loginWithGithub": "Mit Github einloggen wäre schön",
+  "navbar": {
+    "signIn": "Mit github einloggen aber hallo!"
+  },
   "common": {
     "signIn": "Mit Github einloggen",
     "back": "back",

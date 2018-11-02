@@ -172,8 +172,6 @@ const copyArtifact = async (inputFile, outputFile) => {
  * It will be overwritten on the next update of the package.
  * 
  * Constructed by @utopian/i18n v${version}
- * Date: ${new Date()}
- * Lifecycle: ${lifecycle}
  *
  */
 `

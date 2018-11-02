@@ -1,5 +1,11 @@
 // environment config.
 require('dotenv').config()
+const I18N = require('@utopian/i18n/lib')
+const path = require('path')
+// const webpack = require('webpack')
+// const WebpackMildCompile = require('webpack-mild-compile').Plugin
+const ExtraWatchWebpackPlugin = require('extra-watch-webpack-plugin')
+
 
 // quasar / app config.
 module.exports = function (ctx) {
@@ -32,7 +38,9 @@ module.exports = function (ctx) {
       scopeHoisting: true,
       vueRouterMode: 'history',
       useNotifier: false,
+      vueCompiler: true,
 
+      /*
       // webpack configuration.
       extendWebpack: function (cfg) {
         // main loader / js config.
@@ -46,6 +54,44 @@ module.exports = function (ctx) {
           test: /\.pug$/,
           loader: 'pug-plain-loader'
         })
+      },
+      */
+      // todo: https://webpack.js.org/plugins/context-replacement-plugin/ for i18n files in all libs
+      chainWebpack(chain) {
+        chain.plugin('extraWatcher')
+          .use(ExtraWatchWebpackPlugin, [
+            {
+              dirs: [ 'src/i18n/overrides', '../i18n/locales_master' ]
+            }
+          ])
+        chain.plugin('i18n')
+          .use(I18N, [
+            [{
+              debug: false
+            }]
+          ])
+        chain.module.rule('lint')
+          .test(/\.(js|vue)$/)
+          .pre()
+          .use('eslint')
+            .loader('eslint-loader')
+            .options({
+              rules: {
+                semi: 'off'
+              }
+            })
+        chain.module.rule('template-engine')
+          .test(/\.pug$/)
+          .include
+            .add(path.resolve(__dirname, 'src'))
+            .end()
+          .use('pug')
+            .loader('pug-plain-loader')
+        chain.resolve.alias
+          .set('~', __dirname)
+          .set('@', path.resolve(__dirname, 'src'))
+        // normalize the global => good for some non-isomorphic modules
+        chain.output.set('globalObject', 'this')
       }
     },
     // dev server configuration.

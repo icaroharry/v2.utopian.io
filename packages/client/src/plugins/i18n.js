@@ -259,7 +259,5 @@ export default ({ app, Vue, ssrContext, router }) => {
  * It will be overwritten on the next update of the package.
  * 
  * Constructed by @utopian/i18n v1.0.0
- * Date: Fri Nov 02 2018 12:19:10 GMT+0100 (GMT+01:00)
- * Lifecycle: update:i18n
  *
  */

@@ -1,114 +1,54 @@
-#!/usr/bin/env node
-'use strict'
+const path = require('path')
 
 /**
  * @module i18n
- * @description i18n localization management for shared locales with package-level override
+ * @description i18n webpack plugin for reloading changes to override files
  *
- * Flow Description
- * - Exit if not within a Quasar Project
- * - Loop through files in @utopian/locales folder
- *  - forEach(file)
-
- *    - check if same file exists in src/i18n/overrides
- *      - yes: deepMerge
- *      - push(override.lang) to sources.overrides[]
- *    - write object to src/i18n/locales/${lang}.json
- * - write langs[] to src/i18n/locales/langs.json
- *
- * todo: write langs[] to src/i18n/locales/langs.json
- *
+ * todo: discover a "straightforward" way to mock webpack and build a real test
  */
 
-const
-  builder = require('./builder.js'),
-  path = require('path'),
-  fs = require('fs-extra')
+const main = require('./main')
 
-/**
- * Main function
- *
- * @params {string} dir - Force a directory path (optional - for testing)
- * @returns {array} returns success | error message
- * @author Daniel Thompson-Yvetot
- */
-const main = async (dir) => {
-  // the following is my cheap-ass mock used only during development.
-  // todo: when the PR is approved, remove this line.
-  // return await builder.detectQuasar(path.resolve(__dirname, '../__tests__/fixtures/quasarApp'))
-  return builder.detectQuasar(dir)
-    .then(quasarDir => {
-    // the following has been thoroughly unit tested
-    /* istanbul ignore else */
-      if (quasarDir[0] === 'error') {
-        builder.log(quasarDir)
-        return quasarDir
+module.exports = class I18N {
+  /* istanbul ignore next */
+  constructor (opts = {}) {
+    this.opts = opts
+    this.start = true
+    this.count = 0
+    this.getChangedFiles = (compiler) => {
+      // wow https://stackoverflow.com/a/52363168
+      const { watchFileSystem } = compiler
+      const watcher = watchFileSystem.watcher || watchFileSystem.wfs.watcher
+      return Object.keys(watcher.mtimes)
+    }
+  }
+
+  /* istanbul ignore next */
+  apply (compiler) {
+    compiler.hooks.watchRun.tapAsync('i18n', (_compiler, callback) => {
+      // const debug = this.opts[0].debug || false
+      const changedFile = this.getChangedFiles(_compiler)
+      console.log(changedFile)
+      changedFile.forEach(file => {
+        let thing = file.split(path.sep)
+        return thing.forEach(thang => {
+          // naive check to make sure that we've hit an override file
+          if (thang === 'overrides' || thang === 'locales_master') {
+            this.count++
+          }
+        })
+      })
+      if (this.start === true) {
+        main.main()
+        this.start = false
+        callback()
+      } else if (this.count >= 1) {
+        main.main()
+        this.count = 0
+        callback()
       } else {
-      // copy the plugin(s)
-        builder.listFiles(path.resolve(__dirname, '../plugins'))
-          .then(sourcePlugins => {
-            sourcePlugins.forEach(sourcePlugin => {
-              const src = path.resolve(__dirname, `../plugins/${sourcePlugin}`)
-              const tgt = path.resolve(quasarDir[0], `./src/plugins/${sourcePlugin}`)
-              builder.copyArtifact(src, tgt)
-                .then(msg => {
-                  builder.log(msg)
-                })
-            })
-          })
-        // deepMerge the locales
-        builder.listFiles(path.resolve(__dirname, '../locales'))
-          .then(sourceLocales => {
-            let localesList = []
-            sourceLocales.forEach(locale => {
-              localesList.push(locale.split('.')[0])
-              let right, left
-              // this is implicitly true - no need to test it.
-              left = require(path.resolve(__dirname, `../locales/${locale}`))
-              // make sure it exists before requiring it!!!
-              if (fs.existsSync(path.resolve(quasarDir[0], `./src/i18n/overrides/${locale}`))) {
-                right = require(path.resolve(quasarDir[0], `./src/i18n/overrides/${locale}`))
-              } else {
-                right = false
-              }
-              const final = path.resolve(quasarDir[0], `src/i18n/locales/${locale}`)
-              if (!right) {
-                builder.createJsonArtifact(final, left).then(built => {
-                  if (built[0] === 'error') {
-                    builder.log(built)
-                    return built
-                  }
-                })
-              } else {
-                builder.deepMerge(left, right)
-                  .then(msg => {
-                    builder.log(msg)
-                    builder.createJsonArtifact(final, msg).then(built => {
-                      if (built[0] === 'error') {
-                        builder.log(built)
-                        return built
-                      }
-                    })
-                  })
-              }
-            })
-            const localesListFile = path.resolve(quasarDir[0], './src/i18n/localesList.json')
-            builder.createJsonArtifact(localesListFile, localesList).then(built => {
-              if (built[0] === 'error') {
-                builder.log(built)
-                return built
-              }
-            })
-          })
-        console.log(`Created fresh translation files.`)
-        return ['success']
+        callback()
       }
     })
+  }
 }
-
-module.exports = {
-  main
-}
-
-// passing undefined just feels dirty
-main(undefined)
