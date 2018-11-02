@@ -1,4 +1,4 @@
 export default () => ({
-  apiError: null,
+  appError: null,
   localStorageData: []
 })

@@ -40,10 +40,10 @@ q-toolbar.u-toolbar(color='tertiary')
       img.u-logo.desktop-only(src="~assets/img/logo-white.svg")
 
     .u-toolbar-right(v-if="guest === true")
-      q-btn(@click.native="redirectToLogin", color="primary", icon="mdi-account", :label="$t('common.signIn')")
+      q-btn(@click.native="redirectToLogin", color="primary", icon="mdi-account", :label="$t('navbar.signIn')")
 
     .u-toolbar-right(v-if="!guest")
-      q-btn(dense, color="primary", :label="$tc('common.contribution', 1)", icon="mdi-plus")
+      q-btn(dense, color="primary", :label="$t('navbar.contribute', 1)", icon="mdi-plus")
       span
         img.avatar(:src="user.avatarUrl")
         q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]")
@@ -51,17 +51,17 @@ q-toolbar.u-toolbar(color='tertiary')
             q-item(v-if="!steemUser", @click.native="startSteemConnectLogin")
               q-item-side
                 q-icon.q-item-icon.ut-steem
-              q-item-main(label="Link your Steem account")
+              q-item-main(:label="$t('navbar.linkSteemAccount')")
             q-item(v-if="steemUser", :to="`/@${steemUser}`")
               q-item-side
                 q-icon.q-item-icon.ut-steem
               q-item-main(:label="`@${steemUser}`")
             q-item(:to="{ name: 'settings' }")
               q-item-side(icon="mdi-settings")
-              q-item-main(label="Settings")
+              q-item-main(:label="$t('navbar.settings')")
             q-item(@click.native="logout")
               q-item-side(icon="mdi-logout")
-              q-item-main(label="Logout")
+              q-item-main(:label="$t('navbar.logOut')")
 
 </template>
 

@@ -1,2 +1,2 @@
 export const getLocalStorageData = ({ localStorageData }) => localStorageData
-export const apiError = ({ apiError }) => apiError
+export const appError = ({ appError }) => appError

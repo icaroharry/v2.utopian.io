@@ -17,16 +17,16 @@ export default class API {
       }
     } catch (err) {
       if (!err.response) {
-        context.commit('utils/setApiError', 'unexpected', { root: true })
+        context.commit('utils/setAppError', 'unexpected', { root: true })
       // Token not valid anymore
       } else if (err.response.data.statusCode === 401) {
         Cookies.remove('access_token')
         Cookies.remove('refresh_token')
         context.commit('auth/clear', { root: true })
-        context.commit('utils/setApiError', 'unauthorized', { root: true })
+        context.commit('utils/setAppError', 'api.errors.unauthorized', { root: true })
       // Validation errors
       } else if (err.response.data.statusCode === 422) {
-        context.commit('utils/setApiError', err.response.data.message, { root: true })
+        context.commit('utils/setAppError', `api.errors.${err.response.data.message}`, { root: true })
       }
     }
     return null

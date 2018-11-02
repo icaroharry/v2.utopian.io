@@ -6,6 +6,6 @@ export const clearLocalStorageValues = (state) => {
   state.localStorageData = []
 }
 
-export const setApiError = (state, apiError) => {
-  state.apiError = apiError
+export const setAppError = (state, appError) => {
+  state.appError = appError
 }

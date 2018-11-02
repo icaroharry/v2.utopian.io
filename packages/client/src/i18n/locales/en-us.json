@@ -6,84 +6,112 @@
   "interaction": "Interaction",
   "debug": "Debug",
   "GDPR": "GDPR Acceptance",
-  "common": {
-    "signIn": "Login with Github",
-    "back": "back",
-    "by": "by",
-    "contribution_s": "no contributions | one contribution | {count} contributions",
-    "contributeToProject": "contribute to this project",
-    "downvote": "downvote",
-    "goBack": "go back",
-    "language": "Language",
-    "listOnUtopianText": "List your Project on the Utopian open-source platform.",
-    "listOnUtopianSubtext": "Utopian.io will reward contributors for their hard work on your project.",
-    "moderator_s": "no moderator | one moderator | {count} moderators",
-    "nothingHere": "nothing here",
-    "popularProjects": "popular projects",
-    "post": "post",
-    "project_s": "no projects | one project | {count} projects",
-    "recentContributions": "recent contributions",
-    "replied": "replied",
-    "reply": "reply",
-    "save": "Save",
-    "seeAllContributions": "See all contributions",
-    "seeAllProjects": "See all projects",
-    "sorry": "sorry",
-    "sponsor_s": "no sponsors | one sponsor | {count} sponsors",
-    "submitMyProject": "Submit my project",
-    "upvote": "upvote",
-    "wallet": "wallet"
+  "fileUpload": {
+    "error": {
+      "unexpected": "An error occurred while uploading your file."
+    }
   },
-  "categories": {
-    "analysis": "analysis",
-    "blog": "blog",
-    "bugHunting": "bug-hunting",
-    "copywriting": "copywriting",
-    "development": "development",
-    "documentation": "documentation",
-    "graphics": "graphics",
-    "ideas": "ideas",
-    "social": "social",
-    "translations": "translations",
-    "tutorials": "tutorials",
-    "videoTutorials": "video-tutorials"
+  "homepage": {
+    "by": "by",
+    "contributeToProject": "contribute to this project",
+    "featuredProjects": "Featured projects",
+    "newProjectTitle": "List your open source project on Utopian.",
+    "newProjectSubtitle": "Connect with thousands of open source contributors.",
+    "seeAllProjects": "See all projects",
+    "submitYourProject": "Submit your project"
   },
   "projects": {
     "createEdit": {
       "completed": "completed",
-      "documentationPage": "Documentation page",
-      "images": "Images",
-      "imagesHelp": "This is the first thing that people will see when they come across your project. 2000x1130 ideal for hi-res. Select a maximum of 5 images.",
-      "license": "License",
+      "documentationPage": {
+        "label": "Documentation page",
+        "placeholder": "https://quasar-framework.org/guide"
+      },
+      "images": {
+        "label": "Images",
+        "help": "This is the first thing that people will see when they come across your project. 2000x1130 ideal for hi-res. Select a maximum of 5 images."
+      },
+      "license": {
+        "label": "License",
+        "placeholder": "MIT"
+      },
       "notOpensource": "The code of my project is closed",
       "projectDetails": {
         "label": "Project details",
-        "placeholder": "Write everything about your project...",
+        "help": "Write everything about your project...",
         "error": {
           "length": "You have exceeded the maximum length."
         }
       },
-      "projectName": "Project name",
+      "projectName": {
+        "label": "Project name",
+        "placeholder": "Quasar framework",
+        "error": {
+          "exists": "You already have a project with this name."
+        }
+      },
       "projectTags": {
         "label": "Project tags",
         "help": "Please provide between 3 and 5 tags",
+        "placeholder": "javascript vuejs material-design",
         "error": {
           "exists": "Please do not use the same tag twice",
           "length": "This tag is too long."
         }
       },
-      "repositories": "Repositories",
+      "repositories": {
+        "label": "Repositories",
+        "placeholder": "quasarframework/quasar",
+        "error": {
+          "notProjectAdmin": "You must be an admin of the project."
+        }
+      },
+      "save": "Save",
       "shortDescription": {
         "label": "Short description",
-        "help": "Give people a sense about your project..."
+        "placeholder": "Give people a sense about your project..."
       },
       "subtitle": "Make a great first impression with all the project information filled and great images about your project.",
       "title": "Bring your project to Utopian.io",
-      "webPage": "Web page",
+      "webPage": {
+        "label": "Web page",
+        "placeholder": "https://quasar-framework.org"
+      },
       "error": {
-        "not_project_admin": "You must be an admin of the project.",
         "project_exists": "You already have a project with this name."
       }
+    }
+  },
+  "navbar": {
+    "contribute": "contribute",
+    "linkSteemAccount": "Link your Steem account",
+    "logOut": "Log out",
+    "settings": "Settings",
+    "signIn": "sign in"
+  },
+  "notFound": {
+    "goBack": "Go back",
+    "title": "Sorry, nothing here"
+  },
+  "api": {
+    "errors": {
+      "general": {
+        "documentDoesNotExist": "The document does not exist.",
+        "documentUpdateUnauthorized": "You are not authorized to update this document.",
+        "unauthorized": "You are not authorized to do this action.",
+        "updateFail": "An error occurred while updating the data."
+      },
+      "github": {
+        "getUserData": "An error occurred while retrieving your GitHub information, please re log.",
+        "getUserPermission": "An error occurred while retrieving your GitHub information, please re log."
+      },
+      "projects": {
+        "exists": "You already have a project with this name.",
+        "noRepositories": "A project must have at least one repository."
+      }
+    },
+    "messages": {
+      "deleteSuccess": "The information was successfully deleted."
     }
   },
   "errors": {

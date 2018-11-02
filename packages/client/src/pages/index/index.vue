@@ -55,12 +55,6 @@ export default {
 div
   .header.q-pb-lg
     q-page-container.container
-      .gt-sm.row.justify-center.q-my-lg.q-pb-lg.menu
-        router-link(:to="{ name: 'contributions' }") {{$tc('common.contribution', 2)}}
-        a(href="https://join.utopian.io/sponsors/" target="_blank") {{$tc('common.sponsor', 2)}}
-        router-link(:to="{ name: 'project.search' }") {{$tc('common.project', 2)}}
-        router-link(:to="{ name: 'home' }", disabled) {{$t('common.wallet')}}
-        router-link(:to="{ name: 'home' }", disabled) {{$tc('common.moderator', 2)}}
       .row
         .col-lg-6.offset-lg-1.projects-slider
           q-carousel.project-images(color="white", ref="mainCarousel")
@@ -72,12 +66,12 @@ div
                 q-card-title
                   | {{ project.name }}
                   span(slot="subtitle")
-                    | {{ $t('common.by') }}&nbsp;
+                    | {{ $t('homepage.by') }}&nbsp;
                     span.text-dark.q-subheading {{ project.owner }}
                 q-card-main.q-title.text-weight-light.text-dusk
                   | {{ project.description }}
                 q-card-actions(align="center")
-                  q-btn(:label="$t('common.contribute_to_project')", color="primary" @click="goToProjectPage(project.slug)")
+                  q-btn(:label="$t('homepage.contributeToProject')", color="primary" @click="goToProjectPage(project.slug)")
 
           q-btn.carousel-arrow(
           flat,
@@ -103,16 +97,10 @@ div
   .main
     q-page-container.container
       .flex.justify-between.contributions-header
-        .q-title.q-my-lg {{$t('common.recent_contributions')}}
-        router-link(:to="{ name: 'contributions' }")
-          .pt
-            .text-right.mb {{$t('common.see_all_contributions')}}
-            hr
-      .flex.justify-between.contributions-header
-        .q-title.q-my-lg.q-pt-lg {{$t('common.popular_projects')}}
+        .q-title.q-my-lg.q-pt-lg {{$t('homepage.featuredProjects')}}
         router-link.q-pt-lg(:to="{ name: 'project.search' }")
           .pt
-            .text-right.mb {{$t('common.see_all_projects')}}
+            .text-right.mb {{$t('homepage.seeAllProjects')}}
             hr
       .row.projects.gutter-sm
         .col-md-12.col-lg-4(v-for="project in featuredProjects")
@@ -135,11 +123,11 @@ div
         .row.no-wrap.items-center
           img.blue-text(src="~assets/img/skyline.svg")
           .row.column
-            p.blue-text.q-mb-sm {{$t('common.list_on_utopian_text')}}
-            p.q-mb-none {{$t('common.list_on_utopian_subtext')}}
+            p.blue-text.q-mb-sm {{$t('homepage.newProjectTitle')}}
+            p.q-mb-none {{$t('homepage.newProjectSubtitle')}}
         div
           q-btn(color="primary", @click="redirectToCreateProject")
-            | {{$t('common.submit_my_project')}}
+            | {{$t('homepage.submitYourProject')}}
 
 </template>
 

@@ -3,14 +3,13 @@
     p
       img.sad-face(src="~assets/img/sad.svg")
     p.text-faded
-      | {{ $t('common.sorry') }}, {{ $t('common.nothingHere') }}...
+      | {{ $t('notFound.title') }}
     q-btn.back-button(color="primary", @click="$router.push('/')")
-      | {{ $t('common.goBack') }}
+      | {{ $t('notFound.goBack') }}
 </template>
 
 <style lang="stylus">
   div.page-404
-
     img.sad-face
       width 30vw
       max-width 150px

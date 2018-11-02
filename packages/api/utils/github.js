@@ -48,9 +48,9 @@ const getUserInformation = async (token) => {
       return githubResponse.data.data.viewer
     }
 
-    throw Boom.badData('github-get-user-data')
+    throw Boom.badData('github.getUserData')
   } catch (err) {
-    throw Boom.badData('github-get-user-data')
+    throw Boom.badData('github.getUserData')
   }
 }
 
@@ -76,9 +76,10 @@ const getUserProjectPermission = async ({ token, owner, name }) => {
       return githubResponse.data.data.repository.viewerPermission
     }
 
-    throw Boom.badData('github-get-user-permission')
+    throw Boom.badData('github.getUserPermission')
   } catch (err) {
-    throw Boom.badData('github-get-user-permission')
+    console.log(err)
+    throw Boom.badData('github.getUserPermission')
   }
 }
 

@@ -9,20 +9,20 @@ export default {
     await authPlugin({ currentRoute, store, redirect, ssrContext })
   },
   computed: {
-    ...mapGetters('utils', ['apiError'])
+    ...mapGetters('utils', ['appError'])
   },
   methods: {
-    ...mapActions('utils', ['transferToLocalStorage', 'clearApiError'])
+    ...mapActions('utils', ['transferToLocalStorage', 'clearAppError'])
   },
   watch: {
-    apiError: function (value) {
+    appError: function (value) {
       if (value) {
         Notify.create({
           type: 'negative',
           position: 'bottom-right',
-          message: this.$t(`api.error.${value}`)
+          message: this.$t(value)
         })
-        this.clearApiError()
+        this.clearAppError()
       }
     }
   },

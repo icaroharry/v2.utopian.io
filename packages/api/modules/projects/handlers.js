@@ -28,10 +28,10 @@ const deleteProjectBySlug = async (req, h) => {
   // TODO Only owner should be able to delete a project
   const response = await Project.updateOne({ $or: [{ slugs: { $elemMatch: { $eq: req.params.slug } } }, { slug: req.params.slug }] }, { $set: { status: 'deleted', deletedAt: Date.now() } })
   if (response.n === 1) {
-    return h.response({ message: 'delete-success' })
+    return h.response({ message: 'deleteSuccess' })
   }
 
-  throw Boom.badData('document-does-not-exist')
+  throw Boom.badData('general.documentDoesNotExist')
 }
 
 const filterRepositories = async ({ repositories, username }) => {
@@ -56,13 +56,13 @@ const editProject = async (req, h) => {
   const owner = req.auth.credentials.username
   const projectDb = await Project.findOne({ owner, _id: req.payload._id })
   if (!projectDb) {
-    throw Boom.badData('project-no-update-rights')
+    throw Boom.badData('general.documentUpdateUnauthorized')
   }
 
   // A user can't have two projects with the same name
   const projectName = await Project.findOne({ owner, name: req.payload.name, _id: { $ne: req.payload._id } })
   if (projectName) {
-    throw Boom.badData('project-exists')
+    throw Boom.badData('projects.exists')
   }
 
   // Was the name updated? If yes we need to archive the previous slug
@@ -84,7 +84,7 @@ const editProject = async (req, h) => {
     username: owner
   })
   if (repositories.length === 0) {
-    throw Boom.badData('project-no-repositories')
+    throw Boom.badData('projects.noRepositories')
   }
 
   const response = await Project.updateOne(
@@ -107,7 +107,7 @@ const editProject = async (req, h) => {
     })
   }
 
-  throw Boom.badData('update-fail')
+  throw Boom.badData('general.updateFail')
 }
 
 const createProject = async (req, h) => {
@@ -116,7 +116,7 @@ const createProject = async (req, h) => {
   // A user can't have two projects with the same name
   const projectName = await Project.findOne({ owner, name: req.payload.name })
   if (projectName) {
-    throw Boom.badData('project-exists')
+    throw Boom.badData('projects.exists')
   }
 
   /*
@@ -137,7 +137,7 @@ const createProject = async (req, h) => {
     username: owner
   })
   if (repositories.length === 0) {
-    throw Boom.badData('project-no-repositories')
+    throw Boom.badData('projects.noRepositories')
   }
 
   const newProject = new Project({
