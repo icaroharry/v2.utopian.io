@@ -8,7 +8,7 @@ routes.push([
     path: '/v1/blockchains/steem/linkaccount',
     handler: (req, h, next) => Handlers.linkSteemAccount(req, h, next),
     options: {
-      tags: ['api', 'blockchains', 'steem'],
+      tags: ['blockchains', 'steem'],
       validate: Validate.linkSteemAccount
     }
   }

@@ -10,7 +10,7 @@ routes.push([
     handler: (req, h, next) => Handlers.getToken(req, h, next),
     options: {
       auth: false,
-      tags: ['api', 'auth'],
+      tags: ['auth'],
       validate: Validate.getToken
     }
   },
@@ -25,7 +25,7 @@ routes.push([
           scope: 'app'
         }
       },
-      tags: ['api', 'auth'],
+      tags: ['auth'],
       validate: Validate.revokeToken
     }
   },
@@ -34,7 +34,8 @@ routes.push([
     path: '/me',
     handler: (req, h, next) => Handlers.me(req, h, next),
     options: {
-      tags: ['api']
+      auth: { access: { scope: 'user' } },
+      tags: ['auth']
     }
   }
 ])

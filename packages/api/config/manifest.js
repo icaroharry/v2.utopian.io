@@ -27,14 +27,7 @@ module.exports = {
       },
       { plugin: 'inert' },
       { plugin: 'vision' },
-      {
-        plugin: 'hapi-swagger',
-        options: {
-          info: {
-            title: 'Utopian API Documentation'
-          }
-        }
-      },
+      { plugin: 'lout' },
       { plugin: './config/plugins/jwt-auth' },
       { plugin: './config/plugins/routes' }
     ]

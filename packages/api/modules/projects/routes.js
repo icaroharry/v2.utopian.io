@@ -10,7 +10,7 @@ routes.push([
     handler: (req, h, next) => Handlers.getProjects(req, h, next),
     options: {
       auth: false,
-      tags: ['api', 'projects'],
+      tags: ['projects'],
       validate: Validate.getProjects
     }
   },
@@ -20,7 +20,7 @@ routes.push([
     handler: (req, h, next) => Handlers.getFeaturedProjects(req, h, next),
     options: {
       auth: false,
-      tags: ['api', 'projects']
+      tags: ['projects']
     }
   },
   {
@@ -29,7 +29,7 @@ routes.push([
     handler: (req, h, next) => Handlers.getProjectBySlug(req, h, next),
     options: {
       auth: false,
-      tags: ['api', 'projects'],
+      tags: ['projects'],
       validate: Validate.getProjectBySlug
     }
   },
@@ -39,7 +39,7 @@ routes.push([
     handler: (req, h, next) => Handlers.deleteProjectBySlug(req, h, next),
     options: {
       auth: { access: { scope: ['user'] } },
-      tags: ['api', 'projects'],
+      tags: ['projects'],
       validate: Validate.deleteProjectBySlug
     }
   },
@@ -49,7 +49,7 @@ routes.push([
     handler: (req, h, next) => Handlers.editProject(req, h, next),
     options: {
       auth: { access: { scope: ['user'] } },
-      tags: ['api', 'projects'],
+      tags: ['projects'],
       validate: Validate.editProject
     }
   },
@@ -59,7 +59,7 @@ routes.push([
     handler: (req, h, next) => Handlers.createProject(req, h, next),
     options: {
       auth: { access: { scope: ['user'] } },
-      tags: ['api', 'projects'],
+      tags: ['projects'],
       validate: Validate.createProject
     }
   },
@@ -69,7 +69,7 @@ routes.push([
     handler: (req, h, next) => Handlers.isNameAvailable(req, h, next),
     options: {
       auth: { access: { scope: ['user'] } },
-      tags: ['api', 'projects'],
+      tags: ['projects'],
       validate: Validate.isNameAvailable
     }
   },
@@ -79,7 +79,7 @@ routes.push([
     handler: (req, h, next) => Handlers.isProjectAdmin(req, h, next),
     options: {
       auth: { access: { scope: ['user'] } },
-      tags: ['api', 'projects'],
+      tags: ['projects'],
       validate: Validate.isProjectAdmin
     }
   }
