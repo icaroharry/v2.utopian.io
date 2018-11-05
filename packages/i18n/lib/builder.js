@@ -28,23 +28,11 @@
  */
 
 const
-  // readline = require('readline'),
   path = require('path'),
   version = require('../package.json').version,
   R = require('ramda'),
   fs = require('fs-extra'),
-  filesystemSync = require('fs-filesystem'),
   lifecycle = process.env.npm_lifecycle_event
-
-/* todo: save this for later
-let message = {
-  type: '',
-  unixTimestamp: '',
-  functionName: '',
-  i18nDescription: '',
-  furtherInfo: ''
-}
-*/
 
 /**
  * Reusable Ramda wrapper to deepMerge objects (right will overwrite left)
@@ -131,22 +119,14 @@ const createJsonArtifact = async (filePath, obj) => {
   filePath = filePath.split('.')
   filePath[filePath.length - 1] = 'json'
   filePath = filePath.join('.')
+  // console.log('PRE OUTPUT:', obj)
   return fs.outputJson(filePath, obj, { spaces: 2 })
-    .then(() => fs.readJson(filePath))
-    .then(data => {
-    /* istanbul ignore else */
-      if (obj[0] === data[0]) {
-        return log(['success'])
-      } else {
-      // if this is triggered it signals something very wrong with the filesystem
-      // or a sudden change of consistency as with a force push...
-      // which is why we immediately run our filesystemSync check and return an error.
-      // Of course there is no sane way to really test this situation, so whatever.
-        const fs = filesystemSync()
-        console.log(fs)
-        console.trace()
-        return log(['error', Date.now(), 'i18n.builder.createJsonArtifact', 'systemIntegrity', fs])
-      }
+    .then(() => {
+      return log(['success'])
+    })
+    .catch(err => {
+      /* istanbul ignore next */
+      return log(['error', Date.now(), 'i18n.builder.createJsonArtifact', 'couldNotCreate', err])
     })
 }
 
@@ -175,7 +155,6 @@ const copyArtifact = async (inputFile, outputFile) => {
  *
  */
 `
-
   return fs.copy(inputFile, outputFile)
     .then(() => { fs.appendFile(outputFile, append) })
     .then(() => { return ['success'] })

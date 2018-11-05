@@ -66,35 +66,9 @@ export const getLocaleCookie = ssrContext => {
   }
 }
 
-/* Get browser locale
- *
- * @property {object} ssrContext - required for isomorphism
- * @returns {string} Language from cookie or undefined
- *
- */
-/*
-export const getBrowserLocale = (ssrContext) => {
-  if (ssrContext) {
-    const languages = ssrContext.req.headers['accept-language']
-    if (languages) {
-      // common languages string: en-GB,en;q=0.9,en-US;q=0.8,de;q=0.7
-      let browserAcceptLocale = languages.split(',')
-      let browserMatch
-      // browserAcceptLocale.some(browserLocale => {
-      for (let browserLocale of browserAcceptLocale) {
-        browserMatch = browserLocale.split(';')[0].toLowerCase()
-        if (localesList.includes(browserMatch)) break
-      }
-      return browserMatch
-    } else {
-      return undefined
-    }
-  }
-}
-*/
 export const getBrowserLocale = ssrContext => {
   // native Quasar version
-  if (ssrContext) {
+  if (!ssrContext) {
     const language = Quasar.i18n.getLocale()
     if (language) {
       for (let locales of localesList) {
@@ -121,7 +95,7 @@ export const getRoute = routeLocale => {
     return routeLocale
   }
   // fallback to
-  return 'en-us'
+  return 'en'
 }
 
 /* Replace locale in route
@@ -158,10 +132,6 @@ export const getLocale = (ssrContext, routeLocale) => {
       return cookie
     }
   }
-  const browserLocale = getBrowserLocale(ssrContext)
-  if (typeof browserLocale !== 'undefined') {
-    return browserLocale
-  }
   // in the end return undefined and let router handle it.
   return getRoute(routeLocale)
 }
@@ -171,14 +141,40 @@ export default ({ app, Vue, ssrContext, router }) => {
 
   app.i18n = new VueI18n({
     silentTranslationWarn: true,
-    // fallbackLocale: 'en-us',
+    fallbackLocale: 'en',
     messages: {}
   })
   app.loadedLanguages = []
 
   router.beforeEach((to, from, next) => {
     const routeLocale = to.params.locale
-    const locale = getLocale(ssrContext, routeLocale)
+    let locale = getLocale(ssrContext, routeLocale)
+
+    /*
+    const routeLocale = to.params.locale
+    const cookieLocale = getLocaleCookie(ssrContext)
+    const browserLocale = getRoute(getBrowserLocale(ssrContext))
+    let locale
+    if (app.userSelectedLocale === true) {
+      // cookie or route
+      if (cookieLocale) {
+        locale = cookieLocale
+      } else { locale = routeLocale }
+    } else {
+      if (browserLocale) {
+        locale = browserLocale
+      } else { locale = routeLocale }
+    }
+    locale = getRoute(locale)
+    */
+
+    // needed to set quasar locale because short code
+    let qLocale
+    if (locale === 'en') {
+      qLocale = 'en-uk'
+    } else {
+      qLocale = locale
+    }
 
     if (routeLocale !== locale) {
       next({
@@ -190,12 +186,12 @@ export default ({ app, Vue, ssrContext, router }) => {
     if (!app.loadedLanguages.includes(locale)) {
       app.loadedLanguages.push(locale)
       app.i18n.setLocaleMessage(locale, require(`src/i18n/locales/${locale}.json`))
-      import(`quasar-framework/i18n/${locale}`)
+      import(`quasar-framework/i18n/${qLocale}`)
         .then((lang) => {
           Quasar.i18n.set(lang.default)
         })
     } else {
-      import(`quasar-framework/i18n/${locale}`)
+      import(`quasar-framework/i18n/${qLocale}`)
         .then((lang) => {
           Quasar.i18n.set(lang.default)
         })
@@ -213,43 +209,44 @@ export default ({ app, Vue, ssrContext, router }) => {
     async preFetch ({ store, currentRoute, redirect, ssrContext }) {
       if (ssrContext) {
         const locale = currentRoute.params.locale
+        let qLocale
+        if (locale === 'en') {
+          qLocale = 'en-uk'
+        } else {
+          qLocale = locale
+        }
         if (localesList.includes(locale)) {
-          return import(`quasar-framework/i18n/${locale}`)
+          import(`quasar-framework/i18n/${qLocale}`)
             .then((lang) => {
-              Quasar.i18n.lang = locale
+              Quasar.i18n.lang = qLocale
               Quasar.i18n.set(lang.default)
             })
         }
       }
+      return store
     },
-    beforeMount () {
-      const { asyncData } = this.$options
-      if (asyncData) {
-        this.locale = asyncData({
-          locale: this.$route.params.locale
-        })
+    data () {
+      return {
+        locale: '',
+        userSelectedLocale: false
       }
     },
     mounted () {
+      this.locale = this.$route.params.locale
       // watch the emit event for localeChange
       this.$root.$on('localeChange', (val) => {
-        this.locale = val
-      })
-    },
-    watch: {
-      locale: {
-        handler (val, oldVal) {
-          // todo: check the new route before we reroute
-          let route = this.$route.path.split('/')
-          route[1] = val
-          route = route.join('/')
-          if (this.$q.cookies.get('GDPR')) {
-            this.$q.cookies.set('locale', val, { path: '/' })
-          }
-          this.$router.push(route)
+        let route = this.$route.path.split('/')
+        route[1] = val
+        route = route.join('/')
+        if (this.$q.cookies.get('GDPR')) {
+          this.$q.cookies.set('locale', val, { path: '/' })
         }
-      },
-      immediate: true
+        this.userSelectedLocale = true
+        this.$nextTick(() => {
+          this.$router.push(route)
+          this.locale = val
+        })
+      })
     }
   })
 }

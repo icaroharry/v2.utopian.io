@@ -10,11 +10,11 @@ const path = require('path')
 const main = require('./main')
 
 module.exports = class I18N {
-  /* istanbul ignore next */
   constructor (opts = {}) {
     this.opts = opts
     this.start = true
     this.count = 0
+    /* istanbul ignore next */
     this.getChangedFiles = (compiler) => {
       // wow https://stackoverflow.com/a/52363168
       const { watchFileSystem } = compiler

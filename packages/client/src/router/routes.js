@@ -23,6 +23,12 @@ export default [
         component: () => import('src/pages/projects/create-edit/create-edit')
       },
       {
+        path: '/:locale/project/search',
+        name: 'project.search',
+        props: true,
+        component: () => import('src/pages/projects/create-edit/create-edit')
+      },
+      {
         path: '/:locale/i18n',
         name: 'i18n.test',
         props: true,

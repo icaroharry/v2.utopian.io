@@ -5,14 +5,6 @@
         q-card-title.bg-primary {{ $t('interaction') }}
         q-card-separator
         q-card-main
-          q-select(
-          stack-label="i18n dropdown selector (hardwired)"
-          :options="[{ label: 'English (US)', value: 'en-us' }, { label: 'Deutsch', value: 'de' }]"
-          v-model="locale"
-          @select="$root.$emit('localeChange', val)"
-          )
-          // $root.$emit('openLeftDrawer')
-        q-card-actions
           q-checkbox(v-model="GDPR_checkbox")
             label() {{ $t('GDPR') }}
       .col-md-2
@@ -51,6 +43,7 @@ export default {
       handler (val, oldVal) {
         if (val) {
           this.$q.cookies.set('GDPR', Date.now(), { path: '/' })
+          this.$q.cookies.set('locale', this.locale, { path: '/' })
           this.GDPR_checkbox = true
         } else {
           this.$q.cookies.remove('locale', { path: '/' })

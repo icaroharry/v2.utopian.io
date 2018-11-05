@@ -1,5 +1,5 @@
 module.exports = {
-	lang: 'en-us',
+	lang: 'en',
 	langNative: 'English',
 	messages: {
 		common: {

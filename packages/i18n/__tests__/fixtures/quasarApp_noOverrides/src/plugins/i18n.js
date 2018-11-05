@@ -171,7 +171,7 @@ export default ({ app, Vue, ssrContext, router }) => {
 
   app.i18n = new VueI18n({
     silentTranslationWarn: true,
-    // fallbackLocale: 'en-us',
+    // fallbackLocale: 'en-uk',
     messages: {}
   })
   app.loadedLanguages = []
@@ -179,6 +179,13 @@ export default ({ app, Vue, ssrContext, router }) => {
   router.beforeEach((to, from, next) => {
     const routeLocale = to.params.locale
     const locale = getLocale(ssrContext, routeLocale)
+    // needed to set quasar locale because short code
+    let qLocale
+    if (locale === 'en') {
+      qLocale = 'en-uk'
+    } else {
+      qLocale = locale
+    }
 
     if (routeLocale !== locale) {
       next({
@@ -190,12 +197,12 @@ export default ({ app, Vue, ssrContext, router }) => {
     if (!app.loadedLanguages.includes(locale)) {
       app.loadedLanguages.push(locale)
       app.i18n.setLocaleMessage(locale, require(`src/i18n/locales/${locale}.json`))
-      import(`quasar-framework/i18n/${locale}`)
+      import(`quasar-framework/i18n/${qLocale}`)
         .then((lang) => {
           Quasar.i18n.set(lang.default)
         })
     } else {
-      import(`quasar-framework/i18n/${locale}`)
+      import(`quasar-framework/i18n/${qLocale}`)
         .then((lang) => {
           Quasar.i18n.set(lang.default)
         })
@@ -213,10 +220,16 @@ export default ({ app, Vue, ssrContext, router }) => {
     async preFetch ({ store, currentRoute, redirect, ssrContext }) {
       if (ssrContext) {
         const locale = currentRoute.params.locale
+        let qLocale
+        if (locale === 'en') {
+          qLocale = 'en-uk'
+        } else {
+          qLocale = locale
+        }
         if (localesList.includes(locale)) {
-          return import(`quasar-framework/i18n/${locale}`)
+          return import(`quasar-framework/i18n/${qLocale}`)
             .then((lang) => {
-              Quasar.i18n.lang = locale
+              Quasar.i18n.lang = qLocale
               Quasar.i18n.set(lang.default)
             })
         }

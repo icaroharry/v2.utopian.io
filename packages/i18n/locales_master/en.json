@@ -1,6 +1,7 @@
 {
-  "lang": "en-us",
+  "lang": "en",
   "langLabel": "en",
+  "languages": "Languages!",
   "langNative": "English",
   "loginWithGithub": "Login with Github",
   "interaction": "Interaction",
@@ -13,7 +14,7 @@
   },
   "homepage": {
     "by": "by",
-    "contributeToProject": "contribute to this project",
+    "contributeToProject" : "contribute to this project",
     "featuredProjects": "Featured projects",
     "newProjectTitle": "List your open source project on Utopian.",
     "newProjectSubtitle": "Connect with thousands of open source contributors.",

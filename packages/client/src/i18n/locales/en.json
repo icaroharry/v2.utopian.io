@@ -1,6 +1,7 @@
 {
-  "lang": "en-us",
+  "lang": "en",
   "langLabel": "en",
+  "languages": "Languages!",
   "langNative": "English",
   "loginWithGithub": "Login with Github",
   "interaction": "Interaction",
@@ -87,7 +88,7 @@
     "linkSteemAccount": "Link your Steem account",
     "logOut": "Log out",
     "settings": "Settings",
-    "signIn": "sign in"
+    "signIn": "LOG ME IN!"
   },
   "notFound": {
     "goBack": "Go back",
@@ -139,8 +140,5 @@
         "style": "percent"
       }
     }
-  },
-  "common": {
-    "signIn": "Log me in with Github!"
   }
 }

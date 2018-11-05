@@ -21,7 +21,8 @@
 const
   builder = require('./builder.js'),
   path = require('path'),
-  fs = require('fs-extra')
+  fs = require('fs-extra'),
+  R = require('ramda')
 
 /**
  * Main function
@@ -39,6 +40,7 @@ const main = async (dir) => {
         return quasarDir
       } else {
       // copy the plugin(s)
+        this.localesObj = []
         builder.listFiles(path.resolve(__dirname, '../plugins'))
           .then(sourcePlugins => {
             sourcePlugins.forEach(sourcePlugin => {
@@ -56,42 +58,53 @@ const main = async (dir) => {
             let localesList = []
             sourceLocales.forEach(locale => {
               localesList.push(locale.split('.')[0])
-              let right
+              let right = false
               // this is implicitly true - no need to test it.
-              fs.readJson(path.resolve(__dirname, `../locales_master/${locale}`)).then(left => {
-                // make sure it exists before requiring it!!!
-                if (fs.existsSync(path.resolve(quasarDir[0], `./src/i18n/overrides/${locale}`))) {
-                  right = true
-                } else {
-                  right = false
-                }
-                const final = path.resolve(quasarDir[0], `src/i18n/locales/${locale}`)
-                if (!right) {
-                  builder.createJsonArtifact(final, left).then(built => {
-                    if (built[0] === 'error') {
-                      builder.log(built)
-                      return built
-                    }
-                  })
-                } else {
-                  fs.readJson(path.resolve(quasarDir[0], `./src/i18n/overrides/${locale}`)).then(data => {
-                    builder.deepMerge(left, data)
-                      .then(msg => {
-                        builder.log(msg)
-                        builder.createJsonArtifact(final, msg).then(built => {
-                          if (built[0] === 'error') {
-                            builder.log(built)
-                            return built
-                          }
-                        })
+              let left = fs.readJsonSync(path.resolve(__dirname, `../locales_master/${locale}`))
+
+              // check if the locale is already in the obj, if not, add it:
+              // thankyou SSR
+              this.tmpLocales = { lang: left.lang, langNative: left.langNative }
+              if (!R.contains(this.tmpLocales, this.localesObj)) {
+                this.localesObj.push(this.tmpLocales)
+              }
+
+              // make sure it exists before requiring it!!!
+              if (fs.existsSync(path.resolve(quasarDir[0], `./src/i18n/overrides/${locale}`))) right = true
+              const final = path.resolve(quasarDir[0], `src/i18n/locales/${locale}`)
+              if (!right) {
+                builder.createJsonArtifact(final, left).then(built => {
+                  if (built[0] === 'error') {
+                    builder.log(built)
+                    return built
+                  }
+                })
+              } else {
+                fs.readJson(path.resolve(quasarDir[0], `./src/i18n/overrides/${locale}`)).then(data => {
+                  builder.deepMerge(left, data)
+                    .then(msg => {
+                      builder.log(msg)
+                      builder.createJsonArtifact(final, msg).then(built => {
+                        if (built[0] === 'error') {
+                          builder.log(built)
+                          return built
+                        }
                       })
-                  })
-                }
-              })
+                    })
+                })
+              }
             })
 
             const localesListFile = path.resolve(quasarDir[0], './src/i18n/localesList.json')
             builder.createJsonArtifact(localesListFile, localesList).then(built => {
+              if (built[0] === 'error') {
+                builder.log(built)
+                return built
+              }
+            })
+            const loki = this.localesObj // [].concat.apply([],this.localesObj)
+            const localesObjFile = path.resolve(quasarDir[0], './src/i18n/localesObj.json')
+            builder.createJsonArtifact(localesObjFile, loki).then(built => {
               if (built[0] === 'error') {
                 builder.log(built)
                 return built
@@ -106,7 +119,7 @@ const main = async (dir) => {
 
 // run it at least on import to make sure we get the latest strings
 // everytime webpack starts or when its imported. :)
-// main()
+main()
 
 module.exports = {
   main

@@ -7,7 +7,7 @@ import path from 'path'
 require('babel-core').transform('code', {
 	plugins: ['dynamic-import-node']
 })
-const obj = require(path.resolve(__dirname, './fixtures/thisLib/locales/en-us.js'))
+const obj = require(path.resolve(__dirname, './fixtures/thisLib/locales/en.js'))
 
 describe('Detect Quasar [builder.detectQuasar]', () => {
   it('succeeds when it finds a Quasar Project folder', () => {
@@ -75,7 +75,7 @@ describe('Deep Merge two objects [builder.deepMerge]', () => {
 describe('Parses existing files [builder.listFiles]', async () => {
   it('finds the locale files', async () => {
     return builder.listFiles(path.resolve(__dirname, './fixtures/thisLib/locales'))
-    .then(data => expect(data).toEqual(['de.js', 'en-us.js']))
+    .then(data => expect(data).toEqual(['de.js', 'en.js']))
   })
   it('fails with error message if directory exists but is empty', async () => {
     return builder.listFiles(path.resolve(__dirname, './fixtures/thisLib/emptyLib'))
@@ -103,8 +103,8 @@ describe('Prints out logs on errors [builder.log]', async () => {
 describe('Creates file from object [builder.createJsonArtifact]', async () => {
   // note: we do not test if the folder or file exists.
   // fs-extra will create it, so there is no reason to test
-  const filePath = path.resolve(__dirname, './fixtures/quasarApp/src/i18n/locales/en-us.json')
-  const filePathWrongSuffix = path.resolve(__dirname, './fixtures/quasarApp/src/i18n/locales/en-us.png')
+  const filePath = path.resolve(__dirname, './fixtures/quasarApp/src/i18n/locales/en.json')
+  const filePathWrongSuffix = path.resolve(__dirname, './fixtures/quasarApp/src/i18n/locales/en.png')
   it('creates a json file correctly', () => {
     return builder.createJsonArtifact(filePath, obj)
     .then(data => expect(data[0]).toEqual('success'))

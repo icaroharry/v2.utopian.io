@@ -1,11 +1,12 @@
 // environment config.
 require('dotenv').config()
-const I18N = require('@utopian/i18n/lib')
 const path = require('path')
-// const webpack = require('webpack')
-// const WebpackMildCompile = require('webpack-mild-compile').Plugin
-const ExtraWatchWebpackPlugin = require('extra-watch-webpack-plugin')
 
+// i18n webpack cruft
+const I18N = require('@utopian/i18n/lib')
+const ExtraWatchWebpackPlugin = require('extra-watch-webpack-plugin')
+// todo: https://webpack.js.org/plugins/context-replacement-plugin/ for i18n files in all libs
+// const webpack = require('webpack')
 
 // quasar / app config.
 module.exports = function (ctx) {
@@ -14,12 +15,12 @@ module.exports = function (ctx) {
     preFetch: true,
     supportIE: false,
     // list of animations to load.
+    // todo: thin this out because it bloats the final package size
     animations: 'all', // animations: []
     // list of css files to load (including pre-processors).
     css: ['app.styl'],
-
     // quasar extras.
-    extras: ['roboto-font', 'mdi'],
+    extras: ['roboto-font', 'mdi', 'material-icons', 'fontawesome'],
     // quasar plugins.
     plugins: [
       'vuelidate',
@@ -38,25 +39,7 @@ module.exports = function (ctx) {
       scopeHoisting: true,
       vueRouterMode: 'history',
       useNotifier: false,
-      vueCompiler: true,
-
-      /*
-      // webpack configuration.
-      extendWebpack: function (cfg) {
-        // main loader / js config.
-        cfg.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules|quasar)/
-        })
-        cfg.module.rules.push({
-          test: /\.pug$/,
-          loader: 'pug-plain-loader'
-        })
-      },
-      */
-      // todo: https://webpack.js.org/plugins/context-replacement-plugin/ for i18n files in all libs
+      // vueCompiler: true,
       chainWebpack(chain) {
         chain.plugin('extraWatcher')
           .use(ExtraWatchWebpackPlugin, [
@@ -101,8 +84,8 @@ module.exports = function (ctx) {
     },
     // framework configuration.
     framework: {
-      i18n: 'en-us',
-      iconSet: 'mdi',
+      i18n: 'en-uk',
+      iconSet: 'material-icons',
       components: [
         'QAjaxBar',
         'QAutocomplete',

@@ -64,7 +64,7 @@ describe('apply function', () => {
           }
         });
       }
-      const plugin = CopyWebpackPlugin(opts.patterns, opts.options)
+      const plugin = new I18NPlugin(opts.patterns, opts.options)
 
       // Get a mock compiler to pass to plugin.apply
       const compiler = opts.compiler || new MockCompiler()
@@ -115,41 +115,49 @@ describe('apply function', () => {
     return run(opts)
     .then((compilation) => {
       if (opts.expectedAssetKeys && opts.expectedAssetKeys.length > 0) {
-        expect(compilation.assets).to.have.all.keys(opts.expectedAssetKeys.map(removeIllegalCharacterForWindows));
+        expect(compilation.assets).to.have.all.keys(opts.expectedAssetKeys.map(removeIllegalCharacterForWindows))
       } else {
-        expect(compilation.assets).to.deep.equal({});
+        expect(compilation.assets).to.deep.equal({})
       }
 
       if (opts.expectedAssetContent) {
         for (var key in opts.expectedAssetContent) {
-          expect(compilation.assets[key]).to.exist;
+          expect(compilation.assets[key]).to.exist
           if (compilation.assets[key]) {
-            let expectedContent = opts.expectedAssetContent[key];
+            let expectedContent = opts.expectedAssetContent[key]
 
             if (!Buffer.isBuffer(expectedContent)) {
-              expectedContent = new Buffer(expectedContent);
+              expectedContent = new Buffer(expectedContent)
             }
 
-            let compiledContent = compilation.assets[key].source();
+            let compiledContent = compilation.assets[key].source()
 
             if (!Buffer.isBuffer(compiledContent)) {
-              compiledContent = new Buffer(compiledContent);
+              compiledContent = new Buffer(compiledContent)
             }
 
-            expect(Buffer.compare(expectedContent, compiledContent)).to.equal(0);
+            expect(Buffer.compare(expectedContent, compiledContent)).to.equal(0)
           }
         }
       }
     });
   }
-    describe('error handling', () => {
-      it('doesn\'t throw an error if no patterns are passed', (done) => {
-        watchRun({
-          expectedAssetKeys: [],
-          patterns: undefined // eslint-disable-line no-undefined
-        })
-        .then(done)
-        .catch(done);
-      });
+    describe('Webpack plugin options exist', () => {
+      it('doesn\'t throw an error if no options are passed',  () => {
+        const dummy = new I18NPlugin()
+        expect(dummy.opts).toEqual({})
+      })
+      it('knows it has started',  () => {
+        const dummy = new I18NPlugin()
+        expect(dummy['start']).toEqual(true)
+      })
+      it('has nothing to count at the beginning',  () => {
+        const dummy = new I18NPlugin()
+        expect(dummy['count']).toEqual(0)
+      })
+      it('creates an anonymous function',  () => {
+        const dummy = new I18NPlugin()
+        expect(dummy['getChangedFiles']).toBeInstanceOf(Function)
+      })
   })
-  })
+})
