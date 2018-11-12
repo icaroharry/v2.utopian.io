@@ -15,6 +15,24 @@ routes.push([
     }
   },
   {
+    /**
+     *  Find a number of users where the partial matches usernames
+     *  used by: [client/src/components/form/wysiwyg:@mention]
+     *  @params {string} partial - 2-32 character string to try and find a match
+     *  @params {number} count - max number of responses
+     *  @author: Daniel Thompson-Yvetot
+     */
+    method: 'GET',
+    path: '/v1/users/{partial}/{count}',
+    handler: (req, h, next) => Handlers.getUsersByPartial(req, h, next),
+    options: {
+      // auth: { access: { scope: 'user' } },
+      auth: false,
+      tags: ['users'],
+      validate: Validate.getUsersByPartial
+    }
+  },
+  {
     method: 'GET',
     path: '/v1/user/{username}/available',
     handler: (req, h, next) => Handlers.isUsernameAvailable(req, h, next),

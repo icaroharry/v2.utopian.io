@@ -74,7 +74,7 @@
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
     "punycode": "^2.1.1",
-    "quasar-cli": "^0.17.20",
+    "quasar-cli": "^0.17.22",
     "register-service-worker": "^1.4.0",
     "sanitize-html": "^1.18.2",
     "sc2-sdk": "^1.0.2",

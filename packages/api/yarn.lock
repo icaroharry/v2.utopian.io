@@ -1645,6 +1645,7 @@ growl@1.10.5:
 handlebars@4.x.x:
   version "4.0.12"
   resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.0.12.tgz#2c15c8a96d46da5e266700518ba8cb8d919d5bc5"
+  integrity sha512-RhmTekP+FZL+XNhwS1Wf+bTTZpdLougwt5pcgA1tuz6Jcx0fpH/7z0qd71RKnZHBCxIRBHfBOnio4gViPemNzA==
   dependencies:
     async "^2.5.0"
     optimist "^0.6.1"
@@ -2629,6 +2630,7 @@ loose-envify@^1.0.0:
 lout@^11.1.0:
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/lout/-/lout-11.1.0.tgz#4c48b6b068b42197acb6420d79b856095d174589"
+  integrity sha512-HAowXHOraHWEPrYPuNc7mR8v1Sn1Gnmy8uvpXYDidVHsTMlrkxqUZ1liBXGOf4eN22kVB+eG29NWymPhZG/wKg==
   dependencies:
     boom "7.x.x"
     handlebars "4.x.x"
@@ -4298,6 +4300,7 @@ uglify-js@^2.6:
 uglify-js@^3.1.4:
   version "3.4.9"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.4.9.tgz#af02f180c1207d76432e473ed24a28f4a782bae3"
+  integrity sha512-8CJsbKOtEbnJsTyv6LE6m6ZKniqMiFWmm9sRbopbkGs3gMPPfd3Fh8iIA4Ykv5MgaTbqHr4BaoGLJLZNhsrW1Q==
   dependencies:
     commander "~2.17.1"
     source-map "~0.6.1"

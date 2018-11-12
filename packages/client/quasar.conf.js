@@ -31,6 +31,7 @@ module.exports = function (ctx) {
     build: {
       env: {
         UTOPIAN_API: process.env.UTOPIAN_API,
+        UTOPIAN_DOMAIN: process.env.UTOPIAN_DOMAIN,
         AUTH_DOMAIN: process.env.AUTH_DOMAIN,
         GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
         STEEMCONNECT_CLIENT_ID: (process.env.STEEMCONNECT_CLIENT_ID || '"utopian.signin"'),
@@ -40,19 +41,21 @@ module.exports = function (ctx) {
       vueRouterMode: 'history',
       useNotifier: false,
       // vueCompiler: true,
-      chainWebpack(chain) {
+      chainWebpack(chain, { isServer }) {
         chain.plugin('extraWatcher')
-          .use(ExtraWatchWebpackPlugin, [
-            {
-              dirs: [ 'src/i18n/overrides', '../i18n/locales_master' ]
-            }
-          ])
+        .use(ExtraWatchWebpackPlugin, [
+          {
+            dirs: [ 'src/i18n/overrides', '../i18n/locales_master' ]
+          }
+        ])
         chain.plugin('i18n')
-          .use(I18N, [
-            [{
-              debug: false
-            }]
-          ])
+        .use(I18N, [
+          [{
+            debug: false
+          }]
+        ])
+      },
+      chainWebpack(chain, { isClient, isServer }) {
         chain.module.rule('lint')
           .test(/\.(js|vue)$/)
           .pre()
@@ -89,6 +92,8 @@ module.exports = function (ctx) {
       components: [
         'QAjaxBar',
         'QAutocomplete',
+        'QBreadcrumbs',
+        'QBreadcrumbsEl',
         'QBtn',
         'QBtnDropdown',
         'QBtnGroup',
@@ -127,6 +132,7 @@ module.exports = function (ctx) {
         'QList',
         'QListHeader',
         'QNoSsr',
+        'QOptionGroup',
         'QPage',
         'QPageContainer',
         'QPageSticky',
@@ -156,7 +162,8 @@ module.exports = function (ctx) {
         'QTh',
         'QTr',
         'QTd',
-        'QTableColumns'
+        'QTableColumns',
+        'QWindowResizeObservable'
       ],
       directives: [
         'Ripple',

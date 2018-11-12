@@ -10,5 +10,10 @@ export default function () {
     base: process.env.VUE_ROUTER_BASE,
     routes
   })
+  Router.beforeEach((to, from, next) => {
+    // todo guard for auth, then reroute
+
+    next()
+  })
   return Router
 }

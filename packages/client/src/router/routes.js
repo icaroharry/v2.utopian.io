@@ -33,6 +33,12 @@ export default [
         name: 'i18n.test',
         props: true,
         component: () => import('src/pages/tests/i18n')
+      },
+      {
+        path: '/:locale/QEditor',
+        name: 'QEditor',
+        props: true,
+        component: () => import('@/pages/tests/QEditor.vue')
       }
     ]
   },

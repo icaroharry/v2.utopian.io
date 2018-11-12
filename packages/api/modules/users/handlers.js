@@ -11,6 +11,27 @@ const getUserByUsername = async (req, h) => {
   return h.response({ data: user.getPublicFields() })
 }
 
+/**
+ *  Return an array of users where the partial matches usernames
+ *  used by: [client/src/components/form/wysiwyg:methods:search()]
+ *  @param {string} req.params.partial - 2-32 character string to try and find a match
+ *  @param {number} req.params.count - max number of responses
+ *  @returns {array } collection of usernames or message
+ *  @author Daniel Thompson-Yvetot
+ */
+const getUsersByPartial = async (req, h) => {
+  const response = await User.find(
+    { username: { '$regex': req.params.partial, '$options': 'i' } },
+    { username: 1, avatarUrl: 1, _id: 0 })
+    .sort({ username: 1 })
+    .limit(req.params.count)
+  if (response.length <= 0) {
+    return h.response('noUsersFound')
+  }
+
+  return h.response(response)
+}
+
 const deleteUserByUsername = async (req, h) => {
   if (req.auth.credentials.username !== req.params.username) {
     throw Boom.unauthorized('not-allowed')
@@ -93,6 +114,7 @@ const saveUser = async (req, h) => {
 
 module.exports = {
   saveUser,
+  getUsersByPartial,
   getUserByUsername,
   deleteUserByUsername,
   editUserByUsername,

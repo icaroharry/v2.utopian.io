@@ -34,8 +34,8 @@ export default {
 
 <!-- import component template. -->
 <template lang="pug">
-  // wrapper element.
-  div.u-app#q-app
+  q-layout.u-app#q-app(view="hHh LpR fff")
+    //div.u-app#q-app
     // router view enabler.
     router-view
 </template>

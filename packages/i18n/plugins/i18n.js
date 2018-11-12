@@ -234,7 +234,7 @@ export default ({ app, Vue, ssrContext, router }) => {
       }
     },
     mounted () {
-      this.locale = this.$route.params.locale
+      // this.locale = this.$q.cookies.get('locale') || this.$route.params.locale
       // watch the emit event for localeChange
       this.$root.$on('localeChange', (val) => {
         let route = this.$route.path.split('/')

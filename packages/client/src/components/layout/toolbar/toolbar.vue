@@ -34,7 +34,7 @@ export default {
 </script>
 
 <template lang="pug">
-q-toolbar.u-toolbar(color='tertiary')
+q-toolbar.u-toolbar(color='tertiary', style="z-index: 1000000")
   .container.toolbar-container
     router-link(:to="{ name: 'home', params: locale }")
       img.u-logo.mobile-only(src="~assets/img/logo-icon.svg")

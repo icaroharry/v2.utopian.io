@@ -252,7 +252,7 @@ div
         q-input(v-model="project.description", :placeholder="$t('projects.createEdit.shortDescription.placeholder')", type="textarea",
         maxlength="250", :max-height="150", rows="7", @keyup.enter="submit" @blur="updateFormPercentage('description')")
 
-      q-field(:label="`${$t('projects.createEdit.projectDetails.label')}*`", orientation="vertical",
+      q-field.q-field-no-input(:label="`${$t('projects.createEdit.projectDetails.label')}*`", orientation="vertical",
       :helper="$t('projects.createEdit.projectDetails.help')",:error="$v.project.details.$error")
         u-wysiwyg(v-model="project.details", :onChange="updateFormPercentage", field="details")
 
@@ -272,7 +272,6 @@ div
             q-btn.full-width(color="primary", :label="$t('projects.createEdit.save')", @click="submit")
 
 </template>
-
 <style lang="stylus">
 @import "~variables"
 .project-form-container {

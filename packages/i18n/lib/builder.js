@@ -155,9 +155,17 @@ const copyArtifact = async (inputFile, outputFile) => {
  *
  */
 `
-  return fs.copy(inputFile, outputFile)
-    .then(() => { fs.appendFile(outputFile, append) })
-    .then(() => { return ['success'] })
+  try {
+    fs.copySync(inputFile, outputFile)
+  } catch (err) {
+    return log(['error', Date.now(), 'i18n.builder.copyArtifact', 'error.onCopy', err])
+  }
+  try {
+    fs.appendFileSync(outputFile, append)
+  } catch (err) {
+    return log(['error', Date.now(), 'i18n.builder.copyArtifact', 'error.onAppend', err])
+  }
+  return log(['success'])
 }
 
 /**
