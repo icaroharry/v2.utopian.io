@@ -1,6 +1,6 @@
 export default [
   {
-    path: '/',
+    path: '/:locale',
     component: () => import('src/layouts/main'),
     props: true,
     children: [
@@ -11,25 +11,31 @@ export default [
         component: () => import('src/pages/index/index')
       },
       {
-        path: '/:locale/project/create',
+        path: 'project/create',
         name: 'project.create',
         props: true,
         component: () => import('src/pages/projects/create-edit/create-edit')
       },
       {
-        path: '/:locale/project/:name/edit',
+        path: 'project/:name/edit',
         name: 'project.edit',
         props: true,
         component: () => import('src/pages/projects/create-edit/create-edit')
       },
       {
-        path: '/:locale/project/search',
-        name: 'project.search',
+        path: 'articles/create',
+        name: 'articles.create',
         props: true,
-        component: () => import('src/pages/projects/create-edit/create-edit')
+        component: () => import('src/pages/articles/create-edit/create-edit')
       },
       {
-        path: '/:locale/i18n',
+        path: 'articles/:author/:slug/edit',
+        name: 'articles.edit',
+        props: true,
+        component: () => import('src/pages/articles/create-edit/create-edit')
+      },
+      {
+        path: 'i18n',
         name: 'i18n.test',
         props: true,
         component: () => import('src/pages/tests/i18n')

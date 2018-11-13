@@ -36,7 +36,7 @@ const getToken = async (req, h) => {
     })
     await newRefreshToken.save()
 
-    const accessToken = getAccessToken({ username: user.username, scopes: user.scopes })
+    const accessToken = getAccessToken({ uid: user._id, username: user.username, scopes: user.scopes })
     return h.response({
       token_type: 'bearer',
       access_token: accessToken,
@@ -48,7 +48,7 @@ const getToken = async (req, h) => {
       const decoded = JWT.verify(req.payload.code, process.env.JWT_SECRET)
       const refreshToken = await RefreshToken.findOne({ refreshToken: req.payload.code, user: decoded.uid }).populate('user')
       if (refreshToken) {
-        const accessToken = getAccessToken({ username: refreshToken.user.username, scopes: refreshToken.user.scopes })
+        const accessToken = getAccessToken({ uid: refreshToken.user._id, username: refreshToken.user.username, scopes: refreshToken.user.scopes })
         return h.response({
           token_type: 'bearer',
           access_token: accessToken,
@@ -70,7 +70,7 @@ const getToken = async (req, h) => {
       })
       await newRefreshToken.save()
 
-      const accessToken = getAccessToken({ username: user.username, scopes: user.scopes })
+      const accessToken = getAccessToken({ uid: user._id, username: user.username, scopes: user.scopes })
       return h.response({
         token_type: 'bearer',
         access_token: accessToken,
@@ -101,7 +101,7 @@ const revokeToken = async (req, h) => {
 
 const me = async (req, h) => {
   const data = await User.findOne({ username: req.auth.credentials.username })
-    .select('avatarUrl username blockchainAccounts -_id')
+    .select('avatarUrl username blockchainAccounts')
   if (data) {
     return h.response({
       data

@@ -7,6 +7,20 @@
   "interaction": "Interaction",
   "debug": "Debug",
   "GDPR": "GDPR Acceptance",
+  "articles": {
+    "createEdit": {
+      "body": {
+        "label": "Content",
+        "help": "What do you want to share with us?"
+      },
+      "formTitle": "Write anything about a project",
+      "title": {
+        "label": "Article title",
+        "placeholder": "Add a title"
+      },
+      "save": "Publish my article"
+    }
+  },
   "fileUpload": {
     "error": {
       "unexpected": "An error occurred while uploading your file."

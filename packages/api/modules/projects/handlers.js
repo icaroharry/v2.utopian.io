@@ -1,6 +1,5 @@
-const crypto = require('crypto')
 const Boom = require('boom')
-const Slugify = require('slugify')
+const { slugify } = require('../../utils/slugify')
 const Project = require('./project.model')
 const User = require('../users/user.model')
 const { getUserProjectPermission } = require('../../utils/github')
@@ -66,11 +65,11 @@ const editProject = async (req, h) => {
   }
 
   // Was the name updated? If yes we need to archive the previous slug
-  let slug = Slugify(`${owner}-${req.payload.name}`)
+  let slug = `${owner}/${slugify(req.payload.name)}`
   const slugs = projectDb.slugs || []
   if (projectDb.slug !== slug) {
     if (!projectDb.slugs.includes(slug) && await Project.countDocuments({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] }) > 0) {
-      slug += `-${crypto.randomBytes(5).toString('hex')}`
+      slug += `-${Date.now()}`
     }
 
     if (!projectDb.slugs.includes(projectDb.slug)) {
@@ -126,9 +125,9 @@ const createProject = async (req, h) => {
     so the slugs array will have a reference to owner-projectA
     that's why we need to append a random string to the slug
   */
-  let slug = Slugify(`${owner}-${req.payload.name}`)
+  let slug = `${owner}/${slugify(req.payload.name)}`
   if (await Project.countDocuments({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] }) > 0) {
-    slug += `-${crypto.randomBytes(5).toString('hex')}`
+    slug += `-${Date.now()}`
   }
 
   // Filter the repositories where the user has admin rights

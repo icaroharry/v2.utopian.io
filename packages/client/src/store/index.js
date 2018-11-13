@@ -5,15 +5,17 @@ import Vuex from 'vuex'
 // import store modules.
 import api from './api'
 import auth from './auth'
+import articles from './articles'
+import blockchainSteem from './blockchains/steem'
+import github from './github'
 import projects from './projects'
 import users from './users'
-import github from './github'
-import blockchainSteem from './blockchains/steem'
 import utils from './utils'
 
 // join modules.
 const modules = {
   api,
+  articles,
   auth,
   blockchainSteem,
   github,

@@ -1,12 +1,13 @@
 const JWT = require('jsonwebtoken')
 
-const getAccessToken = ({ username = '', scopes = ['user'], providerToken = '', providerType = '', expiresIn = 30 }) => {
+const getAccessToken = ({ uid = '', username = '', scopes = ['user'], providerToken = '', providerType = '', expiresIn = 30 }) => {
   const tokenObj = {
     iss: 'utopian.io',
     aud: 'utopian.io',
     scopes
   }
 
+  if (uid) tokenObj.uid = uid
   if (username) tokenObj.username = username
   if (providerToken) tokenObj.providerToken = providerToken
   if (providerType) tokenObj.providerType = providerType

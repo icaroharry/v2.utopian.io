@@ -19,6 +19,7 @@ const register = (server) => {
           }
         }
 
+        if (decoded.uid) returnObj.credentials.uid = decoded.uid
         if (decoded.username) returnObj.credentials.username = decoded.username
         if (decoded.providerToken) returnObj.credentials.providerToken = decoded.providerToken
         if (decoded.providerType) returnObj.credentials.providerType = decoded.providerType

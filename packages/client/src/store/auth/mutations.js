@@ -1,5 +1,9 @@
 export const setUser = (state, user = null) => {
-  state.user = user
+  const { _id: uid, ...data } = user
+  state.user = {
+    uid,
+    ...data
+  }
 }
 
 export const setCredentials = (state, credentials = null) => {

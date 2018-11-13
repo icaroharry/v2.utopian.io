@@ -45,6 +45,12 @@ q-toolbar.u-toolbar(color='tertiary', style="z-index: 1000000")
 
     .float-right(v-if="!guest")
       q-btn(dense, color="primary", :label="$t('navbar.contribute', 1)", icon="mdi-plus")
+        q-popover(self="top left", anchor="bottom left")
+          q-list(dense, :link="true", separator)
+            q-item(:to="{ name: 'articles.create'}")
+              q-item-main(label="Write an article")
+            q-item(:to="{ name: 'project.create'}")
+              q-item-main(label="Add my project")
       span
         img.avatar(:src="user.avatarUrl")
         q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]")
