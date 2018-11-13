@@ -11,7 +11,7 @@
     "createEdit": {
       "body": {
         "label": "Content",
-        "help": "What do you want to share with us?"
+        "help": "What do you want to share with us? (Hint: Type @@ to find a username)"
       },
       "formTitle": "Write anything about a project",
       "title": {
