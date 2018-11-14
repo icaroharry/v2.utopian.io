@@ -29,6 +29,12 @@ const getToken = async (req, h) => {
       })
     }
 
+    // Requesting a login from github have to override the existing access token
+    await User.updateOne(
+      { _id: user._id, 'authProviders.type': 'github' },
+      { $set: { 'authProviders.$.token': githubToken } }
+    )
+
     const refreshToken = getRefreshToken({ uid: user._id })
     const newRefreshToken = new RefreshToken({
       refreshToken,
