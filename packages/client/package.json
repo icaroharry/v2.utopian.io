@@ -41,7 +41,7 @@
   "devDependencies": {
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@blocker/steem-api": "^1.3.2",
-    "@utopian/i18n": "link:../i18n",
+    "@utopian/i18n": "^1.0.0",
     "babel-eslint": "^8.2.3",
     "babel-plugin-dynamic-import-node": "^2.2.0",
     "babel-plugin-transform-async-to-generator": "^6.24.1",

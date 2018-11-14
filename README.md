@@ -23,6 +23,7 @@ yarn global add lerna
 This will bootstrap all the projects of the monorepo. If you only want to install a specific project, open the project folder and follow the instructions in the README.md.
 
 ```shell
+lerna link
 lerna bootstrap
 ```
 
