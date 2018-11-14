@@ -7,17 +7,17 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('src/pages/login/login')
+    component: () => import('src/pages/login')
   },
   {
-    path: '/users/create',
-    name: 'users.create',
-    component: () => import('src/pages/users/create/create')
+    path: '/signup/utopian',
+    name: 'signup.utopian',
+    component: () => import('src/pages/signup/utopian')
   },
   { // Always leave this as last one
     path: '*',
     name: 'not-found',
-    component: () => import('src/pages/404/404')
+    component: () => import('src/pages/404')
   }
 ]
 
@@ -25,7 +25,7 @@ const routes = [
 if (process.env.MODE !== 'ssr') {
   routes.push({
     path: '*',
-    component: () => import('src/pages/404/404')
+    component: () => import('src/pages/404')
   })
 }
 

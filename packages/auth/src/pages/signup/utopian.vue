@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 import { Cookies, debounce, Notify, Loading } from 'quasar'
 
 export default {
-  name: 'u-page-users-create',
+  name: 'u-page-signup-utopian',
   preFetch ({ redirect, ssrContext }) {
     const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
     let scopes = jwt.decode(cookies.get('access_token')).scopes
@@ -109,6 +109,48 @@ export default {
 }
 </script>
 
-<style lang="stylus" src="./create.styl"></style>
+<template lang="pug">
+q-layout.u-page-signup-utopian
+  .row.justify-center.items-center
+    .create-user-form
+      img.utopian-logo(src="~assets/img/logo-black.svg")
+      p.q-title Please create a unique username to be used in Utopian.io
+      q-field.full-width.q-mb-md(
+        :error="$v.user.username.$error && user.usernameAvailable !== 'checking'",
+        :error-label="getErrorLabel()"
+      )
+        q-input(
+          v-model.trim="user.username",
+          placeholder="ada.lovelace",
+          :before="[{ icon: 'mdi-account' }]",
+          prefix="@"
+          maxlength="32"
+          @input="validateUsername()"
+          :loading="user.usernameAvailable === 'checking'"
+          :color="user.usernameAvailable === true ? 'green' : 'primary'"
+        )
+      q-btn.full-width(color="primary", label="Create", @click="submit", :disabled="user.usernameAvailable !== true")
+</template>
 
-<template lang="pug" src="./create.pug"></template>
+<style lang="stylus">
+.u-page-signup-utopian {
+  > div {
+    height 100vh
+  }
+  .create-user-form {
+    text-align center
+    .utopian-logo {
+      height 60px
+      margin-bottom 20px
+    }
+  }
+
+  .q-if-addon-left {
+    margin-top 5px
+  }
+
+  .q-field {
+    height 75px
+  }
+}
+</style>
