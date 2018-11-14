@@ -31,7 +31,7 @@ describe('featured projects', () => {
 
   it('should have all the keys', () => {
     expect(payload[0]).to.have.all.keys(
-      'description', 'featured_order', 'medias', 'name', 'owner', 'slug', 'tags'
+      'description', 'medias', 'name', 'owner', 'slug', 'tags'
     )
   })
 })
