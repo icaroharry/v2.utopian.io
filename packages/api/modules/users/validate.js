@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const { validation } = require('../../utils/constants')
 
 const findByUsername = {
   params: {
@@ -13,20 +14,20 @@ const findByUsername = {
  */
 const getUsersByPartial = {
   params: {
-    partial: Joi.string().min(2).max(32).trim().alphanum().required(),
+    partial: validation.username,
     count: Joi.number().min(1).max(100).required()
   }
 }
 
 const isUsernameAvailable = {
   params: {
-    username: Joi.string().trim().lowercase().required().min(3).max(32).regex(/^[A-Za-z0-9]+(?:[._-][A-Za-z0-9]+)*$/)
+    username: validation.username
   }
 }
 
 const saveUser = {
   payload: {
-    username: Joi.string().trim().lowercase().required().min(3).max(32).regex(/^[A-Za-z0-9]+(?:[._-][A-Za-z0-9]+)*$/),
+    username: validation.username,
     avatarUrl: Joi.string().trim()
   }
 }

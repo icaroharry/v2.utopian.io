@@ -49,7 +49,7 @@ q-toolbar.u-toolbar(color='tertiary', style="z-index: 1000000")
           q-list(dense, :link="true", separator)
             q-item(:to="{ name: 'articles.create'}")
               q-item-main(label="Write an article")
-            q-item(:to="{ name: 'project.create'}")
+            q-item(:to="{ name: 'projects.create'}")
               q-item-main(label="Add my project")
       span
         img.avatar(:src="user.avatarUrl")

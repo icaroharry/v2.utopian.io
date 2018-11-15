@@ -1,8 +1,9 @@
 const Joi = require('joi')
 const { licenses } = require('../../utils/constants')
 
-const getProjectBySlug = {
+const getProjectByOwnerAndSlug = {
   params: {
+    owner: Joi.string().trim().required(),
     slug: Joi.string().trim().required()
   }
 }
@@ -29,6 +30,7 @@ const createProject = {
     medias: Joi.array().required(),
     description: Joi.string().trim().required(),
     details: Joi.string().trim().required(),
+    owners: Joi.array().optional(),
     tags: Joi.array().min(3).max(5).unique().items(Joi.string().trim().alphanum()).required()
   }
 }
@@ -44,6 +46,7 @@ const editProject = {
     medias: Joi.array().required(),
     description: Joi.string().trim().required(),
     details: Joi.string().trim().required(),
+    owners: Joi.array().optional(),
     tags: Joi.array().min(3).max(5).unique().items(Joi.string().trim().alphanum()).required()
   }
 }
@@ -65,7 +68,7 @@ const isProjectAdmin = {
 module.exports = {
   createProject,
   editProject,
-  getProjectBySlug,
+  getProjectByOwnerAndSlug,
   deleteProjectBySlug,
   getProjects,
   isNameAvailable,

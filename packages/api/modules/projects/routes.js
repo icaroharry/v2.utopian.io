@@ -25,12 +25,12 @@ routes.push([
   },
   {
     method: 'GET',
-    path: '/v1/project/{slug}',
-    handler: (req, h, next) => Handlers.getProjectBySlug(req, h, next),
+    path: '/v1/project/{owner}/{slug}',
+    handler: (req, h, next) => Handlers.getProjectByOwnerAndSlug(req, h, next),
     options: {
       auth: false,
       tags: ['projects'],
-      validate: Validate.getProjectBySlug
+      validate: Validate.getProjectByOwnerAndSlug
     }
   },
   {

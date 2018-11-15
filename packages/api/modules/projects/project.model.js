@@ -25,7 +25,11 @@ const projects = new Schema({
     required: true
   },
   name: { type: String, required: true, index: { unique: true }, text: true },
-  owner: { type: String, required: true },
+  owners: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Users',
+    required: true
+  }],
   repositories: {
     type: [{
       _id: false,

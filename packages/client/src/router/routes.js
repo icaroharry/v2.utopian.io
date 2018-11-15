@@ -11,14 +11,14 @@ export default [
         component: () => import('src/pages/index/index')
       },
       {
-        path: 'project/create',
-        name: 'project.create',
+        path: 'projects/create',
+        name: 'projects.create',
         props: true,
         component: () => import('src/pages/projects/create-edit/create-edit')
       },
       {
-        path: 'project/:name/edit',
-        name: 'project.edit',
+        path: 'projects/:owner/:slug/edit',
+        name: 'projects.edit',
         props: true,
         component: () => import('src/pages/projects/create-edit/create-edit')
       },

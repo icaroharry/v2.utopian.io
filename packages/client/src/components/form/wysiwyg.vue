@@ -1,5 +1,6 @@
 <script>
 import QNoSsr from 'quasar-framework/src/components/no-ssr/QNoSsr'
+import { mapActions } from 'vuex'
 
 // todo: map to quasar internals
 // import { Caret } from 'quasar-framework/src/components/editor/editor-caret'
@@ -61,6 +62,7 @@ export default {
     */
   },
   methods: {
+    ...mapActions('users', ['searchUsers']),
     /**
      * @author Unknown
      */
@@ -286,31 +288,19 @@ export default {
      *  @throws $axios error
      *  @author Daniel Thompson-Yvetot
      */
-    search (terms, done) {
-      // we are sanitizing again, I know.
-      terms = this.partialCleaner(terms)
-      if (terms.length >= 2) {
-        // todo: hit the right api smart guy
-        this.$axios.get(`${process.env.UTOPIAN_API}/v1/users/${terms}/10`)
-          .then((res) => {
-            if (res === 'noUsersFound') {
-              done([{ label: this.$t('editor.noUsersFound'), value: null }])
-            } else {
-              this.users = res.map(user => {
-                return {
-                  label: user.username,
-                  avatar: user.avatarUrl,
-                  value: user.username
-                }
-              })
-              done(this.users)
-            }
-          })
-          .catch(err => {
-            throw new Error(err)
-            // todo: log instead of throw
-          })
-      }
+    search (term, done) {
+      this.searchUsers({ term, count: 10 })
+        .then(users => {
+          if (typeof users === 'string') {
+            done([{ label: this.$t(users), value: null }])
+          } else {
+            done(users.map(user => ({
+              label: user.username,
+              avatar: user.avatarUrl,
+              value: user.username
+            })))
+          }
+        })
     },
 
     /**
@@ -504,7 +494,7 @@ export default {
         <q-autocomplete
           @search="search"
           :debounce="200"
-          :min-characters="2"
+          :min-characters="3"
           :max-results="10"
           @selected="pasteUserToPos"
           dense

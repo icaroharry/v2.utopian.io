@@ -11,7 +11,7 @@
     "createEdit": {
       "body": {
         "label": "Content",
-        "help": "What do you want to share with us?"
+        "help": "What do you want to share with us? (Hint: Type @@ to find a username)"
       },
       "formTitle": "Write anything about a project",
       "title": {
@@ -51,6 +51,10 @@
         "placeholder": "MIT"
       },
       "notOpensource": "The code of my project is closed",
+      "owners": {
+        "label": "Owners",
+        "placeholder": "Find your colleagues"
+      },
       "projectDetails": {
         "label": "Project details",
         "help": "Write everything about your project...",
@@ -107,6 +111,11 @@
   "notFound": {
     "goBack": "Go back",
     "title": "Sorry, nothing here"
+  },
+  "users": {
+    "search": {
+      "notFound": "No users found"
+    }
   },
   "api": {
     "errors": {

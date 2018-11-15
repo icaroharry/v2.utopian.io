@@ -9,3 +9,14 @@ export const isUsernameAvailable = async (context, username) => {
 
   return payload.available
 }
+
+const partialCleaner = (val) => val
+  .toLowerCase()
+  .replace(/[^\w-\\.]/g, '')
+
+export const searchUsers = async (context, { term, count }) =>
+  API.call({
+    context,
+    method: 'get',
+    url: `/v1/users/${partialCleaner(term)}/${count}`
+  })

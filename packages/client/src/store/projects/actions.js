@@ -35,10 +35,10 @@ export const updateProject = async (context, data) => {
   })
 }
 
-export const fetchProject = async (context, slug) => {
+export const fetchProject = async (context, { owner, slug }) => {
   return API.call({
     context,
     method: 'get',
-    url: `/v1/project/${slug}`
+    url: `/v1/project/${owner}/${slug}`
   })
 }

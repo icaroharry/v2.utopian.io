@@ -17,17 +17,18 @@ export default {
       project: {
         name: '',
         closedSource: false,
-        repositorySearch: '',
-        repositorySearchData: null,
         repositories: [],
-        website: '',
-        docs: '',
         license: '',
         medias: [],
         description: '',
         details: '',
-        tags: []
+        tags: [],
+        website: '',
+        docs: '',
+        owners: []
       },
+      ownersSearch: '',
+      repositorySearch: '',
       submitting: false
     }
   },
@@ -68,9 +69,12 @@ export default {
   async mounted () {
     if (!this.user) {
       this.$router.push({ path: `/login?returnUrl=${this.$route.path}` })
-    } else if (this.$route.params && this.$route.params.name) {
-      const result = await this.fetchProject(this.$route.params.name)
-      if (!result || (this.user.username !== result.owner)) {
+    } else if (this.$route.params && this.$route.params.slug) {
+      const result = await this.fetchProject({
+        owner: this.$route.params.owner,
+        slug: this.$route.params.slug
+      })
+      if (!result || !result.owners.some(o => o._id === this.user.uid)) {
         this.$router.push({ path: '/notfound' })
       } else {
         this.project = result
@@ -90,9 +94,8 @@ export default {
       'saveProject',
       'updateProject'
     ]),
-    ...mapActions('utils', [
-      'setAppError'
-    ]),
+    ...mapActions('users', ['searchUsers']),
+    ...mapActions('utils', ['setAppError']),
     uploadFile (file, updateProgress) {
       const data = new FormData()
       data.append('file', file)
@@ -133,20 +136,51 @@ export default {
     searchGithubRepositoryWrapper (query, done) {
       this.searchGithubRepository(query).then(done)
     },
-    async addRepository () {
-      if (!this.project.repositories.find(r => r.id === this.project.repositorySearchData.id)) {
-        this.project.repositorySearchData.type = 'github'
-        if (await this.isProjectAdmin(this.project.repositorySearchData)) {
-          this.project.repositories.push(this.project.repositorySearchData)
+    async addRepository (item) {
+      if (!this.project.repositories.find(r => r.id === item.id)) {
+        const project = { type: 'github', ...item }
+        if (await this.isProjectAdmin(project)) {
+          this.project.repositories.push(project)
           this.updateFormPercentage('repositories')
         } else {
           this.setAppError('projects.createEdit.repositories.error.notProjectAdmin')
         }
       }
+      this.repositorySearch = ''
     },
     removeRepository (id) {
       this.project.repositories = this.project.repositories.filter(r => r.id !== id)
       this.updateFormPercentage('repositories')
+    },
+    searchOwners (term, done) {
+      this.searchUsers({ term, count: 10 })
+        .then(users => {
+          if (typeof users === 'string') { // no results sent as an i18n primitive in string form
+            done([{label: this.$t(users), value: null}])
+          } else {
+            done(users && users.filter(u => u._id !== this.user.uid && !this.project.owners.some(o => o._id === u._id))
+              .map(user => ({
+                label: user.username,
+                avatar: user.avatarUrl,
+                value: user._id
+              })))
+          }
+        })
+    },
+    addOwner (item, e) {
+      if (!e) { // don't trigger automatically on keyboard select
+        if (item.value && !this.project.owners.some(o => o._id === item.value)) {
+          this.project.owners.push({
+            _id: item.value,
+            avatarUrl: item.avatar,
+            username: item.label
+          })
+        }
+        this.ownersSearch = ''
+      }
+    },
+    removeOwner (id) {
+      this.project.owners = this.project.owners.filter(u => u._id !== id)
     },
     removeMedia (src) {
       this.project.medias = this.project.medias.filter(m => m.src !== src)
@@ -172,7 +206,7 @@ export default {
         return
       }
       this.submitting = true
-      const { closedSource, repositorySearch, repositorySearchData, owner, _id, ...project } = this.project
+      const { closedSource, _id, ...project } = this.project
       if (project.docs === '') { delete project.docs }
       if (project.website === '') { delete project.website }
       let result
@@ -185,7 +219,7 @@ export default {
       if (result.error) {
         this.setAppError(`api.error.${result.error}`)
       } else {
-        this.$router.push({ path: `/project/${result.slug}/edit` })
+        this.$router.push({ path: `/${this.$route.params.locale}/projects/${result.slug}/edit` })
       }
       this.submitting = false
     }
@@ -211,14 +245,12 @@ div
       q-field(:label="`${$t('projects.createEdit.repositories.label')}${project.closedSource ? '' : '*'}`",
       orientation="vertical", :error="$v.project.repositories.$error")
         q-search(
-        v-model="project.repositorySearch"
-        :placeholder="$t('projects.createEdit.repositories.placeholder')"
-        icon="mdi-github-circle", :disable="project.closedSource"
-        :after="[{icon: 'mdi-plus', content: true, handler() {addRepository()}}]"
+        v-model="repositorySearch",
+        :placeholder="$t('projects.createEdit.repositories.placeholder')",
+        icon="mdi-github-circle", :disable="project.closedSource",
         @blur="updateFormPercentage('repositories')"
         )
-          q-autocomplete(@search="searchGithubRepositoryWrapper", :min-characters="3", :debounce="500", separator,
-          :value-field="v => {$v.project.$model.repositorySearchData = v; return v.label} ")
+          q-autocomplete(@search="searchGithubRepositoryWrapper", :min-characters="3", :debounce="500", separator, @selected="addRepository")
       q-field(v-if="!project.closedSource && project.repositories.length > 0")
         q-list(v-for="repository in project.repositories", separator, :key="repository.id")
           q-item
@@ -226,12 +258,6 @@ div
             q-item-main(:label="repository.label")
             q-item-side(right)
               q-btn(round, dense, icon="mdi-minus-circle", color="red", size="md" @click="() => removeRepository(repository.id)")
-
-      q-field(:label="$t('projects.createEdit.webPage.label')", orientation="vertical", :error="$v.project.website.$error")
-        q-input(v-model="project.website", :placeholder="$t('projects.createEdit.webPage.placeholder')", @keyup.enter="submit", @blur="updateFormPercentage('website')")
-
-      q-field(:label="$t('projects.createEdit.documentationPage.label')", orientation="vertical", :error="$v.project.docs.$error")
-        q-input(v-model="project.docs", :placeholder="$t('projects.createEdit.documentationPage.placeholder')", @keyup.enter="submit", @blur="updateFormPercentage('docs')")
 
       q-field(:label="`${$t('projects.createEdit.license.label')}*`", orientation="vertical", :error="$v.project.license.$error")
         q-select(v-model="project.license", :placeholder="$t('projects.createEdit.license.placeholder')", :options="licenses", :before="[{ icon: 'mdi-file-outline' }]",
@@ -259,6 +285,28 @@ div
       q-field(:label="`${$t('projects.createEdit.projectTags.label')}*`", orientation="vertical",
       :helper="$t('projects.createEdit.projectTags.help')", :error="$v.project.tags.$error")
         q-chips-input(v-model="project.tags", :placeholder="project.tags.length === 0 ? $t('projects.createEdit.projectTags.placeholder') : ''", clearable, @blur="updateFormPercentage('tags')")
+
+      q-field(:label="$t('projects.createEdit.webPage.label')", orientation="vertical", :error="$v.project.website.$error")
+        q-input(v-model="project.website", :placeholder="$t('projects.createEdit.webPage.placeholder')", @keyup.enter="submit", @blur="updateFormPercentage('website')")
+
+      q-field(:label="$t('projects.createEdit.documentationPage.label')", orientation="vertical", :error="$v.project.docs.$error")
+        q-input(v-model="project.docs", :placeholder="$t('projects.createEdit.documentationPage.placeholder')", @keyup.enter="submit", @blur="updateFormPercentage('docs')")
+
+      q-field(:label="$t('projects.createEdit.owners.label')", orientation="vertical")
+        q-search(
+          v-model="ownersSearch",
+          :placeholder="$t('projects.createEdit.owners.placeholder')",
+        )
+          q-autocomplete(@search="searchOwners", :min-characters="3", :max-results="10", :debounce="500", @selected="addOwner",
+          :value-field="v => v.label")
+
+      q-field(v-if="project.owners.filter(u => u._id !== user.uid).length > 0")
+        q-list(v-for="owner in project.owners.filter(u => u._id !== user.uid)", separator, :key="owner._id")
+          q-item
+            q-item-side(:avatar="owner.avatarUrl")
+            q-item-main(:label="owner.username")
+            q-item-side(right)
+              q-btn(round, dense, icon="mdi-minus-circle", color="red", size="md" @click="() => removeOwner(owner._id)")
 
     .col-md-4.col-sm-12.col-xs-12
       q-scroll-observable(@scroll="scrollHandler")

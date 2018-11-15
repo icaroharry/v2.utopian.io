@@ -20,16 +20,16 @@ const getUserByUsername = async (req, h) => {
  *  @author Daniel Thompson-Yvetot
  */
 const getUsersByPartial = async (req, h) => {
-  const response = await User.find(
+  const data = await User.find(
     { username: { '$regex': req.params.partial, '$options': 'i' } },
-    { username: 1, avatarUrl: 1, _id: 0 })
+    { username: 1, avatarUrl: 1 })
     .sort({ username: 1 })
     .limit(req.params.count)
-  if (response.length <= 0) {
-    return h.response('noUsersFound')
+  if (data.length <= 0) {
+    return h.response({ data: 'users.search.notFound' })
   }
 
-  return h.response(response)
+  return h.response({ data })
 }
 
 const deleteUserByUsername = async (req, h) => {

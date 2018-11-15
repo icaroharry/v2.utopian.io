@@ -26,8 +26,7 @@ routes.push([
     path: '/v1/users/{partial}/{count}',
     handler: (req, h, next) => Handlers.getUsersByPartial(req, h, next),
     options: {
-      // auth: { access: { scope: 'user' } },
-      auth: false,
+      auth: { access: { scope: 'user' } },
       tags: ['users'],
       validate: Validate.getUsersByPartial
     }
