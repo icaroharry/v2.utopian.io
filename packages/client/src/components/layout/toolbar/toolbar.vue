@@ -1,12 +1,15 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import * as locales from 'src/i18n/localesObj.json'
+import i18nDropdownSwitcher from 'src/components/i18n/i18n-dropdown-switcher'
+
 export default {
   name: 'u-layout-toolbar',
+  components: {
+    i18nDropdownSwitcher
+  },
   data () {
     return {
-      steemUser: null,
-      locales: locales.default
+      steemUser: null
     }
   },
   computed: {
@@ -34,80 +37,60 @@ export default {
 </script>
 
 <template lang="pug">
-q-toolbar.u-toolbar(color='tertiary', style="z-index: 1000000")
-  .container.toolbar-container
-    router-link(:to="{ name: 'home', params: locale }")
-      img.u-logo.mobile-only(src="~assets/img/logo-icon.svg")
-      img.u-logo.desktop-only(src="~assets/img/logo-white.svg")
+  q-toolbar.u-toolbar(color='tertiary', style="z-index: 1000000")
+    .container.toolbar-container.row
+      q-toolbar-title
+        router-link(:to="{ name: 'home', params: locale }")
+          img.u-logo.mobile-only(src="~assets/img/logo-icon.svg")
+          img.u-logo.desktop-only(src="~assets/img/logo-white.svg")
+      div
+        div.row(v-if="guest === true")
+          div.q-ma-sm
+            q-btn(@click.native="redirectToLogin", color="primary", icon="mdi-account", :label="$t('navbar.signIn')")
 
-    .float-right(v-if="guest === true")
-      q-btn(@click.native="redirectToLogin", color="primary", icon="mdi-account", :label="$t('navbar.signIn')")
+        div.row(v-if="!guest")
+          div.q-mt-md.q-mr-lg
+            q-btn(dense, size="sm", color="primary", :label="$t('navbar.contribute', 1)", icon="mdi-plus")
+              q-popover(self="top left", anchor="bottom left")
+                q-list(dense, :link="true", separator)
+                  q-item(:to="{ name: 'articles.create'}")
+                    q-item-main(label="Write an article")
+                  q-item(:to="{ name: 'project.create'}")
+                    q-item-main(label="Add my project")
 
-    .float-right(v-if="!guest")
-      q-btn(dense, color="primary", :label="$t('navbar.contribute', 1)", icon="mdi-plus")
-        q-popover(self="top left", anchor="bottom left")
-          q-list(dense, :link="true", separator)
-            q-item(:to="{ name: 'articles.create'}")
-              q-item-main(label="Write an article")
-            q-item(:to="{ name: 'projects.create'}")
-              q-item-main(label="Add my project")
-      span
-        img.avatar(:src="user.avatarUrl")
-        q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]")
-          q-list(dense, :link="true", separator)
-            q-item(v-if="!steemUser", @click.native="startSteemConnectLogin")
-              q-item-side
-                q-icon.q-item-icon.ut-steem
-              q-item-main(:label="$t('navbar.linkSteemAccount')")
-            q-item(v-if="steemUser", :to="`/@${steemUser}`")
-              q-item-side
-                q-icon.q-item-icon.ut-steem
-              q-item-main(:label="`@${steemUser}`")
-            q-item(:to="{ name: 'settings' }")
-              q-item-side(icon="mdi-settings")
-              q-item-main(:label="$t('navbar.settings')")
-            q-item(@click.native="logout")
-              q-item-side(icon="mdi-logout")
-              q-item-main(:label="$t('navbar.logOut')")
-    q-btn-dropdown.float-right(
-      ref="selectLanguages"
-      icon="language"
-      :label="$t('langLabel')"
-      flat
-      dense
-      )
-      q-list
-        q-list-header(inset) {{ $t('languages')  }}
-        q-item(
-          link
-          v-close-overlay
-          v-for="(language, index) in locales", :key="index"
-          @click.native="$root.$emit('localeChange', language.lang)"
-          )
-          q-item-main
-            q-item-tile(label) {{ language.langNative }}
-          q-item-side(v-if="language.lang === locale", right, icon="done", color="primary")
+          div.q-ma-sm
+            img.avatar(:src="user.avatarUrl")
+            q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]")
+              q-list(dense, :link="true", separator)
+                q-item(v-if="!steemUser", @click.native="startSteemConnectLogin")
+                  q-item-side
+                    q-icon.q-item-icon.ut-steem
+                  q-item-main(:label="$t('navbar.linkSteemAccount')")
+                q-item(v-if="steemUser", :to="`/@${steemUser}`")
+                  q-item-side
+                    q-icon.q-item-icon.ut-steem
+                  q-item-main(:label="`@${steemUser}`")
+                q-item(:to="{ name: 'settings' }")
+                  q-item-side(icon="mdi-settings")
+                  q-item-main(:label="$t('navbar.settings')")
+                q-item(@click.native="logout")
+                  q-item-side(icon="mdi-logout")
+                  q-item-main(:label="$t('navbar.logOut')")
+      i18n-dropdown-switcher.float-right
 </template>
 
 <style lang="stylus">
-.q-toolbar.u-toolbar {
-  height 60px
-  div.toolbar-container {
-    justify-content space-between
-    align-items center
-    display flex
-  }
-  div.u-toolbar-right {
-    > * {
-      margin-left 16px
-    }
-    img.avatar {
-      height 32px
-      width 32px
+  .q-toolbar.u-toolbar
+    height 60px
+    div.toolbar-container
+      align-items center
+    div.u-toolbar
+      > *
+        margin-left 16px
+    img.avatar
+      cursor pointer
+      height 36px
+      width 36px
       border-radius 50%
       border: 2px solid rgba(white, 0.6)
-    }
-  }
-}
-
 </style>

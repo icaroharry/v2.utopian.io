@@ -52,6 +52,19 @@ const main = async (dir) => {
                 })
             })
           })
+        // copy the component(s)
+        builder.listFiles(path.resolve(__dirname, '../components'))
+          .then(sourcePlugins => {
+            sourcePlugins.forEach(sourcePlugin => {
+              const src = path.resolve(__dirname, `../components/${sourcePlugin}`)
+              const tgt = path.resolve(quasarDir[0], `./src/components/i18n/${sourcePlugin}`)
+              builder.copyArtifact(src, tgt)
+                .then(msg => {
+                  builder.log(msg)
+                })
+            })
+          })
+
         // deepMerge the locales
         builder.listFiles(path.resolve(__dirname, '../locales_master'))
           .then(sourceLocales => {

@@ -232,23 +232,6 @@ export default ({ app, Vue, ssrContext, router }) => {
         locale: '',
         userSelectedLocale: false
       }
-    },
-    mounted () {
-      // this.locale = this.$q.cookies.get('locale') || this.$route.params.locale
-      // watch the emit event for localeChange
-      this.$root.$on('localeChange', (val) => {
-        let route = this.$route.path.split('/')
-        route[1] = val
-        route = route.join('/')
-        if (this.$q.cookies.get('GDPR')) {
-          this.$q.cookies.set('locale', val, { path: '/' })
-        }
-        this.userSelectedLocale = true
-        this.$nextTick(() => {
-          this.$router.push(route)
-          this.locale = val
-        })
-      })
     }
   })
 }

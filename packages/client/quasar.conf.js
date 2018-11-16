@@ -68,7 +68,12 @@ module.exports = function (ctx) {
         chain.plugin('extraWatcher')
           .use(ExtraWatchWebpackPlugin, [
             {
-              dirs: [ 'src/i18n/overrides', '../i18n/locales_master' ]
+              dirs: [
+                'src/i18n/overrides',
+                '../i18n/locales_master',
+                '../i18n/plugins',
+                '../i18n/components'
+              ]
             }
           ])
         chain.plugin('i18n')
