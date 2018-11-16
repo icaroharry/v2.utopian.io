@@ -139,23 +139,6 @@ export default {
     },
 
     /**
-     * Prevent our api from being accidentally hammered by people who don't
-     * know how to write usernames
-     *
-     * @param {string} val - the searchstring to parse
-     * @returns {string}  cleaned searchstring
-     * @author Daniel Thompson-Yvetot
-     */
-    partialCleaner (val) {
-      if (!val && !this.terms) return ''
-      this.terms = val
-        .toLowerCase()
-        .replace(/[-._— ]/g, '')
-        .replace(/[^a-z0-9-]/g, '')
-      return this.terms
-    },
-
-    /**
      * Called when the user scrolls and sets the current scroll position.
      * Used to calculate the placement of the @mention input
      *
@@ -479,7 +462,6 @@ export default {
         :style="userInputPosRendered"
         ref="userSearch"
         color="amber"
-        @input="val => partialCleaner(val)"
         @blur="clearFindUser()"
         @keyup.escape="clearFindUser('clear')"
         :after="[

@@ -136,17 +136,19 @@ export default {
     searchGithubRepositoryWrapper (query, done) {
       this.searchGithubRepository(query).then(done)
     },
-    async addRepository (item) {
-      if (!this.project.repositories.find(r => r.id === item.id)) {
-        const project = { type: 'github', ...item }
-        if (await this.isProjectAdmin(project)) {
-          this.project.repositories.push(project)
-          this.updateFormPercentage('repositories')
-        } else {
-          this.setAppError('projects.createEdit.repositories.error.notProjectAdmin')
+    async addRepository (item, e) {
+      if (!e) { // don't trigger automatically on keyboard select
+        if (!this.project.repositories.find(r => r.id === item.id)) {
+          const project = {type: 'github', ...item}
+          if (await this.isProjectAdmin(project)) {
+            this.project.repositories.push(project)
+            this.updateFormPercentage('repositories')
+          } else {
+            this.setAppError('projects.createEdit.repositories.error.notProjectAdmin')
+          }
         }
+        this.repositorySearch = ''
       }
-      this.repositorySearch = ''
     },
     removeRepository (id) {
       this.project.repositories = this.project.repositories.filter(r => r.id !== id)
@@ -209,17 +211,15 @@ export default {
       const { closedSource, _id, ...project } = this.project
       if (project.docs === '') { delete project.docs }
       if (project.website === '') { delete project.website }
-      let result
+      let slug
       if (!_id) {
-        result = await this.saveProject(project)
+        slug = await this.saveProject(project)
       } else {
         project._id = _id
-        result = await this.updateProject(project)
+        slug = await this.updateProject(project)
       }
-      if (result.error) {
-        this.setAppError(`api.error.${result.error}`)
-      } else {
-        this.$router.push({ path: `/${this.$route.params.locale}/projects/${result.slug}/edit` })
+      if (slug) {
+        this.$router.push({ path: `/${this.$route.params.locale}/projects/${slug}/edit` })
       }
       this.submitting = false
     }
@@ -317,7 +317,7 @@ div
             q-progress(:percentage="formPercentage", height="10px")
         q-item
           q-item-main
-            q-btn.full-width(color="primary", :label="$t('projects.createEdit.save')", @click="submit")
+            q-btn.full-width(color="primary", :label="project._id ? $t('projects.createEdit.update') : $t('projects.createEdit.save')", @click="submit")
 
 </template>
 <style lang="stylus">

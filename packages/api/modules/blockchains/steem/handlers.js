@@ -8,7 +8,7 @@ const linkSteemAccount = async (req, h) => {
   if (user) {
     const tokens = await getSteemConnectTokens(req.payload.code)
     if (user.blockchainAccounts.some((account) => account.blockchain === 'steem' && account.address === tokens.username)) {
-      throw Boom.badData('account-already-linked')
+      throw Boom.badData('steem.accountAlreadyLinked')
     }
 
     user.blockchainAccounts.push({
@@ -22,17 +22,15 @@ const linkSteemAccount = async (req, h) => {
     )
     if (response.n === 1) {
       return h.response({
-        data: {
-          message: 'link-account-success',
-          username: tokens.username,
-          accessToken: encrypt(tokens.access_token),
-          refreshToken: encrypt(tokens.refresh_token)
-        }
+        message: 'linkAccountSuccess',
+        username: tokens.username,
+        accessToken: encrypt(tokens.access_token),
+        refreshToken: encrypt(tokens.refresh_token)
       })
     }
   }
 
-  throw Boom.badData('document-does-not-exist')
+  throw Boom.badData('users.doesNotExist')
 }
 
 module.exports = {

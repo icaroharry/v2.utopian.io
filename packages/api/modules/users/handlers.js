@@ -26,15 +26,15 @@ const getUsersByPartial = async (req, h) => {
     .sort({ username: 1 })
     .limit(req.params.count)
   if (data.length <= 0) {
-    return h.response({ data: 'users.search.notFound' })
+    return h.response('users.search.notFound')
   }
 
-  return h.response({ data })
+  return h.response(data)
 }
 
 const deleteUserByUsername = async (req, h) => {
   if (req.auth.credentials.username !== req.params.username) {
-    throw Boom.unauthorized('not-allowed')
+    throw Boom.unauthorized('general.unauthorized')
   }
 
   const response = await User.updateOne(
@@ -42,33 +42,33 @@ const deleteUserByUsername = async (req, h) => {
     { $set: { status: 'deleted', deletedAt: Date.now() } }
   )
   if (response.n === 1) {
-    return h.response({ message: 'delete-success' })
+    return h.response({ message: 'deleteSuccess' })
   }
 
-  throw Boom.badData('document-does-not-exist')
+  throw Boom.badData('users.doesNotExist')
 }
 
 const editUserByUsername = async (req, h) => {
   if (req.auth.credentials.username !== req.params.username) {
-    throw Boom.unauthorized('not-allowed')
+    throw Boom.unauthorized('general.unauthorized')
   }
 
   const response = await User.updateOne({ username: req.params.username }, req.payload)
   if (response.n === 1) {
-    return h.response({ message: 'update-success' })
+    return h.response({ message: 'updateSuccess' })
   }
 
-  throw Boom.badData('document-does-not-exist')
+  throw Boom.badData('users.doesNotExist')
 }
 
 const isUsernameAvailable = async (req, h) => {
   const user = await User.count({ username: req.params.username })
 
   if (parseInt(user) !== 0) {
-    return h.response({ data: { available: false } })
+    return h.response({ available: false })
   }
 
-  return h.response({ data: { available: true } })
+  return h.response({ available: true })
 }
 
 const generateUserTokens = async (user) => {
@@ -92,7 +92,7 @@ const saveUser = async (req, h) => {
   const githubUser = await getUserInformation(req.auth.credentials.providerToken)
 
   const user = await User.count({ username: req.payload.username })
-  if (parseInt(user) !== 0) throw Boom.badData('username-exists')
+  if (parseInt(user) !== 0) throw Boom.badData('users.usernameExists')
 
   const newUser = new User({
     username: req.payload.username,
@@ -109,7 +109,7 @@ const saveUser = async (req, h) => {
   const tokens = await generateUserTokens(data)
 
   data.tokens = tokens
-  return h.response({ data })
+  return h.response(data)
 }
 
 module.exports = {

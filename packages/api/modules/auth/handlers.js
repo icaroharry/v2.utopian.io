@@ -62,10 +62,10 @@ const getToken = async (req, h) => {
         })
       }
     } catch (e) {
-      throw Boom.badData('refresh_token-does-not-exist')
+      throw Boom.badData('users.tokenDoesNotExist')
     }
 
-    throw Boom.badData('refresh_token-does-not-exist')
+    throw Boom.badData('users.tokenDoesNotExist')
   } else if (req.payload.grant_type === 'password') {
     const user = await User.findOne({ username: req.payload.username })
     if (user && user.checkPassword(req.payload.password)) {
@@ -85,10 +85,10 @@ const getToken = async (req, h) => {
       })
     }
 
-    throw Boom.badData('wrong-user-password')
+    throw Boom.badData('users.wrongUserPassword')
   }
 
-  throw Boom.badData('bad-grant_type')
+  throw Boom.badData('users.badGrantType')
 }
 
 const revokeToken = async (req, h) => {
@@ -102,19 +102,17 @@ const revokeToken = async (req, h) => {
     throw Boom.unauthorized()
   }
 
-  throw Boom.badData('token-does-not-exist')
+  throw Boom.badData('users.tokenDoesNotExist')
 }
 
 const me = async (req, h) => {
   const data = await User.findOne({ username: req.auth.credentials.username })
     .select('avatarUrl username blockchainAccounts')
   if (data) {
-    return h.response({
-      data
-    })
+    return h.response(data)
   }
 
-  throw Boom.badData('user-does-not-exist')
+  throw Boom.badData('users.doesNotExist')
 }
 
 module.exports = {

@@ -49,15 +49,15 @@ export default {
         return
       }
       const { _id, author, ...article } = this.article
-      let result
+      let slug
       if (!_id) {
-        result = await this.saveArticle(article)
+        slug = await this.saveArticle(article)
       } else {
         article._id = _id
-        result = await this.updateArticle(article)
+        slug = await this.updateArticle(article)
       }
-      if (result) {
-        this.$router.push({ path: `/${this.$route.params.locale}/articles/${result.slug}/edit` })
+      if (slug) {
+        this.$router.push({path: `/${this.$route.params.locale}/articles/${slug}/edit`})
       }
     }
   },
@@ -80,7 +80,7 @@ div
       :helper="$t('articles.createEdit.body.help')", :error="$v.article.body.$error")
         u-wysiwyg(v-model="article.body", field="body")
     .col-md-4.col-sm-12.col-xs-12
-      q-btn.full-width(color="primary", :label="$t('articles.createEdit.save')", @click="submit")
+      q-btn.full-width(color="primary", :label="article._id ? $t('articles.createEdit.update') : $t('articles.createEdit.save')", @click="submit")
 </template>
 
 <style scoped>

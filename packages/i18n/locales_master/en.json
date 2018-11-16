@@ -18,7 +18,8 @@
         "label": "Article title",
         "placeholder": "Add a title"
       },
-      "save": "Publish my article"
+      "save": "Publish my article",
+      "update": "Update my article"
     }
   },
   "fileUpload": {
@@ -92,6 +93,7 @@
       },
       "subtitle": "Make a great first impression with all the project information filled and great images about your project.",
       "title": "Bring your project to Utopian.io",
+      "update": "Update",
       "webPage": {
         "label": "Web page",
         "placeholder": "https://quasar-framework.org"
@@ -132,6 +134,16 @@
       "projects": {
         "exists": "You already have a project with this name.",
         "noRepositories": "A project must have at least one repository."
+      },
+      "steem": {
+        "accountAlreadyLinked": "The Steem account is already linked."
+      },
+      "users": {
+        "badGrantType": "Bad grant type.",
+        "doesNotExist": "The user doesn't exist.",
+        "tokenDoesNotExist": "The token has already been revoked.",
+        "usernameExists": "The username is already taken.",
+        "wrongUserPassword": "Wrong user or password."
       }
     },
     "messages": {

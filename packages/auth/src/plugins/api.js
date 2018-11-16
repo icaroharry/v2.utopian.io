@@ -12,8 +12,8 @@ export default class API {
         url: `${process.env.UTOPIAN_API}${url}`,
         data
       })
-      if (response.status === 200 && response.data.data) {
-        return response.data.data
+      if (response.status === 200 && response.data) {
+        return response.data
       }
     } catch (err) {
       if (err.response.status === 401) {

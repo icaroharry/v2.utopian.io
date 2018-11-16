@@ -17,28 +17,25 @@ export const isNameAvailable = async (context, data) =>
     data
   })
 
-export const saveProject = async (context, data) => {
-  return API.call({
+export const saveProject = async (context, data) =>
+  API.call({
     context,
     method: 'post',
     url: '/v1/project',
     data
   })
-}
 
-export const updateProject = async (context, data) => {
-  return API.call({
+export const updateProject = async (context, data) =>
+  API.call({
     context,
     method: 'put',
     url: '/v1/project',
     data
   })
-}
 
-export const fetchProject = async (context, { owner, slug }) => {
-  return API.call({
+export const fetchProject = async (context, { owner, slug }) =>
+  API.call({
     context,
     method: 'get',
     url: `/v1/project/${owner}/${slug}`
   })
-}

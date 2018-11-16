@@ -12,8 +12,8 @@ export default class API {
         url: `${process.env.UTOPIAN_API}${url}`,
         data
       })
-      if (response.status === 200 && response.data.data) {
-        return response.data.data
+      if (response.status === 200 && response.data) {
+        return response.data
       }
     } catch (err) {
       if (!err.response) {
@@ -27,6 +27,9 @@ export default class API {
       // Validation errors
       } else if (err.response.data.statusCode === 422) {
         context.commit('utils/setAppError', `api.errors.${err.response.data.message}`, { root: true })
+      // For some reason the UI couldn't control what the API expected
+      } else if (err.response.data.statusCode === 400) {
+        context.commit('utils/setAppError', err.response.data.message, { root: true })
       }
     }
     return null

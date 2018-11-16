@@ -27,11 +27,7 @@ const createArticle = async (req, h) => {
 
   const data = await newArticle.save()
 
-  return h.response({
-    data: {
-      slug: data.slug
-    }
-  })
+  return h.response(data.slug)
 }
 
 /**
@@ -77,11 +73,7 @@ const editArticle = async (req, h) => {
   )
 
   if (response.n === 1) {
-    return h.response({
-      data: {
-        slug
-      }
-    })
+    return h.response(slug)
   }
 
   throw Boom.badData('general.updateFail')
@@ -101,7 +93,7 @@ const editArticle = async (req, h) => {
 const getArticleByAuthorAndSlug = async (req, h) => {
   const slug = `${req.params.author}/${req.params.slug}`
   const data = await Article.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] }).select('author title body _id')
-  return h.response({ data })
+  return h.response(data)
 }
 
 module.exports = {

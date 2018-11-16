@@ -11,7 +11,7 @@ const getProjects = async (req, h) => {
 
   const reg = new RegExp(q, 'i')
   const projects = await Project.find({ $or: [{ $text: { $search: q } }, { name: { $regex: reg }, blacklisted: false, status: 'active' }] }).select('medias tags slug createdAt owner description details name repositories website license docs -_id')
-  return h.response({ data: projects })
+  return h.response(projects)
 }
 
 /**
@@ -36,12 +36,12 @@ const getProjectByOwnerAndSlug = async (req, h) => {
   })
     .populate('owners', 'username avatarUrl')
     .select('name repositories website docs license medias description details tags owners _id')
-  return h.response({ data: project })
+  return h.response(project)
 }
 
 const getFeaturedProjects = async (req, h) => {
   const projects = await Project.find({ featured: true, blacklisted: false }).select('description medias name owner slug tags -_id')
-  return h.response({ data: projects })
+  return h.response(projects)
 }
 
 const deleteProjectBySlug = async (req, h) => {
@@ -152,11 +152,7 @@ const editProject = async (req, h) => {
   )
 
   if (response.n === 1) {
-    return h.response({
-      data: {
-        slug
-      }
-    })
+    return h.response(slug)
   }
 
   throw Boom.badData('general.updateFail')
@@ -227,16 +223,12 @@ const createProject = async (req, h) => {
 
   const data = await newProject.save()
 
-  return h.response({
-    data: {
-      slug: data.slug
-    }
-  })
+  return h.response(data.slug)
 }
 
 const isNameAvailable = async (req, h) => {
   const owner = req.auth.credentials.username
-  return h.response({ data: await Project.countDocuments({ owner, name: req.payload.name, _id: { $ne: req.payload._id } }) === 0 })
+  return h.response(await Project.countDocuments({ owner, name: req.payload.name, _id: { $ne: req.payload._id } }) === 0)
 }
 
 /**
@@ -260,11 +252,11 @@ const isProjectAdmin = async (req, h) => {
         owner,
         name
       })
-      return h.response({ data: permission.toString().toUpperCase() === 'ADMIN' })
+      return h.response(permission.toString().toUpperCase() === 'ADMIN')
     }
   }
 
-  return h.response({ data: false })
+  return h.response(false)
 }
 
 module.exports = {

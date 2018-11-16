@@ -8,6 +8,7 @@ node_modules
 /packages/*/dist
 /packages/*/node_modules
 /packages/*/service-account.json
+/packages/*/src/i18n/locales/*.json
 /packages/*/*.log*
 /**/coverage
 

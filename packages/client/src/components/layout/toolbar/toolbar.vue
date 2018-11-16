@@ -26,6 +26,10 @@ export default {
       'startGithubLogin',
       'startSteemConnectLogin'
     ]),
+    logoutAndRedirect () {
+      this.$router.push({ path: `/${this.$route.params.locale}` })
+      this.logout()
+    },
     redirectToLogin () {
       window.location = `${process.env.AUTH_DOMAIN}/login/?redirectUrl=${window.location.href}`
     }
@@ -49,13 +53,13 @@ export default {
             q-btn(@click.native="redirectToLogin", color="primary", icon="mdi-account", :label="$t('navbar.signIn')")
 
         div.row(v-if="!guest")
-          div.q-mt-md.q-mr-lg
-            q-btn(dense, size="sm", color="primary", :label="$t('navbar.contribute', 1)", icon="mdi-plus")
+          div.q-mt-sm.q-mr-lg
+            q-btn(color="primary", :label="$t('navbar.contribute')", icon="mdi-plus")
               q-popover(self="top left", anchor="bottom left")
                 q-list(dense, :link="true", separator)
                   q-item(:to="{ name: 'articles.create'}")
                     q-item-main(label="Write an article")
-                  q-item(:to="{ name: 'project.create'}")
+                  q-item(:to="{ name: 'projects.create'}")
                     q-item-main(label="Add my project")
 
           div.q-ma-sm
@@ -73,7 +77,7 @@ export default {
                 q-item(:to="{ name: 'settings' }")
                   q-item-side(icon="mdi-settings")
                   q-item-main(:label="$t('navbar.settings')")
-                q-item(@click.native="logout")
+                q-item(@click.native="logoutAndRedirect")
                   q-item-side(icon="mdi-logout")
                   q-item-main(:label="$t('navbar.logOut')")
       i18n-dropdown-switcher.float-right
