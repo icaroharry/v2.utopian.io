@@ -89,6 +89,11 @@
       }
     }
   },
+  "auth": {
+    "login": {
+      "github": "Mit Github einloggen"
+    }
+  },
   "errors": {
     "fileUpload": "An error occurred while uploading"
   },

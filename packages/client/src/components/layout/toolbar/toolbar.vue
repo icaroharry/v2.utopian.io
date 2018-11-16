@@ -31,7 +31,7 @@ export default {
       this.logout()
     },
     redirectToLogin () {
-      window.location = `${process.env.AUTH_DOMAIN}/login/?redirectUrl=${window.location.href}`
+      window.location = `${process.env.AUTH_DOMAIN}/${this.$route.params.locale}/login/?redirectUrl=${window.location.href}`
     }
   },
   mounted () {

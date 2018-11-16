@@ -23,7 +23,7 @@ q-layout.u-page-login
     .col-md-4.col-sm-12.col-xs-12.column.justify-center
       .column.items-center.login-from
         img.q-mb-xl(src="~assets/img/logo-black.svg")
-        q-btn.q-mb-sm(@click="startGithubLogin", icon="mdi-github-circle", color="white", text-color="black", label="$t('login.button.login')")
+        q-btn.q-mb-sm(@click="startGithubLogin", icon="mdi-github-circle", color="white", text-color="black", :label="$t('auth.login.github')")
     .side-img.col-md-8
       img(src="~assets/img/background.jpg")
 </template>

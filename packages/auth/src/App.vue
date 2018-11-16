@@ -12,12 +12,14 @@ export default {
   },
   mounted () {
     this.transferToLocalStorage()
-
-    if (this.$route.path === '/') {
+    if (this.$route.path === `/${this.$route.params.locale}` ||
+      this.$route.path === `/${this.$route.params.locale}/` ||
+      this.$route.path === '/' || this.$route.path === ''
+    ) {
       if (this.$route.query.redirectUrl) {
         if (typeof window !== 'undefined') window.location = this.$route.query.redirectUrl
       } else {
-        this.$router.push('login')
+        this.$router.push({ path: `/login` })
       }
     }
   }

@@ -3,7 +3,6 @@
   "langLabel": "en",
   "languages": "Languages!",
   "langNative": "English",
-  "loginWithGithub": "Login with Github",
   "interaction": "Interaction",
   "debug": "Debug",
   "GDPR": "GDPR Acceptance",
@@ -148,6 +147,11 @@
     },
     "messages": {
       "deleteSuccess": "The information was successfully deleted."
+    }
+  },
+  "auth": {
+    "login": {
+      "github": "Login with GitHub"
     }
   },
   "errors": {

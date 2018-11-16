@@ -1,5 +1,9 @@
 // environment config.
 require('dotenv').config()
+const path = require('path')
+
+const I18N = require('@utopian/i18n/lib')
+const ExtraWatchWebpackPlugin = require('extra-watch-webpack-plugin')
 
 // Configuration for your app
 module.exports = function (ctx) {
@@ -25,18 +29,41 @@ module.exports = function (ctx) {
       vueRouterMode: 'history',
       useNotifier: false,
 
-      extendWebpack (cfg) {
-        // main loader / js config.
-        cfg.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules|quasar)/
-        })
-        cfg.module.rules.push({
-          test: /\.pug$/,
-          loader: 'pug-plain-loader'
-        })
+      chainWebpack (chain, { isServer }) {
+        chain.module.rule('lint')
+          .test(/\.(js|vue)$/)
+          .pre()
+          .use('eslint')
+          .loader('eslint-loader')
+          .options({
+            rules: {
+              semi: 'off'
+            }
+          })
+        chain.module.rule('template-engine')
+          .test(/\.pug$/)
+          .include
+          .add(path.resolve(__dirname, 'src'))
+          .end()
+          .use('pug')
+          .loader('pug-plain-loader')
+        chain.resolve.alias
+          .set('~', __dirname)
+          .set('@', path.resolve(__dirname, 'src'))
+        // normalize the global => good for some non-isomorphic modules
+        chain.output.set('globalObject', 'this')
+        chain.plugin('extraWatcher')
+          .use(ExtraWatchWebpackPlugin, [
+            {
+              dirs: [ 'src/i18n/overrides', '../i18n/locales_master' ]
+            }
+          ])
+        chain.plugin('i18n')
+          .use(I18N, [
+            [{
+              debug: false
+            }]
+          ])
       }
     },
     // dev server configuration.
@@ -67,6 +94,7 @@ module.exports = function (ctx) {
       directives: [
         'Ripple'
       ],
+      i18n: 'en-uk',
       // Quasar plugins
       plugins: [
         'Cookies',

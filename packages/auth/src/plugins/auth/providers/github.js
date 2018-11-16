@@ -4,6 +4,7 @@ import { Cookies } from 'quasar'
 
 export default async ({ currentRoute, store, redirect, ssrContext, redirectUrl }) => {
   const code = currentRoute.query.code
+  const locale = currentRoute.params.locale
 
   if (code) {
     const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
@@ -28,9 +29,9 @@ export default async ({ currentRoute, store, redirect, ssrContext, redirectUrl }
     })
 
     if (!token.username) {
-      redirect(`signup/utopian/?redirectUrl=${redirectUrl}`)
+      redirect(`${locale}/signup/utopian/?redirectUrl=${redirectUrl}`)
     } else {
-      redirect(`/?redirectUrl=${redirectUrl}`)
+      redirect(`${locale}/?redirectUrl=${redirectUrl}`)
     }
   }
 }
