@@ -28,7 +28,6 @@ describe('get subcategories in English, default language', () => {
   })
 
   it('should have all the keys', () => {
-    console.log(payload[0])
     expect(payload[0]).to.have.all.keys(
       '_id', 'key', 'text'
     )

@@ -1,6 +1,7 @@
 const Mongoose = require('mongoose')
 
 module.exports = [
+  // Typical Open Source project
   {
     '_id': new Mongoose.Types.ObjectId('5b83ba210575923a3e6dd071'),
     'blacklisted': false,
@@ -9,7 +10,6 @@ module.exports = [
     'details': 'Build responsive Single Page Apps, SSR Apps, PWAs, Hybrid Mobile Apps and Electron Apps, all using the same codebase!, powered with Vue.',
     'docs': 'https://quasar-framework.org/guide/',
     'featured': true,
-    'featured_order': 1,
     'license': 'MIT',
     'medias': [
       {
@@ -18,7 +18,7 @@ module.exports = [
       }
     ],
     'name': 'Quasar Framework',
-    'owner': 'rstoenescu',
+    'owners': [new Mongoose.Types.ObjectId('5bc798adad26d25470439533')],
     'repositories': [
       {
         'id': 43695474,
@@ -28,18 +28,18 @@ module.exports = [
         'type': 'github'
       }
     ],
-    'slug': 'quasar-framework',
-    'status': 'active',
+    'slug': 'nothingismagick/quasar-framework',
+    'slugs': ['quasar-framework/quasar-framework'],
     'tags': [
       'vuejs2',
       'material-design',
       'pwa'
     ],
     'website': 'https://quasar-framework.org/',
-
     'createdAt': new Date('2018-08-27T08:45:15.987Z'),
     '__v': 0
   },
+  // Another open source project but defined as unclaimed because it's linked to the utopian user
   {
     '_id': new Mongoose.Types.ObjectId('5b8013053b4cc0211aa4fee1'),
     'blacklisted': false,
@@ -47,7 +47,6 @@ module.exports = [
     'description': 'Blockchain-based social network where anyone can earn rewards.',
     'details': 'Busy is an Open Source social network and communications platform which extends itself to a variety of rich features and functionality including free digital payments and a marketplace for goods and services.',
     'featured': true,
-    'featured_order': 2,
     'license': 'MIT',
     'medias': [
       {
@@ -56,7 +55,7 @@ module.exports = [
       }
     ],
     'name': 'busy',
-    'owner': 'busyorg',
+    'owners': [new Mongoose.Types.ObjectId('5bee961699164e6d24cbd3ed')], // Add the busy project as an unclaimed project
     'repositories': [
       {
         'id': 64382195,
@@ -67,17 +66,17 @@ module.exports = [
       }
     ],
     'slug': 'busyorg-busy',
-    'status': 'active',
+    'slugs': [],
     'tags': [
       'steem',
       'interface',
       'social-media'
     ],
     'website': 'https://busy.org/',
-
     'createdAt': new Date('2018-08-24T14:14:02.032Z'),
     '__v': 0
   },
+  // A blacklisted project
   {
     '_id': new Mongoose.Types.ObjectId('5b8013053b4cc0211aa4fee2'),
     'blacklisted': true,
@@ -85,7 +84,6 @@ module.exports = [
     'description': 'Blacklisted project',
     'details': 'Blacklisted project',
     'featured': true,
-    'featured_order': 3,
     'license': 'MIT',
     'medias': [
       {
@@ -94,7 +92,7 @@ module.exports = [
       }
     ],
     'name': 'blacklisted',
-    'owner': 'blacklisted',
+    'owners': [new Mongoose.Types.ObjectId('5bcaf95f3344e352e0921157')],
     'repositories': [
       {
         'id': 1,
@@ -104,16 +102,16 @@ module.exports = [
         'type': 'github'
       }
     ],
-    'slug': 'blacklisted',
-    'status': 'active',
+    'slug': 'gregory/blacklisted',
+    'slugs': [],
     'tags': [
       'opensource'
     ],
     'website': 'https://google.com',
-
     'createdAt': new Date('2018-08-24T14:14:02.032Z'),
     '__v': 0
   },
+  // the utopian project
   {
     '_id': new Mongoose.Types.ObjectId('5b8013053b4cc0211aa4fee3'),
     'blacklisted': false,
@@ -121,7 +119,6 @@ module.exports = [
     'description': 'Earn rewards by contributing to your favorite Open Source projects!',
     'details': 'Utopian is the only platform rewarding contributions to Open Source projects by utilizing a decentralised, vote-based reward system built on top of the STEEM Blockchain.',
     'featured': true,
-    'featured_order': 4,
     'license': 'MIT',
     'medias': [
       {
@@ -130,7 +127,7 @@ module.exports = [
       }
     ],
     'name': 'Utopian',
-    'owner': 'utopian-io',
+    'owners': [new Mongoose.Types.ObjectId('5bee961699164e6d24cbd3ee')],
     'repositories': [
       {
         'id': 136034748,
@@ -140,14 +137,14 @@ module.exports = [
         'type': 'github'
       }
     ],
-    'slug': 'utopian-io',
-    'status': 'active',
+    'slug': 'utopian-io/utopian-io',
+    'slugs': [],
     'tags': [
+      'quasarframework',
       'steem',
-      'opensource'
+      'mongodb'
     ],
     'website': 'https://join.utopian.io/',
-
     'createdAt': new Date('2018-08-24T14:14:02.032Z'),
     '__v': 0
   }

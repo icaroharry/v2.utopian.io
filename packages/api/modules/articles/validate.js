@@ -17,7 +17,7 @@ const createArticle = {
  *
  * @author Grégory LATINIER
  */
-const editArticle = {
+const updateArticle = {
   params: {
     id: Joi.string().trim().required()
   },
@@ -41,6 +41,6 @@ const getArticleByAuthorAndSlug = {
 
 module.exports = {
   createArticle,
-  editArticle,
+  updateArticle,
   getArticleByAuthorAndSlug
 }

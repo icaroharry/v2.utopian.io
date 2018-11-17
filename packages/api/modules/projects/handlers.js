@@ -6,14 +6,6 @@ const User = require('../users/user.model')
 const { getUserProjectPermission } = require('../../utils/github')
 const { sanitizeHtml } = require('../../utils/html-sanitizer')
 
-const getProjects = async (req, h) => {
-  const { q } = req.payload
-
-  const reg = new RegExp(q, 'i')
-  const projects = await Project.find({ $or: [{ $text: { $search: q } }, { name: { $regex: reg }, blacklisted: false, status: 'active' }] }).select('medias tags slug createdAt owner description details name repositories website license docs -_id')
-  return h.response(projects)
-}
-
 /**
  * Get a project by its owner and slug
  *
@@ -40,18 +32,8 @@ const getProjectByOwnerAndSlug = async (req, h) => {
 }
 
 const getFeaturedProjects = async (req, h) => {
-  const projects = await Project.find({ featured: true, blacklisted: false }).select('description medias name owner slug tags -_id')
+  const projects = await Project.find({ featured: true, blacklisted: false }).select('description medias name owners slug tags -_id')
   return h.response(projects)
-}
-
-const deleteProjectBySlug = async (req, h) => {
-  // TODO Only owner should be able to delete a project
-  const response = await Project.updateOne({ $or: [{ slugs: { $elemMatch: { $eq: req.params.slug } } }, { slug: req.params.slug }] }, { $set: { status: 'deleted', deletedAt: Date.now() } })
-  if (response.n === 1) {
-    return h.response({ message: 'deleteSuccess' })
-  }
-
-  throw Boom.badData('general.documentDoesNotExist')
 }
 
 /**
@@ -91,7 +73,7 @@ const filterRepositories = async ({ repositories, username }) => {
  * @returns updated slug
  * @author Grégory LATINIER
  */
-const editProject = async (req, h) => {
+const updateProject = async (req, h) => {
   const ownerId = req.auth.credentials.uid
   const username = req.auth.credentials.username
   const { owners, repositories, details, ...project } = req.payload
@@ -226,9 +208,18 @@ const createProject = async (req, h) => {
   return h.response(data.slug)
 }
 
+/**
+ * Checks if the project name is available
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ * @payload {object} req.payload - name to check
+ * @return boolean if the project name is available
+ * @author Grégory LATINIER
+ */
 const isNameAvailable = async (req, h) => {
-  const owner = req.auth.credentials.username
-  return h.response(await Project.countDocuments({ owner, name: req.payload.name, _id: { $ne: req.payload._id } }) === 0)
+  const ownerId = req.auth.credentials.uid
+  return h.response(await Project.countDocuments({ owners: { $elemMatch: { $eq: ownerId } }, name: req.payload.name, _id: { $ne: req.payload._id } }) === 0)
 }
 
 /**
@@ -260,11 +251,9 @@ const isProjectAdmin = async (req, h) => {
 }
 
 module.exports = {
-  getProjects,
   createProject,
-  editProject,
+  updateProject,
   getProjectByOwnerAndSlug,
-  deleteProjectBySlug,
   getFeaturedProjects,
   isNameAvailable,
   isProjectAdmin

@@ -41,7 +41,7 @@ const createArticle = async (req, h) => {
  * @returns updated slug
  * @author Grégory LATINIER
  */
-const editArticle = async (req, h) => {
+const updateArticle = async (req, h) => {
   const author = req.auth.credentials.uid
   const username = req.auth.credentials.username
   const articleDb = await Article.findOne({ author, _id: req.params.id })
@@ -98,6 +98,6 @@ const getArticleByAuthorAndSlug = async (req, h) => {
 
 module.exports = {
   createArticle,
-  editArticle,
+  updateArticle,
   getArticleByAuthorAndSlug
 }

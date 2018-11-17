@@ -17,11 +17,11 @@ routes.push([
   {
     method: 'POST',
     path: '/v1/article/{id}',
-    handler: (req, h, next) => Handlers.editArticle(req, h, next),
+    handler: (req, h, next) => Handlers.updateArticle(req, h, next),
     options: {
       auth: { access: { scope: ['user'] } },
       tags: ['articles'],
-      validate: Validate.editArticle
+      validate: Validate.updateArticle
     }
   },
   {

@@ -8,18 +8,6 @@ const getProjectByOwnerAndSlug = {
   }
 }
 
-const deleteProjectBySlug = {
-  params: {
-    slug: Joi.string().trim().required()
-  }
-}
-
-const getProjects = {
-  payload: {
-    q: Joi.string().trim().required()
-  }
-}
-
 const createProject = {
   payload: {
     name: Joi.string().trim().required(),
@@ -35,7 +23,7 @@ const createProject = {
   }
 }
 
-const editProject = {
+const updateProject = {
   payload: {
     _id: Joi.string().trim().required(),
     name: Joi.string().trim().required(),
@@ -67,10 +55,8 @@ const isProjectAdmin = {
 
 module.exports = {
   createProject,
-  editProject,
+  updateProject,
   getProjectByOwnerAndSlug,
-  deleteProjectBySlug,
-  getProjects,
   isNameAvailable,
   isProjectAdmin
 }

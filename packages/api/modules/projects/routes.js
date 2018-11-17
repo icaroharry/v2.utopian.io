@@ -5,16 +5,6 @@ const routes = []
 
 routes.push([
   {
-    method: 'POST',
-    path: '/v1/projects',
-    handler: (req, h, next) => Handlers.getProjects(req, h, next),
-    options: {
-      auth: false,
-      tags: ['projects'],
-      validate: Validate.getProjects
-    }
-  },
-  {
     method: 'GET',
     path: '/v1/projects/featured',
     handler: (req, h, next) => Handlers.getFeaturedProjects(req, h, next),
@@ -34,23 +24,13 @@ routes.push([
     }
   },
   {
-    method: 'DELETE',
-    path: '/v1/project/{slug}',
-    handler: (req, h, next) => Handlers.deleteProjectBySlug(req, h, next),
-    options: {
-      auth: { access: { scope: ['user'] } },
-      tags: ['projects'],
-      validate: Validate.deleteProjectBySlug
-    }
-  },
-  {
     method: 'PUT',
     path: '/v1/project',
-    handler: (req, h, next) => Handlers.editProject(req, h, next),
+    handler: (req, h, next) => Handlers.updateProject(req, h, next),
     options: {
       auth: { access: { scope: ['user'] } },
       tags: ['projects'],
-      validate: Validate.editProject
+      validate: Validate.updateProject
     }
   },
   {
