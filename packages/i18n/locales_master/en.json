@@ -13,6 +13,11 @@
         "help": "What do you want to share with us? (Hint: Type @@ to find a username)"
       },
       "formTitle": "Write anything about a project",
+      "proReview": {
+        "label": "Pro Review",
+        "helper": "The Pro Review option gives you higher chances to get additional incentives and more exposure on Utopian.",
+        "helperImportant": "Enable the Pro Review option for only 15% of the total rewards."
+      },
       "title": {
         "label": "Article title",
         "placeholder": "Add a title"

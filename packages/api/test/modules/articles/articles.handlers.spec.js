@@ -8,6 +8,7 @@ const createArticleEndpoint = {
   url: '/v1/article',
   payload: {
     body: 'Article body',
+    proReview: true,
     title: 'Article title'
   }
 }
@@ -17,6 +18,7 @@ const updateArticleEndpoint = {
   url: '/v1/article/5beeacddc4fc083ec0939a1e',
   payload: {
     body: 'Article body updated',
+    proReview: false,
     title: 'Article title updated'
   }
 }
@@ -26,6 +28,7 @@ const updateArticleNotExistingEndpoint = {
   url: '/v1/article/5beeacddc4fc083ec0000a1e',
   payload: {
     body: 'Article body not found',
+    proReview: false,
     title: 'Article title not found'
   }
 }
@@ -131,7 +134,7 @@ describe('get an article by its author and slug', () => {
 
   it('should have all the keys', () => {
     expect(payload).to.have.all.keys(
-      'author', 'title', 'body', '_id'
+      'author', 'title', 'body', 'proReview', '_id'
     )
   })
 })

@@ -8,8 +8,9 @@ const Schema = Mongoose.Schema
  * @author Grégory LATINIER
  */
 const articles = new Schema({
-  author: { type: Schema.Types.ObjectId, ref: 'Users' },
+  author: { type: Schema.Types.ObjectId, ref: 'Users', required: true },
   body: { type: String, required: true, text: true },
+  proReview: { type: Boolean, required: true, default: true },
   slug: { type: String, required: true, index: true },
   slugs: { type: Array, index: true },
   title: { type: String, required: true, text: true },

@@ -11,6 +11,7 @@ export default {
     return {
       article: {
         body: '',
+        proReview: true,
         title: ''
       }
     }
@@ -18,6 +19,7 @@ export default {
   validations: {
     article: {
       body: {required},
+      proReview: {required},
       title: {required}
     }
   },
@@ -80,7 +82,13 @@ div
       :helper="$t('articles.createEdit.body.help')", :error="$v.article.body.$error")
         u-wysiwyg(v-model="article.body", field="body")
     .col-md-4.col-sm-12.col-xs-12
-      q-btn.full-width(color="primary", :label="article._id ? $t('articles.createEdit.update') : $t('articles.createEdit.save')", @click="submit")
+      q-field(:label="$t('articles.createEdit.proReview.label')")
+      q-toggle(
+        v-model="article.proReview"
+        left-label
+        :label="`${$t('articles.createEdit.proReview.helper')} <strong>${$t('articles.createEdit.proReview.helperImportant')}</strong>`"
+      )
+      q-btn.full-width.q-mt-lg(color="primary", :label="article._id ? $t('articles.createEdit.update') : $t('articles.createEdit.save')", @click="submit")
 </template>
 
 <style scoped>

@@ -92,7 +92,7 @@ const updateArticle = async (req, h) => {
  */
 const getArticleByAuthorAndSlug = async (req, h) => {
   const slug = `${req.params.author}/${req.params.slug}`
-  const data = await Article.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] }).select('author title body _id')
+  const data = await Article.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] }).select('author body proReview title _id')
   return h.response(data)
 }
 
