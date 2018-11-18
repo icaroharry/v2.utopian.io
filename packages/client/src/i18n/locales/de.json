@@ -1,13 +1,18 @@
 {
   "lang": "de",
   "langLabel": "de",
+  "languages": "Sprachen!",
   "langNative": "Deutsch",
   "interaction": "Interaktion",
   "debug": "Debuggen",
   "GDPR": "GDPR Zustimmung",
-  "loginWithGithub": "Mit Github einloggen wäre schön",
+  "loginWithGithub": "Mit Github einloggen",
   "navbar": {
-    "signIn": "Mit github einloggen aber hallo!"
+    "contribute": "beitragen",
+    "linkSteemAccount": "Steem-Konto verbinden",
+    "logOut": "Ausloggen",
+    "settings": "Einstellungen",
+    "signIn": "Einloggen"
   },
   "common": {
     "signIn": "Mit Github einloggen",

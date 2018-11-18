@@ -40,9 +40,9 @@ module.exports = function (ctx) {
       scopeHoisting: true,
       vueRouterMode: 'history',
       useNotifier: false,
-      // vueCompiler: true,
+      vueCompiler: true,
 
-      chainWebpack(chain, { isServer }) {
+      chainWebpack(chain) {
         chain.module.rule('lint')
           .test(/\.(js|vue)$/)
           .pre()
@@ -65,22 +65,22 @@ module.exports = function (ctx) {
           .set('@', path.resolve(__dirname, 'src'))
         // normalize the global => good for some non-isomorphic modules
         chain.output.set('globalObject', 'this')
-        chain.plugin('extraWatcher')
-          .use(ExtraWatchWebpackPlugin, [
-            {
-              dirs: [
-                'src/i18n/overrides',
-                '../i18n/locales_master',
-                '../i18n/plugins',
-                '../i18n/components'
-              ]
-            }
-          ])
         chain.plugin('i18n')
           .use(I18N, [
             [{
               debug: false
             }]
+          ])
+        chain.plugin('extraWatcher')
+          .use(ExtraWatchWebpackPlugin, [
+            {
+              files: ['../i18n/plugins/i18n.js'],
+              dirs: [
+                'src/i18n/overrides',
+                '../i18n/locales_master',
+                '../i18n/components'
+              ]
+            }
           ])
       }
     },

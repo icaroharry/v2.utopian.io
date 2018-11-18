@@ -138,50 +138,48 @@ export const getLocale = (ssrContext, routeLocale) => {
 
 export default ({ app, Vue, ssrContext, router }) => {
   Vue.use(VueI18n)
-
   app.i18n = new VueI18n({
     silentTranslationWarn: true,
     fallbackLocale: 'en',
     messages: {}
   })
-  app.loadedLanguages = []
+  // always make sure that the fallback is loaded
+  app.loadedLanguages = ['en']
+  app.i18n.setLocaleMessage('en', require(`src/i18n/locales/en.json`))
 
   router.beforeEach((to, from, next) => {
-    const routeLocale = to.params.locale
-    let locale = getLocale(ssrContext, routeLocale)
+    // const routeLocale = to.params.locale
+    // let locale = getLocale(ssrContext, routeLocale)
 
-    /*
     // Keeping this here until we decide how to resolve the Browser Pref Issue
-
     const routeLocale = to.params.locale
     const cookieLocale = getLocaleCookie(ssrContext)
-    const browserLocale = getRoute(getBrowserLocale(ssrContext))
+    // const browserLocale = getRoute(getBrowserLocale(ssrContext))
     let locale
-    if (app.userSelectedLocale === true) {
-      // cookie or route
-      if (cookieLocale) {
-        locale = cookieLocale
-      } else { locale = routeLocale }
-    } else {
+    // if (app.userSelectedLocale === true) {
+    // cookie or route
+    if (cookieLocale) {
+      locale = cookieLocale
+    } else { locale = routeLocale }
+    // }
+    /*
+      else {
       if (browserLocale) {
         locale = browserLocale
       } else { locale = routeLocale }
     }
-    locale = getRoute(locale)
     */
-
+    if (routeLocale !== locale) {
+      next({
+        path: replaceLocale(to.path, locale)
+      })
+    }
     // needed to set quasar locale because short code
     let qLocale
     if (locale === 'en') {
       qLocale = 'en-uk'
     } else {
       qLocale = locale
-    }
-
-    if (routeLocale !== locale) {
-      next({
-        path: replaceLocale(to.path, locale)
-      })
     }
 
     // on first load this will always be true
@@ -226,12 +224,6 @@ export default ({ app, Vue, ssrContext, router }) => {
         }
       }
       return store
-    },
-    data () {
-      return {
-        locale: '',
-        userSelectedLocale: false
-      }
     }
   })
 }

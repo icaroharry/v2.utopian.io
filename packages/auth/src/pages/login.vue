@@ -1,7 +1,11 @@
 <script>
 import { btoa } from 'b2a'
+import i18nDropdownSwitcher from 'src/components/i18n/i18n-dropdown-switcher'
 
 export default {
+  components: {
+    i18nDropdownSwitcher
+  },
   preFetch ({ store, redirect }) {
     if (store.state.auth.user) {
       redirect('/')
@@ -18,64 +22,64 @@ export default {
 </script>
 
 <template lang="pug">
-q-layout.u-page-login
-  .row
-    .col-md-4.col-sm-12.col-xs-12.column.justify-center
-      .column.items-center.login-from
-        img.q-mb-xl(src="~assets/img/logo-black.svg")
-        q-btn.q-mb-sm(@click="startGithubLogin", icon="mdi-github-circle", color="white", text-color="black", :label="$t('auth.login.github')")
-    .side-img.col-md-8
-      img(src="~assets/img/background.jpg")
+q-layout.u-page-login.row
+  .col-md-4.col-sm-12.col-xs-12.row.justify-center
+    .col-12
+      i18nDropdownSwitcher.float-right
+    .justify-center
+      .col-12
+        .column.items-center.login-from
+          img.q-mb-xl(src="~assets/img/logo-black.svg")
+          q-btn.q-mb-sm(@click="startGithubLogin", icon="mdi-github-circle", color="white", text-color="black", :label="$t('auth.login.github')")
+  .side-img.col-md-8
+    img(src="~assets/img/background.jpg")
 </template>
 
 <style lang="stylus">
 @import "~variables"
-.u-page-login {
-  > div {
-    height 100%
-  }
-  .login-from {
+body
+  overflow hidden
+  background #FAFAFA
+.red
+  background red
+.u-page-login
+  .login-from
     max-width 250px
-    margin 0 auto
-    img {
+    margin auto
+    @media (min-width $breakpoint-md-min)
+      margin -25px auto 0 auto
+    img
       width 190px
-    }
-    button {
+    button
       width 100%
       font-family 'Noto Sans'
       font-size 12px
       font-weight 600
       height 44px
-      .q-icon {
+      .q-icon
         font-size 30px !important
-      }
-      &.signup {
+      &.signup
         height 35px
-        .q-icon {
+        .q-icon
           font-size 24px !important
-        }
-      }
-    }
-    p {
+    p
       font-family 'Noto Sans'
       font-size 12px
       margin 0 10px
       padding 8px 0
-      &.title {
+      &.title
         color #181818
-      }
-      &.subtitle {
+      &.subtitle
         color #818181
-      }
-    }
-  }
-  .side-img {
-    display none
-    height 100vh
-    overflow hidden
-    @media (min-width $breakpoint-md-min) {
+  .side-img
+    @media (max-width $breakpoint-md-min)
+      position absolute
+      left 0
+      top 0
+      opacity 0.1
+      height 100vh
+      z-index -1
+    @media (min-width $breakpoint-md-min)
       display block
-    }
-  }
-}
+      opacity 1
 </style>

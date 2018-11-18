@@ -6,16 +6,19 @@ export default {
   data () {
     return {
       locales: locales.default,
-      locale: this.$q.cookies.get('locale')
+      locale: this.$q.cookies.get('locale') || this.$route.params.locale
     }
   },
   methods: {
     changeLang (val) {
-      let route = this.$route.path.split('/')
+      // let route = this.$route.path.split('/')
+      let hostName = window.location.hostname
+      hostName = hostName.substring(hostName.lastIndexOf('.', hostName.lastIndexOf('.') - 1) + 1)
+      let route = document.location.pathname.split('/')
       route[1] = val
       route = route.join('/')
-      this.$q.cookies.set('locale', val, { path: '/' })
-      this.userSelectedLocale = true
+      if (location.search) route = route + location.search
+      this.$q.cookies.set('locale', val, { path: '/', domain: hostName })
       this.$router.push(route)
       this.locale = val
     }
@@ -23,22 +26,23 @@ export default {
 }
 </script>
 <template lang="pug">
-  q-btn-dropdown(
-  ref="selectLanguages"
-  icon="language"
-  :label="$t('langLabel')"
-  flat
-  dense
-  )
-    q-list
-      q-list-header(inset) {{ $t('languages')  }}
-      q-item(
-      link
-      v-close-overlay
-      v-for="(language, index) in locales", :key="index"
-      @click.native="changeLang(language.lang)"
-      )
-        q-item-main
-          q-item-tile(label) {{ language.langNative }}
-        q-item-side(v-if="language.lang === locale", right, icon="done", color="primary")
+  div
+    q-btn(
+      ref="selectLanguages"
+      icon="language"
+      :label="$t('langLabel')"
+      flat
+      dense
+    )
+    q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]", style="z-index:1")
+      q-list(dense, separator)
+        q-item(
+          link
+          v-close-overlay
+          v-for="(language, index) in locales", :key="index"
+          @click.native="changeLang(language.lang)"
+        )
+          q-item-main
+            q-item-tile(label) {{ language.langNative }}
+          q-item-side(v-if="language.lang === locale", right, icon="done", color="primary")
 </template>

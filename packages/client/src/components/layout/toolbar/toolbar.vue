@@ -44,7 +44,7 @@ export default {
   q-toolbar.u-toolbar(color='tertiary', style="z-index: 1000000")
     .container.toolbar-container.row
       q-toolbar-title
-        router-link(:to="{ name: 'home', params: locale }")
+        router-link(:to="{ name: 'home', params: 'locale' }")
           img.u-logo.mobile-only(src="~assets/img/logo-icon.svg")
           img.u-logo.desktop-only(src="~assets/img/logo-white.svg")
       div
@@ -54,17 +54,17 @@ export default {
 
         div.row(v-if="!guest")
           div.q-mt-sm.q-mr-lg
-            q-btn(color="primary", :label="$t('navbar.contribute')", icon="mdi-plus")
-              q-popover(self="top left", anchor="bottom left")
-                q-list(dense, :link="true", separator)
-                  q-item(:to="{ name: 'articles.create'}")
-                    q-item-main(label="Write an article")
-                  q-item(:to="{ name: 'projects.create'}")
-                    q-item-main(label="Add my project")
+            q-btn(color="primary", :label="$t('navbar.contribute')", icon="mdi-plus" )
+            q-popover(self="top left", anchor="bottom left" style="z-index:1")
+              q-list(dense, :link="true", separator)
+                q-item(:to="{ name: 'articles.create'}")
+                  q-item-main(label="Write an article")
+                q-item(:to="{ name: 'projects.create'}")
+                  q-item-main(label="Add my project")
 
           div.q-ma-sm
             img.avatar(:src="user.avatarUrl")
-            q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]")
+            q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]", style="z-index:1")
               q-list(dense, :link="true", separator)
                 q-item(v-if="!steemUser", @click.native="startSteemConnectLogin")
                   q-item-side

@@ -12,7 +12,7 @@ module.exports = function (ctx) {
     supportIE: false,
     css: ['app.styl'],
     // app plugins (/src/plugins)
-    extras: ['roboto-font', 'mdi'],
+    extras: ['roboto-font', 'mdi', 'material-icons',],
     plugins: [
       'axios',
       'i18n',
@@ -29,7 +29,7 @@ module.exports = function (ctx) {
       vueRouterMode: 'history',
       useNotifier: false,
 
-      chainWebpack (chain, { isServer }) {
+      chainWebpack (chain) {
         chain.module.rule('lint')
           .test(/\.(js|vue)$/)
           .pre()
@@ -55,8 +55,12 @@ module.exports = function (ctx) {
         chain.plugin('extraWatcher')
           .use(ExtraWatchWebpackPlugin, [
             {
-              dirs: [ 'src/i18n/overrides', '../i18n/locales_master' ]
-            }
+              dirs: [
+                'src/i18n/overrides',
+                '../i18n/locales_master',
+                '../i18n/plugins',
+                '../i18n/components'
+              ]            }
           ])
         chain.plugin('i18n')
           .use(I18N, [
@@ -75,12 +79,14 @@ module.exports = function (ctx) {
     framework: {
       components: [
         'QBtn',
+        'QBtnDropdown',
         'QField',
         'QIcon',
         'QInput',
         'QItem',
         'QItemMain',
         'QItemSide',
+        'QItemTile',
         'QLayout',
         'QLayoutDrawer',
         'QLayoutHeader',
@@ -88,11 +94,13 @@ module.exports = function (ctx) {
         'QListHeader',
         'QPage',
         'QPageContainer',
+        'QPopover',
         'QToolbar',
         'QToolbarTitle'
       ],
       directives: [
-        'Ripple'
+        'Ripple',
+        'CloseOverlay'
       ],
       i18n: 'en-uk',
       // Quasar plugins
