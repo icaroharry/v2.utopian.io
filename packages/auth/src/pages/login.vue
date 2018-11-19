@@ -23,14 +23,13 @@ export default {
 
 <template lang="pug">
 q-layout.u-page-login.row
-  .col-md-4.col-sm-12.col-xs-12.row.justify-center
+  .col-md-4.col-sm-12.col-xs-12.row.login-pane
     .col-12
       i18nDropdownSwitcher.float-right
-    .justify-center
-      .col-12
-        .column.items-center.login-from
-          img.q-mb-xl(src="~assets/img/logo-black.svg")
-          q-btn.q-mb-sm(@click="startGithubLogin", icon="mdi-github-circle", color="white", text-color="black", :label="$t('auth.login.github')")
+    .col-12
+      .column.items-center.login-from
+        img.q-mb-xl(src="~assets/img/logo-black.svg")
+        q-btn.q-mb-sm(@click="startGithubLogin", icon="mdi-github-circle", color="white", text-color="black", :label="$t('auth.login.github')")
   .side-img.col-md-8
     img(src="~assets/img/background.jpg")
 </template>
@@ -42,12 +41,17 @@ body
   background #FAFAFA
 .red
   background red
+.login-pane
+  height 100%
+  max-height 100%
 .u-page-login
   .login-from
     max-width 250px
     margin auto
     @media (min-width $breakpoint-md-min)
       margin -25px auto 0 auto
+    height 100px
+      // margin auto
     img
       width 190px
     button
