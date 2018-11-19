@@ -1,8 +1,8 @@
 {
   "lang": "en",
   "langLabel": "en",
+  "languages": "Languages!",
   "langNative": "English",
-  "loginWithGithub": "Login with Github",
   "interaction": "Interaction",
   "debug": "Debug",
   "GDPR": "GDPR Acceptance",
@@ -10,14 +10,20 @@
     "createEdit": {
       "body": {
         "label": "Content",
-        "help": "What do you want to share with us?"
+        "help": "What do you want to share with us? (Hint: Type @@ to find a username)"
       },
       "formTitle": "Write anything about a project",
+      "proReview": {
+        "label": "Pro Review",
+        "helper": "The Pro Review option gives you higher chances to get additional incentives and more exposure on Utopian.",
+        "helperImportant": "Enable the Pro Review option for only 15% of the total rewards."
+      },
       "title": {
         "label": "Article title",
         "placeholder": "Add a title"
       },
-      "save": "Publish my article"
+      "save": "Publish my article",
+      "update": "Update my article"
     }
   },
   "fileUpload": {
@@ -50,6 +56,10 @@
         "placeholder": "MIT"
       },
       "notOpensource": "The code of my project is closed",
+      "owners": {
+        "label": "Owners",
+        "placeholder": "Find your colleagues"
+      },
       "projectDetails": {
         "label": "Project details",
         "help": "Write everything about your project...",
@@ -87,6 +97,7 @@
       },
       "subtitle": "Make a great first impression with all the project information filled and great images about your project.",
       "title": "Bring your project to Utopian.io",
+      "update": "Update",
       "webPage": {
         "label": "Web page",
         "placeholder": "https://quasar-framework.org"
@@ -107,6 +118,11 @@
     "goBack": "Go back",
     "title": "Sorry, nothing here"
   },
+  "users": {
+    "search": {
+      "notFound": "No users found"
+    }
+  },
   "api": {
     "errors": {
       "general": {
@@ -122,10 +138,25 @@
       "projects": {
         "exists": "You already have a project with this name.",
         "noRepositories": "A project must have at least one repository."
+      },
+      "steem": {
+        "accountAlreadyLinked": "The Steem account is already linked."
+      },
+      "users": {
+        "badGrantType": "Bad grant type.",
+        "doesNotExist": "The user doesn't exist.",
+        "tokenDoesNotExist": "The token has already been revoked.",
+        "usernameExists": "The username is already taken.",
+        "wrongUserPassword": "Wrong user or password."
       }
     },
     "messages": {
       "deleteSuccess": "The information was successfully deleted."
+    }
+  },
+  "auth": {
+    "login": {
+      "github": "Login with GitHub"
     }
   },
   "errors": {

@@ -66,35 +66,9 @@ export const getLocaleCookie = ssrContext => {
   }
 }
 
-/* Get browser locale
- *
- * @property {object} ssrContext - required for isomorphism
- * @returns {string} Language from cookie or undefined
- *
- */
-/*
-export const getBrowserLocale = (ssrContext) => {
-  if (ssrContext) {
-    const languages = ssrContext.req.headers['accept-language']
-    if (languages) {
-      // common languages string: en-GB,en;q=0.9,en-US;q=0.8,de;q=0.7
-      let browserAcceptLocale = languages.split(',')
-      let browserMatch
-      // browserAcceptLocale.some(browserLocale => {
-      for (let browserLocale of browserAcceptLocale) {
-        browserMatch = browserLocale.split(';')[0].toLowerCase()
-        if (localesList.includes(browserMatch)) break
-      }
-      return browserMatch
-    } else {
-      return undefined
-    }
-  }
-}
-*/
 export const getBrowserLocale = ssrContext => {
   // native Quasar version
-  if (ssrContext) {
+  if (!ssrContext) {
     const language = Quasar.i18n.getLocale()
     if (language) {
       for (let locales of localesList) {
@@ -121,7 +95,7 @@ export const getRoute = routeLocale => {
     return routeLocale
   }
   // fallback to
-  return 'en-us'
+  return 'en'
 }
 
 /* Replace locale in route
@@ -158,39 +132,54 @@ export const getLocale = (ssrContext, routeLocale) => {
       return cookie
     }
   }
-  const browserLocale = getBrowserLocale(ssrContext)
-  if (typeof browserLocale !== 'undefined') {
-    return browserLocale
-  }
   // in the end return undefined and let router handle it.
   return getRoute(routeLocale)
 }
 
 export default ({ app, Vue, ssrContext, router }) => {
   Vue.use(VueI18n)
-
   app.i18n = new VueI18n({
     silentTranslationWarn: true,
-    // fallbackLocale: 'en-uk',
+    fallbackLocale: 'en',
     messages: {}
   })
-  app.loadedLanguages = []
+  // always make sure that the fallback is loaded
+  app.loadedLanguages = ['en']
+  app.i18n.setLocaleMessage('en', require(`src/i18n/locales/en.json`))
 
   router.beforeEach((to, from, next) => {
+    // const routeLocale = to.params.locale
+    // let locale = getLocale(ssrContext, routeLocale)
+
+    // Keeping this here until we decide how to resolve the Browser Pref Issue
     const routeLocale = to.params.locale
-    const locale = getLocale(ssrContext, routeLocale)
+    const cookieLocale = getLocaleCookie(ssrContext)
+    // const browserLocale = getRoute(getBrowserLocale(ssrContext))
+    let locale
+    // if (app.userSelectedLocale === true) {
+    // cookie or route
+    if (cookieLocale) {
+      locale = cookieLocale
+    } else { locale = routeLocale }
+    // }
+    /*
+      else {
+      if (browserLocale) {
+        locale = browserLocale
+      } else { locale = routeLocale }
+    }
+    */
+    if (routeLocale !== locale) {
+      next({
+        path: replaceLocale(to.path, locale)
+      })
+    }
     // needed to set quasar locale because short code
     let qLocale
     if (locale === 'en') {
       qLocale = 'en-uk'
     } else {
       qLocale = locale
-    }
-
-    if (routeLocale !== locale) {
-      next({
-        path: replaceLocale(to.path, locale)
-      })
     }
 
     // on first load this will always be true
@@ -227,42 +216,14 @@ export default ({ app, Vue, ssrContext, router }) => {
           qLocale = locale
         }
         if (localesList.includes(locale)) {
-          return import(`quasar-framework/i18n/${qLocale}`)
+          import(`quasar-framework/i18n/${qLocale}`)
             .then((lang) => {
               Quasar.i18n.lang = qLocale
               Quasar.i18n.set(lang.default)
             })
         }
       }
-    },
-    beforeMount () {
-      const { asyncData } = this.$options
-      if (asyncData) {
-        this.locale = asyncData({
-          locale: this.$route.params.locale
-        })
-      }
-    },
-    mounted () {
-      // watch the emit event for localeChange
-      this.$root.$on('localeChange', (val) => {
-        this.locale = val
-      })
-    },
-    watch: {
-      locale: {
-        handler (val, oldVal) {
-          // todo: check the new route before we reroute
-          let route = this.$route.path.split('/')
-          route[1] = val
-          route = route.join('/')
-          if (this.$q.cookies.get('GDPR')) {
-            this.$q.cookies.set('locale', val, { path: '/' })
-          }
-          this.$router.push(route)
-        }
-      },
-      immediate: true
+      return store
     }
   })
 }

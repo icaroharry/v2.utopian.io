@@ -1,10 +1,15 @@
-const withPrefix = (prefix, routes) => 
+const withPrefix = (prefix, routes) =>
   routes.map((route) => {
     route.path = prefix + route.path
     return route
   })
 
 const routes = [
+  {
+    // failsafe
+    path: '/',
+    redirect: '/en'
+  },
   {
     path: '/:locale',
     name: 'home'

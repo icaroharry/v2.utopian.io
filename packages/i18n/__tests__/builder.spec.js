@@ -72,12 +72,12 @@ describe('Deep Merge two objects [builder.deepMerge]', () => {
   })
 })
 
-describe('Parses existing files [builder.listFiles]', async () => {
+describe('Parses existing files [builder.listFiles]',() => {
   it('finds the locale files', async () => {
     return builder.listFiles(path.resolve(__dirname, './fixtures/thisLib/locales'))
     .then(data => expect(data).toEqual(['de.js', 'en.js']))
   })
-  it('fails with error message if directory exists but is empty', async () => {
+  it('fails with error message if directory is empty', async () => {
     return builder.listFiles(path.resolve(__dirname, './fixtures/thisLib/emptyLib'))
     .then(data => expect(data[3]).toEqual('directoryEmpty'))
   })
@@ -87,7 +87,7 @@ describe('Parses existing files [builder.listFiles]', async () => {
   })
 })
 
-describe('Prints out logs on errors [builder.log]', async () => {
+describe('Prints out logs on errors [builder.log]', () => {
   const msg_error=['error', 'jestSelftest']
   const msg_success=['success']
   it('shows an error', async () => {
@@ -100,7 +100,7 @@ describe('Prints out logs on errors [builder.log]', async () => {
   })
 })
 
-describe('Creates file from object [builder.createJsonArtifact]', async () => {
+describe('Creates file from object [builder.createJsonArtifact]', () => {
   // note: we do not test if the folder or file exists.
   // fs-extra will create it, so there is no reason to test
   const filePath = path.resolve(__dirname, './fixtures/quasarApp/src/i18n/locales/en.json')

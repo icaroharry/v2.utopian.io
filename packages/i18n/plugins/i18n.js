@@ -62,7 +62,7 @@ export const getLocaleCookie = ssrContext => {
       return cookie.toLowerCase()
     }
   } else {
-    return undefined
+    return false
   }
 }
 
@@ -148,19 +148,23 @@ export default ({ app, Vue, ssrContext, router }) => {
   app.i18n.setLocaleMessage('en', require(`src/i18n/locales/en.json`))
 
   router.beforeEach((to, from, next) => {
-    // const routeLocale = to.params.locale
-    // let locale = getLocale(ssrContext, routeLocale)
-
-    // Keeping this here until we decide how to resolve the Browser Pref Issue
+    // ignore quasar
+    if (to.params.locale === 'src') {
+      next()
+    }
     const routeLocale = to.params.locale
     const cookieLocale = getLocaleCookie(ssrContext)
     // const browserLocale = getRoute(getBrowserLocale(ssrContext))
-    let locale
     // if (app.userSelectedLocale === true) {
     // cookie or route
+    let locale
     if (cookieLocale) {
       locale = cookieLocale
-    } else { locale = routeLocale }
+    } else {
+      locale = routeLocale
+    }
+    locale = getRoute(locale) // => MUST BE EN
+
     // }
     /*
       else {
@@ -202,13 +206,16 @@ export default ({ app, Vue, ssrContext, router }) => {
 
   Vue.mixin({
     /**
-     * Vue global object available everywhere
-     * @namespace
-     * @property {string}  locale              - The active language
+     * Check the route
+     * @param store
+     * @param currentRoute
+     * @param redirect
+     * @param ssrContext
+     * @returns {Promise<*>}
      */
     async preFetch ({ store, currentRoute, redirect, ssrContext }) {
       if (ssrContext) {
-        const locale = currentRoute.params.locale
+        let locale = getRoute(currentRoute.params.locale)
         let qLocale
         if (locale === 'en') {
           qLocale = 'en-uk'

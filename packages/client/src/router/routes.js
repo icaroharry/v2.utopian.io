@@ -1,8 +1,12 @@
 export default [
   {
+    // failsafe
+    path: '/',
+    redirect: '/en'
+  },
+  {
     path: '/:locale',
     component: () => import('src/layouts/main'),
-    props: true,
     children: [
       {
         path: '/:locale',

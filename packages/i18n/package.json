@@ -29,7 +29,7 @@
     "lint": "eslint --ext .js,.vue src",
     "lint:fix": "eslint --ext .js,.vue lib --fix",
     "test": "echo \"No test specified\" && exit 0",
-    "test:jest": "jest --coverage",
+    "test:jest": "jest",
     "coverage:serve": "quasar serve ./__tests__/coverage/lcov-report",
     "precommit": "lint-staged"
   },

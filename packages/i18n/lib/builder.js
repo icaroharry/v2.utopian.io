@@ -87,7 +87,7 @@ const detectQuasar = async (dir) => {
 const listFiles = async (dir) => {
   return fs.readdir(dir)
     .then(files => {
-      if (!files.length) {
+      if (!files.length || files[0] === '.gitkeep') {
         return log(['error', Date.now(), 'i18n.builder.listFiles', 'directoryEmpty', dir])
       } else {
         return files
@@ -158,11 +158,13 @@ const copyArtifact = async (inputFile, outputFile) => {
   try {
     fs.copySync(inputFile, outputFile)
   } catch (err) {
+    /* istanbul ignore next */
     return log(['error', Date.now(), 'i18n.builder.copyArtifact', 'error.onCopy', err])
   }
   try {
     fs.appendFileSync(outputFile, append)
   } catch (err) {
+    /* istanbul ignore next */
     return log(['error', Date.now(), 'i18n.builder.copyArtifact', 'error.onAppend', err])
   }
   return log(['success'])
@@ -178,7 +180,8 @@ const copyArtifact = async (inputFile, outputFile) => {
 const log = async (msg) => {
   // only for console at the moment, because no remote logger is available
   // and this module is technically only ever going to be run on a developer's machine
-  if (msg[0] === 'error') {
+  /* istanbul ignore next */
+  if (msg[0] === 'error' && (lifecycle !== 'jest' || lifecycle !== 'test:jest')) {
     console.log(msg)
     /* axios call could be placed here */
     // this would be the place to send to a logging server - if we cared

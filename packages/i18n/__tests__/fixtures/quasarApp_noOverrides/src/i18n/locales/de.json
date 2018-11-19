@@ -1,13 +1,18 @@
 {
   "lang": "de",
   "langLabel": "de",
+  "languages": "Sprachen!",
   "langNative": "Deutsch",
   "interaction": "Interaktion",
   "debug": "Debuggen",
   "GDPR": "GDPR Zustimmung",
-  "loginWithGithub": "Mit Github einloggen wäre schön",
+  "loginWithGithub": "Mit Github einloggen",
   "navbar": {
-    "signIn": "Mit github einloggen aber hallo!"
+    "contribute": "beitragen",
+    "linkSteemAccount": "Steem-Konto verbinden",
+    "logOut": "Ausloggen",
+    "settings": "Einstellungen",
+    "signIn": "Einloggen"
   },
   "common": {
     "signIn": "Mit Github einloggen",
@@ -87,6 +92,11 @@
         "not_project_admin": "You must be an admin of the project.",
         "project_exists": "You already have a project with this name."
       }
+    }
+  },
+  "auth": {
+    "login": {
+      "github": "Mit Github einloggen"
     }
   },
   "errors": {

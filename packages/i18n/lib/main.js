@@ -34,13 +34,14 @@ const
 const main = async (dir) => {
   return builder.detectQuasar(dir)
     .then(quasarDir => {
-    /* istanbul ignore else */
+      let localesObj, tmpLocales
+      /* istanbul ignore else */
       if (quasarDir[0] === 'error') {
         builder.log(quasarDir)
         return quasarDir
       } else {
       // copy the plugin(s)
-        this.localesObj = []
+        localesObj = []
         builder.listFiles(path.resolve(__dirname, '../plugins'))
           .then(sourcePlugins => {
             sourcePlugins.forEach(sourcePlugin => {
@@ -77,9 +78,9 @@ const main = async (dir) => {
 
               // check if the locale is already in the obj, if not, add it:
               // thankyou SSR
-              this.tmpLocales = { lang: left.lang, langNative: left.langNative }
-              if (!R.contains(this.tmpLocales, this.localesObj)) {
-                this.localesObj.push(this.tmpLocales)
+              tmpLocales = { lang: left.lang, langNative: left.langNative }
+              if (!R.contains(tmpLocales, localesObj)) {
+                localesObj.push(tmpLocales)
               }
 
               // make sure it exists before requiring it!!!
@@ -115,7 +116,7 @@ const main = async (dir) => {
                 return built
               }
             })
-            const loki = this.localesObj // [].concat.apply([],this.localesObj)
+            const loki = localesObj // [].concat.apply([],localesObj)
             const localesObjFile = path.resolve(quasarDir[0], './src/i18n/localesObj.json')
             builder.createJsonArtifact(localesObjFile, loki).then(built => {
               if (built[0] === 'error') {

@@ -3,22 +3,22 @@ module.exports = {
     __DEV__: true
   },
 	setupTestFrameworkScriptFile: '<rootDir>/__tests__/jest.setup.js',
-	noStackTrace: true,
-	bail: true,
+	noStackTrace: false,
+	bail: false,
 	cache: false,
-	verbose: true,
+	verbose: false,
   testURL: 'http://localhost/',
-  collectCoverage: false,
+  collectCoverage: true,
   coverageDirectory: '<rootDir>/__tests__/coverage',
   collectCoverageFrom: [
     '<rootDir>/lib/*.js',
   ],
   coverageThreshold: {
     global: {
-      branches: 100,
-      functions: 100,
-      lines: 100,
-      statements: 100
+      branches: 50,
+      functions: 50,
+      lines: 50,
+      statements: 50
     }
   },
   testMatch: [

@@ -1,7 +1,7 @@
 {
   "name": "@utopian/root",
   "private": true,
-  "license" : "GPL-3.0",
+  "license": "GPL-3.0",
   "author": "Utopian Company SRLs",
   "homepage": "https://utopian.io",
   "repository": {
@@ -16,6 +16,7 @@
     "test:jest": "lerna run test:jest --no-bail"
   },
   "devDependencies": {
+    "@utopian/i18n": "file:packages/i18n",
     "husky": "^1.1.4",
     "lerna": "^3.4.3"
   }
