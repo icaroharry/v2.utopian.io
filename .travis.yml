@@ -3,3 +3,7 @@ node_js:
   - "node"
 os:
   - linux
+install:
+  - yarn
+  - lerna link
+  - lerna bootstrap
