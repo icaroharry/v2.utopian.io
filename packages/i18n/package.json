@@ -28,7 +28,7 @@
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
     "lint:fix": "eslint --ext .js,.vue lib --fix",
-    "test": "jest --coverage",
+    "test": "echo \"No test specified\" && exit 0",
     "test:jest": "jest --coverage",
     "coverage:serve": "quasar serve ./__tests__/coverage/lcov-report",
     "precommit": "lint-staged"

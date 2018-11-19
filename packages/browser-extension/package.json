@@ -5,6 +5,7 @@
   "author": "Utopian Company SRLs",
   "description": "A cross browser extension for Utopian Bounties",
   "scripts": {
+    "test": "echo \"No test specified\" && exit 0",
     "chrome-build": "cross-env TARGET=chrome gulp",
     "opera-build": "cross-env TARGET=opera gulp",
     "firefox-build": "cross-env TARGET=firefox gulp",
