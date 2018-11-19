@@ -19,7 +19,8 @@ const createProjectPayload = {
   description: 'Earn rewards by contributing to your favorite Open Source projects!',
   details: 'Utopian is the only platform rewarding...',
   owners: ['5bee961699164e6d24cbd3ee'],
-  tags: ['quasarframework', 'steem', 'mongodb']
+  tags: ['quasarframework', 'steem', 'mongodb'],
+  allowExternals: false
 }
 const updateProjectPayload = {
   _id: '5b8013053b4cc0211aa4fee4', // Real ID is 5b8013053b4cc0211aa4fee3
@@ -40,6 +41,8 @@ const featuredEndpoint = { method: 'GET', url: '/v1/projects/featured' }
 const getProjectByOwnerAndSlugEndpoint = { method: 'GET', url: '/v1/project/utopian-io/utopian-io' }
 const getProjectNonExistingProjectEndpoint = { method: 'GET', url: '/v1/project/utopian-io/xxx' }
 const isNameAvailableEndpoint = { method: 'POST', url: '/v1/projects/isnameavailable' }
+const getProjectThatAllowsExternalContributions = { method: 'GET', url: '/v1/project/nothingismagick/quasar-framework' }
+const getProjectThatDoesNotAllowExternalContributions = { method: 'GET', url: '/v1/project/utopian-io/utopian-io' }
 
 describe('featured projects', () => {
   let response
@@ -88,7 +91,7 @@ describe('get the utopian project by its owner and slug', () => {
 
   it('should have all the keys', () => {
     expect(payload).to.have.all.keys(
-      'name', 'repositories', 'website', 'license', 'medias', 'description', 'details', 'tags', 'owners', '_id'
+      'name', 'repositories', 'website', 'license', 'medias', 'description', 'details', 'tags', 'owners', '_id', 'allowExternals'
     )
   })
   it('should have utopian-io as owner', () => {
@@ -227,5 +230,26 @@ describe('check if the project "New awesome project" is available', () => {
 
   it('should return the project "New awesome project" as available', () => {
     assert.equal(payload, 'true')
+  })
+})
+
+describe("check project's allows external contributions flag", () => {
+  let quasarProjectResponse, utopianProjectResponse
+  let quasarPayload, utopianPayload
+
+  before(async () => {
+    quasarProjectResponse = await global.server.inject(getProjectThatAllowsExternalContributions)
+    quasarPayload = JSON.parse(quasarProjectResponse.payload)
+
+    utopianProjectResponse = await global.server.inject(getProjectThatDoesNotAllowExternalContributions)
+    utopianPayload = JSON.parse(utopianProjectResponse.payload)
+  })
+
+  it('should allow external contributions', () => {
+    assert.equal(quasarPayload.allowExternals, true)
+  })
+
+  it('should NOT allow external contributions', () => {
+    assert.equal(utopianPayload.allowExternals, false)
   })
 })

@@ -27,7 +27,7 @@ const getProjectByOwnerAndSlug = async (req, h) => {
     owners: { $elemMatch: { $eq: user._id } }
   })
     .populate('owners', 'username avatarUrl')
-    .select('name repositories website docs license medias description details tags owners _id')
+    .select('name repositories website docs license medias description details tags owners _id allowExternals')
   return h.response(project)
 }
 

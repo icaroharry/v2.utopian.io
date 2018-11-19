@@ -9,7 +9,7 @@ import { mapActions } from 'vuex'
 
 export default {
   name: 'u-wysiwyg',
-  components: {QNoSsr},
+  components: { QNoSsr },
   props: ['value', 'onChange', 'field'],
   mounted () {
     /*

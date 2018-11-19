@@ -80,6 +80,9 @@
             "length": "This tag is too long."
         }
       },
+      "allowExternals": {
+        "label": "Allow external contributions"
+      },
       "repositories": "Repositories",
         "shortDescription": {
         "label": "Short description",

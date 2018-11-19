@@ -74,6 +74,9 @@
           "exists": "You already have a project with this name."
         }
       },
+      "allowExternals": {
+        "label": "Allow external contributions"
+      },
       "projectTags": {
         "label": "Project tags",
         "help": "Please provide between 3 and 5 tags",

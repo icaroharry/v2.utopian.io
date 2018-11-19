@@ -10,6 +10,7 @@ const getProjectByOwnerAndSlug = {
 
 const createProject = {
   payload: {
+    allowExternals: Joi.boolean().required(),
     name: Joi.string().trim().required(),
     repositories: Joi.array().unique().required(),
     website: Joi.string().optional().trim().uri(),
@@ -26,6 +27,7 @@ const createProject = {
 const updateProject = {
   payload: {
     _id: Joi.string().trim().required(),
+    allowExternals: Joi.boolean().required(),
     name: Joi.string().trim().required(),
     repositories: Joi.array().unique().required(),
     website: Joi.string().optional().trim().uri(),

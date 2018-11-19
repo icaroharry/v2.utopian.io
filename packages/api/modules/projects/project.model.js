@@ -3,6 +3,7 @@ const Mongoose = require('mongoose')
 const Schema = Mongoose.Schema
 
 const projects = new Schema({
+  allowExternals: { type: Boolean, required: true, default: true },
   blacklisted: { type: Boolean, default: false },
   closedSource: { type: Boolean, default: false },
   description: { type: String, required: true, text: true },

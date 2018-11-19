@@ -18,9 +18,9 @@ export default {
   },
   validations: {
     article: {
-      body: {required},
-      proReview: {required},
-      title: {required}
+      body: { required },
+      proReview: { required },
+      title: { required }
     }
   },
   async mounted () {
@@ -59,7 +59,7 @@ export default {
         slug = await this.updateArticle(article)
       }
       if (slug) {
-        this.$router.push({path: `/${this.$route.params.locale}/articles/${slug}/edit`})
+        this.$router.push({ path: `/${this.$route.params.locale}/articles/${slug}/edit` })
       }
     }
   },

@@ -4,6 +4,7 @@ module.exports = [
   // Typical Open Source project
   {
     '_id': new Mongoose.Types.ObjectId('5b83ba210575923a3e6dd071'),
+    'allowExternals': true,
     'blacklisted': false,
     'closedSource': false,
     'description': 'High Performance Full Frontend Stack',
@@ -114,6 +115,7 @@ module.exports = [
   // the utopian project
   {
     '_id': new Mongoose.Types.ObjectId('5b8013053b4cc0211aa4fee3'),
+    'allowExternals': false,
     'blacklisted': false,
     'closedSource': true,
     'description': 'Earn rewards by contributing to your favorite Open Source projects!',

@@ -17,6 +17,7 @@ export default {
       project: {
         name: '',
         closedSource: false,
+        allowExternals: true,
         repositories: [],
         license: '',
         medias: [],
@@ -49,16 +50,16 @@ export default {
         required: requiredUnless(function () { return this.project.closedSource }),
         minLength: minLength(1)
       },
-      website: {url},
-      docs: {url},
-      license: {required},
+      website: { url },
+      docs: { url },
+      license: { required },
       medias: {
         required,
         minLength: minLength(1),
         maxLength: maxLength(5)
       },
-      description: {required},
-      details: {required},
+      description: { required },
+      details: { required },
       tags: {
         required,
         minLength: minLength(3),
@@ -139,7 +140,7 @@ export default {
     async addRepository (item, e) {
       if (!e) { // don't trigger automatically on keyboard select
         if (!this.project.repositories.find(r => r.id === item.id)) {
-          const project = {type: 'github', ...item}
+          const project = { type: 'github', ...item }
           if (await this.isProjectAdmin(project)) {
             this.project.repositories.push(project)
             this.updateFormPercentage('repositories')
@@ -158,7 +159,7 @@ export default {
       this.searchUsers({ term, count: 10 })
         .then(users => {
           if (typeof users === 'string') { // no results sent as an i18n primitive in string form
-            done([{label: this.$t(users), value: null}])
+            done([{ label: this.$t(users), value: null }])
           } else {
             done(users && users.filter(u => u._id !== this.user.uid && !this.project.owners.some(o => o._id === u._id))
               .map(user => ({
@@ -308,6 +309,9 @@ div
             q-item-side(right)
               q-btn(round, dense, icon="mdi-minus-circle", color="red", size="md" @click="() => removeOwner(owner._id)")
 
+      q-field
+        q-toggle.allow-externals(v-model="project.allowExternals", :label="$t('projects.createEdit.allowExternals.label')")
+
     .col-md-4.col-sm-12.col-xs-12
       q-scroll-observable(@scroll="scrollHandler")
       q-list(separator, :class="fixedProgress ? 'fixed' : ''").create-edit-project-progress
@@ -328,6 +332,9 @@ div
     > span {
       width 100%
     }
+  }
+  .allow-externals {
+    font-weight: 600
   }
   .create-edit-project-progress {
     margin-top 38px
