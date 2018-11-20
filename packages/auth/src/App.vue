@@ -19,7 +19,7 @@ export default {
       if (this.$route.query.redirectUrl) {
         if (typeof window !== 'undefined') window.location = this.$route.query.redirectUrl
       } else {
-        this.$router.push({ path: `/login` })
+        this.$router.push({ path: `/en/login` })
       }
     }
   }

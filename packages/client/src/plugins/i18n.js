@@ -152,7 +152,6 @@ export default ({ app, Vue, ssrContext, router }) => {
     if (to.params.locale === 'src') {
       next()
     }
-    console.log('LOCALE ', to.params.locale)
     const routeLocale = to.params.locale
     const cookieLocale = getLocaleCookie(ssrContext)
     // const browserLocale = getRoute(getBrowserLocale(ssrContext))
