@@ -22,13 +22,9 @@ const createProjectPayload = {
   tags: ['quasarframework', 'steem', 'mongodb'],
   allowExternals: false
 }
-const updateProjectPayload = {
-  _id: '5b8013053b4cc0211aa4fee4', // Real ID is 5b8013053b4cc0211aa4fee3
-  ...createProjectPayload
-}
 
 const createProjectEndpoint = { method: 'POST', url: '/v1/project', payload: createProjectPayload }
-const updateProjectEndpoint = { method: 'PUT', url: '/v1/project', payload: updateProjectPayload }
+const updateProjectEndpoint = { method: 'POST', url: '/v1/project/5b8013053b4cc0211aa4fee4', payload: createProjectPayload }
 const isProjectAdminEndpoint = {
   method: 'POST',
   url: '/v1/projects/isprojectadmin',

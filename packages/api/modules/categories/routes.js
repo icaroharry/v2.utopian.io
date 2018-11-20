@@ -7,7 +7,7 @@ routes.push([
   {
     method: 'GET',
     path: '/v1/categories/{lang}',
-    handler: (req, h, next) => Handlers.getCategories(req, h, next),
+    handler: (req, h) => Handlers.getCategories(req, h),
     options: {
       auth: false,
       tags: ['categories'],
@@ -17,7 +17,7 @@ routes.push([
   {
     method: 'GET',
     path: '/v1/subcategories/{lang}/{category}',
-    handler: (req, h, next) => Handlers.getSubCategories(req, h, next),
+    handler: (req, h) => Handlers.getSubCategories(req, h),
     options: {
       auth: false,
       tags: ['categories'],

@@ -7,7 +7,7 @@ routes.push([
   {
     method: 'POST',
     path: '/v1/article',
-    handler: (req, h, next) => Handlers.createArticle(req, h, next),
+    handler: (req, h) => Handlers.createArticle(req, h),
     options: {
       auth: { access: { scope: ['user'] } },
       tags: ['articles'],
@@ -17,7 +17,7 @@ routes.push([
   {
     method: 'POST',
     path: '/v1/article/{id}',
-    handler: (req, h, next) => Handlers.updateArticle(req, h, next),
+    handler: (req, h) => Handlers.updateArticle(req, h),
     options: {
       auth: { access: { scope: ['user'] } },
       tags: ['articles'],
@@ -27,7 +27,7 @@ routes.push([
   {
     method: 'GET',
     path: '/v1/article/{author}/{slug}',
-    handler: (req, h, next) => Handlers.getArticleByAuthorAndSlug(req, h, next),
+    handler: (req, h) => Handlers.getArticleByAuthorAndSlug(req, h),
     options: {
       auth: false,
       tags: ['articles'],

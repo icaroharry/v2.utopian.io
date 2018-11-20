@@ -4,7 +4,7 @@ import API from 'src/plugins/api'
 export const linkAccount = async (context, data) => {
   const payload = await API.call({
     context,
-    method: 'put',
+    method: 'POST',
     url: '/v1/blockchains/steem/linkaccount',
     data
   })

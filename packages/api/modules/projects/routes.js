@@ -7,7 +7,7 @@ routes.push([
   {
     method: 'GET',
     path: '/v1/projects/featured',
-    handler: (req, h, next) => Handlers.getFeaturedProjects(req, h, next),
+    handler: (req, h) => Handlers.getFeaturedProjects(req, h),
     options: {
       auth: false,
       tags: ['projects']
@@ -16,7 +16,7 @@ routes.push([
   {
     method: 'GET',
     path: '/v1/project/{owner}/{slug}',
-    handler: (req, h, next) => Handlers.getProjectByOwnerAndSlug(req, h, next),
+    handler: (req, h) => Handlers.getProjectByOwnerAndSlug(req, h),
     options: {
       auth: false,
       tags: ['projects'],
@@ -24,9 +24,9 @@ routes.push([
     }
   },
   {
-    method: 'PUT',
-    path: '/v1/project',
-    handler: (req, h, next) => Handlers.updateProject(req, h, next),
+    method: 'POST',
+    path: '/v1/project/{id}',
+    handler: (req, h) => Handlers.updateProject(req, h),
     options: {
       auth: { access: { scope: ['user'] } },
       tags: ['projects'],
@@ -36,7 +36,7 @@ routes.push([
   {
     method: 'POST',
     path: '/v1/project',
-    handler: (req, h, next) => Handlers.createProject(req, h, next),
+    handler: (req, h) => Handlers.createProject(req, h),
     options: {
       auth: { access: { scope: ['user'] } },
       tags: ['projects'],
@@ -46,7 +46,7 @@ routes.push([
   {
     method: 'POST',
     path: '/v1/projects/isnameavailable',
-    handler: (req, h, next) => Handlers.isNameAvailable(req, h, next),
+    handler: (req, h) => Handlers.isNameAvailable(req, h),
     options: {
       auth: { access: { scope: ['user'] } },
       tags: ['projects'],
@@ -56,7 +56,7 @@ routes.push([
   {
     method: 'POST',
     path: '/v1/projects/isprojectadmin',
-    handler: (req, h, next) => Handlers.isProjectAdmin(req, h, next),
+    handler: (req, h) => Handlers.isProjectAdmin(req, h),
     options: {
       auth: { access: { scope: ['user'] } },
       tags: ['projects'],

@@ -129,6 +129,7 @@
   "api": {
     "errors": {
       "general": {
+        "500": "An unexpected occurred, please contact the support at support@utopian.io",
         "documentDoesNotExist": "The document does not exist.",
         "documentUpdateUnauthorized": "You are not authorized to update this document.",
         "unauthorized": "You are not authorized to do this action.",

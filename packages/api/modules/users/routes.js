@@ -7,7 +7,7 @@ routes.push([
   {
     method: 'GET',
     path: '/v1/user/{username}',
-    handler: (req, h, next) => Handlers.getUserByUsername(req, h, next),
+    handler: (req, h) => Handlers.getUserByUsername(req, h),
     options: {
       auth: false,
       tags: ['users'],
@@ -24,7 +24,7 @@ routes.push([
      */
     method: 'GET',
     path: '/v1/users/{partial}/{count}',
-    handler: (req, h, next) => Handlers.getUsersByPartial(req, h, next),
+    handler: (req, h) => Handlers.getUsersByPartial(req, h),
     options: {
       auth: { access: { scope: 'user' } },
       tags: ['users'],
@@ -34,7 +34,7 @@ routes.push([
   {
     method: 'GET',
     path: '/v1/user/{username}/available',
-    handler: (req, h, next) => Handlers.isUsernameAvailable(req, h, next),
+    handler: (req, h) => Handlers.isUsernameAvailable(req, h),
     options: {
       auth: false,
       tags: ['users'],
@@ -44,16 +44,16 @@ routes.push([
   {
     method: 'DELETE',
     path: '/v1/user/{username}',
-    handler: (req, h, next) => Handlers.deleteUserByUsername(req, h, next),
+    handler: (req, h) => Handlers.deleteUserByUsername(req, h),
     options: {
       tags: ['users'],
       validate: Validate.deleteUserByUsername
     }
   },
   {
-    method: 'PUT',
+    method: 'POST',
     path: '/v1/user/{username}',
-    handler: (req, h, next) => Handlers.editUserByUsername(req, h, next),
+    handler: (req, h) => Handlers.editUserByUsername(req, h),
     options: {
       tags: ['users'],
       validate: Validate.editUserByUsername
@@ -62,7 +62,7 @@ routes.push([
   {
     method: 'POST',
     path: '/v1/user',
-    handler: (req, h, next) => Handlers.saveUser(req, h, next),
+    handler: (req, h) => Handlers.saveUser(req, h),
     options: {
       auth: { access: { scope: 'createAccount' } },
       tags: ['users'],

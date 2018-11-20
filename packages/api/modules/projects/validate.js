@@ -25,8 +25,10 @@ const createProject = {
 }
 
 const updateProject = {
+  params: {
+    id: Joi.string().trim().required()
+  },
   payload: {
-    _id: Joi.string().trim().required(),
     allowExternals: Joi.boolean().required(),
     name: Joi.string().trim().required(),
     repositories: Joi.array().unique().required(),

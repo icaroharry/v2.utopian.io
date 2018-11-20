@@ -30,6 +30,8 @@ export default class API {
       // For some reason the UI couldn't control what the API expected
       } else if (err.response.data.statusCode === 400) {
         context.commit('utils/setAppError', err.response.data.message, { root: true })
+      } else if (err.response.data.statusCode === 500) {
+        context.commit('utils/setAppError', 'api.errors.general.500', { root: true })
       }
     }
     return null

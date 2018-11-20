@@ -7,7 +7,7 @@ routes.push([
   {
     method: 'POST',
     path: '/oauth/token',
-    handler: (req, h, next) => Handlers.getToken(req, h, next),
+    handler: (req, h) => Handlers.getToken(req, h),
     options: {
       auth: false,
       tags: ['auth'],
@@ -17,7 +17,7 @@ routes.push([
   {
     method: 'POST',
     path: '/oauth/revoke',
-    handler: (req, h, next) => Handlers.revokeToken(req, h, next),
+    handler: (req, h) => Handlers.revokeToken(req, h),
     options: {
       auth: { access: { scope: 'user' } },
       tags: ['auth'],
@@ -27,7 +27,7 @@ routes.push([
   {
     method: 'GET',
     path: '/me',
-    handler: (req, h, next) => Handlers.me(req, h, next),
+    handler: (req, h) => Handlers.me(req, h),
     options: {
       auth: { access: { scope: 'user' } },
       tags: ['auth']

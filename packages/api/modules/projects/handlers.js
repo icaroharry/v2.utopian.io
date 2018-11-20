@@ -77,13 +77,13 @@ const updateProject = async (req, h) => {
   const ownerId = req.auth.credentials.uid
   const username = req.auth.credentials.username
   const { owners, repositories, details, ...project } = req.payload
-  const projectDb = await Project.findOne({ owners: { $elemMatch: { $eq: ownerId } }, _id: req.payload._id })
+  const projectDb = await Project.findOne({ owners: { $elemMatch: { $eq: ownerId } }, _id: req.params.id })
   if (!projectDb) {
     throw Boom.badData('general.documentUpdateUnauthorized')
   }
 
   // A user can't have two projects with the same name
-  const projectName = await Project.findOne({ owners: { $elemMatch: { $eq: ownerId } }, name: req.payload.name, _id: { $ne: req.payload._id } })
+  const projectName = await Project.findOne({ owners: { $elemMatch: { $eq: ownerId } }, name: req.payload.name, _id: { $ne: req.params.id } })
   if (projectName) {
     throw Boom.badData('projects.exists')
   }
@@ -122,7 +122,7 @@ const updateProject = async (req, h) => {
   }
 
   const response = await Project.updateOne(
-    { _id: project._id },
+    { _id: req.params.id },
     {
       repositories: filteredRepositories,
       owners: updatedOwners,

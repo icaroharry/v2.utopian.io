@@ -25,13 +25,15 @@ export const saveProject = async (context, data) =>
     data
   })
 
-export const updateProject = async (context, data) =>
-  API.call({
+export const updateProject = async (context, project) => {
+  const { _id, ...data } = project
+  return API.call({
     context,
-    method: 'put',
-    url: '/v1/project',
+    method: 'post',
+    url: `/v1/project/${_id}`,
     data
   })
+}
 
 export const fetchProject = async (context, { owner, slug }) =>
   API.call({
