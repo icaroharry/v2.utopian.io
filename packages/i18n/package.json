@@ -63,7 +63,7 @@
     "fs-filesystem": "^2.1.2",
     "jest": "^23.6.0",
     "jest-serializer-vue": "^2.0.2",
-    "lint-staged": "^8.0.5",
+    "lint-staged": "^8.1.0",
     "minimist": "^1.2.0",
     "promise": "^8.0.2",
     "quasar-cli": "^0.17.20",

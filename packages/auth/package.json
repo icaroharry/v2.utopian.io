@@ -37,7 +37,7 @@
     "eslint-plugin-vue": "^4.3.0",
     "extra-watch-webpack-plugin": "^1.0.3",
     "jsonwebtoken": "^8.3.0",
-    "lint-staged": "^8.0.5",
+    "lint-staged": "^8.1.0",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
     "quasar-cli": "^0.17.22",
