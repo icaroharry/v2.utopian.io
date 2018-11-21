@@ -69,7 +69,7 @@ export default {
   },
   async mounted () {
     if (!this.user) {
-      this.$router.push({ path: `/login?returnUrl=${this.$route.path}` })
+      this.$router.push({ path: `/${process.env.AUTH_DOMAIN}/login?returnUrl=${this.$route.path}` })
     } else if (this.$route.params && this.$route.params.slug) {
       const result = await this.fetchProject({
         owner: this.$route.params.owner,
@@ -310,7 +310,7 @@ div
               q-btn(round, dense, icon="mdi-minus-circle", color="red", size="md" @click="() => removeOwner(owner._id)")
 
       q-field
-        q-toggle.allow-externals(v-model="project.allowExternals", :label="$t('projects.createEdit.allowExternals.label')")
+        q-toggle.u-forms-toggle(v-model="project.allowExternals", :label="$t('projects.createEdit.allowExternals.label')")
 
     .col-md-4.col-sm-12.col-xs-12
       q-scroll-observable(@scroll="scrollHandler")
@@ -332,9 +332,6 @@ div
     > span {
       width 100%
     }
-  }
-  .allow-externals {
-    font-weight: 600
   }
   .create-edit-project-progress {
     margin-top 38px

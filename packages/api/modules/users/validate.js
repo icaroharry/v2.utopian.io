@@ -3,7 +3,7 @@ const { validation } = require('../../utils/constants')
 
 const findByUsername = {
   params: {
-    username: Joi.string().trim().insensitive().required().min(3).max(32)
+    username: validation.username
   }
 }
 
@@ -25,6 +25,11 @@ const isUsernameAvailable = {
   }
 }
 
+/**
+ * Create a utopian user
+ * Used by the auth package
+ * @author Icaro Harry
+ */
 const saveUser = {
   payload: {
     username: validation.username,
@@ -32,9 +37,26 @@ const saveUser = {
   }
 }
 
-const editUserByUsername = {
+const updateProfileMainInformation = {
   payload: {
-    avatarUrl: Joi.string().trim().required()
+    email: Joi.string().trim().optional().email().allow(''),
+    location: Joi.string().trim().optional().allow(''),
+    name: Joi.string().trim().optional().allow('')
+  }
+}
+
+const updateProfileJob = {
+  payload: {
+    availableForHire: Joi.boolean(),
+    job: Joi.string().trim().optional().allow(''),
+    resume: Joi.string().trim().optional().allow('')
+  }
+}
+
+const updateProfileImages = {
+  payload: {
+    avatarUrl: Joi.string().trim().required().uri(),
+    cover: Joi.string().trim().allow(null).optional().uri()
   }
 }
 
@@ -42,7 +64,8 @@ module.exports = {
   saveUser,
   getUsersByPartial,
   getUserByUsername: findByUsername,
-  deleteUserByUsername: findByUsername,
-  editUserByUsername,
+  updateProfileMainInformation,
+  updateProfileJob,
+  updateProfileImages,
   isUsernameAvailable
 }

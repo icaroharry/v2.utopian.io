@@ -34,3 +34,7 @@ export const startSteemConnectLogin = () => {
   }
   window.location = `https://steemconnect.com/oauth2/authorize?client_id=${process.env.STEEMCONNECT_CLIENT_ID}&redirect_uri=${callbackURL}&response_type=code&scope=offline,comment,vote,comment_options,custom_json&state=steemconnectlogin`
 }
+
+export const updateAvatarUrl = (context, avatarUrl) => {
+  context.commit('updateAvatarUrl', avatarUrl)
+}

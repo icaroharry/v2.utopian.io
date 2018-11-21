@@ -44,3 +44,34 @@ export const searchUsers = async (context, { term, count }) =>
     method: 'get',
     url: `/v1/users/${partialCleaner(term)}/${count}`
   })
+
+export const fetchUserProfile = async (context) =>
+  API.call({
+    context,
+    method: 'get',
+    url: '/v1/user/profile'
+  })
+
+export const updateProfileMainInformation = async (context, data) =>
+  API.call({
+    context,
+    method: 'post',
+    url: '/v1/user/profile/maininformation',
+    data
+  })
+
+export const updateProfileJob = async (context, data) =>
+  API.call({
+    context,
+    method: 'post',
+    url: '/v1/user/profile/job',
+    data
+  })
+
+export const updateProfileImages = async (context, data) =>
+  API.call({
+    context,
+    method: 'post',
+    url: '/v1/user/profile/images',
+    data
+  })

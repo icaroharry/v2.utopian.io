@@ -9,3 +9,7 @@ export const clearLocalStorageValues = (state) => {
 export const setAppError = (state, appError) => {
   state.appError = appError
 }
+
+export const setAppSuccess = (state, appSuccess) => {
+  state.appSuccess = appSuccess
+}

@@ -9,10 +9,10 @@ export default {
     await authPlugin({ currentRoute, store, redirect, ssrContext })
   },
   computed: {
-    ...mapGetters('utils', ['appError'])
+    ...mapGetters('utils', ['appError', 'appSuccess'])
   },
   methods: {
-    ...mapActions('utils', ['transferToLocalStorage', 'clearAppError'])
+    ...mapActions('utils', ['transferToLocalStorage', 'clearAppError', 'clearAppSuccess'])
   },
   watch: {
     appError: function (value) {
@@ -23,6 +23,16 @@ export default {
           message: this.$t(value)
         })
         this.clearAppError()
+      }
+    },
+    appSuccess: function (value) {
+      if (value) {
+        Notify.create({
+          type: 'positive',
+          position: 'bottom-right',
+          message: this.$t(value)
+        })
+        this.clearAppSuccess()
       }
     }
   },

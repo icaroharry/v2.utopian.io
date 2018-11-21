@@ -15,13 +15,6 @@ routes.push([
     }
   },
   {
-    /**
-     *  Find a number of users where the partial matches usernames
-     *  used by: [client/src/components/form/wysiwyg:@mention]
-     *  @params {string} partial - 2-32 character string to try and find a match
-     *  @params {number} count - max number of responses
-     *  @author: Daniel Thompson-Yvetot
-     */
     method: 'GET',
     path: '/v1/users/{partial}/{count}',
     handler: (req, h) => Handlers.getUsersByPartial(req, h),
@@ -42,31 +35,49 @@ routes.push([
     }
   },
   {
-    method: 'DELETE',
-    path: '/v1/user/{username}',
-    handler: (req, h) => Handlers.deleteUserByUsername(req, h),
-    options: {
-      tags: ['users'],
-      validate: Validate.deleteUserByUsername
-    }
-  },
-  {
-    method: 'POST',
-    path: '/v1/user/{username}',
-    handler: (req, h) => Handlers.editUserByUsername(req, h),
-    options: {
-      tags: ['users'],
-      validate: Validate.editUserByUsername
-    }
-  },
-  {
     method: 'POST',
     path: '/v1/user',
-    handler: (req, h) => Handlers.saveUser(req, h),
+    handler: (req, h) => Handlers.createUser(req, h),
     options: {
       auth: { access: { scope: 'createAccount' } },
       tags: ['users'],
       validate: Validate.saveUser
+    }
+  },
+  {
+    method: 'GET',
+    path: '/v1/user/profile',
+    handler: (req, h) => Handlers.getUserProfile(req, h),
+    options: {
+      auth: { access: { scope: 'user' } },
+      tags: ['users']
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/user/profile/maininformation',
+    handler: (req, h) => Handlers.updateProfile(req, h),
+    options: {
+      tags: ['users'],
+      validate: Validate.updateProfileMainInformation
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/user/profile/job',
+    handler: (req, h) => Handlers.updateProfile(req, h),
+    options: {
+      tags: ['users'],
+      validate: Validate.updateProfileJob
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/user/profile/images',
+    handler: (req, h) => Handlers.updateProfile(req, h),
+    options: {
+      tags: ['users'],
+      validate: Validate.updateProfileImages
     }
   }
 ])

@@ -74,9 +74,9 @@ export default {
                   q-item-side
                     q-icon.q-item-icon.ut-steem
                   q-item-main(:label="`@${steemUser}`")
-                q-item(:to="{ name: 'settings' }")
-                  q-item-side(icon="mdi-settings")
-                  q-item-main(:label="$t('navbar.settings')")
+                q-item(:to="`/${$route.params.locale}/profile`")
+                  q-item-side(icon="mdi-account")
+                  q-item-main(:label="$t('navbar.profile')")
                 q-item(@click.native="logoutAndRedirect")
                   q-item-side(icon="mdi-logout")
                   q-item-main(:label="$t('navbar.logOut')")

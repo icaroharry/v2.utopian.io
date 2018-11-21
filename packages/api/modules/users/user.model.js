@@ -24,6 +24,7 @@ const users = new Schema({
       type: String
     }
   }],
+  availableForHire: { type: Boolean, default: false },
   blockchainAccounts: [{
     _id: false,
     blockchain: {
@@ -41,6 +42,12 @@ const users = new Schema({
     },
     data: { type: Object }
   }],
+  cover: { type: String },
+  email: { type: String },
+  job: { type: String },
+  location: { type: String },
+  name: { type: String },
+  resume: { type: String },
   createdAt: { type: Date, default: Date.now() },
   updatedAt: { type: Date },
   deletedAt: { type: Date }
@@ -53,6 +60,24 @@ users.methods.getPublicFields = function () {
     authProviders: this.authProviders.map((authProvider) => {
       return { username: authProvider.username, type: authProvider.type }
     })
+  }
+}
+
+users.methods.getEditableFields = function () {
+  return {
+    username: this.username,
+    avatarUrl: this.avatarUrl,
+    authProviders: this.authProviders.map((authProvider) => {
+      return { username: authProvider.username, type: authProvider.type }
+    }),
+    availableForHire: this.availableForHire,
+    blockchainAccounts: this.blockchainAccounts,
+    cover: this.cover,
+    email: this.email,
+    job: this.job,
+    location: this.location,
+    name: this.name,
+    resume: this.resume
   }
 }
 

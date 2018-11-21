@@ -32,35 +32,6 @@ const getUsersByPartial = async (req, h) => {
   return h.response(data)
 }
 
-const deleteUserByUsername = async (req, h) => {
-  if (req.auth.credentials.username !== req.params.username) {
-    throw Boom.unauthorized('general.unauthorized')
-  }
-
-  const response = await User.updateOne(
-    { username: req.params.username },
-    { $set: { status: 'deleted', deletedAt: Date.now() } }
-  )
-  if (response.n === 1) {
-    return h.response({ message: 'deleteSuccess' })
-  }
-
-  throw Boom.badData('users.doesNotExist')
-}
-
-const editUserByUsername = async (req, h) => {
-  if (req.auth.credentials.username !== req.params.username) {
-    throw Boom.unauthorized('general.unauthorized')
-  }
-
-  const response = await User.updateOne({ username: req.params.username }, req.payload)
-  if (response.n === 1) {
-    return h.response({ message: 'updateSuccess' })
-  }
-
-  throw Boom.badData('users.doesNotExist')
-}
-
 const isUsernameAvailable = async (req, h) => {
   const user = await User.count({ username: req.params.username })
 
@@ -88,7 +59,7 @@ const generateUserTokens = async (user) => {
   }
 }
 
-const saveUser = async (req, h) => {
+const createUser = async (req, h) => {
   const githubUser = await getUserInformation(req.auth.credentials.providerToken)
 
   const user = await User.count({ username: req.payload.username })
@@ -112,11 +83,57 @@ const saveUser = async (req, h) => {
   return h.response(data)
 }
 
+/**
+ * Get the user's information so that he can edit his profile
+ *
+ * @param {object} req - request
+ * @param {object} req.params - request parameters
+ * @param {string} req.params.username - the user to retrieve the information
+ * @param {object} h - response
+ *
+ * @returns All the users information except those that concern the system
+ * @author Grégory LATINIER
+ */
+const getUserProfile = async (req, h) => {
+  if (!req.auth.credentials.uid) {
+    throw Boom.unauthorized('general.unauthorized')
+  }
+
+  const data = await User.findOne({
+    _id: req.auth.credentials.uid
+  })
+  return h.response(data.getEditableFields())
+}
+
+/**
+ * Update the user's profile
+ * This method is used by 3 different endpoints that differentiate the page's forms
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ * @payload {object} req.payload - either main information, job or images data
+ *
+ * @returns update success message
+ * @author Grégory LATINIER
+ */
+const updateProfile = async (req, h) => {
+  if (!req.auth.credentials.uid) {
+    throw Boom.unauthorized('general.unauthorized')
+  }
+
+  const response = await User.updateOne({ _id: req.auth.credentials.uid }, req.payload)
+  if (response.n === 1) {
+    return h.response('updateSuccess')
+  }
+
+  throw Boom.badData('users.doesNotExist')
+}
+
 module.exports = {
-  saveUser,
+  createUser,
   getUsersByPartial,
   getUserByUsername,
-  deleteUserByUsername,
-  editUserByUsername,
+  getUserProfile,
+  updateProfile,
   isUsernameAvailable
 }

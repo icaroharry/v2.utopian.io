@@ -14,3 +14,7 @@ export const clear = (state) => {
   state.user = null
   state.credentials = []
 }
+
+export const updateAvatarUrl = (state, avatarUrl) => {
+  state.user.avatarUrl = avatarUrl
+}

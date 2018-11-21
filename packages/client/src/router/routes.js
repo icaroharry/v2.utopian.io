@@ -39,6 +39,12 @@ export default [
         component: () => import('src/pages/articles/create-edit/create-edit')
       },
       {
+        path: 'profile',
+        name: 'users.profile',
+        props: true,
+        component: () => import('src/pages/users/profile/profile')
+      },
+      {
         path: 'i18n',
         name: 'i18n.test',
         props: true,
