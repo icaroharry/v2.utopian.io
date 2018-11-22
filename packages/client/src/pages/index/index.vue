@@ -34,7 +34,7 @@ export default {
       return this.$router.push({ name: 'project.details', params: { name } })
     },
     redirectToCreateProject () {
-      return this.$router.push({ name: 'project.create' })
+      return this.$router.push({ name: 'projects.create' })
     }
   },
   computed: {

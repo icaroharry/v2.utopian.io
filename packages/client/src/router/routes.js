@@ -18,31 +18,36 @@ export default [
         path: 'projects/create',
         name: 'projects.create',
         props: true,
-        component: () => import('src/pages/projects/create-edit/create-edit')
+        component: () => import('src/pages/projects/create-edit/create-edit'),
+        meta: { auth: true }
       },
       {
         path: 'projects/:owner/:slug/edit',
         name: 'projects.edit',
         props: true,
-        component: () => import('src/pages/projects/create-edit/create-edit')
+        component: () => import('src/pages/projects/create-edit/create-edit'),
+        meta: { auth: true }
       },
       {
         path: 'articles/create',
         name: 'articles.create',
         props: true,
-        component: () => import('src/pages/articles/create-edit/create-edit')
+        component: () => import('src/pages/articles/create-edit/create-edit'),
+        meta: { auth: true }
       },
       {
         path: 'articles/:author/:slug/edit',
         name: 'articles.edit',
         props: true,
-        component: () => import('src/pages/articles/create-edit/create-edit')
+        component: () => import('src/pages/articles/create-edit/create-edit'),
+        meta: { auth: true }
       },
       {
         path: 'profile',
         name: 'users.profile',
         props: true,
-        component: () => import('src/pages/users/profile/profile')
+        component: () => import('src/pages/users/profile/profile'),
+        meta: { auth: true }
       },
       {
         path: 'i18n',

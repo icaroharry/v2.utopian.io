@@ -26,9 +26,9 @@ export default {
       'startGithubLogin',
       'startSteemConnectLogin'
     ]),
-    logoutAndRedirect () {
+    async logoutAndRedirect () {
+      await this.logout()
       this.$router.push({ path: `/${this.$route.params.locale}` })
-      this.logout()
     },
     redirectToLogin () {
       window.location = `${process.env.AUTH_DOMAIN}/${this.$route.params.locale}/login/?redirectUrl=${window.location.href}`

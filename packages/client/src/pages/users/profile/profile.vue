@@ -36,33 +36,27 @@ export default {
     skills: {}
   },
   async mounted () {
-    if (!this.user) {
-      if (typeof window !== 'undefined') {
-        window.location = `${process.env.AUTH_DOMAIN}/${this.$route.params.locale}/login?redirectUrl=${this.$route.path}`
-      }
+    const result = await this.fetchUserProfile()
+    if (!result) {
+      this.$router.push({ path: '/notfound' })
     } else {
-      const result = await this.fetchUserProfile()
-      if (!result) {
-        this.$router.push({ path: '/notfound' })
-      } else {
-        this.username = result.username
-        this.mainInformation = {
-          email: result.email,
-          location: result.location,
-          name: result.name
-        }
-        this.job = {
-          availableForHire: result.availableForHire,
-          job: result.job,
-          resume: result.resume
-        }
-        this.images = {
-          avatarUrl: result.avatarUrl,
-          cover: result.cover
-        }
-        this.avatarPreview = result.avatarUrl
-        this.coverPreview = result.cover
+      this.username = result.username
+      this.mainInformation = {
+        email: result.email,
+        location: result.location,
+        name: result.name
       }
+      this.job = {
+        availableForHire: result.availableForHire,
+        job: result.job,
+        resume: result.resume
+      }
+      this.images = {
+        avatarUrl: result.avatarUrl,
+        cover: result.cover
+      }
+      this.avatarPreview = result.avatarUrl
+      this.coverPreview = result.cover
     }
   },
   methods: {
