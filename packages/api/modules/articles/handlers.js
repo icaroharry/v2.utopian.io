@@ -1,6 +1,7 @@
 const Boom = require('boom')
 const { slugify } = require('../../utils/slugify')
 const Article = require('./article.model')
+const Language = require('../languages/language.model')
 
 /**
  * Creates the article
@@ -17,6 +18,10 @@ const createArticle = async (req, h) => {
   // Count the author's articles using the slug or the slugs array attributes
   if (await Article.countDocuments({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }], author }) > 0) {
     slug += `-${Date.now()}`
+  }
+
+  if (await Language.countDocuments({ lang: req.payload.language }) === 0) {
+    throw Boom.badData('general.languageNotSupported')
   }
 
   const newArticle = new Article({
@@ -62,6 +67,10 @@ const updateArticle = async (req, h) => {
     }
   }
 
+  if (await Language.countDocuments({ lang: req.payload.language }) === 0) {
+    throw Boom.badData('general.languageNotSupported')
+  }
+
   const response = await Article.updateOne(
     { author, _id: req.params.id },
     {
@@ -92,7 +101,7 @@ const updateArticle = async (req, h) => {
  */
 const getArticleByAuthorAndSlug = async (req, h) => {
   const slug = `${req.params.author}/${req.params.slug}`
-  const data = await Article.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] }).select('author body proReview title _id')
+  const data = await Article.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] }).select('author body language proReview title _id')
   return h.response(data)
 }
 

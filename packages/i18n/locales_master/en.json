@@ -26,6 +26,14 @@
       "update": "Update my article"
     }
   },
+  "components": {
+    "form": {
+      "language": {
+        "label": "Language",
+        "placeholder": "Select a language"
+      }
+    }
+  },
   "fileUpload": {
     "error": {
       "unexpected": "An error occurred while uploading your file."
@@ -181,6 +189,7 @@
         "500": "An unexpected occurred, please contact the support at support@utopian.io",
         "documentDoesNotExist": "The document does not exist.",
         "documentUpdateUnauthorized": "You are not authorized to update this document.",
+        "languageNotSupported": "This language is not currently supported",
         "unauthorized": "You are not authorized to do this action.",
         "updateFail": "An error occurred while updating the data."
       },

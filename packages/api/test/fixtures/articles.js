@@ -5,6 +5,7 @@ module.exports = [
     '_id': new Mongoose.Types.ObjectId('5beeacddc4fc083ec0939a1e'),
     'author': new Mongoose.Types.ObjectId('5bcaf95f3344e352e0921157'),
     'body': 'Article body',
+    'language': 'en',
     'proReview': true,
     'slug': 'gregory/article-fixture',
     'slugs': [],

@@ -8,6 +8,7 @@ const Joi = require('joi')
 const createArticle = {
   payload: {
     body: Joi.string().trim().required(),
+    language: Joi.string().trim().required(),
     proReview: Joi.boolean().required(),
     title: Joi.string().trim().required()
   }
@@ -24,6 +25,7 @@ const updateArticle = {
   },
   payload: {
     body: Joi.string().trim().required(),
+    language: Joi.string().trim().required(),
     proReview: Joi.boolean().required(),
     title: Joi.string().trim().required()
   }

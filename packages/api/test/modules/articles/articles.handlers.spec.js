@@ -8,6 +8,7 @@ const createArticleEndpoint = {
   url: '/v1/article',
   payload: {
     body: 'Article body',
+    language: 'en',
     proReview: true,
     title: 'Article title'
   }
@@ -18,6 +19,7 @@ const updateArticleEndpoint = {
   url: '/v1/article/5beeacddc4fc083ec0939a1e',
   payload: {
     body: 'Article body updated',
+    language: 'en',
     proReview: false,
     title: 'Article title updated'
   }
@@ -28,8 +30,20 @@ const updateArticleNotExistingEndpoint = {
   url: '/v1/article/5beeacddc4fc083ec0000a1e',
   payload: {
     body: 'Article body not found',
+    language: 'en',
     proReview: false,
     title: 'Article title not found'
+  }
+}
+
+const updateArticleUnsupportedLanguageEndpoint = {
+  method: 'POST',
+  url: '/v1/article/5beeacddc4fc083ec0939a1e',
+  payload: {
+    body: 'Article body updated',
+    language: 'zh',
+    proReview: false,
+    title: 'Article title updated'
   }
 }
 
@@ -119,6 +133,28 @@ describe('update an article that doesn\'t exist', () => {
   })
 })
 
+describe('update an article with an unsupported language', () => {
+  let response
+  let payload
+
+  before(async () => {
+    const token = generateAccessToken({ uid: '5bcaf95f3344e352e0921157', username: 'gregory' })
+    updateArticleUnsupportedLanguageEndpoint.headers = {
+      'Authorization': token
+    }
+    response = await global.server.inject(updateArticleUnsupportedLanguageEndpoint)
+    payload = JSON.parse(response.payload)
+  })
+
+  it('should return a 422 status response', () => {
+    expect(response.statusCode).to.equal(422)
+  })
+
+  it('should return the error message general.languageNotSupported', () => {
+    assert.equal(payload.message, 'general.languageNotSupported')
+  })
+})
+
 describe('get an article by its author and slug', () => {
   let response
   let payload
@@ -134,7 +170,7 @@ describe('get an article by its author and slug', () => {
 
   it('should have all the keys', () => {
     expect(payload).to.have.all.keys(
-      'author', 'title', 'body', 'proReview', '_id'
+      'author', 'title', 'body', 'language', 'proReview', '_id'
     )
   })
 })
