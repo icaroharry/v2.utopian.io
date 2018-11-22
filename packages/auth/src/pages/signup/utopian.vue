@@ -90,7 +90,7 @@ export default {
     async submit () {
       this.$v.user.$touch()
 
-      Loading.show({ message: this.$t('users.create.loading') })
+      Loading.show({ message: this.$t('auth.signup.loading') })
       try {
         await this.saveUser({ username: this.user.username })
         Loading.hide()

@@ -55,6 +55,7 @@ const users = new Schema({
 
 users.methods.getPublicFields = function () {
   return {
+    _id: this._id,
     username: this.username,
     avatarUrl: this.avatarUrl,
     authProviders: this.authProviders.map((authProvider) => {

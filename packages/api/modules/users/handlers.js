@@ -50,7 +50,7 @@ const generateUserTokens = async (user) => {
   })
   await newRefreshToken.save()
 
-  const accessToken = getAccessToken({ username: user.username, scopes: user.scopes })
+  const accessToken = getAccessToken({ uid: user._id, username: user.username, scopes: user.scopes })
   return {
     token_type: 'bearer',
     access_token: accessToken,

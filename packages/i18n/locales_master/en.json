@@ -211,6 +211,9 @@
   "auth": {
     "login": {
       "github": "Login with GitHub"
+    },
+    "signup": {
+      "loading": "Creating new user..."
     }
   },
   "errors": {
