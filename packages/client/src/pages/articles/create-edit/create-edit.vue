@@ -25,7 +25,9 @@ export default {
   },
   async mounted () {
     if (!this.user) {
-      this.$router.push({ path: `/${process.env.AUTH_DOMAIN}/login?returnUrl=${this.$route.path}` })
+      if (typeof window !== 'undefined') {
+        window.location = `${process.env.AUTH_DOMAIN}/${this.$route.params.locale}/login?redirectUrl=${this.$route.path}`
+      }
     } else if (this.$route.params && this.$route.params.author && this.$route.params.slug) {
       const result = await this.fetchArticle({
         author: this.$route.params.author,
