@@ -26,23 +26,23 @@ export default {
 }
 </script>
 <template lang="pug">
-  div
-    q-btn(
-      ref="selectLanguages"
-      icon="language"
-      :label="$t('langLabel')"
-      flat
-      dense
-    )
-    q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]", style="z-index:1")
-      q-list(dense, separator)
-        q-item(
-          link
-          v-close-overlay
-          v-for="(language, index) in locales", :key="index"
-          @click.native="changeLang(language.lang)"
-        )
-          q-item-main
-            q-item-tile(label) {{ language.langNative }}
-          q-item-side(v-if="language.lang === locale", right, icon="done", color="primary")
+div
+  q-btn(
+    ref="selectLanguages"
+    icon="language"
+    :label="$t('langLabel')"
+    flat
+    dense
+  )
+  q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]", style="z-index:1")
+    q-list(dense, separator)
+      q-item(
+        link
+        v-close-overlay
+        v-for="(language, index) in locales", :key="index"
+        @click.native="changeLang(language.lang)"
+      )
+        q-item-main
+          q-item-tile(label) {{ language.langNative }}
+        q-item-side(v-if="language.lang === locale", right, icon="done", color="primary")
 </template>

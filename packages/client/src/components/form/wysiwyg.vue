@@ -1,64 +1,103 @@
-<script>
-import QNoSsr from 'quasar-framework/src/components/no-ssr/QNoSsr'
+<script crossorigin="anonymous">
 import { mapActions } from 'vuex'
-
-// todo: map to quasar internals
-// import { Caret } from 'quasar-framework/src/components/editor/editor-caret'
-// this.caret = new Caret(this.$refs.editor, this)
-// this.caret.restore()
 
 export default {
   name: 'u-wysiwyg',
-  components: { QNoSsr },
-  props: ['value', 'onChange', 'field'],
+  props: ['value', 'field'],
   mounted () {
-    /*
-    window.addEventListener('paste', async function (e) {
-      e.preventDefault()
-      e.stopPropagation()
-      let file = e.clipboardData.items[0].getAsFile()
-      let objectUrl = URL.createObjectURL(file)
-      // console.log(objectUrl)
-      // do something with url here
-      document.execCommand('insertImage', false, objectUrl)
-    })
-
-    document.querySelector('div[contenteditable="true"]').addEventListener("paste", function(e) {
-        e.preventDefault();
-        var text = e.clipboardData.getData("text/plain");
-        document.execCommand("insertHTML", false, text);
-    });
-
-    // https://stackoverflow.com/a/28213320
-
-    // only paste in "cleaned text".
-    <div contenteditable="true" onpaste="OnPaste_StripFormatting(this, event);" />
-    var _onPaste_StripFormatting_IEPaste = false;
-
-    function OnPaste_StripFormatting(elem, e) {
-
-        if (e.originalEvent && e.originalEvent.clipboardData && e.originalEvent.clipboardData.getData) {
-            e.preventDefault();
-            var text = e.originalEvent.clipboardData.getData('text/plain');
-            window.document.execCommand('insertText', false, text);
+    // stop all other drag events!
+    // this is so ugly I want to apologize.
+    if (typeof window !== 'undefined') {
+      window.addEventListener('drop', function (e) {
+        if (e.path[0].contentEditable !== true) {
+          e.preventDefault()
+          return false
         }
-        else if (e.clipboardData && e.clipboardData.getData) {
-            e.preventDefault();
-            var text = e.clipboardData.getData('text/plain');
-            window.document.execCommand('insertText', false, text);
-        }
-        else if (window.clipboardData && window.clipboardData.getData) {
-            // Stop stack overflow
-            if (!_onPaste_StripFormatting_IEPaste) {
-                _onPaste_StripFormatting_IEPaste = true;
-                e.preventDefault();
-                window.document.execCommand('ms-pasteTextOnly', false);
-            }
-            _onPaste_StripFormatting_IEPaste = false;
-        }
-
+      })
     }
+  /*
 
+      // helpful: https://code.flickr.net/2012/12/10/drag-n-drop/
+      // https://github.com/github/paste-markdown/blob/master/src/paste-markdown-image-link.js
+
+      ---------
+      paste event graveyard
+      - note, this won't even work at all without enabling base64 upload to IPFS
+      - verified NOT to work on linux.
+      ---------
+
+      pasteCapture (e) {
+      // https://stackoverflow.com/questions/490908/paste-an-image-from-clipboard-using-javascript
+      // https://stackoverflow.com/questions/6333814/how-does-the-paste-image-from-clipboard-functionality-work-in-gmail-and-google-c
+      // http://joelb.me/blog/2011/code-snippet-accessing-clipboard-images-with-javascript/
+      // https://github.com/layerssss/paste.js/blob/master/paste.js
+      const items = (e.clipboardData || e.originalEvent.clipboardData).items
+      try {
+        if (items) {
+          for (const item of items) {
+            if (item.kind === 'file') {
+              e.preventDefault()
+              if (/^image\//.test(item.type)) {
+                const blob = item.getAsFile()
+
+                let loader = new Image()
+                loader.crossOrigin = 'anonymous'
+                loader.onload = () => {
+                  let newBlob, canvas, ctx, dataURL
+                  canvas = document.createElement('canvas')
+                  canvas.width = loader.width
+                  canvas.height = loader.height
+                  ctx = canvas.getContext('2d')
+                  ctx.drawImage(loader, 0, 0, canvas.width, canvas.height)
+                  dataURL = null
+                  try {
+                    dataURL = canvas.toDataURL('image/png')
+                    newBlob = this.dataURLtoBlob(dataURL)
+                  } catch (error) {}
+                  if (dataURL) {
+                    this.uploadFile(newBlob)
+                  }
+                }
+                let reader = new FileReader()
+                reader.onload = (evt) => {
+                  console.log(evt)
+                  // const newBlob = this.dataURLtoBlob(evt.target.result)
+                  // this.uploadFile(newBlob)
+                  // console.log(newBlob)
+                  loader.src = evt.target.result
+                }
+                // reader.readAsBinaryString(blob)
+                // reader.readAsArrayBuffer(blob)
+                reader.readAsDataURL(blob)
+              } else {
+                // not something we support :(
+                this.$q.notify(this.$t('editor.fileTypeNotSupported'))
+              }
+            } else {
+              console.log('clipboardData.items: not a file')
+            }
+          }
+        } else if (e.clipboardData.files) {
+          for (const item of e.clipboardData.files) {
+            if (item.kind === 'file') {
+              e.preventDefault()
+              if (/^image\//.test(item.type)) {
+                const blob = item.getAsFile()
+                this.uploadFile(blob)
+              } else {
+                // not something we support :(
+                this.$q.notify(this.$t('editor.fileTypeNotSupported'))
+              }
+            } else {
+              console.log('clipboardData.files: not a file')
+            }
+          }
+        }
+      } catch (err) {
+        console.log(err)
+        this.$q.notify(this.$t('editor.pasteError'))
+      }
+    },
     */
   },
   methods: {
@@ -68,13 +107,10 @@ export default {
      */
     handleChange (newVal) {
       this.$emit('input', newVal)
-      if (this.onChange && this.field) {
-        this.onChange(this.field)
-      }
     },
 
     /*
-          helpers
+                                  helpers
     */
 
     /**
@@ -109,7 +145,7 @@ export default {
      */
     fullscreen (e) {
       this.clearFindUser()
-      this.fullScreen = e
+      this.fullScreenBoolean = e
     },
 
     /**
@@ -150,7 +186,7 @@ export default {
     },
 
     /*
-          @mentions
+                                  @mentions
     */
 
     /**
@@ -198,7 +234,7 @@ export default {
      * Get the caret position in all cases
      *
      * @returns {object} left, top distance in pixels
-     *
+     * @author jiyinyiyong
      */
     getCaretTopPoint () {
       // https://gist.github.com/jiyinyiyong/f79c2bdf3fa646042173
@@ -239,14 +275,24 @@ export default {
     },
 
     /**
+     *  focus on the input area (needed if area is not focussed / empty)
+     *
+     *  @param {number} offset - offset to the right in pixels
+     *  @author Daniel Thompson-Yvetot
+     */
+    buttonPrep (offset) {
+      this.$refs.editor.focus()
+      document.execCommand('insertHTML', false, '&nbsp;')
+      this.craftInput(offset)
+    },
+
+    /**
      *  create the input position (for DOM rendering)
      *
      *  @param {number} offset - offset to the right in pixels
-     *
+     *  @author Daniel Thompson-Yvetot
      */
     craftInput (offset) {
-      // this.$refs.editor.focus()
-
       this.userInputPos.pos = this.getRangePolyfill()
       let child = this.getCaretTopPoint()
       const parent = document.getElementById('CE').getBoundingClientRect()
@@ -265,7 +311,7 @@ export default {
     /**
      *  Hit the api to discover users where the partial matches usernames
      *
-     *  @param {string} terms - 2-32 character string to search the DB
+     *  @param {string} term - 2-32 character string to search the DB
      *  @param {function} done - waterfall callback
      *  @callback done - the results mapped to the autocomplete dropdown
      *  @throws $axios error
@@ -312,52 +358,190 @@ export default {
 
     /*
 
-    image upload
+                                image upload
 
      */
 
     /**
-     * Pastes selected @mention user into the contenteditable
+     * Submit file to IPFS, place returned URL into editor
      *
-     * @param {object} file
-     * @param {object} updateProgress
-     * @returns {boolean}
-     * @status works cross browser
+     * @param {object} file - possible multiple file descriptors
+     * @returns {promise}
+     * @author unknown
      * @author Daniel Thompson-Yvetot
      */
-    uploadFile (file, updateProgress) {
+    uploadFile (file) {
       const data = new FormData()
+      if (!file) return
+      this.$q.loading.show()
       data.append('file', file)
       return new Promise((resolve, reject) => {
-        if (this.project.medias.filter(m => m.type === 'image').length >= 5) {
+        this.$axios.post(
+          'https://img.utopian.io/upload/',
+          data
+        ).then((res) => {
+          this.$q.loading.hide()
+          // check if we have focus, if not get it.
+          this.$refs.editor.focus()
+          document.execCommand('insertImage', false, res.url)
+          resolve(file)
+        }).catch(() => {
           reject(file)
-        } else {
-          this.$axios.post(
-            'https://img.utopian.io/upload/',
-            data,
-            {
-              onUploadProgress: (progressEvent) => {
-                updateProgress(progressEvent.loaded / progressEvent.total)
-              }
-            }
-          )
-            .then((res) => {
-              if (!this.project.medias.some(m => m.type === 'image' && m.src === res.url)) {
-                this.project.medias.push({
-                  type: 'image',
-                  src: res.url
-                })
-                this.updateFormPercentage('medias')
-              }
-              resolve(file)
-            }).catch(() => {
-              reject(file)
-            })
-        }
+        })
       })
     },
+
+    /**
+     * Send a message that the upload didn't work
+     *
+     * @author unknown
+     */
     uploadFails () {
-      // this.setAppError('fileUpload.error.unexpected')
+      this.setAppError('fileUpload.error.unexpected')
+    },
+
+    // https://github.com/layerssss/paste.js/blob/master/paste.js
+    async dataURLtoBlob (dataURL, sliceSize) {
+      let b64Data, byteArray, byteArrays, byteCharacters, byteNumbers, contentType, i, m, offset, ref, slice
+      if (sliceSize == null) {
+        sliceSize = 512
+      }
+      if (!(m = dataURL.match(/^data:([^;]+)\base64,(.+)$/))) {
+        return null
+      }
+      ref = m
+      m = ref[0]
+      contentType = ref[1]
+      b64Data = ref[2]
+      byteCharacters = atob(b64Data)
+      byteArrays = []
+      offset = 0
+      while (offset < byteCharacters.length) {
+        slice = byteCharacters.slice(offset, offset + sliceSize)
+        byteNumbers = new Array(slice.length)
+        i = 0
+        while (i < slice.length) {
+          byteNumbers[i] = slice.charCodeAt(i)
+          i++
+        }
+        byteArray = new Uint8Array(byteNumbers)
+        byteArrays.push(byteArray)
+        offset += sliceSize
+      }
+      return new Blob(byteArrays, {
+        type: contentType
+      })
+    },
+
+    /**
+     * Capture the <CTL-V> paste event, only allow plain-text, no images.
+     *
+     * see: https://stackoverflow.com/a/28213320
+     *
+     * @param {object} e - array of files
+     * @author Daniel Thompson-Yvetot
+     */
+    pasteCapture (e) {
+      try {
+        // here we unfortunately need to cleanup the HTML on paste.
+        let text, onPasteStripFormattingIEPaste
+        e.preventDefault()
+        if (e.originalEvent && e.originalEvent.clipboardData && e.originalEvent.clipboardData.getData) {
+          text = e.originalEvent.clipboardData.getData('text/plain')
+          document.execCommand('insertText', false, text)
+        } else if (e.clipboardData && e.clipboardData.getData) {
+          text = e.clipboardData.getData('text/plain')
+          document.execCommand('insertText', false, text)
+        } else if (window.clipboardData && window.clipboardData.getData) {
+          // Stop stack overflow
+          if (!onPasteStripFormattingIEPaste) {
+            onPasteStripFormattingIEPaste = true
+            window.document.execCommand('ms-pasteTextOnly', false)
+          }
+          onPasteStripFormattingIEPaste = false
+        }
+      } catch (err) {
+        console.log(err)
+        this.$q.notify(this.$t('editor.pasteError'))
+      }
+    },
+
+    /**
+     * Capture the drop event
+     *
+     * @param {object} e - array of files
+     * @author Daniel Thompson-Yvetot
+     */
+    dropCapture (e) {
+      if (this.dropStop === true) {
+        this.dropStop = false
+        return
+      }
+      this.dragging = false
+      try {
+        if (e.dataTransfer) {
+          for (const item of e.dataTransfer.items) {
+            if (item.kind === 'file') {
+              e.preventDefault()
+              if (/^image\//.test(item.type)) {
+                const blob = item.getAsFile()
+                this.uploadFile(blob)
+              } else {
+                // not something we support :(
+                this.$q.notify(this.$t('editor.fileTypeNotSupported'))
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.log(err)
+        this.$q.notify(this.$t('editor.pasteError'))
+      }
+    },
+
+    /**
+     * Capture the buttonUpload event
+     *
+     * @param {object} e - possible several files
+     * @author Daniel Thompson-Yvetot
+     */
+    buttonCapture (e) {
+      if (e.target.files) {
+        for (const item of e.target.files) {
+          if (/^image\//.test(item.type)) {
+            this.uploadFile(item)
+            this.$refs.file.val = null
+          } else {
+            // not something we support :(
+            this.$q.notify(this.$t('editor.fileTypeNotSupported'))
+          }
+        }
+      }
+    },
+
+    /**
+     * Create markdown / render markdown / show markdown
+     * Unavailable in Fullscreen for reasons.
+     *
+     * @author Daniel Thompson-Yvetot
+     */
+    markdown () {
+      if (this.fullScreenBoolean === true) {
+        this.$q.notify(this.$t('editor.notAvailableInFullScreen'))
+      } else {
+        this.markdownMD = this.$turndown.turndown(this.value)
+        this.markdownHTML = this.$marked(this.markdownMD)
+        this.showMarkdown = !this.showMarkdown
+      }
+    },
+
+    /**
+     * Craft Github selection stub
+     *
+     * @author Daniel Thompson-Yvetot
+     */
+    craftGithub () {
+      this.$q.notify(this.$t('editor.gitComingSoon'))
     }
   },
   data () {
@@ -367,6 +551,7 @@ export default {
         left: 0,
         pos: 0
       },
+      wysiwyg: '',
       errorLog: [],
       browser: 'init',
       userInputPosRendered: false,
@@ -377,44 +562,56 @@ export default {
       keycode: '',
       findUser: false,
       users: {}, // results array for @mention
-      fullScreen: false,
+      fullScreenBoolean: false,
+      showMarkdown: false,
+      markdownMD: '',
+      markdownHTML: '',
+      markdownCode: false,
+      pic: {},
+      picPopup: false,
+      dropTop: false,
+      dragging: false,
       definitions: {
+        git: {
+          handler: () => this.craftGithub(),
+          icon: 'fab fa-git',
+          tip: this.$t('editor.findGitIssue')
+        },
         getUser: {
-          handler: () => this.craftInput(), // () => { this.userInputPosRendered = true },
-          icon: 'far fa-user',
+          handler: () => this.buttonPrep(15),
+          icon: 'fas fa-at',
           tip: this.$t('editor.findUsername')
         },
         upload: {
-          handler: () => this.uploadFile(), // () => { this.userInputPosRendered = true },
+          handler: () => this.$refs.file.click(),
           icon: 'far fa-image',
           tip: this.$t('editor.uploadImage')
+        },
+        markdown: {
+          handler: () => this.markdown('handler'),
+          icon: 'fab fa-markdown',
+          tip: this.$t('editor.showMarkdown')
         }
       },
       toolbar: [
-        ['fullscreen'],
-        ['link', 'upload'], // , 'getUser' => save it for a rainy day
         [
-          {
-            icon: this.$q.icon.editor.removeFormat,
-            // onlyIcons: true,
-            fixedIcon: false,
-            fixedLabel: true,
-            list: 'only-icons',
-            disable: true,
-            options: ['bold', 'italic', 'strike', 'underline', 'removeFormat']
-          },
-          {
-            icon: this.$q.icon.editor.fontSize,
-            fixedLabel: true,
-            fixedIcon: false,
-            list: 'no-icons',
-            options: ['size-1', 'size-2', 'size-3', 'size-4', 'size-5', 'size-6']
-          },
+          'git',
+          'getUser'
+        ],
+        [
           {
             icon: this.$q.icon.editor.formatting,
             fixedLabel: true,
             fixedIcon: false,
-            options: ['p', 'code']
+            list: 'no-icons',
+            options: ['p', 'h3', 'h4', 'code']
+          },
+          {
+            icon: this.$q.icon.editor.removeFormat,
+            fixedIcon: false,
+            fixedLabel: true,
+            list: 'only-icons',
+            options: ['bold', 'italic', 'strike', 'underline', 'removeFormat']
           }
         ],
         [
@@ -430,103 +627,155 @@ export default {
             list: 'only-icons',
             options: ['unordered', 'ordered', 'quote', 'hr']
           }
-        ]
+        ],
+        ['link', 'upload', 'fullscreen', 'markdown']
       ]
     }
   }
 }
 </script>
-<template>
-  <div>
-    <form id="CE" autocorrect="off" autocapitalize="off" autocomplete="off">
-      <q-editor
+<template lang="pug">
+  div
+    form(
+      id="CE"
+      autocorrect="off"
+      autocapitalize="off"
+      autocomplete="off"
+      :class="[dragging ? 'dragenter' : 'nodrag']"
+    )
+      q-editor(
+        v-if="!showMarkdown"
         ref="editor"
         @keyup.native="detectAt()"
         @fullscreen="fullscreen"
+        @paste.native="evt => pasteCapture(evt)"
+        @drop.native="evt => dropCapture(evt)"
+        @drag.native="dropStop = true"
+        @dragenter.native="dragging = true"
+        @dragend.native="dragging = false"
+        @dragleave.native="dragging = false"
         @input="handleChange"
-        :value="value"
+        :value="value || '&nbsp;'"
         :field="field"
         :toolbar="toolbar"
         :definitions="definitions"
-        :content-style="{ fontFamily: 'Noto Sans' }"
-      >
-      </q-editor>
-      <q-input
+        :content-style="{ fontFamily: 'Noto Sans',     fontSize: '0.8em!important' }"
+      )
+      q-input(
         v-if="userInputPosRendered"
         v-model="terms"
         maxlength="32"
         class="findUser"
         placeholder="Search for a user"
         autofocus
+        autocorrect="off"
         :class="[ fullScreen ? 'superZ': 'normalZ' ]"
         :style="userInputPosRendered"
         ref="userSearch"
         color="amber"
         @blur="clearFindUser()"
         @keyup.escape="clearFindUser('clear')"
-        :after="[
-        {
-          icon: 'close',
-          handler () {
-            clearFindUser('clear')
-          }
-        }
-      ]"
-      >
-        <q-autocomplete
+        :after="[{icon: 'close', handler () {clearFindUser('clear')}}]"
+      )
+        q-autocomplete(
           @search="search"
           :debounce="200"
           :min-characters="3"
           :max-results="10"
           @selected="pasteUserToPos"
           dense
-        ></q-autocomplete>
-      </q-input>
-    </form>
+        )
 
-    <div class="fullScreen" v-if="fullScreen">
-      <img src="~assets/img/logo-icon.svg" />
-    </div>
-    <q-no-ssr>
-      <q-scroll-observable @scroll="userHasScrolled"></q-scroll-observable>
-      <!--<q-window-resize-observable v-if="!$q.platform.is.android" @resize="detectAt"></q-window-resize-observable>-->
-    </q-no-ssr>
-  </div>
+    // FYI, the following is merely using the quasar class styling to stay visually identical.
+    .q-editor.markdown(v-if="showMarkdown")
+      .q-editor-toolbar.row.full-width
+        h4(style="margin: auto 0 6px 10px")
+          strong {{ $t('editor.markdownPreview') }}
+        q-btn-group(style="margin: 0 0 0 auto")
+          q-btn(
+            v-if="showMarkdown"
+            size="md"
+            flat
+            @click.native="showMarkdown = false"
+            icon="fab fa-html5"
+          )
+            span &nbsp;&nbsp;{{ $t('editor.showEditor') }}
+          q-btn(v-if="markdownCode" flat icon="fas fa-code" @click="markdownCode = false" style="margin: 0 0 0 auto")
+          q-btn(v-else, flat icon="fab fa-markdown" @click="markdownCode = true" style="margin: 0 0 0 auto")
+      .row.bg-white
+        small.row.q-pa-sm.full-width(v-if="markdownCode")
+          pre() {{ markdownMD }}
+        small.row.q-pa-sm.full-width(v-else)
+          span(v-html="markdownHTML")
+
+    // this is the invisible element to use for the button click for adding files
+    input(
+      type="file"
+      ref="file"
+      multiple="true"
+      accept="image/*"
+      style="display: none"
+      @change="evt => buttonCapture(evt)"
+    )
+    q-no-ssr
+      q-scroll-observable(@scroll="userHasScrolled")
+      // q-window-resize-observable(v-if="!$q.platform.is.android" @resize="detectAt")
 </template>
-<style>
-  .findUser {
-    height: 26px;
-    font-family: 'Noto Sans';
-    outline-color: transparent!important;
-    padding-left: 2px!important;
-    border-color: transparent!important;
-  }
-  .superZ {
-    z-index: 6001;
-  }
-  .normalZ {
-    z-index: 1000;
-  }
-  .fullScreen {
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    z-index: 10000;
-    opacity: 0.3;
-  }
-  .q-if-addon-left {
-    margin: 5px 0 0 -2px;
-  }
-  a.mention-link, a.mention-link:visited,a.mention-link:hover {
-    color: #E9DC51!important;
-    text-decoration-line: none!important;
-  }
-  .q-editor-content *::selection {
-    background-color:rgba(255, 255, 100, 0.7)!important;
-    color:#032764!important;
-  }
-  .q-popover {
-    transform: translate3d(0,0,0);
-  }
-
+<style lang="stylus">
+  @import "~variables"
+  .findUser
+    height 26px
+    font-family 'Noto Sans'
+    outline-color transparent!important
+    padding-left 2px!important
+    border-color transparent!important
+  .superZ
+    z-index 6001
+  .normalZ
+    z-index 1000
+  .fullScreen
+    position absolute
+    top 5px
+    right 10px
+    z-index 10000
+    opacity 0.3
+  .q-if-addon-left
+    margin 5px 0 0 -2px
+  a.mention-link, a.mention-link:visited, a.mention-link:hover
+    color #E9DC51!important
+    text-decoration-line: none!important
+  .q-editor-content::selection, .q-editor-content *::selection
+    background-color rgba(255, 255, 100, 0.7)
+    color #032764
+  .q-editor-content, .markdown
+    object-fit contain!important
+    white-space pre-wrap
+    img
+      max-width 100%!important
+  .q-popover
+    transform translate3d(0,0,0)
+  pre, .pre .q-input-target
+    white-space pre-wrap
+    display block
+    unicode-bidi embed
+    font-family monospace!important
+    color: black!important
+  h2
+    font-size 50px
+    line-height 52px
+    margin 0
+  .q-editor-toolbar
+    background-color: #ffffff!important
+    .q-editor-toolbar-padding
+      .q-btn-group:last-child
+        margin 0 0 0 auto
+        color #888!important
+      .q-btn-group:last-child::before
+        opacity 0
+  .dragenter
+    border dotted 4px #779!important
+    opacity 0.5!important
+  .nodrag
+    border 4px transparent
+    opacity 1
 </style>

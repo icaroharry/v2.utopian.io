@@ -56,6 +56,12 @@ export default [
         component: () => import('src/pages/tests/i18n')
       },
       {
+        path: 'croppa',
+        name: 'croppa',
+        props: true,
+        component: () => import('src/pages/tests/croppa')
+      },
+      {
         path: '/:locale/QEditor',
         name: 'QEditor',
         props: true,

@@ -118,6 +118,22 @@
       }
     }
   },
+  "editor": {
+    "userSearch": "Search for a user",
+    "userNotFound": "No users found",
+    "findGitIssue": "Insert a link to a Git issue",
+    "findUserName": "Insert a link to a User profile",
+    "uploadImage": "Insert an Image",
+    "markdownPreview": "Markdown Preview",
+    "showMarkdown": "Toggle Markdown View",
+    "showEditor": "Return to Editor",
+    "imageEditor": "Edit your Image",
+    "dragAndDrop": "Drag and drop target",
+    "fileTypeNotSupported": "We only support uploading images.",
+    "gitComingSoon": "Git Repo Search Coming Soon!",
+    "pasteError": "Unable to paste your resource. Try again with the button.",
+    "notAvailableInFullScreen": "This feature not available in full-screen mode."
+  },
   "navbar": {
     "contribute": "contribute",
     "linkSteemAccount": "Link your Steem account",

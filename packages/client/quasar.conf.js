@@ -25,7 +25,9 @@ module.exports = function (ctx) {
     plugins: [
       'vuelidate',
       'i18n',
-      'axios'
+      'axios',
+      { path: 'markdown', server: false },
+      { path: 'croppa', server: false }
     ],
     // build configuration.
     build: {
@@ -41,7 +43,6 @@ module.exports = function (ctx) {
       vueRouterMode: 'history',
       useNotifier: false,
       vueCompiler: true,
-
       chainWebpack(chain) {
         chain.module.rule('lint')
           .test(/\.(js|vue)$/)
@@ -130,6 +131,8 @@ module.exports = function (ctx) {
         'QLayoutHeader',
         'QList',
         'QListHeader',
+        'QModal',
+        'QModalLayout',
         'QNoSsr',
         'QOptionGroup',
         'QPage',
