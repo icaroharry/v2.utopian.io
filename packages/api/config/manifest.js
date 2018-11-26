@@ -29,7 +29,8 @@ module.exports = {
       { plugin: 'vision' },
       { plugin: 'lout' },
       { plugin: './config/plugins/jwt-auth' },
-      { plugin: './config/plugins/routes' }
+      { plugin: './config/plugins/routes' },
+      { plugin: './config/plugins/logger' }
     ]
   }
 }

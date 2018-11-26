@@ -23,6 +23,7 @@ module.exports = function (ctx) {
     extras: ['roboto-font', 'mdi', 'material-icons', 'fontawesome'],
     // quasar plugins.
     plugins: [
+      { path: 'sentry', server: false },
       'vuelidate',
       'i18n',
       'axios',
@@ -36,6 +37,7 @@ module.exports = function (ctx) {
         UTOPIAN_DOMAIN: process.env.UTOPIAN_DOMAIN,
         AUTH_DOMAIN: process.env.AUTH_DOMAIN,
         GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+        SENTRY_DSN: process.env.SENTRY_DSN,
         STEEMCONNECT_CLIENT_ID: (process.env.STEEMCONNECT_CLIENT_ID || '"utopian.signin"'),
         STEEM_API: (process.env.STEEM_API_DEV || '"https://api.steemit.com"')
       },

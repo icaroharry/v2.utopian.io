@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^15.8.2",
+    "@sentry/browser": "4.3.4",
     "@steemit/steem-js": "^0.7.1",
     "axios": "^0.18.0",
     "b2a": "^1.0.10",
