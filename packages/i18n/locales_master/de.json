@@ -99,10 +99,30 @@
   },
   "auth": {
     "login": {
-      "github": "Mit Github einloggen"
+      "github": "Mit Github einloggen",
+      "text": "Connect to Utopian using one of your social accounts.",
+      "smallerText": "Don't worry, we won't post anything on your behalf."
     },
     "signup": {
-      "loading": "Creating new user..."
+      "text": "You're almost there!",
+      "smallerText": "Please create a unique username to be used in Utopian.",
+      "loading": "Creating new user...",
+      "create": "Create"
+    },
+    "steemConnect": {
+      "text": "You can connect a Steem account to receive SP rewards.",
+      "smallerText": "You can create a new one if you don't have any.",
+      "connect": "Connect",
+      "create": "I don't have a Steem account"
+    },
+    "steemCreate": {
+      "text": "Steem creation - WIP.",
+      "smallerText": "Steem creation - wip.",
+      "modal": {
+        "title": "Sorry :(",
+        "message": "You have already claimed a Steem account through Utopian.",
+        "ok": "Go back to app"
+      }
     }
   },
   "errors": {

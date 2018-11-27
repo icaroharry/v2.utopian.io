@@ -29,7 +29,7 @@ export default async ({ currentRoute, store, redirect, ssrContext, redirectUrl }
     })
 
     if (!token.username) {
-      redirect(`${locale}/signup/utopian/?redirectUrl=${redirectUrl}`)
+      redirect(`${locale}/signup/?redirectUrl=${redirectUrl}`)
     } else {
       redirect(`${locale}/?redirectUrl=${redirectUrl}`)
     }

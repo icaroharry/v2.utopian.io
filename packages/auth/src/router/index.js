@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import { Cookies } from 'quasar'
 
 import routes from './routes'
 
@@ -10,15 +11,21 @@ Vue.use(VueRouter)
  * directly export the Router instantiation
  */
 
-export default function (/* { store, ssrContext } */) {
+export default function ({ store, ssrContext }) {
   const Router = new VueRouter({
-    scrollBehavior: () => ({ y: 0 }),
     routes,
-
-    // Leave these as is and change from quasar.conf.js instead!
-    // quasar.conf.js -> build -> vueRouterMode
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
+  })
+
+  Router.beforeEach((to, from, next) => {
+    const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
+    if (to.matched.some(record => record.meta.auth)) {
+      if (!cookies.get('access_token')) {
+        next('/en/login')
+      }
+    }
+    next()
   })
 
   return Router

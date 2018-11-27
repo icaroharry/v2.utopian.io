@@ -12,7 +12,7 @@ module.exports = function (ctx) {
     supportIE: false,
     css: ['app.styl'],
     // app plugins (/src/plugins)
-    extras: ['roboto-font', 'mdi', 'material-icons',],
+    extras: ['roboto-font', 'mdi', 'material-icons'],
     plugins: [
       'axios',
       'i18n',
@@ -104,7 +104,8 @@ module.exports = function (ctx) {
       plugins: [
         'Cookies',
         'Loading',
-        'Notify'
+        'Notify',
+        'Dialog'
       ]
     },
     // animations: 'all' --- includes all animations
