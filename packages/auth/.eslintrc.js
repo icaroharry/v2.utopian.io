@@ -35,9 +35,6 @@ module.exports = {
 
     // trailing spaces are the most annoying rule in the world.
     'no-trailing-spaces': 0,
-    // requiring an empty line at the end of file is the second one.
-    'eol-last': 0,
-
     'import/first': 0,
     'import/named': 2,
     'import/namespace': 2,

@@ -36,6 +36,15 @@ routes.push([
   },
   {
     method: 'POST',
+    path: '/v1/user/blockchains/{blockchain}/claimed',
+    handler: (req, h) => Handlers.hasClaimedBlockchainAccount(req, h),
+    options: {
+      tags: ['users'],
+      validate: Validate.hasClaimedBlockchainAccount
+    }
+  },
+  {
+    method: 'POST',
     path: '/v1/user',
     handler: (req, h) => Handlers.createUser(req, h),
     options: {

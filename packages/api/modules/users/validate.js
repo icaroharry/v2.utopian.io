@@ -26,6 +26,17 @@ const isUsernameAvailable = {
 }
 
 /**
+ * Check if a user has claimed a blockchain account
+ *
+ * @author Icaro Harry
+ */
+const hasClaimedBlockchainAccount = {
+  params: {
+    blockchain: Joi.string().trim().allow('steem')
+  }
+}
+
+/**
  * Create a utopian user
  * Used by the auth package
  * @author Icaro Harry
@@ -67,5 +78,6 @@ module.exports = {
   updateProfileMainInformation,
   updateProfileJob,
   updateProfileImages,
-  isUsernameAvailable
+  isUsernameAvailable,
+  hasClaimedBlockchainAccount
 }

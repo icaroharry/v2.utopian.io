@@ -5,34 +5,25 @@ import jwt from 'jsonwebtoken'
 import { Cookies, debounce, Notify, Loading } from 'quasar'
 
 export default {
-  name: 'u-page-signup-utopian',
+  name: 'u-page-signup',
   preFetch ({ redirect, ssrContext }) {
     const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
-    let scopes = jwt.decode(cookies.get('access_token')).scopes
-
-    if (!scopes.includes('createAccount')) {
-      redirect('/')
+    if (cookies.get('access_token')) {
+      let scopes = jwt.decode(cookies.get('access_token')).scopes
+      if (!scopes.includes('createAccount')) {
+        redirect('/')
+      }
     }
   },
-
-  // component data.
   data () {
     return {
-      // map user store getters.
-      ...mapGetters('auth', [
-        'account',
-        'username'
-      ]),
-
-      // user internal data.
+      ...mapGetters('auth', ['account', 'username']),
       user: {
         username: '',
         usernameAvailable: ''
       }
     }
   },
-
-  // component validations.
   validations: {
     ...mapGetters('api', ['getTokens']),
     user: {
@@ -45,8 +36,6 @@ export default {
       }
     }
   },
-
-  // component methods.
   methods: {
     ...mapActions([
       'startLoading',
@@ -74,7 +63,6 @@ export default {
     }, 1000),
     getErrorLabel () {
       const usernameValidator = this.$v.user.username
-
       if (!usernameValidator.minLength) {
         return 'The username should be at least 3 characters long.'
       } else if (!usernameValidator.maxLength) {
@@ -84,17 +72,14 @@ export default {
       } else if (!usernameValidator.usernameAvailable) {
         return 'Sorry. This username is not available.'
       }
-
       return ''
     },
     async submit () {
       this.$v.user.$touch()
-
       Loading.show({ message: this.$t('auth.signup.loading') })
       try {
         await this.saveUser({ username: this.user.username })
         Loading.hide()
-
         if (typeof window !== 'undefined') window.location = this.$route.query.redirectUrl || process.env.UTOPIAN_DOMAIN
       } catch (err) {
         Loading.hide()
@@ -110,47 +95,33 @@ export default {
 </script>
 
 <template lang="pug">
-q-layout.u-page-signup-utopian
-  .row.justify-center.items-center
-    .create-user-form
-      img.utopian-logo(src="~assets/img/logo-black.svg")
-      p.q-title Please create a unique username to be used in Utopian.io
-      q-field.full-width.q-mb-md(
-        :error="$v.user.username.$error && user.usernameAvailable !== 'checking'",
-        :error-label="getErrorLabel()"
+  .u-page-signup-utopian
+    .q-subheading.q-mb-sm {{ $t('auth.signup.text') }}
+    .q-body-1.text-grey.q-mb-lg {{ $t('auth.signup.smallerText') }}
+    q-field.full-width.q-mb-md(
+    :error="$v.user.username.$error && user.usernameAvailable !== 'checking'",
+    :error-label="getErrorLabel()"
+    )
+      q-input(
+      v-model.trim="user.username",
+      placeholder="ada.lovelace",
+      :before="[{ icon: 'mdi-account' }]",
+      prefix="@"
+      maxlength="32"
+      @input="validateUsername()"
+      :loading="user.usernameAvailable === 'checking'"
+      :color="user.usernameAvailable === true ? 'green' : 'primary'"
       )
-        q-input(
-          v-model.trim="user.username",
-          placeholder="ada.lovelace",
-          :before="[{ icon: 'mdi-account' }]",
-          prefix="@"
-          maxlength="32"
-          @input="validateUsername()"
-          :loading="user.usernameAvailable === 'checking'"
-          :color="user.usernameAvailable === true ? 'green' : 'primary'"
-        )
-      q-btn.full-width(color="primary", label="Create", @click="submit", :disabled="user.usernameAvailable !== true")
+    q-btn.full-width(color="primary", no-caps, :label="$t('auth.signup.create')", @click="submit", :disabled="user.usernameAvailable !== true")
 </template>
 
 <style lang="stylus">
-.u-page-signup-utopian {
-  > div {
-    height 100vh
-  }
-  .create-user-form {
-    text-align center
-    .utopian-logo {
-      height 60px
-      margin-bottom 20px
+  .u-page-signup-utopian {
+    .q-if-addon-left {
+      margin-top 5px
+    }
+    .q-field {
+      height 75px
     }
   }
-
-  .q-if-addon-left {
-    margin-top 5px
-  }
-
-  .q-field {
-    height 75px
-  }
-}
 </style>
