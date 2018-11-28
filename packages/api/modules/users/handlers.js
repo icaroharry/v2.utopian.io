@@ -1,6 +1,5 @@
 const Boom = require('boom')
 const User = require('./user.model')
-const UtopianBlockchainAccounts = require('./utopianBlockchainAccounts.model')
 const { getUserInformation } = require('../../utils/github')
 const RefreshToken = require('../auth/refreshtoken.model')
 const { getAccessToken, getRefreshToken } = require('../../utils/token')
@@ -10,29 +9,6 @@ const getUserByUsername = async (req, h) => {
     username: req.params.username
   })
   return h.response({ data: user.getPublicFields() })
-}
-
-/**
- *  Return a boolean that says whether the user has claimed a blockchain
- *  account through Utopian or not
- *  @param {string} req.params.blockchain - which blockchain. Currently only accepts 'steem'
- *  @returns {boolean}
- *  @author Icaro Harry
- */
-const hasClaimedBlockchainAccount = async (req, h) => {
-  const user = await User.findOne({ _id: req.auth.credentials.uid })
-
-  const hasClaimed = await UtopianBlockchainAccounts.count({
-    blockchain: req.params.blockchain,
-    $or: user.authProviders.map((authProvider) => ({
-      $and: [{
-        provider: authProvider.type,
-        username: authProvider.username
-      }]
-    })).concat({ userId: req.auth.credentials.uid })
-  })
-
-  return h.response({ claimed: hasClaimed > 0 })
 }
 
 /**
@@ -157,8 +133,7 @@ module.exports = {
   createUser,
   getUsersByPartial,
   getUserByUsername,
-  isUsernameAvailable,
-  hasClaimedBlockchainAccount,
   getUserProfile,
-  updateProfile
+  updateProfile,
+  isUsernameAvailable
 }

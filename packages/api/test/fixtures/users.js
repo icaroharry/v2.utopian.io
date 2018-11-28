@@ -56,7 +56,7 @@ module.exports = [
     'blockchainAccounts': [{
       'active': true,
       'blockchain': 'steem',
-      'address': 'icaro'
+      'address': 'icaro.dev'
     }],
     '__v': 0,
     'scopes': ['user']

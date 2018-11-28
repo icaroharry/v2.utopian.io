@@ -79,15 +79,6 @@ routes.push([
       tags: ['users'],
       validate: Validate.updateProfileImages
     }
-  },
-  {
-    method: 'POST',
-    path: '/v1/user/blockchains/{blockchain}/claimed',
-    handler: (req, h) => Handlers.hasClaimedBlockchainAccount(req, h),
-    options: {
-      tags: ['users'],
-      validate: Validate.hasClaimedBlockchainAccount
-    }
   }
 ])
 

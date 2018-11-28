@@ -1,3 +1,9 @@
+const withPrefix = (prefix, routes) =>
+  routes.map((route) => {
+    route.path = prefix + route.path
+    return route
+  })
+
 const routes = [
   {
     // failsafe
@@ -6,38 +12,25 @@ const routes = [
   },
   {
     path: '/:locale',
-    component: () => import('src/layouts/main'),
-    children: [
-      {
-        path: 'login',
-        name: 'login',
-        component: () => import('src/pages/login')
-      },
-      {
-        path: 'signup',
-        name: 'signup',
-        component: () => import('src/pages/signup'),
-        meta: { auth: true }
-      },
-      {
-        path: 'steem/connect',
-        name: 'steem.connect',
-        component: () => import('src/pages/steem/connect'),
-        meta: { auth: true }
-      },
-      {
-        path: 'steem/create',
-        name: 'steem.create',
-        component: () => import('src/pages/steem/create'),
-        meta: { auth: true }
-      }
-    ]
+    name: 'home'
   },
-  { // Always leave this as last one
-    path: '*',
-    name: 'not-found',
-    component: () => import('src/pages/404')
-  }
+  ...withPrefix('/:locale', [
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('src/pages/login')
+    },
+    {
+      path: '/signup/utopian/',
+      name: 'signup.utopian',
+      component: () => import('src/pages/signup/utopian')
+    },
+    { // Always leave this as last one
+      path: '/*',
+      name: 'not-found',
+      component: () => import('src/pages/404')
+    }
+  ])
 ]
 
 // Always leave this as last one
