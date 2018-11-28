@@ -116,6 +116,20 @@
       "error": {
         "project_exists": "You already have a project with this name."
       }
+    },
+    "view": {
+      "createdBy": "Created by",
+      "addBounty": {
+        "label": "Add a bounty"
+      },
+      "stats": {
+        "articles": "Articles",
+        "bounties": "Bounties",
+        "contributors": "Contributors"
+      },
+      "writeArticle": {
+        "label": "Write an article"
+      }
     }
   },
   "editor": {

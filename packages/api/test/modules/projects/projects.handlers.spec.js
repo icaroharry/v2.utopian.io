@@ -39,6 +39,7 @@ const getProjectNonExistingProjectEndpoint = { method: 'GET', url: '/v1/project/
 const isNameAvailableEndpoint = { method: 'POST', url: '/v1/projects/isnameavailable' }
 const getProjectThatAllowsExternalContributions = { method: 'GET', url: '/v1/project/nothingismagick/quasar-framework' }
 const getProjectThatDoesNotAllowExternalContributions = { method: 'GET', url: '/v1/project/utopian-io/utopian-io' }
+const getProjectViewDetailsEndpoint = { method: 'GET', url: '/v1/project/utopian-io/utopian-io/details' }
 
 describe('featured projects', () => {
   let response
@@ -247,5 +248,29 @@ describe("check project's allows external contributions flag", () => {
 
   it('should NOT allow external contributions', () => {
     assert.equal(utopianPayload.allowExternals, false)
+  })
+})
+
+describe('get the utopian project view with the details tab information', () => {
+  let response
+  let payload
+
+  before(async () => {
+    response = await global.server.inject(getProjectViewDetailsEndpoint)
+    payload = JSON.parse(response.payload)
+  })
+
+  it('should return a 200 status response', () => {
+    expect(response.statusCode).to.equal(200)
+  })
+
+  it('should have all the keys', () => {
+    expect(payload).to.have.all.keys(
+      'name', 'repositories', 'website', 'license', 'medias', 'description', 'details', 'tags', 'owners', '_id', 'allowExternals',
+      'articlesCount', 'bountiesCount', 'contributorsCount'
+    )
+  })
+  it('should have utopian-io as owner', () => {
+    assert.equal(payload.owners[0].username, 'utopian-io')
   })
 })

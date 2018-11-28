@@ -41,3 +41,12 @@ export const fetchProject = async (context, { owner, slug }) =>
     method: 'get',
     url: `/v1/project/${owner}/${slug}`
   })
+
+export const loadProject = async (context, { owner, slug, tab = 'details' }) => {
+  const payload = await API.call({
+    context,
+    method: 'get',
+    url: `/v1/project/${owner}/${slug}/${tab}`
+  })
+  context.commit('setProject', payload)
+}

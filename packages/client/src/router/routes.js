@@ -29,6 +29,18 @@ export default [
         meta: { auth: true }
       },
       {
+        path: 'project/:owner/:slug',
+        name: 'project.view',
+        props: true,
+        component: () => import('src/pages/projects/view/view'),
+        children: [{
+          path: ':tab',
+          name: 'project.view.tab',
+          props: true,
+          component: () => import('src/pages/projects/view/view')
+        }]
+      },
+      {
         path: 'articles/create',
         name: 'articles.create',
         props: true,

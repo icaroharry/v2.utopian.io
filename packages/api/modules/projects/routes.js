@@ -62,6 +62,16 @@ routes.push([
       tags: ['projects'],
       validate: Validate.isProjectAdmin
     }
+  },
+  {
+    method: 'GET',
+    path: '/v1/project/{owner}/{slug}/{tab}',
+    handler: (req, h) => Handlers.getProjectView(req, h),
+    options: {
+      auth: false,
+      tags: ['projects'],
+      validate: Validate.getProjectView
+    }
   }
 ])
 

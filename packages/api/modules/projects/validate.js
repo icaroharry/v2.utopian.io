@@ -8,6 +8,14 @@ const getProjectByOwnerAndSlug = {
   }
 }
 
+const getProjectView = {
+  params: {
+    owner: Joi.string().trim().required(),
+    slug: Joi.string().trim().required(),
+    tab: Joi.string().trim().required().allow('blog', 'bounties', 'details')
+  }
+}
+
 const createProject = {
   payload: {
     allowExternals: Joi.boolean().required(),
@@ -62,5 +70,6 @@ module.exports = {
   updateProject,
   getProjectByOwnerAndSlug,
   isNameAvailable,
-  isProjectAdmin
+  isProjectAdmin,
+  getProjectView
 }

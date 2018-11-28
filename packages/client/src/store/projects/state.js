@@ -1,4 +1,4 @@
 export default () => ({
-  projects: [],
-  featuredProjects: []
+  featuredProjects: [],
+  project: null
 })

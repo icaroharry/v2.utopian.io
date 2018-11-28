@@ -1,6 +1,7 @@
 const Boom = require('boom')
 const Mongoose = require('mongoose')
 const { slugify } = require('../../utils/slugify')
+const Article = require('../articles/article.model')
 const Project = require('./project.model')
 const User = require('../users/user.model')
 const { getUserProjectPermission } = require('../../utils/github')
@@ -250,11 +251,54 @@ const isProjectAdmin = async (req, h) => {
   return h.response(false)
 }
 
+/**
+ * Get a project by its owner and slug
+ * Load the data of the selected tab
+ *
+ * @param {object} req - request
+ * @param {object} req.params - request parameters
+ * @param {string} req.params.owner - the project's owner
+ * @param {string} req.params.slug - slugified project's name
+ * @param {string} req.params.tab - tab data to load
+ * @param {object} h - response
+ *
+ * @returns Project and its owners
+ * @author Grégory LATINIER
+ */
+const getProjectView = async (req, h) => {
+  const { owner, slug, tab } = req.params
+  let fields = 'name website medias description tags owners allowExternals documentation license'
+  if (tab === 'details') {
+    fields += ' details repositories'
+  }
+
+  const user = await User.findOne({ username: owner })
+  const projectDB = await Project.findOne({
+    $or: [{ slugs: { $elemMatch: { $eq: `${owner}/${slug}` } } }, { slug: `${owner}/${slug}` }],
+    blacklisted: false,
+    owners: { $elemMatch: { $eq: user._id } }
+  })
+    .populate('owners', 'username avatarUrl')
+    .select(fields)
+
+  const project = projectDB.toJSON()
+  // articles contribution counts
+  project.articlesCount = await Article.countDocuments({ project: project._id })
+
+  // TODO bounties count
+  project.bountiesCount = 0
+  // TODO contributors count
+  project.contributorsCount = 0
+
+  return h.response(project)
+}
+
 module.exports = {
   createProject,
   updateProject,
   getProjectByOwnerAndSlug,
   getFeaturedProjects,
   isNameAvailable,
-  isProjectAdmin
+  isProjectAdmin,
+  getProjectView
 }

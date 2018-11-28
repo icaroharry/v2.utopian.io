@@ -11,6 +11,7 @@ const articles = new Schema({
   author: { type: Schema.Types.ObjectId, ref: 'Users', required: true },
   body: { type: String, required: true, text: true },
   language: { type: String, required: true },
+  project: { type: Schema.Types.ObjectId, ref: 'Projects' },
   proReview: { type: Boolean, required: true, default: true },
   slug: { type: String, required: true, index: true },
   slugs: { type: Array, index: true },
