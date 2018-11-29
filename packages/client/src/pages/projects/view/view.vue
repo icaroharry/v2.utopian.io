@@ -23,7 +23,10 @@ export default {
 <template lang="pug">
   .project-view
     .project-header.flex.justify-end
-      img.bg(:src="project.medias[0].src")
+      img.bg(v-if="project.medias.length === 1", :src="project.medias[0].src")
+      q-carousel.bg(v-if="project.medias.length > 1", quick-nav, autoplay, infinite)
+        q-carousel-slide(v-for="media in project.medias")
+          img(:src="media.src")
       .column.justify-center.items-end
         q-card(color="white", text-color="black", dark)
           q-card-title
@@ -66,7 +69,7 @@ export default {
         height initial
         align-items center
         flex-direction column
-      img.bg
+      .bg
         position absolute
         left 0
         z-index 1
@@ -74,6 +77,16 @@ export default {
           position initial
           width 100%
           margin-bottom 10px
+      .q-carousel-slide
+        padding 0
+        @media (max-width $breakpoint-sm-max)
+          img
+            width 100%
+      .q-carousel-quick-nav
+        max-width 770px
+        @media (max-width $breakpoint-sm-max)
+          position: relative;
+          bottom: 40px;
       .column
         z-index 2
         .q-card
