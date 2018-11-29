@@ -49,6 +49,14 @@ Once you've created your app, fill the client id in the .env file. The client se
 STEEMCONNECT_CLIENT_ID='"my-utopian-app"'
 ```
 
+##### 6. Sentry.io
+The use of Sentry to track errors is not required but you can create a [free tier account](https://sentry.io/signup/) if you want to.
+Follow the website's documentation and add the url to the .env file.
+
+```
+SENTRY_DSN=https://public_key@sentry.io/project_id
+```
+
 ##### 5. Backend
 Refer to the [backend documentation](https://github.com/utopian-io/v2.utopian.io/tree/develop/packages/server/README.md) to finish setting up the project
 

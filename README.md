@@ -44,25 +44,41 @@ If you want to help us build this great project, these are the steps you will ha
 
 Please open the [issues page](https://github.com/utopian-io/v2.utopian.io/issues). 
 
-You can work on any issue that is prefixed with [OT] and is in the **To do column** of the [project board](https://github.com/orgs/utopian-io/projects/4).
+You can work on any issue of the [project board](https://github.com/orgs/utopian-io/projects/4) that is prefixed with [UT-*] and is in the **To do column** and is **not assigned**.
 
 All issues have been assigned a difficulty score from 1 to 5. A score of 1 is an easy task that can be completed by a beginner. 5 is for experienced developers who have a good understanding of the project and the technologies we are using.
 
 You've picked one? Great.
 
-Now open the Jira link provided in the description. Make sure that the task is in the **READY FOR DEV** status and that all the linked issues in the _is blocked by_ section are in the **DONE** status. 
-
-Still good? Read the description carefully and check the zeplin links.
+Read the description carefully and check the UML and design.
 
 Are you feeling up to the task? DM @gregory[mod] on the [utopian discord](https://discord.gg/CA9pqES) with the following message:
 > Hi,
-> I would like to start working on the task _JIRA_URL_.
+> I would like to start working on the task _GITHUB_ISSUE_URL_.
 >
 > A little bit about me: _a short description of your experience as a developer_
+> My GitHub repo: _link to your repo_
 
 You will then join a dedicated discord channel and meet your fellow collaborators. **Please read the pinned messages of the channel before doing anything else.**
 
 Let's get to work!
+
+### Submitting your Pull Request
+
+When you submit your Pull Request you need to be sure that it contains only the files that you've modified. You also need to resolve any conflicts with the develop branch.
+To achieve this you need to rebase your feature's branch by doing the following
+```
+git fetch
+git checkout develop
+git pull
+git checkout my_branch
+git reset --soft HEAD~X // where X is the number of commits that you did
+git rebase develop
+git commit -m "my commit message"
+git push -f
+```
+This will rewrite the history of your branch and ensure that your Pull Request doesn't contain the files of other merged features.
+And yes you lose your commit history. For us, it doesn't matter because your Pull Request will be Squashed and Merged.
 
 ### License
 

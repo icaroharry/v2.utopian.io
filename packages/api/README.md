@@ -75,7 +75,15 @@ We are using the algorithm _aes-256-cbc_. Generate a 64 characters string and ad
 ENCRYPTION_KEY=XXX
 ```
 
-##### 8. Backend
+##### 8. Sentry.io
+The use of Sentry to track errors is not required but you can create a [free tier account](https://sentry.io/signup/) if you want to.
+Follow the website's documentation and add the url to the .env file.
+
+```
+SENTRY_DSN=https://public_key@sentry.io/project_id
+```
+
+##### 9. Backend
 Refer to the [frontend documentation](https://github.com/utopian-io/v2.utopian.io/tree/develop/packages/client/README.md) to finish setting up the project.
 
 ### Development
