@@ -28,7 +28,8 @@ const getProjectByOwnerAndSlug = async (req, h) => {
     owners: { $elemMatch: { $eq: user._id } }
   })
     .populate('owners', 'username avatarUrl')
-    .select('name repositories website docs license medias description details tags owners _id allowExternals')
+    .populate('collaborators.user', 'username avatarUrl')
+    .select('name repositories website docs license medias description details tags owners collaborators _id allowExternals')
   return h.response(project)
 }
 
@@ -77,7 +78,7 @@ const filterRepositories = async ({ repositories, username }) => {
 const updateProject = async (req, h) => {
   const ownerId = req.auth.credentials.uid
   const username = req.auth.credentials.username
-  const { owners, repositories, details, ...project } = req.payload
+  const { owners, collaborators, repositories, details, ...project } = req.payload
   const projectDb = await Project.findOne({ owners: { $elemMatch: { $eq: ownerId } }, _id: req.params.id })
   if (!projectDb) {
     throw Boom.badData('general.documentUpdateUnauthorized')
@@ -122,11 +123,29 @@ const updateProject = async (req, h) => {
     }
   }
 
+  // Update the collaborators of the project
+  const updatedCollaborators = []
+  if (collaborators) {
+    for (let i = 0; i < collaborators.length; i += 1) {
+      const collaborator = collaborators[i]
+      // Check that the added users exist and is not already added and is not an owner
+      if (!updatedCollaborators.some((o) => o.user.toString() === collaborator.user._id) &&
+      !updatedOwners.some((o) => o._id.toString() === collaborator.user._id) &&
+      await User.countDocuments({ _id: collaborator.user._id }) > 0) {
+        updatedCollaborators.push({
+          user: Mongoose.Types.ObjectId(collaborator.user._id),
+          roles: collaborators[i].roles
+        })
+      }
+    }
+  }
+
   const response = await Project.updateOne(
     { _id: req.params.id },
     {
       repositories: filteredRepositories,
       owners: updatedOwners,
+      collaborators: updatedCollaborators,
       slug,
       slugs,
       details: sanitizeHtml(details),
@@ -154,7 +173,7 @@ const updateProject = async (req, h) => {
 const createProject = async (req, h) => {
   const ownerId = req.auth.credentials.uid
   const username = req.auth.credentials.username
-  const { owners, repositories, details, ...project } = req.payload
+  const { owners, collaborators, repositories, details, ...project } = req.payload
 
   // A user can't have two projects with the same name
   const projectName = await Project.findOne({ owners: { $elemMatch: { $eq: ownerId } }, name: req.payload.name })
@@ -186,6 +205,7 @@ const createProject = async (req, h) => {
   const newProject = new Project({
     repositories: filteredRepositories,
     owners: [],
+    collaborators: [],
     slug,
     details: sanitizeHtml(details),
     ...project
@@ -200,6 +220,22 @@ const createProject = async (req, h) => {
       // Check that the added users exist and is not already added
       if (!newProject.owners.some((o) => o._id.toString() === owner._id) && await User.countDocuments({ _id: owner._id }) > 0) {
         newProject.owners.push(Mongoose.Types.ObjectId(owner._id))
+      }
+    }
+  }
+
+  // Add the collaborators to the project
+  if (collaborators) {
+    for (let i = 0; i < collaborators.length; i += 1) {
+      const collaborator = collaborators[i]
+      // Check that the added users exist and is not already added and is not an owner
+      if (!newProject.collaborators.some((o) => o.user.toString() === collaborator.user._id) &&
+      !newProject.owners.some((o) => o._id.toString() === collaborator.user._id) &&
+      await User.countDocuments({ _id: collaborator.user._id }) > 0) {
+        newProject.collaborators.push({
+          user: Mongoose.Types.ObjectId(collaborator.user._id),
+          roles: collaborators[i].roles
+        })
       }
     }
   }

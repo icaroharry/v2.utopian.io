@@ -28,6 +28,7 @@ const createProject = {
     description: Joi.string().trim().required(),
     details: Joi.string().trim().required(),
     owners: Joi.array().optional(),
+    collaborators: Joi.array().optional(),
     tags: Joi.array().min(3).max(5).unique().items(Joi.string().trim().alphanum()).required()
   }
 }
@@ -47,6 +48,7 @@ const updateProject = {
     description: Joi.string().trim().required(),
     details: Joi.string().trim().required(),
     owners: Joi.array().optional(),
+    collaborators: Joi.array().optional(),
     tags: Joi.array().min(3).max(5).unique().items(Joi.string().trim().alphanum()).required()
   }
 }

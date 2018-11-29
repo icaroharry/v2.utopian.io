@@ -50,6 +50,22 @@
   },
   "projects": {
     "createEdit": {
+      "allowExternals": {
+        "label": "Allow external contributions"
+      },
+      "collaborators": {
+        "label": "Collaborators",
+        "helper": "Add collaborators to this project and enable them to edit your project's details, write articles or bounties for the project.",
+        "placeholder": "Find your collaborators",
+        "roles": {
+          "articles": "Articles",
+          "bounties": "Bounties",
+          "project": "Project"
+        },
+        "errors": {
+          "owner": "An owner can't be a collaborator"
+        }
+      },
       "completed": "completed",
       "documentationPage": {
         "label": "Documentation page",
@@ -66,7 +82,10 @@
       "notOpensource": "The code of my project is closed",
       "owners": {
         "label": "Owners",
-        "placeholder": "Find your colleagues"
+        "placeholder": "Find your colleagues",
+        "errors": {
+          "collaborator": "A collaborator can't be an owner"
+        }
       },
       "projectDetails": {
         "label": "Project details",
@@ -81,9 +100,6 @@
         "error": {
           "exists": "You already have a project with this name."
         }
-      },
-      "allowExternals": {
-        "label": "Allow external contributions"
       },
       "projectTags": {
         "label": "Project tags",

@@ -6,6 +6,20 @@ const projects = new Schema({
   allowExternals: { type: Boolean, required: true, default: true },
   blacklisted: { type: Boolean, default: false },
   closedSource: { type: Boolean, default: false },
+  collaborators: [{
+    _id: false,
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'Users',
+      required: true
+    },
+    roles: [{
+      _id: false,
+      type: String,
+      enum: ['project', 'articles', 'bounties'],
+      required: true
+    }]
+  }],
   description: { type: String, required: true, text: true },
   details: { type: String, required: true, text: true },
   docs: { type: String },

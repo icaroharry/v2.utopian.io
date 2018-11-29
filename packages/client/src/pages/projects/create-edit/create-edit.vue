@@ -26,9 +26,11 @@ export default {
         tags: [],
         website: '',
         docs: '',
-        owners: []
+        owners: [],
+        collaborators: []
       },
       ownersSearch: '',
+      collaboratorsSearch: '',
       repositorySearch: '',
       submitting: false
     }
@@ -170,18 +172,63 @@ export default {
     },
     addOwner (item, e) {
       if (!e) { // don't trigger automatically on keyboard select
-        if (item.value && !this.project.owners.some(o => o._id === item.value)) {
-          this.project.owners.push({
-            _id: item.value,
-            avatarUrl: item.avatar,
-            username: item.label
-          })
-        }
+        if (item.value) {
+          // A collaborator can't be an owner
+          if (this.project.collaborators.some(o => o.user._id === item.value)) {
+            this.setAppError('projects.createEdit.owners.errors.collaborator')
+          // Check if the owner is not in the list already
+          } else if (!this.project.owners.some(o => o._id === item.value)) {
+            this.project.owners.push({
+              _id: item.value,
+              avatarUrl: item.avatar,
+              username: item.label
+            })
+          }
+        } 
         this.ownersSearch = ''
       }
     },
     removeOwner (id) {
       this.project.owners = this.project.owners.filter(u => u._id !== id)
+    },
+    searchCollaborators (term, done) {
+      this.searchUsers({ term, count: 10 })
+        .then(users => {
+          if (typeof users === 'string') { // no results sent as an i18n primitive in string form
+            done([{ label: this.$t(users), value: null }])
+          } else {
+            done(users && users.filter(u => u._id !== this.user.uid && !this.project.collaborators.some(o => o.user._id === u._id))
+              .map(user => ({
+                label: user.username,
+                avatar: user.avatarUrl,
+                value: user._id
+              })))
+          }
+        })
+    },
+    addCollaborator (item, e) {
+      if (!e) { // don't trigger automatically on keyboard select
+        if (item.value) {
+          // An owner can't be a collaborator
+          if (this.project.owners.some(o => o._id === item.value)) {
+            this.setAppError('projects.createEdit.collaborators.errors.owner')
+          // Check if the collaborator is not in the list already
+          } else if (!this.project.collaborators.some(o => o.user._id === item.value)) {
+            this.project.collaborators.push({
+              user: {
+                _id: item.value,
+                avatarUrl: item.avatar,
+                username: item.label
+              },
+              roles: ['project', 'articles', 'bounties']
+            })
+          }
+        }
+        this.ownersSearch = ''
+      }
+    },
+    removeCollaborator (id) {
+      this.project.collaborators = this.project.collaborators.filter(u => u.user._id !== id)
     },
     removeMedia (src) {
       this.project.medias = this.project.medias.filter(m => m.src !== src)
@@ -306,6 +353,30 @@ div
             q-item-main(:label="owner.username")
             q-item-side(right)
               q-btn(round, dense, icon="mdi-minus-circle", color="red", size="md" @click="() => removeOwner(owner._id)")
+
+      q-field(:label="$t('projects.createEdit.collaborators.label')", orientation="vertical", :helper="$t('projects.createEdit.collaborators.helper')")
+        q-search(
+          v-model="collaboratorsSearch",
+          :placeholder="$t('projects.createEdit.collaborators.placeholder')",
+        )
+          q-autocomplete(@search="searchCollaborators", :min-characters="3", :max-results="10", :debounce="500", @selected="addCollaborator",
+          :value-field="v => v.label")
+
+      q-field(v-if="project.collaborators.length > 0")
+        q-list(v-for="(collaborator, idx) in project.collaborators", separator, :key="collaborator.user")
+          q-item
+            q-item-side(:avatar="collaborator.user.avatarUrl")
+            q-item-main.row
+              .col-md-3.col-sm-12.col-xs-12
+                | {{collaborator.user.username}}
+              .col-md-3.col-sm-4.col-xs-12
+                q-toggle.u-forms-toggle(v-model="project.collaborators[idx].roles", val="project", :label="$t('projects.createEdit.collaborators.roles.project')")
+              .col-md-3.col-sm-4.col-xs-12
+                q-toggle.u-forms-toggle(v-model="project.collaborators[idx].roles", val="articles", :label="$t('projects.createEdit.collaborators.roles.articles')")
+              .col-md-3.col-sm-4.col-xs-12
+                q-toggle.u-forms-toggle(v-model="project.collaborators[idx].roles", val="bounties", :label="$t('projects.createEdit.collaborators.roles.bounties')")
+            q-item-side(right)
+              q-btn(round, dense, icon="mdi-minus-circle", color="red", size="md" @click="() => removeCollaborator(collaborator.user._id)")
 
       q-field
         q-toggle.u-forms-toggle(v-model="project.allowExternals", :label="$t('projects.createEdit.allowExternals.label')")
