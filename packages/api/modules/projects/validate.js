@@ -1,7 +1,7 @@
 const Joi = require('joi')
 const { licenses } = require('../../utils/constants')
 
-const getProjectForEdit = {
+const getProjectByOwnerAndSlug = {
   params: {
     owner: Joi.string().trim().required(),
     slug: Joi.string().trim().required()
@@ -70,7 +70,7 @@ const isProjectAdmin = {
 module.exports = {
   createProject,
   updateProject,
-  getProjectForEdit,
+  getProjectByOwnerAndSlug,
   isNameAvailable,
   isProjectAdmin,
   getProjectView

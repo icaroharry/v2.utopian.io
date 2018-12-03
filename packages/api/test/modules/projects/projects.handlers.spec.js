@@ -34,11 +34,11 @@ const isProjectAdminEndpoint = {
   }
 }
 const featuredEndpoint = { method: 'GET', url: '/v1/projects/featured' }
-const getProjectForEditEndpoint = { method: 'GET', url: '/v1/project/utopian-io/utopian-io' }
-const getProjectForEditNonExistingProjectEndpoint = { method: 'GET', url: '/v1/project/utopian-io/xxx' }
+const getProjectByOwnerAndSlugEndpoint = { method: 'GET', url: '/v1/project/utopian-io/utopian-io' }
+const getProjectNonExistingProjectEndpoint = { method: 'GET', url: '/v1/project/utopian-io/xxx' }
 const isNameAvailableEndpoint = { method: 'POST', url: '/v1/projects/isnameavailable' }
-const getProjectForEditThatAllowsExternalContributions = { method: 'GET', url: '/v1/project/nothingismagick/quasar-framework' }
-const getProjectForEditThatDoesNotAllowExternalContributions = { method: 'GET', url: '/v1/project/utopian-io/utopian-io' }
+const getProjectThatAllowsExternalContributions = { method: 'GET', url: '/v1/project/nothingismagick/quasar-framework' }
+const getProjectThatDoesNotAllowExternalContributions = { method: 'GET', url: '/v1/project/utopian-io/utopian-io' }
 const getProjectViewDetailsEndpoint = { method: 'GET', url: '/v1/project/utopian-io/utopian-io/details' }
 
 describe('featured projects', () => {
@@ -78,11 +78,7 @@ describe('get the utopian project by its owner and slug', () => {
   let payload
 
   before(async () => {
-    const token = generateAccessToken({ uid: '5bee961699164e6d24cbd3ee', username: 'utopian-io' })
-    getProjectForEditEndpoint.headers = {
-      'Authorization': token
-    }
-    response = await global.server.inject(getProjectForEditEndpoint)
+    response = await global.server.inject(getProjectByOwnerAndSlugEndpoint)
     payload = JSON.parse(response.payload)
   })
 
@@ -105,12 +101,8 @@ describe('get a non existing project', () => {
   let payload
 
   before(async () => {
-    const token = generateAccessToken({ uid: '5bee961699164e6d24cbd3ee', username: 'utopian-io' })
-    getProjectForEditNonExistingProjectEndpoint.headers = {
-      'Authorization': token
-    }
-    response = await global.server.inject(getProjectForEditNonExistingProjectEndpoint)
-    payload = JSON.parse(response.payload)
+    response = await global.server.inject(getProjectNonExistingProjectEndpoint)
+    payload = response.payload
   })
 
   it('should return a 200 status response', () => {
@@ -118,7 +110,7 @@ describe('get a non existing project', () => {
   })
 
   it('response should be empty', () => {
-    assert.deepEqual(payload, {})
+    assert.isEmpty(payload)
   })
 })
 
@@ -243,18 +235,10 @@ describe("check project's allows external contributions flag", () => {
   let quasarPayload, utopianPayload
 
   before(async () => {
-    let token = generateAccessToken({ uid: '5bc798adad26d25470439533', username: 'nothingismagick' })
-    getProjectForEditThatAllowsExternalContributions.headers = {
-      'Authorization': token
-    }
-    quasarProjectResponse = await global.server.inject(getProjectForEditThatAllowsExternalContributions)
+    quasarProjectResponse = await global.server.inject(getProjectThatAllowsExternalContributions)
     quasarPayload = JSON.parse(quasarProjectResponse.payload)
 
-    token = generateAccessToken({ uid: '5bee961699164e6d24cbd3ee', username: 'utopian-io' })
-    getProjectForEditThatDoesNotAllowExternalContributions.headers = {
-      'Authorization': token
-    }
-    utopianProjectResponse = await global.server.inject(getProjectForEditThatDoesNotAllowExternalContributions)
+    utopianProjectResponse = await global.server.inject(getProjectThatDoesNotAllowExternalContributions)
     utopianPayload = JSON.parse(utopianProjectResponse.payload)
   })
 
@@ -283,7 +267,7 @@ describe('get the utopian project view with the details tab information', () => 
   it('should have all the keys', () => {
     expect(payload).to.have.all.keys(
       'name', 'repositories', 'website', 'license', 'medias', 'description', 'details', 'tags', 'owners', '_id', 'allowExternals',
-      'collaborators', 'articlesCount', 'bountiesCount', 'contributorsCount'
+      'articlesCount', 'bountiesCount', 'contributorsCount'
     )
   })
   it('should have utopian-io as owner', () => {

@@ -8,7 +8,7 @@ const { getUserProjectPermission } = require('../../utils/github')
 const { sanitizeHtml } = require('../../utils/html-sanitizer')
 
 /**
- * Get a project by its owner and slug for editing purposes
+ * Get a project by its owner and slug
  *
  * @param {object} req - request
  * @param {object} req.params - request parameters
@@ -19,32 +19,18 @@ const { sanitizeHtml } = require('../../utils/html-sanitizer')
  * @returns Project and its owners
  * @author Grégory LATINIER
  */
-const getProjectForEdit = async (req, h) => {
+const getProjectByOwnerAndSlug = async (req, h) => {
   const { owner, slug } = req.params
-  const userId = req.auth.credentials.uid
+  const user = await User.findOne({ username: owner })
   const project = await Project.findOne({
     $or: [{ slugs: { $elemMatch: { $eq: `${owner}/${slug}` } } }, { slug: `${owner}/${slug}` }],
-    blacklisted: false
+    blacklisted: false,
+    owners: { $elemMatch: { $eq: user._id } }
   })
     .populate('owners', 'username avatarUrl')
     .populate('collaborators.user', 'username avatarUrl')
     .select('name repositories website docs license medias description details tags owners collaborators _id allowExternals')
-
-  if (!project) return {}
-
-  for (let i = 0; i < project.owners.length; i += 1) {
-    if (project.owners[i]._id.toString() === userId) {
-      return h.response(project)
-    }
-  }
-
-  for (let i = 0; i < project.collaborators.toObject().length; i += 1) {
-    if (project.collaborators[i].user._id.toString() === userId && project.collaborators[i].roles.includes('project')) {
-      return h.response(project)
-    }
-  }
-
-  throw Boom.unauthorized('general.unauthorized')
+  return h.response(project)
 }
 
 const getFeaturedProjects = async (req, h) => {
@@ -317,15 +303,16 @@ const isProjectAdmin = async (req, h) => {
  */
 const getProjectView = async (req, h) => {
   const { owner, slug, tab } = req.params
-  let fields = 'name website medias description tags owners collaborators allowExternals documentation license'
+  let fields = 'name website medias description tags owners allowExternals documentation license'
   if (tab === 'details') {
     fields += ' details repositories'
   }
 
+  const user = await User.findOne({ username: owner })
   const projectDB = await Project.findOne({
     $or: [{ slugs: { $elemMatch: { $eq: `${owner}/${slug}` } } }, { slug: `${owner}/${slug}` }],
     blacklisted: false,
-    deletedAt: null
+    owners: { $elemMatch: { $eq: user._id } }
   })
     .populate('owners', 'username avatarUrl')
     .select(fields)
@@ -345,7 +332,7 @@ const getProjectView = async (req, h) => {
 module.exports = {
   createProject,
   updateProject,
-  getProjectForEdit,
+  getProjectByOwnerAndSlug,
   getFeaturedProjects,
   isNameAvailable,
   isProjectAdmin,

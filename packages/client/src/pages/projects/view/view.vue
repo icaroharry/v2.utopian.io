@@ -11,34 +11,10 @@ export default {
   },
   data () {
     return {
-      defaultTab: this.$route.params.tab || 'details',
-      tooltipArticles: null,
-      tooltipBounties: null
-    }
-  },
-  mounted () {
-    if (!this.project.allowExternals && !this.user) {
-      this.tooltipArticles = 'projects.view.noContributionsTooltip.noExternals'
-      this.tooltipBounties = 'projects.view.noContributionsTooltip.noExternals'
-    }
-    // If this user is not an owner but maybe collaborator
-    if (!this.project.allowExternals && this.user && !this.project.owners.some((o) => o._id === this.user.uid)) {
-      const userRoles = this.project.collaborators && this.project.collaborators.find((c) => c.user === this.user.uid)
-      if (!userRoles) {
-        this.tooltipArticles = 'projects.view.noContributionsTooltip.noExternals'
-        this.tooltipBounties = 'projects.view.noContributionsTooltip.noExternals'
-      } else {
-        if (!userRoles.roles.includes('articles')) {
-          this.tooltipArticles = 'projects.view.noContributionsTooltip.noRightsArticles'
-        }
-        if (!userRoles.roles.includes('bounties')) {
-          this.tooltipBounties = 'projects.view.noContributionsTooltip.noRightsBounties'
-        }
-      }
+      defaultTab: this.$route.params.tab || 'details'
     }
   },
   computed: {
-    ...mapGetters('auth', ['user']),
     ...mapGetters('projects', ['project'])
   }
 }
@@ -63,10 +39,8 @@ export default {
           q-card-main
             p.desc {{project.description}}
           q-card-actions.q-mb-md(align="around")
-            q-btn(:disabled="tooltipBounties !== null", size="md", color="primary", :label="$t('projects.view.addBounty.label')", to="/")
-              q-tooltip(v-if="tooltipBounties !== null", :offset="[0, 10]") {{$t(tooltipBounties)}}
-            q-btn(:disabled="tooltipArticles !== null", size="md", color="white", text-color="black", :label="$t('projects.view.writeArticle.label')", :to="tooltipArticles === null ? `/${$route.params.locale}/articles/create?project=${project._id}` : ''")
-              q-tooltip(v-if="tooltipArticles !== null", :offset="[0, 10]") {{$t(tooltipArticles)}}
+            q-btn(size="md", color="primary", :label="$t('projects.view.addBounty.label')")
+            q-btn(size="md", color="white", text-color="black", :label="$t('projects.view.writeArticle.label')", :to="`/${$route.params.locale}/articles/create?project=${project._id}`")
         .row.inline.justify-around.stats.q-mt-sm
           .stat
             .stat-title {{project.articlesCount}}

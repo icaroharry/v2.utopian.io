@@ -75,12 +75,8 @@ export default {
         owner: this.$route.params.owner,
         slug: this.$route.params.slug
       })
-      // Unauthorized edit
-      if (!result) {
-        this.$router.push({ name: 'home' })
-      // An empty object is returned is the project doesn't exist
-      } else if (result && !result.name) {
-        this.$router.push({ name: 'not-found' })
+      if (!result || !result.owners.some(o => o._id === this.user.uid)) {
+        this.$router.push({ path: '/notfound' })
       } else {
         this.project = result
         this.$v.project.$touch()
