@@ -148,6 +148,7 @@ module.exports = [
     ],
     'website': 'https://join.utopian.io/',
     'createdAt': new Date('2018-08-24T14:14:02.032Z'),
+    'updatedAt': new Date('2018-08-25T14:14:02.032Z'),
     '__v': 0
   }
 ]

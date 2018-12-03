@@ -14,6 +14,21 @@ export default {
       },
       controls: null
     }
+  },
+  meta () {
+    return {
+      title: this.$t('common.SEOTitle'),
+      titleTemplate: title => `${title} - ${this.$t('common.SEOTitleTemplate')}`,
+      meta: {
+        // Twitter Card data
+        twitterSite: { name: 'twitter:site', content: '@utopian' },
+        // Facebook Open Graph data
+        ogType: { property: 'og:type', content: 'article' },
+        ogUrl: { property: 'og:url', content: `${process.env.UTOPIAN_DOMAIN}${this.$route.path}` },
+        ogSiteName: { property: 'og:site_name', content: this.$t('common.SEOTitle') },
+        ogFbAppId: { property: 'fb:app_id', content: `${process.env.SEO_FB_ID}` }
+      }
+    }
   }
 }
 </script>

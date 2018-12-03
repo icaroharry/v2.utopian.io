@@ -30,8 +30,8 @@ export default {
       this.$refs.mainCarousel.previous()
       this.$refs.infoCarousel.previous()
     },
-    goToProjectPage (name) {
-      return this.$router.push({ name: 'project.details', params: { name } })
+    goToProjectPage (slug) {
+      return this.$router.push({ path: `/${this.$route.params.locale}/project/${slug}` })
     },
     redirectToCreateProject () {
       return this.$router.push({ name: 'projects.create' })
@@ -71,7 +71,7 @@ div
                 q-card-main.q-title.text-weight-light.text-dusk
                   | {{ project.description }}
                 q-card-actions(align="center")
-                  q-btn(:label="$t('homepage.contributeToProject')", color="primary" @click="goToProjectPage(project.slug)")
+                  q-btn(:label="$t('homepage.contributeToProject')", color="primary" @click.native="goToProjectPage(project.slug)")
 
           q-btn.carousel-arrow(
           flat,
@@ -166,8 +166,8 @@ div
       background #fff
       @media screen and (min-width: $breakpoint-md) {
         box-shadow 0 0 25px rgba(0, 0, 0, .1)
-        margin-left -50px
-      margin-top 50px
+        margin-left: -50px
+      }
     }
     .q-carousel-slide {
       @media screen and (max-width: $breakpoint-md) {
@@ -180,7 +180,6 @@ div
         }
       }
     }
-  }
   }
 
   div.main {

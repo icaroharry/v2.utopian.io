@@ -38,6 +38,7 @@ module.exports = function (ctx) {
         AUTH_DOMAIN: process.env.AUTH_DOMAIN,
         GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
         SENTRY_DSN: process.env.SENTRY_DSN,
+        SEO_FB_ID: process.env.SEO_FB_ID,
         STEEMCONNECT_CLIENT_ID: (process.env.STEEMCONNECT_CLIENT_ID || '"utopian.signin"'),
         STEEM_API: (process.env.STEEM_API_DEV || '"https://api.steemit.com"')
       },
@@ -177,11 +178,12 @@ module.exports = function (ctx) {
         'Platform'
       ],
       plugins: [
+        'AddressbarColor',
         'Cookies',
         'Dialog',
         'Loading',
+        'Meta',
         'Notify',
-        'AddressbarColor',
         'Screen'
       ]
     },

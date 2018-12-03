@@ -149,6 +149,7 @@ const updateProject = async (req, h) => {
       slug,
       slugs,
       details: sanitizeHtml(details),
+      updateAt: Date.now(),
       ...project
     }
   )
@@ -303,7 +304,7 @@ const isProjectAdmin = async (req, h) => {
  */
 const getProjectView = async (req, h) => {
   const { owner, slug, tab } = req.params
-  let fields = 'name website medias description tags owners allowExternals documentation license'
+  let fields = 'name website medias description tags owners allowExternals documentation license createdAt updatedAt'
   if (tab === 'details') {
     fields += ' details repositories'
   }

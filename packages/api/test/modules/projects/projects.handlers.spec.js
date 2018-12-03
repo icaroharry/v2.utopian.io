@@ -267,7 +267,7 @@ describe('get the utopian project view with the details tab information', () => 
   it('should have all the keys', () => {
     expect(payload).to.have.all.keys(
       'name', 'repositories', 'website', 'license', 'medias', 'description', 'details', 'tags', 'owners', '_id', 'allowExternals',
-      'articlesCount', 'bountiesCount', 'contributorsCount'
+      'articlesCount', 'bountiesCount', 'contributorsCount', 'createdAt', 'updatedAt'
     )
   })
   it('should have utopian-io as owner', () => {

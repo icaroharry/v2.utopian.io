@@ -6,6 +6,10 @@
   "interaction": "Interaction",
   "debug": "Debug",
   "GDPR": "GDPR Acceptance",
+  "common": {
+    "SEOTitle": "Utopian.io",
+    "SEOTitleTemplate": "Utopian.io, empowering open source"
+  },
   "articles": {
     "createEdit": {
       "body": {
@@ -31,6 +35,14 @@
       "language": {
         "label": "Language",
         "placeholder": "Select a language"
+      }
+    },
+    "tools": {
+      "socialShare": {
+        "copyToClipboard": {
+          "label": "Copy",
+          "success": "Url copied to clipboard"
+        }
       }
     }
   },

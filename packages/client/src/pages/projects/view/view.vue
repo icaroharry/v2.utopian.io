@@ -1,7 +1,12 @@
 <script>
 import { mapGetters } from 'vuex'
+import USocialShare from 'src/components/tools/social-share'
+
 export default {
   name: 'u-page-projects-view',
+  components: {
+    USocialShare
+  },
   preFetch ({ store, currentRoute }) {
     return store.dispatch('projects/loadProject', {
       owner: currentRoute.params.owner,
@@ -12,6 +17,26 @@ export default {
   data () {
     return {
       defaultTab: this.$route.params.tab || 'details'
+    }
+  },
+  meta () {
+    return {
+      title: this.project.name,
+      meta: {
+        description: { name: 'description', content: this.project.description },
+        // Twitter Card data
+        twitterTitle: { name: 'twitter:title', content: this.project.name },
+        twitterDescription: { name: 'twitter:description', content: this.project.description.length <= 200 ? this.project.description : `${this.project.description.substr(0, 197)}...` },
+        twitterCreator: { name: 'twitter:creator', content: `@${this.project.owners[0].username}` },
+        twitterImageSrc: { name: 'twitter:image', content: this.project.medias.find((m) => m.type === 'image').src },
+        // Facebook Open Graph data
+        ogTitle: { property: 'og:title', content: this.project.name },
+        ogImage: { property: 'og:image', content: this.project.medias.find((m) => m.type === 'image').src },
+        ogDescription: { property: 'og:description', content: this.project.description.length <= 200 ? this.project.description : `${this.project.description.substr(0, 197)}...` },
+        articlePublishedTime: { name: 'article:published_time', content: this.project.createdAt },
+        articleModifiedTime: { name: 'article:modified_time', content: this.project.updatedAt },
+        articleTag: { name: 'article:tag', content: this.project.tags.join(' ') }
+      }
     }
   },
   computed: {
@@ -25,11 +50,12 @@ export default {
     .project-header.flex.justify-end
       img.bg(v-if="project.medias.length === 1", :src="project.medias[0].src")
       q-carousel.bg(v-if="project.medias.length > 1", quick-nav, autoplay, infinite)
-        q-carousel-slide(v-for="media in project.medias")
+        q-carousel-slide(v-for="media in project.medias", :key="media.src")
           img(:src="media.src")
       .column.justify-center.items-end
         q-card(color="white", text-color="black", dark)
           q-card-title
+            u-social-share(:title="project.name", :description="project.description")
             h1 {{project.name}}
             h2 {{$t('projects.view.createdBy')}}
             .owners.row.inline(v-for="owner in project.owners")
@@ -69,6 +95,14 @@ export default {
         height initial
         align-items center
         flex-direction column
+      h1
+        width: calc(100% - 55px)
+      .q-card-title
+        position relative
+        .social-share
+          position absolute
+          right 0
+          top 0
       .bg
         position absolute
         left 0
