@@ -23,9 +23,20 @@
     "update:i18n": "node ../i18n/lib/index.js",
     "precommit": "lint-staged",
     "lint": "eslint --ext .js,.vue src",
-    "test": "concurrently \"yarn run lint\""
-  },
-  "dependencies": {
+    "serve:dev:ngrok": "ngrok http 8080 --region eu",
+    "serve:pwa": "quasar serve ./dist/pwa-mat --port 3000",
+    "serve:dist": "nodemon dist/ssr-mat/index.js",
+    "serve:test:coverage": "quasar serve test/coverage/lcov-report/ --port 8790",
+    "serve:test:lighthouse": "quasar serve test/lighthouse/reports/ --port 8791",
+    "test": "yarn run lint",
+    "test:jest": "jest --coverage",
+    "test:jest:watch": "jest --watch",
+    "test:webdriver": "wdio ./test/webdriver/config/wdio.conf.js",
+    "audit:snyk": "snyk test --org=info-fth --json > ./test/audits/snyk.json",
+    "audit:node_modules": "yarn audit --json > ./test/audits/node_modules_audit.json",
+    "audit:licenses": "nlf --summary detail > ./test/audits/licenses.txt",
+    "audit:lighthouse": "lighthouse http://localhost:3000 view --output-path=./test/lighthouse/reports/index.html --config-path=./test/lighthouse/configs/full-config.js",
+    "vue-devtools": "./node_modules/.bin/vue-devtools"
   },
   "devDependencies": {
     "@babel/plugin-syntax-dynamic-import": "7.0.0",
@@ -33,6 +44,7 @@
     "@sentry/browser": "4.4.0",
     "@steemit/steem-js": "0.7.3",
     "@utopian/i18n": "1.0.0",
+    "@utopian/testing": "1.0.0",
     "axios": "0.18.0",
     "b2a": "1.0.10",
     "babel-eslint": "10.0.1",
@@ -54,6 +66,7 @@
     "eslint-plugin-vue": "4.7.1",
     "extra-watch-webpack-plugin": "1.0.3",
     "fs": "0.0.2",
+    "jest": "23.6.0",
     "jsonwebtoken": "8.4.0",
     "lint-staged": "8.1.0",
     "marked":"0.5.2",
@@ -75,6 +88,7 @@
     "vue-i18n": "8.3.2",
     "vue-router": "3.0.2",
     "vuelidate": "0.7.4",
-    "vuex": "3.0.1"
+    "vuex": "3.0.1",
+    "webdriverio": "4.14.0"
   }
 }

@@ -12,13 +12,25 @@
     "build": "quasar build -m ssr -t mat",
     "precommit": "lint-staged",
     "lint": "eslint --ext .js,.vue src",
-    "test": "concurrently \"yarn run lint\""
-  },
-  "dependencies": {
+    "serve:dev:ngrok": "ngrok http 8081 --region eu",
+    "serve:pwa": "quasar serve ./dist/pwa-mat --port 3001",
+    "serve:dist": "nodemon dist/ssr-mat/index.js",
+    "serve:test:coverage": "quasar serve test/coverage/lcov-report/ --port 8788",
+    "serve:test:lighthouse": "quasar serve test/lighthouse/reports/ --port 8789",
+    "test": "yarn run lint",
+    "test:jest": "jest --coverage",
+    "test:jest:watch": "jest --watch",
+    "test:webdriver": "wdio ./test/webdriver/config/wdio.conf.js",
+    "audit:snyk": "snyk test --org=info-fth --json > ./test/audits/snyk.json",
+    "audit:node_modules": "yarn audit --json > ./test/audits/node_modules_audit.json",
+    "audit:licenses": "nlf --summary detail > ./test/audits/licenses.txt",
+    "audit:lighthouse": "lighthouse http://localhost:3000 view --output-path=./test/lighthouse/reports/index.html --config-path=./test/lighthouse/configs/full-config.js",
+    "vue-devtools": "./node_modules/.bin/vue-devtools"
   },
   "devDependencies": {
     "@steemit/steem-js": "0.7.3",
     "@utopian/i18n": "1.0.0",
+    "@utopian/testing": "1.0.0",
     "axios": "0.18.0",
     "b2a": "1.0.10",
     "babel-eslint": "10.0.1",
@@ -34,6 +46,7 @@
     "eslint-plugin-standard": "4.0.0",
     "eslint-plugin-vue": "4.7.1",
     "extra-watch-webpack-plugin": "1.0.3",
+    "jest": "23.6.0",
     "jsonwebtoken": "8.4.0",
     "lint-staged": "8.1.0",
     "pug": "2.0.3",
@@ -45,7 +58,8 @@
     "typeface-roboto-mono": "0.0.54",
     "typeface-source-sans-pro": "0.0.54",
     "vue-i18n": "8.3.2",
-    "vuelidate": "0.7.4"
+    "vuelidate": "0.7.4",
+    "webdriverio": "4.14.0"
   },
   "engines": {
     "node": ">= 10.0.0",

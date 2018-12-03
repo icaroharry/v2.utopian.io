@@ -2,11 +2,8 @@
 require('dotenv').config()
 const path = require('path')
 
-// i18n webpack cruft
 const I18N = require('@utopian/i18n/lib')
 const ExtraWatchWebpackPlugin = require('extra-watch-webpack-plugin')
-// todo: https://webpack.js.org/plugins/context-replacement-plugin/ for i18n files in all libs
-// const webpack = require('webpack')
 
 // quasar / app config.
 module.exports = function (ctx) {
@@ -48,41 +45,52 @@ module.exports = function (ctx) {
       vueCompiler: true,
       chainWebpack(chain) {
         chain.module.rule('lint')
-          .test(/\.(js|vue)$/)
-          .pre()
-          .use('eslint')
-            .loader('eslint-loader')
-            .options({
-              rules: {
-                semi: 'off'
-              }
-            })
+        .test(/\.(js|vue)$/)
+        .pre()
+        .use('eslint')
+          .loader('babel-loader')
+          .loader('eslint-loader')
+          .options({
+            rules: {
+              semi: 'off',
+              'eol-last' :0
+            }
+          })
         chain.module.rule('template-engine')
-          .test(/\.pug$/)
-          .include
-            .add(path.resolve(__dirname, 'src'))
-            .end()
-          .use('pug')
-            .loader('pug-plain-loader')
+        .test(/\.pug$/)
+        .include
+          .add(path.resolve(__dirname, 'src'))
+          .end()
+        .use('pug')
+          .loader('pug-plain-loader')
+
         chain.resolve.alias
-          .set('~', __dirname)
-          .set('@', path.resolve(__dirname, 'src'))
+        .set('~', __dirname)
+        .set('@', path.resolve(__dirname, 'src'))
         // normalize the global => good for some non-isomorphic modules
         chain.output.set('globalObject', 'this')
         chain.plugin('i18n')
-          .use(I18N, [
-            [{
-              debug: false
-            }]
-          ])
+        .use(I18N, [
+          [{
+            debug: false
+          }]
+        ])
         chain.plugin('extraWatcher')
-          .use(ExtraWatchWebpackPlugin, [
-            {
-              dirs: [`..${path.sep}i18n`]
-            }
-          ])
+        .use(ExtraWatchWebpackPlugin, [
+          {
+            dirs: [`..${path.sep}i18n`]
+          }
+        ])
+        chain.module.rule('jest')
+          .test(/\.jest$/)
+          .use('jest')
+            .loader(require.resolve('./test/loaders/jest-loader.js'))
+        chain.module.rule('webdriver')
+          .test(/\.webdriver$/)
+          .use('webdriver')
+            .loader(require.resolve('./test/loaders/webdriver-loader.js'))
       }
-    },
+      },
     // dev server configuration.
     devServer: {
       port: 8080,

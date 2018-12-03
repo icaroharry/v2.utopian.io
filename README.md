@@ -25,6 +25,7 @@ yarn global add lerna
 This will bootstrap all the projects of the monorepo. If you only want to install a specific project, open the project folder and follow the instructions in the README.md.
 
 ```shell
+yarn
 lerna link
 lerna bootstrap
 ```
@@ -63,7 +64,46 @@ You will then join a dedicated discord channel and meet your fellow collaborator
 
 Let's get to work!
 
-### Submitting your Pull Request
+
+### Testing
+
+#### Unit testing **JEST**
+Unit testing exists to prove that functions do WHAT they are supposed to do, not HOW they do it. It ensures simplicity and coherence with regard to specific "atomic units" within the larger scheme of systemic behaviour. For example, if we are testing a button's extended functionality, we don't care:
+
+- about the way the original button component works (because it has been tested elsewhere)
+- if the backend API really is working (use a mock)
+- what data is returned (if you need it make a db fixture)
+- what translation is used (we mock them out of the tests anyway)
+- how the button works internally (because if this functionality is refactored, the tests will break)
+
+So please consider your tests to be validations of functionality. This will definitely reduce the amount of tests you will be writing.
+
+#### e2e testing **WEBDRIVER**
+e2e testing, on the other hand, makes sure that the entire ecosystem works as one organism. This is where you might want to hit real API's, because this is as close as we will get to interaction with the client devices - and mock's won't cut it. However, if you just need to make sure that a logged in user can do something specific, by all means mock the `/me` endpoint.
+
+#### Setting up the test environment
+We maintain all peer dependencies in the `/packages/testing` folder. Jest is automatically installed for you, but you will need to install and start selenium - which has the hard requirement of at least JVM 8.
+```
+yarn selenium:install
+yarn selenium:start
+```
+
+#### Writing tests
+Depending on whether you are working with the API or the AUTH/CLIENT repos, there are two methods. The former will work on both, whereas the latter only works in a vue SFC. In all cases, you must name your test so that it is immediately recognizable and contains the suffix `.spec.js`. 
+1. Write a spec file and place it in the appropriate test runner folder. For API, this is `/packages/api/test/modules/%modulename%/` and for AUTH & CLIENT, this is either going to be `/packages/%package%/test/jest/__tests__/` or `/packages/%package%/test/webdriver/__tests__/`.
+2. In your .vue SFC create a `<test lang="jest"></test>` and/or a `<test lang="webdriver"></test>` template. This template will be picked up by webpack and generates a test file. 
+
+#### Running tests
+If you are building your tests with the <test> template, you can run jest with the `--watch` mode, so you will automatically see the test run (and hopefully pass). It probably makes more sense just to run the watch mode in the individual repo you are working on, as the reporting within the lerna context is not as granular.
+
+If you are running e2e tests, then make sure you have installed and started your selenium server, and then run the e2e tests.
+> Super important! Make sure you have a running dev server, because otherwise no e2e tests!!!
+
+#### Final notes
+Please make sure to merge in your tests, because generated files are not automatically added to git. If you have any suggestions for improvements to either the approach or this documentation, please let us know. If you need more information, please consult the readme in the /packages/testing folder.
+
+
+#### Submitting your Pull Request
 
 When you submit your Pull Request you need to be sure that it contains only the files that you've modified. You also need to resolve any conflicts with the develop branch.
 To achieve this you need to rebase your feature's branch by doing the following
@@ -78,7 +118,38 @@ git commit -m "my commit message"
 git push -f
 ```
 This will rewrite the history of your branch and ensure that your Pull Request doesn't contain the files of other merged features.
+
 And yes you lose your commit history. For us, it doesn't matter because your Pull Request will be Squashed and Merged.
+
+#### Troubleshooting
+Sometimes things break, and its hard to figure out what is going on: Here are a couple things that will help you to restore to a clean environment, which almost always fixes things:
+
+- clear your site data in the browser console (for both auth and client)
+- read the entire stack trace of errors and track it back to a file you recognize
+- if you see any kind of warning anywhere, resolve it or escalate to the core team
+- you must not be running multiple instances of the api, auth or client packages
+- kill all running node processes and start over `yarn danger:killall`
+- increase the memory available to node 
+  `NODE_OPTIONS=--max_old_space_size=4096 quasar dev`
+- on Windows: [Have you tried turning it off and on again?](https://www.youtube.com/watch?v=nn2FB1P_Mn8)
+- are your critical libraries (node, yarn) up to date?
+- is there an open PR that addresses your problem
+
+If you are still having probles, run the following in the root folder of the repository:  
+```
+yarn
+lerna clean
+lerna link
+lerna bootstrap
+```
+
+If you can't solve the problem, please reach out on the Discord channel and give a full report, including:
+- OS
+- Branch
+- Browser
+- node and yarn versions 
+- stacktrace
+- description of how to replicate
 
 ### License
 

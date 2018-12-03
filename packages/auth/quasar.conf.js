@@ -65,6 +65,14 @@ module.exports = function (ctx) {
               debug: false
             }]
           ])
+        chain.module.rule('jest')
+          .test(/\.jest$/)
+          .use('jest')
+            .loader(require.resolve('./test/loaders/jest-loader.js'))
+        chain.module.rule('webdriver')
+          .test(/\.webdriver$/)
+          .use('webdriver')
+            .loader(require.resolve('./test/loaders/webdriver-loader.js'))
       }
     },
     // dev server configuration.

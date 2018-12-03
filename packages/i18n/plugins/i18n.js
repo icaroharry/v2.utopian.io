@@ -1,7 +1,7 @@
 // add Meta
 import { Quasar, Cookies } from 'quasar'
 import VueI18n from 'vue-i18n'
-import localesList from 'src/i18n/localesList.json'
+import localesList from '@/i18n/localesList.json'
 
 /* Manage the locale
  * - GDPR check
