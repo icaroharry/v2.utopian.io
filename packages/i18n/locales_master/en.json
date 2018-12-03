@@ -134,9 +134,14 @@
       }
     },
     "view": {
-      "createdBy": "Created by",
       "addBounty": {
         "label": "Add a bounty"
+      },
+      "createdBy": "Created by",
+      "noContributionsTooltip": {
+        "noExternals": "This project doesn't allow external contributions.",
+        "noRightsArticles": "You can't write articles for this project.",
+        "noRightsBounties": "You can't post bounties for this project."
       },
       "stats": {
         "articles": "Articles",

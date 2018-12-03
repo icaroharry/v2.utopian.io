@@ -64,7 +64,7 @@ export default {
 
           div.q-ma-sm
             img.avatar(:src="user.avatarUrl")
-            q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]", style="z-index:1")
+            q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]", style="z-index:500")
               q-list(dense, :link="true", separator)
                 q-item(v-if="!steemUser", @click.native="startSteemConnectLogin")
                   q-item-side
