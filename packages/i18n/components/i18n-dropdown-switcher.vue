@@ -34,7 +34,7 @@ div
     flat
     dense
   )
-  q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]", style="z-index:1")
+  q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]", style="z-index:500")
     q-list(dense, separator)
       q-item(
         link
