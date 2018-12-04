@@ -5,7 +5,6 @@
         "package.json",
         "packages/api/package.json",
         "packages/auth/package.json",
-        "packages/browser-extension/package.json",
         "packages/client/package.json",
         "packages/i18n/package.json"
       ]
