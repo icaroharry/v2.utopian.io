@@ -23,7 +23,7 @@ export default class API {
         Cookies.remove('access_token')
         Cookies.remove('refresh_token')
         context.commit('auth/clear', { root: true })
-        context.commit('utils/setAppError', 'api.errors.unauthorized', { root: true })
+        context.commit('utils/setAppError', 'api.errors.general.unauthorized', { root: true })
       // Validation errors
       } else if (err.response.data.statusCode === 422) {
         context.commit('utils/setAppError', `api.errors.${err.response.data.message}`, { root: true })

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
-// import { Cookies } from 'quasar'
+import { Cookies } from 'quasar'
 
 export default class API {
   static async call ({ context, method, url, data }) {
@@ -16,17 +16,23 @@ export default class API {
         return response.data
       }
     } catch (err) {
-      if (err.response.status === 401) {
-        // TODO bad token remove logged user and token from store
-        // Cookies.remove('access_token')
-        // Cookies.remove('refresh_token')
+      if (!err.response) {
+        context.commit('utils/setAppError', 'unexpected', { root: true })
+      // Token not valid anymore
+      } else if (err.response.data.statusCode === 401) {
+        Cookies.remove('access_token')
+        Cookies.remove('refresh_token')
+        context.commit('auth/clear', { root: true })
+        context.commit('utils/setAppError', 'api.errors.general.unauthorized', { root: true })
       // Validation errors
-      } else if (err.response.status === 422) {
-        return {
-          error: err.response.data.message
-        }
+      } else if (err.response.data.statusCode === 422) {
+        context.commit('utils/setAppError', `api.errors.${err.response.data.message}`, { root: true })
+      // For some reason the UI couldn't control what the API expected
+      } else if (err.response.data.statusCode === 400) {
+        context.commit('utils/setAppError', err.response.data.message, { root: true })
+      } else if (err.response.data.statusCode === 500) {
+        context.commit('utils/setAppError', 'api.errors.general.500', { root: true })
       }
-      return err.response.data
     }
     return null
   }
@@ -54,9 +60,9 @@ export default class API {
               headers['Authorization'] = response.data.access_token
             }
           } catch (err) {
-            // TODO unlog the user from the store and destroy all the tokens
-            // Cookies.remove('access_token')
-            // Cookies.remove('refresh_token')
+            Cookies.remove('access_token')
+            Cookies.remove('refresh_token')
+            context.commit('auth/clear', { root: true })
           }
         }
       } else {

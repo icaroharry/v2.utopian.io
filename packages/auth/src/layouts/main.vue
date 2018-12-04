@@ -2,7 +2,7 @@
 import i18nDropdownSwitcher from 'src/components/i18n/i18n-dropdown-switcher'
 
 export default {
-  name: 'main',
+  name: 'u-auth-main',
   components: {
     i18nDropdownSwitcher
   },

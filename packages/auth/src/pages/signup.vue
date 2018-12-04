@@ -2,7 +2,7 @@
 import { required, minLength, maxLength, helpers } from 'vuelidate/lib/validators'
 import { mapGetters, mapActions } from 'vuex'
 import jwt from 'jsonwebtoken'
-import { Cookies, debounce, Notify, Loading } from 'quasar'
+import { Cookies, debounce, Loading } from 'quasar'
 
 export default {
   name: 'u-page-signup',
@@ -37,11 +37,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'startLoading',
-      'stopLoading',
-      'showDialog'
-    ]),
     ...mapActions('users', [
       'isUsernameAvailable',
       'saveUser'
@@ -83,11 +78,6 @@ export default {
         if (typeof window !== 'undefined') window.location = this.$route.query.redirectUrl || process.env.UTOPIAN_DOMAIN
       } catch (err) {
         Loading.hide()
-        Notify.create({
-          type: 'negative',
-          position: 'bottom-right',
-          message: this.$t(`api.error.${err.message}`)
-        })
       }
     }
   }

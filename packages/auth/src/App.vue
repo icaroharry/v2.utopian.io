@@ -1,5 +1,6 @@
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import { Notify } from 'quasar'
 import authPlugin from 'src/plugins/auth'
 
 export default {
@@ -7,8 +8,33 @@ export default {
   async preFetch ({ currentRoute, store, redirect, ssrContext }) {
     await authPlugin({ currentRoute, store, redirect, ssrContext })
   },
+  computed: {
+    ...mapGetters('utils', ['appError', 'appSuccess'])
+  },
   methods: {
-    ...mapActions('utils', ['transferToLocalStorage'])
+    ...mapActions('utils', ['transferToLocalStorage', 'clearAppError', 'clearAppSuccess'])
+  },
+  watch: {
+    appError: function (value) {
+      if (value) {
+        Notify.create({
+          type: 'negative',
+          position: 'bottom-right',
+          message: this.$t(value)
+        })
+        this.clearAppError()
+      }
+    },
+    appSuccess: function (value) {
+      if (value) {
+        Notify.create({
+          type: 'positive',
+          position: 'bottom-right',
+          message: this.$t(value)
+        })
+        this.clearAppSuccess()
+      }
+    }
   },
   mounted () {
     this.transferToLocalStorage()
