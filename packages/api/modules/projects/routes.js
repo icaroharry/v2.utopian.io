@@ -16,11 +16,11 @@ routes.push([
   {
     method: 'GET',
     path: '/v1/project/{owner}/{slug}',
-    handler: (req, h) => Handlers.getProjectByOwnerAndSlug(req, h),
+    handler: (req, h) => Handlers.getProjectForEdit(req, h),
     options: {
-      auth: false,
+      auth: { access: { scope: ['user'] } },
       tags: ['projects'],
-      validate: Validate.getProjectByOwnerAndSlug
+      validate: Validate.getProjectForEdit
     }
   },
   {

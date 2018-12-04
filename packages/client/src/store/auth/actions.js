@@ -7,7 +7,7 @@ export const me = async (context) => {
     method: 'get',
     url: '/me'
   })
-  if (!payload.statusCode) {
+  if (payload) {
     context.commit('setUser', payload)
   }
 }
