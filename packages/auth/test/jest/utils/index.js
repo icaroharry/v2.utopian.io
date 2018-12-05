@@ -47,13 +47,19 @@ export const mountQuasar = (component, options = {}) => {
     }
   }
 
+  // mock the i18n
+  const $t = () => {}
+  const $tc = () => {}
+  const $n = () => {}
+  const $d = () => {}
+
   return shallowMount(component, {
     localVue: localVue,
     store,
     router,
-    i18n: app.i18n,
+    mocks:{ $t, $tc, $n, $d },
     // Injections for Components with a QPage root Element
-    // todo: make this Utopion v2 compliant
+    // todo: make this Utopian v2 compliant
     provide: {
       pageContainer: true,
       layout: {

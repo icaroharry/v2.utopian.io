@@ -777,16 +777,3 @@ export default {
     border 4px transparent
     opacity 1
 </style>
-
-<test lang="jest">
-import { mountQuasar } from '~/test/jest/utils'
-import wysiwyg from '../wysiwyg.vue'
-describe('Test the SFC!', () => {
-  it('Quasar init and vue lives!!!', () => {
-    mountQuasar(wysiwyg, {
-      cookies: false
-    })
-  })
-})
-// console.log
-</test>

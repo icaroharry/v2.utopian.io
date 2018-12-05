@@ -24,6 +24,7 @@ localVue.use(Vuex)
 localVue.use(VueRouter)
 localVue.use(Quasar)
 
+// https://eddyerburgh.me/mock-vuex-in-vue-unit-tests
 export const mountQuasar = (component, options = {}) => {
   const app= {}
   const store = new Vuex.Store({})
@@ -49,6 +50,7 @@ export const mountQuasar = (component, options = {}) => {
 
   // mock the i18n
   const $t = () => {}
+  const $tc = () => {}
   const $n = () => {}
   const $d = () => {}
 
@@ -56,9 +58,9 @@ export const mountQuasar = (component, options = {}) => {
     localVue: localVue,
     store,
     router,
-    mocks:{ $t, $n, $d },
+    mocks:{ $t, $tc, $n, $d },
     // Injections for Components with a QPage root Element
-    // todo: make this Utopion v2 compliant
+    // todo: make this Utopian v2 compliant
     provide: {
       pageContainer: true,
       layout: {

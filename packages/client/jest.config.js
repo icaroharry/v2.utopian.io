@@ -22,10 +22,6 @@ module.exports = {
 			statements: 50
 		}
 	},
-  watchPathIgnorePatterns: [
-    // only watch for test file changes!!!
-    '<rootDir>/*',
-  ],
 	testMatch: [
 		'<rootDir>/test/jest/__tests__/**/*.spec.js',
 		'<rootDir>/test/jest/__tests__/**/*.test.js',
@@ -40,7 +36,7 @@ module.exports = {
 		'^vue$': '<rootDir>/node_modules/vue/dist/vue.common.js',
 		'^quasar$': '<rootDir>/node_modules/quasar-framework/dist/umd/quasar.mat.umd.min.js',
 		'^~/(.*)$': '<rootDir>/$1',
-		'^@/(.*)$': '<rootDir>/src/$1'
+		'^src/(.*)$': '<rootDir>/src/$1'
 	},
 	transform: {
 		'.*\\.vue$': '<rootDir>/../testing/node_modules/vue-jest',

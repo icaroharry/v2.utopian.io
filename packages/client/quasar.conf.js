@@ -53,7 +53,7 @@ module.exports = function (ctx) {
           .options({
             rules: {
               semi: 'off',
-              'eol-last' :0
+              'eol-last': 0
             }
           })
         chain.module.rule('template-engine')
@@ -63,7 +63,6 @@ module.exports = function (ctx) {
           .end()
         .use('pug')
           .loader('pug-plain-loader')
-
         chain.resolve.alias
         .set('~', __dirname)
         .set('@', path.resolve(__dirname, 'src'))
@@ -81,14 +80,6 @@ module.exports = function (ctx) {
             dirs: [`..${path.sep}i18n`]
           }
         ])
-        chain.module.rule('jest')
-          .test(/\.jest$/)
-          .use('jest')
-            .loader(require.resolve('./test/loaders/jest-loader.js'))
-        chain.module.rule('webdriver')
-          .test(/\.webdriver$/)
-          .use('webdriver')
-            .loader(require.resolve('./test/loaders/webdriver-loader.js'))
       }
       },
     // dev server configuration.

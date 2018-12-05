@@ -68,7 +68,7 @@ Let's get to work!
 ### Testing
 If you are new to testing, please check out this [stack overflow answer](https://stackoverflow.com/a/520116) to learn more about what different kinds of tests are for.
 
-#### Unit testing **JEST**
+#### Unit testing
 Unit testing exists to prove that functions do WHAT they are supposed to do, not HOW they do it. It ensures simplicity and coherence with regard to specific "atomic units" within the larger scheme of systemic behaviour. For example, if we are testing a button's extended functionality, we don't care:
 
 - about the way the original button component works (because it has been tested elsewhere)
@@ -79,20 +79,19 @@ Unit testing exists to prove that functions do WHAT they are supposed to do, not
 
 So please consider your unit tests to be validations of functionality. This will definitely reduce the amount of tests you will be writing.
 
-#### e2e testing **WEBDRIVER**
+#### e2e testing
 e2e testing, on the other hand, makes sure that the entire ecosystem works as one organism. This is where you might want to hit real API's, because this is as close as we will get to interaction with the client devices - and mock's won't cut it. However, if you just need to make sure that a logged in user can do something specific, by all means mock the `/me` endpoint.
 
 #### Setting up the test environment
-We maintain all peer dependencies in the `/packages/testing` folder. Jest is automatically installed for you, but you will need to install and start selenium - which has the hard requirement of at least JVM 8.
+We maintain all peer dependencies in the `/packages/testing` folder. Jest is automatically installed for you, but to run e2e tests, you will need to install and start selenium - which has the hard requirement of at least JVM 8.
 ```
 yarn selenium:install
 yarn selenium:start
 ```
 
 #### Writing tests
-Depending on whether you are working with the API or the AUTH/CLIENT repos, there are two methods. The former will work on both, whereas the latter only works in a vue SFC. In all cases, you must name your test so that it is immediately recognizable and contains the suffix `.spec.js`. 
-1. Write a spec file and place it in the appropriate test runner folder. For API, this is `/packages/api/test/modules/%modulename%/` and for AUTH & CLIENT, this is either going to be `/packages/%package%/test/jest/__tests__/` or `/packages/%package%/test/webdriver/__tests__/`.
-2. In your .vue SFC create a `<test lang="jest"></test>` and/or a `<test lang="webdriver"></test>` template. This template will be picked up by webpack and generates a test file. 
+Write a spec file and place it in the appropriate test runner folder. For API, this is `/packages/api/test/modules/%modulename%/` and for AUTH & CLIENT, you will put unit tests in `/packages/%package%/test/webdriver/__tests__/`.
+
 
 #### Running tests
 If you are building your tests with the <test> template, you can run jest with the `--watch` mode, so you will automatically see the test run (and hopefully pass). It probably makes more sense just to run the watch mode in the individual repo you are working on, as the reporting within the lerna context is not as granular.
