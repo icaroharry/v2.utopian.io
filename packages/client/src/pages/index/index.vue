@@ -31,7 +31,7 @@ export default {
       this.$refs.infoCarousel.previous()
     },
     goToProjectPage (slug) {
-      return this.$router.push({ path: `/${this.$route.params.locale}/project/${slug}` })
+      return this.$router.push({ path: `/${this.$route.params.locale}/projects/${slug}` })
     },
     redirectToCreateProject () {
       return this.$router.push({ name: 'projects.create' })

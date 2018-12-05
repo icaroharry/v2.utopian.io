@@ -29,13 +29,13 @@ export default [
         meta: { auth: true }
       },
       {
-        path: 'project/:owner/:slug',
-        name: 'project.view',
+        path: 'projects/:owner/:slug',
+        name: 'projects.view',
         props: true,
         component: () => import('src/pages/projects/view/view'),
         children: [{
           path: ':tab',
-          name: 'project.view.tab',
+          name: 'projects.view.tab',
           props: true,
           component: () => import('src/pages/projects/view/view')
         }]

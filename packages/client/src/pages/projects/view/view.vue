@@ -64,7 +64,16 @@ export default {
   },
   computed: {
     ...mapGetters('auth', ['user']),
-    ...mapGetters('projects', ['project'])
+    ...mapGetters('projects', ['project']),
+    hasEditRights () {
+      if (this.user &&
+        (this.project.owners.some((o) => o._id === this.user.uid) ||
+          this.project.collaborators.some((c) => c.user === this.user.uid && c.roles.includes('project')))
+      ) {
+        return true
+      }
+      return false
+    }
   }
 }
 </script>
@@ -79,7 +88,9 @@ export default {
       .column.justify-center.items-end
         q-card(color="white", text-color="black", dark)
           q-card-title
-            u-social-share(:title="project.name", :description="project.description")
+            .title-actions
+              u-social-share(:title="project.name", :description="project.description")
+              q-btn.edit-project(v-if="hasEditRights", color="primary", icon="mdi-pencil", flat, :to="`/${$route.params.locale}/projects/${$route.params.owner}/${$route.params.slug}/edit`")
             h1 {{project.name}}
             h2 {{$t('projects.view.createdBy')}}
             .owners.row.inline(v-for="owner in project.owners")
@@ -96,13 +107,13 @@ export default {
         .row.inline.justify-around.stats.q-mt-sm
           .stat
             .stat-title {{project.articlesCount}}
-            .stat-subtitle {{$t('projects.view.stats.articles')}}
+            .stat-subtitle {{$tc('projects.view.stats.articles', project.articlesCount)}}
           .stat
-            .stat-title {{project.articlesCount}}
-            .stat-subtitle {{$t('projects.view.stats.bounties')}}
+            .stat-title {{project.bountiesCount}}
+            .stat-subtitle {{$tc('projects.view.stats.bounties', project.bountiesCount)}}
           .stat
-            .stat-title {{project.articlesCount}}
-            .stat-subtitle {{$t('projects.view.stats.contributors')}}
+            .stat-title {{project.contributorsCount}}
+            .stat-subtitle {{$tc('projects.view.stats.contributors', project.contributorsCount)}}
     q-tabs(v-model="defaultTab", color="white", text-color="black", underline-color="primary")
       q-tab(slot="title" name="articles" label="Blog")
       q-tab(slot="title" name="bounties" label="Bounties")
@@ -122,17 +133,24 @@ export default {
         align-items center
         flex-direction column
       h1
-        width: calc(100% - 55px)
+        width calc(100% - 65px)
+      h2
+        line-height 30px
+      .q-card-primary
+        padding-bottom 8px
       .q-card-title
         position relative
-        .social-share
+        .title-actions
           position absolute
           right 0
           top 0
+          .social-share, .edit-project
+            padding 4px 8px
       .bg
         position absolute
         left 0
         z-index 1
+        max-width 770px
         @media (max-width $breakpoint-sm-max)
           position initial
           width 100%
@@ -151,10 +169,14 @@ export default {
         z-index 2
         .q-card
           max-width 470px
+          .q-card-main
+            padding-bottom 8px
           h1
             font-family 'Noto Sans', sans-serif
             font-size 32px
             margin 0
+            word-break break-word
+            max-height 70px
           h2
             font-family 'Noto Sans', sans-serif
             font-size 15px
@@ -168,6 +190,9 @@ export default {
             font-family 'Noto Sans', sans-serif
             font-size 15px
             margin 0
+            word-break break-all
+            max-height 80px
+            overflow-y auto
         .stats
           width 66%
           background-color $grey-1

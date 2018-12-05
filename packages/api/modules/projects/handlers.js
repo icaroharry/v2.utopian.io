@@ -8,6 +8,24 @@ const { getUserProjectPermission } = require('../../utils/github')
 const { sanitizeHtml } = require('../../utils/html-sanitizer')
 
 /**
+ * Get a project with its populated fields for update
+ *
+ * @param slug
+ *
+ * @returns Project and its owners
+ * @author Grégory LATINIER
+ */
+// eslint-disable-next-line require-await
+const getPopulatedProject = async ({ slug }) =>
+  Project.findOne({
+    $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }],
+    blacklisted: false
+  })
+    .populate('owners', 'username avatarUrl')
+    .populate('collaborators.user', 'username avatarUrl')
+    .select('name repositories website docs license medias description details tags owners collaborators _id allowExternals')
+
+/**
  * Get a project by its owner and slug for editing purposes
  *
  * @param {object} req - request
@@ -22,13 +40,7 @@ const { sanitizeHtml } = require('../../utils/html-sanitizer')
 const getProjectForEdit = async (req, h) => {
   const { owner, slug } = req.params
   const userId = req.auth.credentials.uid
-  const project = await Project.findOne({
-    $or: [{ slugs: { $elemMatch: { $eq: `${owner}/${slug}` } } }, { slug: `${owner}/${slug}` }],
-    blacklisted: false
-  })
-    .populate('owners', 'username avatarUrl')
-    .populate('collaborators.user', 'username avatarUrl')
-    .select('name repositories website docs license medias description details tags owners collaborators _id allowExternals')
+  const project = await getPopulatedProject({ slug: `${owner}/${slug}` })
 
   if (!project) return {}
 
@@ -169,7 +181,7 @@ const updateProject = async (req, h) => {
   )
 
   if (response.n === 1) {
-    return h.response(slug)
+    return h.response(await getPopulatedProject({ slug }))
   }
 
   throw Boom.badData('general.updateFail')
@@ -255,9 +267,9 @@ const createProject = async (req, h) => {
     }
   }
 
-  const data = await newProject.save()
+  await newProject.save()
 
-  return h.response(data.slug)
+  return h.response(slug)
 }
 
 /**

@@ -19,16 +19,16 @@ const getProjectView = {
 const createProject = {
   payload: {
     allowExternals: Joi.boolean().required(),
-    name: Joi.string().trim().required(),
-    repositories: Joi.array().unique().required(),
-    website: Joi.string().optional().trim().uri(),
-    docs: Joi.string().optional().trim().uri(),
+    name: Joi.string().trim().max(50).required(),
+    repositories: Joi.array().unique().max(5).required(),
+    website: Joi.string().optional().trim().max(1000).uri(),
+    docs: Joi.string().optional().trim().max(1000).uri(),
     license: Joi.string().trim().required().allow(licenses),
-    medias: Joi.array().required(),
-    description: Joi.string().trim().required(),
-    details: Joi.string().trim().required(),
-    owners: Joi.array().optional(),
-    collaborators: Joi.array().optional(),
+    medias: Joi.array().min(1).max(5).required(),
+    description: Joi.string().trim().max(250).required(),
+    details: Joi.string().trim().max(250000).required(),
+    owners: Joi.array().optional().max(50),
+    collaborators: Joi.array().optional().max(50),
     tags: Joi.array().min(3).max(5).unique().items(Joi.string().trim().alphanum()).required()
   }
 }
@@ -39,16 +39,16 @@ const updateProject = {
   },
   payload: {
     allowExternals: Joi.boolean().required(),
-    name: Joi.string().trim().required(),
-    repositories: Joi.array().unique().required(),
-    website: Joi.string().optional().trim().uri(),
-    docs: Joi.string().optional().trim().uri(),
+    name: Joi.string().trim().max(50).required(),
+    repositories: Joi.array().unique().max(10).required(),
+    website: Joi.string().optional().trim().max(1000).uri(),
+    docs: Joi.string().optional().trim().max(1000).uri(),
     license: Joi.string().trim().required().allow(licenses),
-    medias: Joi.array().required(),
-    description: Joi.string().trim().required(),
-    details: Joi.string().trim().required(),
-    owners: Joi.array().optional(),
-    collaborators: Joi.array().optional(),
+    medias: Joi.array().min(1).max(5).required(),
+    description: Joi.string().trim().max(250).required(),
+    details: Joi.string().trim().max(250000).required(),
+    owners: Joi.array().optional().max(50),
+    collaborators: Joi.array().optional().max(50),
     tags: Joi.array().min(3).max(5).unique().items(Joi.string().trim().alphanum()).required()
   }
 }

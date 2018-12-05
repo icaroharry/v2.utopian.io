@@ -129,14 +129,20 @@
           "notProjectAdmin": "You must be an admin of the project."
         }
       },
-      "save": "Save",
+      "save": {
+        "label": "Save",
+        "successMsg": "The project was saved!"
+      },
       "shortDescription": {
         "label": "Short description",
         "placeholder": "Give people a sense about your project..."
       },
       "subtitle": "Make a great first impression with all the project information filled and great images about your project.",
       "title": "Bring your project to Utopian.io",
-      "update": "Update",
+      "update": {
+        "label": "Update",
+        "successMsg": "The project was updated!"
+      },
       "webPage": {
         "label": "Web page",
         "placeholder": "https://quasar-framework.org"
@@ -156,9 +162,9 @@
         "noRightsBounties": "You can't post bounties for this project."
       },
       "stats": {
-        "articles": "Articles",
-        "bounties": "Bounties",
-        "contributors": "Contributors"
+        "articles": "Articles | Article | Articles",
+        "bounties": "Bounties | Bounty | Bounties",
+        "contributors": "Contributors | Contributor | Contributors"
       },
       "writeArticle": {
         "label": "Write an article"

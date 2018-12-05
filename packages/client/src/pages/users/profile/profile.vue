@@ -175,7 +175,7 @@ div.profile-form
             .col-md-6.col-sm-12.col-xs-12
               q-field(:label="$t('users.profile.avatar.label')", orientation="vertical", :helper="$t('users.profile.avatar.helper')", :error="$v.images.avatarUrl.$error")
                 q-input(v-model.trim.lazy="images.avatarUrl", :placeholder="$t('users.profile.avatar.placeholder')", @keyup.enter="updateImages")
-                q-uploader.q-mt-md(ref="avatarUploader", url="", :upload-factory="uploadAvatar", @add="(files) => uploadAvatar(files)", @fail="uploadFails", auto-expand, hide-upload-button, :auto-expand="false", extensions=".jpg,.jpeg,.png,.gif")
+                q-uploader.q-mt-md(ref="avatarUploader", url="", :upload-factory="uploadAvatar", @add="(files) => uploadAvatar(files)", @fail="uploadFails", hide-upload-button, :auto-expand="false", extensions=".jpg,.jpeg,.png,.gif")
             .col-md-6.col-sm-12.col-xs-12
               q-field.text-center(:label="$t('users.profile.avatar.preview')", orientation="vertical")
                 img.avatar-preview(:src="avatarPreview", @error="() => avatarPreview = 'statics/img/default-avatar.png'")
@@ -183,7 +183,7 @@ div.profile-form
             .col-md-6.col-sm-12.col-xs-12
               q-field(:label="$t('users.profile.cover.label')", orientation="vertical", :helper="$t('users.profile.cover.helper')", :error="$v.images.cover.$error")
                 q-input(v-model.trim.lazy="images.cover", :placeholder="$t('users.profile.cover.placeholder')", @keyup.enter="updateImages")
-                q-uploader.q-mt-md(ref="coverUploader", url="", :upload-factory="uploadCover", @add="(files) => uploadCover(files)", @fail="uploadFails", auto-expand, hide-upload-button, :auto-expand="false", extensions=".jpg,.jpeg,.png,.gif")
+                q-uploader.q-mt-md(ref="coverUploader", url="", :upload-factory="uploadCover", @add="(files) => uploadCover(files)", @fail="uploadFails", hide-upload-button, :auto-expand="false", extensions=".jpg,.jpeg,.png,.gif")
             .col-md-6.col-sm-12.col-xs-12
               q-field.text-center(:label="$t('users.profile.cover.preview')", orientation="vertical")
                 img.cover-preview(:src="coverPreview", @error="() => coverPreview = 'statics/img/default-cover.png'")

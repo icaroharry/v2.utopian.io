@@ -20,12 +20,13 @@ module.exports = function (ctx) {
     extras: ['roboto-font', 'mdi', 'material-icons', 'fontawesome'],
     // quasar plugins.
     plugins: [
-      { path: 'sentry', server: false },
-      'vuelidate',
-      'i18n',
       'axios',
+      { path: 'croppa', server: false },
+      'i18n',
       { path: 'markdown', server: false },
-      { path: 'croppa', server: false }
+      { path: 'sentry', server: false },
+      { path: 'vue-gallery', server: false },
+      'vuelidate'
     ],
     // build configuration.
     build: {

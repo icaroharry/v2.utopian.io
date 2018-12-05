@@ -55,7 +55,7 @@ export default {
         div.row(v-if="!guest")
           div.q-mt-sm.q-mr-lg
             q-btn(color="primary", :label="$t('navbar.contribute')", icon="mdi-plus" )
-            q-popover(self="top left", anchor="bottom left" style="z-index:1")
+            q-popover(self="top left", anchor="bottom left" style="z-index:500")
               q-list(dense, :link="true", separator)
                 q-item(:to="{ name: 'articles.create'}")
                   q-item-main(label="Write an article")

@@ -29,6 +29,8 @@ export default {
         owners: [],
         collaborators: []
       },
+      galleryIdx: null,
+      uploading: false,
       ownersSearch: '',
       collaboratorsSearch: '',
       repositorySearch: '',
@@ -38,6 +40,7 @@ export default {
   validations: {
     project: {
       name: {
+        maxLength: maxLength(50),
         required,
         async isNotUsed (value) {
           if (value === '') return true
@@ -50,22 +53,41 @@ export default {
       },
       repositories: {
         required: requiredUnless(function () { return this.project.closedSource }),
-        minLength: minLength(1)
+        minLength: minLength(1),
+        maxLength: maxLength(5)
       },
-      website: { url },
-      docs: { url },
+      website: {
+        url,
+        maxLength: maxLength(1000)
+      },
+      docs: {
+        url,
+        maxLength: maxLength(1000)
+      },
       license: { required },
       medias: {
         required,
         minLength: minLength(1),
         maxLength: maxLength(5)
       },
-      description: { required },
-      details: { required },
+      description: {
+        required,
+        maxLength: maxLength(250)
+      },
+      details: {
+        required,
+        maxLength: maxLength(250000)
+      },
       tags: {
         required,
         minLength: minLength(3),
         maxLength: maxLength(5)
+      },
+      owners: {
+        maxLength: maxLength(50)
+      },
+      collaborators: {
+        maxLength: maxLength(50)
       }
     }
   },
@@ -100,22 +122,20 @@ export default {
       'updateProject'
     ]),
     ...mapActions('users', ['searchUsers']),
-    ...mapActions('utils', ['setAppError']),
-    uploadFile (file, updateProgress) {
+    ...mapActions('utils', ['setAppError', 'setAppSuccess']),
+    uploadFile (files) {
+      this.uploading = true
+      const file = files[0]
       const data = new FormData()
       data.append('file', file)
       return new Promise((resolve, reject) => {
         if (this.project.medias.filter(m => m.type === 'image').length >= 5) {
+          this.uploading = false
           reject(file)
         } else {
           this.$axios.post(
             'https://img.utopian.io/upload/',
-            data,
-            {
-              onUploadProgress: (progressEvent) => {
-                updateProgress(progressEvent.loaded / progressEvent.total)
-              }
-            }
+            data
           )
             .then((res) => {
               if (!this.project.medias.some(m => m.type === 'image' && m.src === res.url)) {
@@ -126,8 +146,11 @@ export default {
                 this.updateFormPercentage('medias')
               }
               resolve(file)
+              this.$refs.uploader.reset()
+              this.uploading = false
             }).catch(() => {
               reject(file)
+              this.uploading = false
             })
         }
       })
@@ -261,15 +284,20 @@ export default {
       const { closedSource, _id, ...project } = this.project
       if (project.docs === '') { delete project.docs }
       if (project.website === '') { delete project.website }
-      let slug
+      let result
       if (!_id) {
-        slug = await this.saveProject(project)
+        result = await this.saveProject(project)
       } else {
         project._id = _id
-        slug = await this.updateProject(project)
+        result = await this.updateProject(project)
       }
-      if (slug) {
-        this.$router.push({ path: `/${this.$route.params.locale}/projects/${slug}/edit` })
+      if (result) {
+        if (!_id) {
+          this.$router.replace({ path: `/${this.$route.params.locale}/projects/${result}/edit` })
+        } else {
+          this.project = result
+        }
+        this.setAppSuccess(`projects.createEdit.${_id ? 'update' : 'save'}.successMsg`)
       }
       this.submitting = false
     }
@@ -290,7 +318,7 @@ div
   .row.gutter-sm.project-form-container
     .col-md-8.col-sm-12.col-xs-12
       q-field(:label="`${$t('projects.createEdit.projectName.label')}*`", orientation="vertical", :error="$v.project.name.$error")
-        q-input(v-model.trim.lazy="project.name", :placeholder="$t('projects.createEdit.projectName.placeholder')", @keyup.enter="submit", @blur="updateFormPercentage('name')")
+        q-input(v-model.trim.lazy="project.name", maxlength="50", :placeholder="$t('projects.createEdit.projectName.placeholder')", @keyup.enter="submit", @blur="updateFormPercentage('name')")
 
       q-field(:label="`${$t('projects.createEdit.repositories.label')}${project.closedSource ? '' : '*'}`",
       orientation="vertical", :error="$v.project.repositories.$error")
@@ -302,27 +330,27 @@ div
         )
           q-autocomplete(@search="searchGithubRepositoryWrapper", :min-characters="3", :debounce="500", separator, @selected="addRepository")
       q-field(v-if="!project.closedSource && project.repositories.length > 0")
-        q-list(v-for="repository in project.repositories", separator, :key="repository.id")
-          q-item
-            q-item-side(:avatar="repository.avatar")
-            q-item-main(:label="repository.label")
-            q-item-side(right)
-              q-btn(round, dense, icon="mdi-minus-circle", color="red", size="md" @click="() => removeRepository(repository.id)")
+        .row.gutter-sm
+          .col-md-3.col-xs-6(v-for="repository in project.repositories", separator, :key="repository.id")
+            q-card.user-card
+              q-card-title.text-center
+                img.avatar(:src="repository.avatar")
+                a(slot="subtitle", :href="`https://github.com/${repository.label}`", target="_blank") {{repository.label}}
+                q-btn(round, dense, icon="mdi-minus", color="red", size="xs" @click="() => removeRepository(repository.id)")
 
       q-field(:label="`${$t('projects.createEdit.license.label')}*`", orientation="vertical", :error="$v.project.license.$error")
         q-select(v-model="project.license", :placeholder="$t('projects.createEdit.license.placeholder')", :options="licenses", :before="[{ icon: 'mdi-file-outline' }]",
         filter, autofocus-filter, @blur="updateFormPercentage('license')")
 
       q-field(:label="`${$t('projects.createEdit.images.label')}*`", orientation="vertical", :helper="$t('projects.createEdit.images.help')", :error="$v.project.medias.$error")
-        q-uploader(url="", :upload-factory="uploadFile", @fail="uploadFails", auto-expand, multiple, extensions=".jpg,.jpeg,.png")
+        q-uploader(url="", ref="uploader", :upload-factory="uploadFile", @add="(files) => uploadFile(files)", @fail="uploadFails", hide-upload-button,
+        :auto-expand="false", extensions=".jpg,.jpeg,.png,.gif", :after="[{icon: uploading ? 'cloud_upload' : null}]")
 
       q-field(v-if="project.medias.filter(m => m.type === 'image').length > 0")
-        q-list(v-for="media in project.medias.filter(m => m.type === 'image')", separator, :key="media.src")
-          q-item
-            q-item-side(:image="media.src")
-            q-item-main(:label="media.src")
-            q-item-side(right)
-              q-btn(round, dense, icon="mdi-minus-circle", color="red", size="md" @click="() => removeMedia(media.src)")
+        gallery(:images="project.medias.filter(m => m.type === 'image').map((i) => i.src)" :index="galleryIdx" @close="galleryIdx = null")
+        .project-image(v-for="(image, imageIndex) in project.medias.filter(m => m.type === 'image')", :key="imageIndex")
+          q-btn(round, dense, icon="mdi-minus", color="red", size="xs" @click="() => removeMedia(image.src)")
+          div(@click="galleryIdx = imageIndex", :style="{ backgroundImage: 'url(' + image.src + ')' }")
 
       q-field(:label="`${$t('projects.createEdit.shortDescription.label')}*`", :count="250", orientation="vertical", :error="$v.project.description.$error")
         q-input(v-model="project.description", :placeholder="$t('projects.createEdit.shortDescription.placeholder')", type="textarea",
@@ -337,10 +365,13 @@ div
         q-chips-input(v-model="project.tags", :placeholder="project.tags.length === 0 ? $t('projects.createEdit.projectTags.placeholder') : ''", clearable, @blur="updateFormPercentage('tags')")
 
       q-field(:label="$t('projects.createEdit.webPage.label')", orientation="vertical", :error="$v.project.website.$error")
-        q-input(v-model="project.website", :placeholder="$t('projects.createEdit.webPage.placeholder')", @keyup.enter="submit", @blur="updateFormPercentage('website')")
+        q-input(v-model="project.website", maxlength="1000", :placeholder="$t('projects.createEdit.webPage.placeholder')", @keyup.enter="submit", @blur="updateFormPercentage('website')")
 
       q-field(:label="$t('projects.createEdit.documentationPage.label')", orientation="vertical", :error="$v.project.docs.$error")
-        q-input(v-model="project.docs", :placeholder="$t('projects.createEdit.documentationPage.placeholder')", @keyup.enter="submit", @blur="updateFormPercentage('docs')")
+        q-input(v-model="project.docs", maxlength="1000", :placeholder="$t('projects.createEdit.documentationPage.placeholder')", @keyup.enter="submit", @blur="updateFormPercentage('docs')")
+
+      q-field
+        q-toggle.u-forms-toggle(v-model="project.allowExternals", :label="$t('projects.createEdit.allowExternals.label')")
 
       q-field(:label="$t('projects.createEdit.owners.label')", orientation="vertical")
         q-search(
@@ -351,12 +382,13 @@ div
           :value-field="v => v.label")
 
       q-field(v-if="project.owners.filter(u => u._id !== user.uid).length > 0")
-        q-list(v-for="owner in project.owners.filter(u => u._id !== user.uid)", separator, :key="owner._id")
-          q-item
-            q-item-side(:avatar="owner.avatarUrl")
-            q-item-main(:label="owner.username")
-            q-item-side(right)
-              q-btn(round, dense, icon="mdi-minus-circle", color="red", size="md" @click="() => removeOwner(owner._id)")
+        .row.gutter-sm
+          .col-md-3.col-xs-6(v-for="(owner, ownerIdx) in project.owners.filter(u => u._id !== user.uid)", :key="ownerIdx")
+            q-card.user-card
+              q-card-title.text-center
+                img.avatar(:src="owner.avatarUrl")
+                router-link(slot="subtitle", :to="`/${$route.params.locale}/@${owner.username}`") {{owner.username}}
+                q-btn(round, dense, icon="mdi-minus", color="red", size="xs" @click="() => removeOwner(owner._id)")
 
       q-field(:label="$t('projects.createEdit.collaborators.label')", orientation="vertical", :helper="$t('projects.createEdit.collaborators.helper')")
         q-search(
@@ -367,23 +399,18 @@ div
           :value-field="v => v.label")
 
       q-field(v-if="project.collaborators.length > 0")
-        q-list(v-for="(collaborator, idx) in project.collaborators", separator, :key="collaborator.user")
-          q-item
-            q-item-side(:avatar="collaborator.user.avatarUrl")
-            q-item-main.row
-              .col-md-3.col-sm-12.col-xs-12
-                | {{collaborator.user.username}}
-              .col-md-3.col-sm-4.col-xs-12
-                q-toggle.u-forms-toggle(v-model="project.collaborators[idx].roles", val="project", :label="$t('projects.createEdit.collaborators.roles.project')")
-              .col-md-3.col-sm-4.col-xs-12
-                q-toggle.u-forms-toggle(v-model="project.collaborators[idx].roles", val="articles", :label="$t('projects.createEdit.collaborators.roles.articles')")
-              .col-md-3.col-sm-4.col-xs-12
-                q-toggle.u-forms-toggle(v-model="project.collaborators[idx].roles", val="bounties", :label="$t('projects.createEdit.collaborators.roles.bounties')")
-            q-item-side(right)
-              q-btn(round, dense, icon="mdi-minus-circle", color="red", size="md" @click="() => removeCollaborator(collaborator.user._id)")
-
-      q-field
-        q-toggle.u-forms-toggle(v-model="project.allowExternals", :label="$t('projects.createEdit.allowExternals.label')")
+        .row.gutter-sm
+          .col-md-3.col-xs-6(v-for="(collaborator, collabIdx) in project.collaborators", :key="collabIdx")
+            q-card.user-card
+              q-card-title.text-center
+                img.avatar(:src="collaborator.user.avatarUrl")
+                router-link(slot="subtitle", :to="`/${$route.params.locale}/@${collaborator.user.username}`") {{collaborator.user.username}}
+                q-btn(round, dense, icon="mdi-minus", color="red", size="xs" @click="() => removeCollaborator(collaborator.user._id)")
+              q-card-main.column.items-center
+                .column
+                  q-toggle.u-forms-toggle(v-model="project.collaborators[collabIdx].roles", val="project", :label="$t('projects.createEdit.collaborators.roles.project')")
+                  q-toggle.u-forms-toggle(v-model="project.collaborators[collabIdx].roles", val="articles", :label="$t('projects.createEdit.collaborators.roles.articles')")
+                  q-toggle.u-forms-toggle(v-model="project.collaborators[collabIdx].roles", val="bounties", :label="$t('projects.createEdit.collaborators.roles.bounties')")
 
     .col-md-4.col-sm-12.col-xs-12
       q-scroll-observable(@scroll="scrollHandler")
@@ -394,37 +421,68 @@ div
             q-progress(:percentage="formPercentage", height="10px")
         q-item
           q-item-main
-            q-btn.full-width(color="primary", :label="project._id ? $t('projects.createEdit.update') : $t('projects.createEdit.save')", @click="submit")
+            q-btn.full-width(color="primary", :label="project._id ? $t('projects.createEdit.update.label') : $t('projects.createEdit.save.label')", @click="submit")
 
 </template>
 <style lang="stylus">
 @import "~variables"
-.project-form-container {
+.project-form-container
   margin-top 20px
-  .q-page-sticky {
-    > span {
+  .q-page-sticky
+    > span
       width 100%
-    }
-  }
-  .create-edit-project-progress {
+
+  .project-image
+    cursor pointer
+    position relative
+    z-index 0
+    width 192px
+    height 105px
+    float left
+    background-size cover
+    background-repeat no-repeat
+    background-position center center
+    border 1px solid #ebebeb
+    margin 5px
+    @media (max-width $breakpoint-sm-max)
+      width 150px
+      height 84px
+
+  .project-image
+    .q-btn
+      position absolute !important
+      top 5px
+      right 5px
+      z-index 10
+    div
+      background-size cover
+      height 100%
+  .user-card
+    position relative
+    word-break break-all
+    .q-btn
+      position absolute
+      top 5px
+      right 5px
+    a
+      text-decoration none
+  .create-edit-project-progress
     margin-top 38px
     background #fff
-    @media (max-width $breakpoint-sm-max) {
+    @media (max-width $breakpoint-sm-max)
       margin-top 0
-    }
-    &.fixed {
+
+    &.fixed
       top 45px
       width inherit
       max-width ($breakpoint-lg-max / 3 - 22)px
-      @media (min-width $breakpoint-md-min) and (max-width $breakpoint-md-max) {
+      @media (min-width $breakpoint-md-min) and (max-width $breakpoint-md-max)
         max-width calc(33.3333% - 23px)
-      }
-      @media (max-width $breakpoint-sm-max) {
+      @media (max-width $breakpoint-sm-max)
         position  initial
         max-width inherit
-      }
-    }
-    .q-list-header {
+
+    .q-list-header
       text-align right
       text-transform uppercase
       color #9d9d9d
@@ -433,19 +491,15 @@ div
       font-size 12px
       min-height 12px
       line-height 12px
-    }
-    .q-progress {
+
+    .q-progress
       border-radius 5px
       margin-bottom 20px
-      .q-progress-track {
+      .q-progress-track
         background-color #e0e2e5
         opacity 1
-      }
-    }
-    button {
+
+    button
       margin-top 8px
-    }
-  }
-}
 
 </style>
