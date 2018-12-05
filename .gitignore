@@ -9,6 +9,7 @@ node_modules
 /packages/*/node_modules
 /packages/*/service-account.json
 /packages/*/src/i18n/locales/*.json
+/packages/*/src/plugins/i18n.js
 /packages/*/src/components/i18n/i18n-dropdown-switcher.vue
 /packages/*/*.log*
 /**/coverage

@@ -141,12 +141,15 @@ export default ({ app, Vue, ssrContext, router }) => {
   app.i18n = new VueI18n({
     silentTranslationWarn: true,
     fallbackLocale: 'en',
-    messages: {}
+    messages: {},
+    dateTimeFormats: {},
+    numberFormats: {}
   })
   // always make sure that the fallback is loaded
   app.loadedLanguages = ['en']
   app.i18n.setLocaleMessage('en', require(`src/i18n/locales/en.json`))
-
+  app.i18n.setDateTimeFormat('en', app.i18n.messages.en.formats.dateTime)
+  app.i18n.setNumberFormat('en', app.i18n.messages.en.formats.number)
   router.beforeEach((to, from, next) => {
     // ignore quasar
     if (to.params.locale === 'src') {
@@ -201,6 +204,8 @@ export default ({ app, Vue, ssrContext, router }) => {
         })
     }
     app.i18n.locale = locale
+    app.i18n.setDateTimeFormat(locale, app.i18n.messages[locale].formats.dateTime)
+    app.i18n.setNumberFormat(locale, app.i18n.messages[locale].formats.number)
     next()
   })
 

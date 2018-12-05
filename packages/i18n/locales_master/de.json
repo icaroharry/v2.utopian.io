@@ -108,6 +108,11 @@
   "errors": {
     "fileUpload": "An error occurred while uploading"
   },
+  "countables": {
+    "articles": "Artikel | Artikel | Artikeln",
+    "bounties": "Bounty | Bounty | Bounties",
+    "contributors": "Mitwirkender_In | Mitwirkender_In | Mitwirkender_Innen"
+  },
   "formats": {
     "dateTime": {
       "short": {
@@ -124,7 +129,8 @@
     "number": {
       "currency": {
         "style": "currency",
-        "currency": "USD"
+        "currency": "EUR",
+        "currencyDisplay": "symbol"
       },
       "percent": {
         "style": "percent"

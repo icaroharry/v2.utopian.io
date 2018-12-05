@@ -311,6 +311,11 @@
   "errors": {
     "fileUpload": "An error occurred while uploading"
   },
+  "countables": {
+    "articles": "Articles | Article | Articles",
+    "bounties": "Bounties | Bounty | Bounties",
+    "contributors": "Contributors | Contributor | Contributors"
+  },
   "formats": {
     "dateTime": {
       "short": {
@@ -327,7 +332,8 @@
     "number": {
       "currency": {
         "style": "currency",
-        "currency": "USD"
+        "currency": "USD",
+        "currencyDisplay": "symbol"
       },
       "percent": {
         "style": "percent"

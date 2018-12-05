@@ -23,7 +23,17 @@
           .row |&nbsp;$t('langLabel'):&nbsp;{{ $t('langLabel') }}
           .row |&nbsp;$q.i18n.lang:&nbsp;&nbsp;&nbsp;&nbsp;{{ $q.i18n.lang }}
           .row &nbsp;-------------------------------------
-
+    .row
+      .col-12
+        h3.row Currency
+        p.row $n(100.055, 'currency') => {{ $n(100.055, 'currency') }}
+        h3.row DateTime
+        p.row $d(new Date(), 'short') => {{ $d(new Date(), 'short') }}
+        p.row $d(new Date(), 'long') => {{ $d(new Date(), 'long') }}
+        h3 Plurals
+        p.row => 0 {{ $tc('countables.articles', 0) }}
+        p.row => 1 {{ $tc('countables.bounties', 1) }}
+        p.row => 20 {{ $tc('countables.contributors', 20) }}
     .row
       br
     q-table.row(

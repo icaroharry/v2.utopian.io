@@ -66,6 +66,7 @@ Let's get to work!
 
 
 ### Testing
+If you are new to testing, please check out this [stack overflow answer](https://stackoverflow.com/a/520116) to learn more about what different kinds of tests are for.
 
 #### Unit testing **JEST**
 Unit testing exists to prove that functions do WHAT they are supposed to do, not HOW they do it. It ensures simplicity and coherence with regard to specific "atomic units" within the larger scheme of systemic behaviour. For example, if we are testing a button's extended functionality, we don't care:
@@ -76,7 +77,7 @@ Unit testing exists to prove that functions do WHAT they are supposed to do, not
 - what translation is used (we mock them out of the tests anyway)
 - how the button works internally (because if this functionality is refactored, the tests will break)
 
-So please consider your tests to be validations of functionality. This will definitely reduce the amount of tests you will be writing.
+So please consider your unit tests to be validations of functionality. This will definitely reduce the amount of tests you will be writing.
 
 #### e2e testing **WEBDRIVER**
 e2e testing, on the other hand, makes sure that the entire ecosystem works as one organism. This is where you might want to hit real API's, because this is as close as we will get to interaction with the client devices - and mock's won't cut it. However, if you just need to make sure that a logged in user can do something specific, by all means mock the `/me` endpoint.
@@ -128,14 +129,15 @@ Sometimes things break, and its hard to figure out what is going on: Here are a 
 - read the entire stack trace of errors and track it back to a file you recognize
 - if you see any kind of warning anywhere, resolve it or escalate to the core team
 - you must not be running multiple instances of the api, auth or client packages
-- kill all running node processes and start over `yarn danger:killall`
-- increase the memory available to node 
+- kill all running node processes and start over: `yarn danger:killall`
+- increase the memory available to node: 
   `NODE_OPTIONS=--max_old_space_size=4096 quasar dev`
 - on Windows: [Have you tried turning it off and on again?](https://www.youtube.com/watch?v=nn2FB1P_Mn8)
 - are your critical libraries (node, yarn) up to date?
-- is there an open PR that addresses your problem
+- is there an open PR that addresses your problem or an issue in the offending node module?
+- if your issue is about Quasar, have you asked at the [Quasar Discord channel](https://discord.gg/rmdY9jE)?
 
-If you are still having probles, run the following in the root folder of the repository:  
+If you are still having problems, run the following in the root folder of the repository to reset all repositories:  
 ```
 yarn
 lerna clean
