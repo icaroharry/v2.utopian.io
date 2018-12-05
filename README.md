@@ -105,15 +105,32 @@ Please make sure to merge in your tests, because generated files are not automat
 
 #### Submitting your Pull Request
 
-When you submit your Pull Request you need to be sure that it contains only the files that you've modified. You also need to resolve any conflicts with the develop branch.
-To achieve this you need to rebase your feature's branch by doing the following
+When you submit your Pull Request you need to be sure that it contains only the files that you've modified.
+
+Two cases can happen, the easiest one is that you worked on your feature and when you submit your Pull Request no conflict is spotted by GitHub. In this case, just do your commits as usual, push your branch and submit your Pull Request.
+
+The other case is when you need to use some updated code of the develop branch or when you have a conflict. To achieve this you need to rebase your feature's branch onto the develop by doing the following steps.
+Be sure to commit all your work first and then 
 ```
 git fetch
 git checkout develop
 git pull
 git checkout my_branch
 git reset --soft HEAD~X // where X is the number of commits that you did
+```
+At this point you might need to stash your changes
+```
+git stash
+```
+Then
+```
 git rebase develop
+```
+And may be reapply your stash
+```
+git stash pop
+```
+```
 git commit -m "my commit message"
 git push -f
 ```
