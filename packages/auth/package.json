@@ -28,6 +28,7 @@
     "vue-devtools": "./node_modules/.bin/vue-devtools"
   },
   "devDependencies": {
+    "@sentry/browser": "4.4.0",
     "@steemit/steem-js": "0.7.3",
     "@utopian/i18n": "1.0.0",
     "@utopian/testing": "1.0.0",
