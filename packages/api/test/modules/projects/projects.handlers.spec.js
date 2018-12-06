@@ -161,8 +161,8 @@ describe('update a project that the authenticated user doesn\'t own', () => {
     expect(response.statusCode).to.equal(422)
   })
 
-  it('should return the error general.documentUpdateUnauthorized', () => {
-    assert.equal(payload.message, 'general.documentUpdateUnauthorized')
+  it('should return the error general.documentDoesNotExist', () => {
+    assert.equal(payload.message, 'general.documentDoesNotExist')
   })
 })
 

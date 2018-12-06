@@ -102,16 +102,22 @@ const filterRepositories = async ({ repositories, username }) => {
  * @author Grégory LATINIER
  */
 const updateProject = async (req, h) => {
-  const ownerId = req.auth.credentials.uid
+  const userId = req.auth.credentials.uid
   const username = req.auth.credentials.username
   const { owners, collaborators, repositories, details, ...project } = req.payload
-  const projectDb = await Project.findOne({ owners: { $elemMatch: { $eq: ownerId } }, _id: req.params.id })
+  const projectDb = await Project.findOne({ _id: req.params.id })
+
   if (!projectDb) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  if (!projectDb.owners.some((u) => u.toString() === userId) &&
+  !projectDb.collaborators.toObject().some((u) => u.user.toString() === userId && u.roles.includes('project'))) {
     throw Boom.badData('general.documentUpdateUnauthorized')
   }
 
-  // A user can't have two projects with the same name
-  const projectName = await Project.findOne({ owners: { $elemMatch: { $eq: ownerId } }, name: req.payload.name, _id: { $ne: req.params.id } })
+  // Owners can't have two projects with the same name
+  const projectName = await Project.findOne({ owners: { $elemMatch: { $eq: userId } }, name: req.payload.name, _id: { $ne: req.params.id } })
   if (projectName) {
     throw Boom.badData('projects.exists')
   }
@@ -138,7 +144,7 @@ const updateProject = async (req, h) => {
     throw Boom.badData('projects.noRepositories')
   }
 
-  const updatedOwners = [Mongoose.Types.ObjectId(ownerId)]
+  const updatedOwners = [Mongoose.Types.ObjectId(userId)]
   if (owners) {
     for (let i = 0; i < owners.length; i += 1) {
       const owner = owners[i]
@@ -198,12 +204,12 @@ const updateProject = async (req, h) => {
  * @author Grégory LATINIER
  */
 const createProject = async (req, h) => {
-  const ownerId = req.auth.credentials.uid
+  const userId = req.auth.credentials.uid
   const username = req.auth.credentials.username
   const { owners, collaborators, repositories, details, ...project } = req.payload
 
   // A user can't have two projects with the same name
-  const projectName = await Project.findOne({ owners: { $elemMatch: { $eq: ownerId } }, name: req.payload.name })
+  const projectName = await Project.findOne({ owners: { $elemMatch: { $eq: userId } }, name: req.payload.name })
   if (projectName) {
     throw Boom.badData('projects.exists')
   }
@@ -239,7 +245,7 @@ const createProject = async (req, h) => {
   })
 
   // Add the authenticated user as owner
-  newProject.owners.push(Mongoose.Types.ObjectId(ownerId))
+  newProject.owners.push(Mongoose.Types.ObjectId(userId))
 
   if (owners) {
     for (let i = 0; i < owners.length; i += 1) {
@@ -282,8 +288,8 @@ const createProject = async (req, h) => {
  * @author Grégory LATINIER
  */
 const isNameAvailable = async (req, h) => {
-  const ownerId = req.auth.credentials.uid
-  return h.response(await Project.countDocuments({ owners: { $elemMatch: { $eq: ownerId } }, name: req.payload.name, _id: { $ne: req.payload._id } }) === 0)
+  const userId = req.auth.credentials.uid
+  return h.response(await Project.countDocuments({ owners: { $elemMatch: { $eq: userId } }, name: req.payload.name, _id: { $ne: req.payload._id } }) === 0)
 }
 
 /**
