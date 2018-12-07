@@ -48,6 +48,7 @@ const users = new Schema({
   location: { type: String },
   name: { type: String },
   resume: { type: String },
+  skills: { type: Array },
   createdAt: { type: Date, default: Date.now() },
   updatedAt: { type: Date },
   deletedAt: { type: Date }
@@ -78,7 +79,8 @@ users.methods.getEditableFields = function () {
     job: this.job,
     location: this.location,
     name: this.name,
-    resume: this.resume
+    resume: this.resume,
+    skills: this.skills
   }
 }
 

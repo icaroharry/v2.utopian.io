@@ -241,6 +241,14 @@
         "job": "Job",
         "skills": "Skills"
       },
+      "skills": {
+        "label": "Skills",
+        "placeholder": "Add your skills",
+        "errors": {
+          "duplicatedSkill": "This skill is already in the list",
+          "minSkillLength": "Skill must have at least 2 characters"
+        }
+      },
       "subtitle": "Make a great first impression with all the information about yourself and your career.",
       "title": "Let's update your profile",
       "update": "Update",

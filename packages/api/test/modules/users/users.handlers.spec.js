@@ -37,6 +37,23 @@ const hasClaimedBlockchainAccountEndpoint = {
   url: '/v1/user/blockchains/steem/claimed'
 }
 
+const updateSkillsEndpoint = {
+  method: 'POST',
+  url: '/v1/user/profile/skills',
+  payload: {
+    skills: ['Coding', 'Painting']
+  }
+}
+
+const searchUsersSkillsEndpoint = {
+  method: 'POST',
+  url: '/v1/user/profile/searchSkills',
+  payload: {
+    partial: 'cod',
+    skills: ['Coding', 'Painting']
+  }
+}
+
 describe('update the profile main information', () => {
   let response
   let payload
@@ -148,5 +165,49 @@ describe('has claimed blockchain account', () => {
 
   it('should return false for the user that has not claimed', () => {
     assert.equal(userHasNotClaimedPayload.claimed, false)
+  })
+})
+
+describe('update the profile skills', () => {
+  let response
+  let payload
+
+  before(async () => {
+    const token = generateAccessToken({ uid: '5bcaf95f3344e352e0921157', username: 'gregory' })
+    updateSkillsEndpoint.headers = {
+      'Authorization': token
+    }
+    response = await global.server.inject(updateSkillsEndpoint)
+    payload = response.payload
+  })
+
+  it('should return a 200 status response', () => {
+    expect(response.statusCode).to.equal(200)
+  })
+
+  it('should return the success message', () => {
+    assert.equal(payload, 'updateSuccess')
+  })
+})
+
+describe('search for users\' skills', () => {
+  let response
+  let payload
+
+  before(async () => {
+    const token = generateAccessToken({ uid: '5bcaf95f3344e352e0921157', username: 'gregory' })
+    searchUsersSkillsEndpoint.headers = {
+      'Authorization': token
+    }
+    response = await global.server.inject(searchUsersSkillsEndpoint)
+    payload = JSON.parse(response.payload)
+  })
+
+  it('should return a 200 status response', () => {
+    expect(response.statusCode).to.equal(200)
+  })
+
+  it('should return 2 results', () => {
+    assert.lengthOf(payload, 2)
   })
 })

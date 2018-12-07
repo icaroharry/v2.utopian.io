@@ -59,7 +59,8 @@ module.exports = [
       'address': 'icaro'
     }],
     '__v': 0,
-    'scopes': ['user']
+    'scopes': ['user'],
+    'skills': ['Cod', 'Code']
   },
   // Account not linked to steem
   {

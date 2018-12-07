@@ -75,3 +75,37 @@ export const updateProfileImages = async (context, data) =>
     url: '/v1/user/profile/images',
     data
   })
+
+/**
+ * Update the skills from the logged user
+ *
+ * @param {Object} data - Object
+ * @param {Array} data.skills - Array containing the skills to be added
+ * @returns {String} - Message from the server
+ * @author Adriel Santos
+ */
+export const updateProfileSkills = async (context, data) =>
+  API.call({
+    context,
+    method: 'post',
+    url: '/v1/user/profile/skills',
+    data
+  })
+
+/**
+ * Search for skills from users
+ *
+ * @param {Object} data -
+ * @param {String} data.term - contains the term to be searched
+ * @param {String} data.skills - contains the term to be searched
+ * @returns {Array} - contains the matched skills
+ * @author Adriel Santos
+ */
+
+export const searchUsersSkills = async (context, data) =>
+  API.call({
+    context,
+    method: 'post',
+    url: `/v1/user/profile/searchSkills`,
+    data
+  })

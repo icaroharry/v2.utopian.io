@@ -88,6 +88,24 @@ routes.push([
       tags: ['users'],
       validate: Validate.updateProfileImages
     }
+  },
+  {
+    method: 'POST',
+    path: '/v1/user/profile/skills',
+    handler: (req, h) => Handlers.updateProfile(req, h),
+    options: {
+      tags: ['users'],
+      validate: Validate.updateProfileSkills
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/user/profile/searchSkills',
+    handler: (req, h) => Handlers.searchUsersSkills(req, h),
+    options: {
+      tags: ['users'],
+      validate: Validate.searchUsersSkills
+    }
   }
 ])
 

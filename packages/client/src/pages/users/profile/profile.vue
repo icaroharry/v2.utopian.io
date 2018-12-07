@@ -1,6 +1,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { email, required, url } from 'vuelidate/lib/validators'
+import { email, required, url, maxLength } from 'vuelidate/lib/validators'
 
 export default {
   name: 'u-page-users-edit',
@@ -22,7 +22,8 @@ export default {
       images: {
         avatarUrl: '',
         cover: ''
-      }
+      },
+      skills: []
     }
   },
   validations: {
@@ -33,7 +34,9 @@ export default {
       avatarUrl: { required, url },
       cover: { url }
     },
-    skills: {}
+    skills: {
+      maxLength: maxLength(30)
+    }
   },
   async mounted () {
     const result = await this.fetchUserProfile()
@@ -57,6 +60,7 @@ export default {
       }
       this.avatarPreview = result.avatarUrl
       this.coverPreview = result.cover
+      this.skills = result.skills
     }
   },
   methods: {
@@ -64,10 +68,12 @@ export default {
       'fetchUserProfile',
       'updateProfileMainInformation',
       'updateProfileJob',
-      'updateProfileImages'
+      'updateProfileImages',
+      'updateProfileSkills',
+      'searchUsersSkills'
     ]),
     ...mapActions('auth', ['updateAvatarUrl']),
-    ...mapActions('utils', ['setAppSuccess']),
+    ...mapActions('utils', ['setAppSuccess', 'setAppError']),
     uploadAvatar (file) {
       this.uploadImage(file[0], 'avatarUrl', 'avatarUploader')
     },
@@ -126,7 +132,32 @@ export default {
     async updateSkills () {
       this.$v.skills.$touch()
       if (!this.$v.skills.$invalid) {
-
+        const result = await this.updateProfileSkills({ skills: this.skills })
+        if (result) {
+          this.setAppSuccess(`api.messages.${result}`)
+        }
+      }
+    },
+    async skillsAutocomplete (term, done) {
+      const data = {
+        partial: term,
+        skills: this.skills
+      }
+      let skills = await this.searchUsersSkills(data)
+      if (skills !== null) {
+        done(skills.map(skill => ({
+          value: skill._id,
+          label: `${skill.name} (${skill.occurrences})`
+        })))
+      }
+    },
+    duplicatedSkills (value) {
+      this.setAppError('users.profile.skills.errors.duplicatedSkill')
+    },
+    chipsInputChange (newValues) {
+      if (newValues[newValues.length - 1].length < 2) {
+        this.skills.pop()
+        this.setAppError('users.profile.skills.errors.minSkillLength')
       }
     }
   },
@@ -209,6 +240,14 @@ div.profile-form
       h4.q-mb-sm {{$t('users.profile.section.skills')}}
       q-card(square, color="white")
         q-card-main
+          q-field(:count="30")
+            q-chips-input(
+              v-model="skills"
+              @duplicate="duplicatedSkills"
+              @input="chipsInputChange"
+              :placeholder="skills.length === 0 ? $t('users.profile.skills.placeholder') : ''"
+            )
+              q-autocomplete(@search="skillsAutocomplete", :min-characters="2", :max-results="10")
         q-card-separator
         q-card-actions(align="end")
           q-btn(color="primary", :label="$t('users.profile.update')", @click="updateSkills")
