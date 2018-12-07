@@ -6,13 +6,14 @@ import routes from './routes'
 Vue.use(VueRouter)
 
 export default function ({ store, ssrContext }) {
+  const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
+  
   const Router = new VueRouter({
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE,
-    routes
+    routes: routes(cookies)
   })
   Router.beforeEach((to, from, next) => {
-    const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
     if (to.matched.some(record => record.meta.auth)) {
       // We need to test the presence of the access token also because the store is not yet populated during SSR
       if (store.getters['auth/guest'] && !cookies.get('access_token')) {

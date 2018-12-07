@@ -12,14 +12,14 @@ Vue.use(VueRouter)
  */
 
 export default function ({ store, ssrContext }) {
+  const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
   const Router = new VueRouter({
-    routes,
+    routes: routes(cookies),
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
   })
 
   Router.beforeEach((to, from, next) => {
-    const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
     if (to.name !== 'login' && to.matched.some(record => record.meta && record.meta.auth)) {
       if (!cookies.get('access_token')) {
         next(`/${to.params.locale}/login`)

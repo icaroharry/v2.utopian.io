@@ -1,8 +1,8 @@
-export default [
+export default (cookies) => ([
   {
     // failsafe
     path: '/',
-    redirect: '/en'
+    redirect: cookies.get('locale') || 'en'
   },
   {
     path: '/:locale',
@@ -49,4 +49,4 @@ export default [
     props: true,
     component: () => import('src/pages/404')
   }
-]
+])
