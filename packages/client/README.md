@@ -22,9 +22,9 @@ If you've already created the app, simply add the missing environment variables.
 Utopian uses GitHub accounts to log users in. Since we can't publish the OAuth Dev App Secret, you will need to create your own.
 Create the OAuth app [here](https://github.com/settings/applications/new) and fill the form with the following values: 
 * **Application name:** _My utopian oauth app_
-* **Homepage URL:** _http://localhost:8080_
+* **Homepage URL:** _http://localhost:8081_
 * **Application description:** _My utopian oauth app_
-* **Authorization callback URL:** _http://localhost:8080_
+* **Authorization callback URL:** _http://localhost:8081_
 
 When you click on the login button, you'll be redirected to your OAuth app. After authorizing this app, you'll be redirected to the dev website on localhost. 
 
