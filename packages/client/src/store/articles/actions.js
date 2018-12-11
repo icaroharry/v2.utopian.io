@@ -19,10 +19,10 @@ export const updateArticle = async (context, article) => {
   })
 }
 
-export const fetchArticle = async (context, { author, slug }) => {
+export const fetchArticleForEdit = async (context, { author, slug }) => {
   return API.call({
     context,
     method: 'get',
-    url: `/v1/article/${author}/${slug}`
+    url: `/v1/article/${author}/${slug}/edit`
   })
 }

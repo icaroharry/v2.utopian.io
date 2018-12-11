@@ -12,6 +12,15 @@
   },
   "articles": {
     "createEdit": {
+      "beneficiaries": {
+        "helper": "You can share the rewards of this article with anyone you like. Beneficiaries can't be modified once the article has been published.",
+        "label": "Beneficiaries",
+        "placeholder": "Search for any users",
+        "authorShares": "You have <strong>{authorShares}%</strong> of the shares",
+        "errors": {
+          "weight": "The total beneficiaries percentage can't exceed 100%. Each percentages must be greater than 1."
+        }
+      },
       "body": {
         "label": "Content",
         "help": "What do you want to share with us? (Hint: Type @@ to find a username)"
@@ -26,8 +35,14 @@
         "label": "Article title",
         "placeholder": "Add a title"
       },
-      "save": "Publish my article",
-      "update": "Update my article"
+      "save": {
+        "label": "Publish my article",
+        "successMsg": "The article was published!"
+      },
+      "update": {
+        "label": "Update my article",
+        "successMsg": "The article was updated!"
+      }
     }
   },
   "components": {
@@ -262,6 +277,9 @@
   },
   "api": {
     "errors": {
+      "articles": {
+        "beneficiariesWeight": "The total beneficiaries percentage can't exceed 100%. Each percentages must be greater than 1."
+      },
       "general": {
         "500": "An unexpected occurred, please contact the support at support@utopian.io",
         "documentDoesNotExist": "The document does not exist.",

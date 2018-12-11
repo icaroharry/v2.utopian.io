@@ -9,6 +9,20 @@ const Schema = Mongoose.Schema
  */
 const articles = new Schema({
   author: { type: Schema.Types.ObjectId, ref: 'Users', required: true },
+  beneficiaries: [{
+    _id: false,
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'Users',
+      required: true
+    },
+    weight: {
+      type: Number,
+      min: 1,
+      max: 100,
+      required: true
+    }
+  }],
   body: { type: String, required: true, text: true },
   language: { type: String, required: true },
   project: { type: Schema.Types.ObjectId, ref: 'Projects' },

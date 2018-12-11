@@ -7,6 +7,14 @@ const createArticleEndpoint = {
   method: 'POST',
   url: '/v1/article',
   payload: {
+    beneficiaries: [{
+      user: {
+        _id: '5ba3d89a197c286217e02d5f',
+        username: 'icaro',
+        avatarUrl: 'https: //avatars0.githubusercontent.com/u/6475893?v=4'
+      },
+      weight: 50
+    }],
     body: 'Article body',
     language: 'en',
     proReview: true,
@@ -47,9 +55,9 @@ const updateArticleUnsupportedLanguageEndpoint = {
   }
 }
 
-const getArticleByAuthorAndSlugEndPoint = { method: 'GET', url: '/v1/article/gregory/article-fixture' }
+const getArticleForEditEndPoint = { method: 'GET', url: '/v1/article/gregory/article-fixture/edit' }
 
-const getArticleNonExistingEndPoint = { method: 'GET', url: '/v1/article/gregory/xxx' }
+const getArticleNonExistingForEditEndPoint = { method: 'GET', url: '/v1/article/gregory/xxx/edit' }
 
 describe('create an article', () => {
   let response
@@ -155,12 +163,16 @@ describe('update an article with an unsupported language', () => {
   })
 })
 
-describe('get an article by its author and slug', () => {
+describe('get an article by its author and slug for edit', () => {
   let response
   let payload
 
   before(async () => {
-    response = await global.server.inject(getArticleByAuthorAndSlugEndPoint)
+    const token = generateAccessToken({ uid: '5bcaf95f3344e352e0921157', username: 'gregory' })
+    getArticleForEditEndPoint.headers = {
+      'Authorization': token
+    }
+    response = await global.server.inject(getArticleForEditEndPoint)
     payload = JSON.parse(response.payload)
   })
 
@@ -170,18 +182,22 @@ describe('get an article by its author and slug', () => {
 
   it('should have all the keys', () => {
     expect(payload).to.have.all.keys(
-      'author', 'title', 'body', 'language', 'proReview', '_id'
+      'author', 'beneficiaries', 'body', 'language', 'proReview', 'title', '_id'
     )
   })
 })
 
-describe('get an article that doesn\'t exist', () => {
+describe('get an article that doesn\'t exist for edit', () => {
   let response
   let payload
 
   before(async () => {
-    response = await global.server.inject(getArticleNonExistingEndPoint)
-    payload = response.payload
+    const token = generateAccessToken({ uid: '5bcaf95f3344e352e0921157', username: 'gregory' })
+    getArticleNonExistingForEditEndPoint.headers = {
+      'Authorization': token
+    }
+    response = await global.server.inject(getArticleNonExistingForEditEndPoint)
+    payload = JSON.parse(response.payload)
   })
 
   it('should return a 200 status response', () => {
@@ -189,6 +205,6 @@ describe('get an article that doesn\'t exist', () => {
   })
 
   it('response should be empty', () => {
-    assert.isEmpty(payload)
+    assert.deepEqual(payload, {})
   })
 })

@@ -26,12 +26,11 @@ routes.push([
   },
   {
     method: 'GET',
-    path: '/v1/article/{author}/{slug}',
-    handler: (req, h) => Handlers.getArticleByAuthorAndSlug(req, h),
+    path: '/v1/article/{author}/{slug}/edit',
+    handler: (req, h) => Handlers.getArticleForEdit(req, h),
     options: {
-      auth: false,
       tags: ['articles'],
-      validate: Validate.getArticleByAuthorAndSlug
+      validate: Validate.getArticleForEdit
     }
   }
 ])

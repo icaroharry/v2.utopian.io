@@ -7,10 +7,14 @@ const Joi = require('joi')
  */
 const createArticle = {
   payload: {
-    body: Joi.string().trim().required(),
-    language: Joi.string().trim().required(),
+    beneficiaries: Joi.array().optional().max(50).items({
+      user: Joi.object().required(),
+      weight: Joi.number().integer().required().min(1).max(100)
+    }),
+    body: Joi.string().trim().max(250000).required(),
+    language: Joi.string().trim().max(2).required(),
     proReview: Joi.boolean().required(),
-    title: Joi.string().trim().required()
+    title: Joi.string().trim().max(250).required()
   }
 }
 
@@ -24,10 +28,10 @@ const updateArticle = {
     id: Joi.string().trim().required()
   },
   payload: {
-    body: Joi.string().trim().required(),
-    language: Joi.string().trim().required(),
+    body: Joi.string().trim().max(250000).required(),
+    language: Joi.string().trim().max(2).required(),
     proReview: Joi.boolean().required(),
-    title: Joi.string().trim().required()
+    title: Joi.string().trim().max(250).required()
   }
 }
 
@@ -36,7 +40,7 @@ const updateArticle = {
  *
  * @author Grégory LATINIER
  */
-const getArticleByAuthorAndSlug = {
+const getArticleForEdit = {
   params: {
     author: Joi.string().trim().required(),
     slug: Joi.string().trim().required()
@@ -46,5 +50,5 @@ const getArticleByAuthorAndSlug = {
 module.exports = {
   createArticle,
   updateArticle,
-  getArticleByAuthorAndSlug
+  getArticleForEdit
 }

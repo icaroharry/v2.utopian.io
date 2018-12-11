@@ -1,6 +1,8 @@
 const Boom = require('boom')
+const Mongoose = require('mongoose')
 const { slugify } = require('../../utils/slugify')
 const Article = require('./article.model')
+const User = require('../users/user.model')
 const Language = require('../languages/language.model')
 
 /**
@@ -14,25 +16,50 @@ const Language = require('../languages/language.model')
 const createArticle = async (req, h) => {
   const author = req.auth.credentials.uid
   const username = req.auth.credentials.username
-  let slug = `${username}/${slugify(req.payload.title)}`
+  const { beneficiaries, ...article } = req.payload
+  let slug = `${username}/${slugify(article.title)}`
   // Count the author's articles using the slug or the slugs array attributes
   if (await Article.countDocuments({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }], author }) > 0) {
     slug += `-${Date.now()}`
   }
 
-  if (await Language.countDocuments({ lang: req.payload.language }) === 0) {
+  if (await Language.countDocuments({ lang: article.language }) === 0) {
     throw Boom.badData('general.languageNotSupported')
   }
 
   const newArticle = new Article({
     author,
     slug,
-    ...req.payload
+    ...article
   })
 
-  const data = await newArticle.save()
+  // Add the beneficiaries to the article
+  if (beneficiaries) {
+    if (beneficiaries.reduce((percentage, user) => percentage + user.weight, 0) > 100 ||
+      beneficiaries.some((u) => u.weight <= 0)
+    ) {
+      throw Boom.badData('articles.beneficiariesWeight')
+    }
 
-  return h.response(data.slug)
+    for (let i = 0; i < beneficiaries.length; i += 1) {
+      const beneficiary = beneficiaries[i]
+      // Check that the added users is not the author and is not already added and exists
+      if (author !== beneficiary.user._id &&
+        !newArticle.beneficiaries.some((o) => o.user.toString() === beneficiary.user._id) &&
+        await User.countDocuments({ _id: beneficiary.user._id }) > 0 &&
+        beneficiary.weight > 0
+      ) {
+        newArticle.beneficiaries.push({
+          user: Mongoose.Types.ObjectId(beneficiary.user._id),
+          weight: beneficiaries[i].weight
+        })
+      }
+    }
+  }
+
+  await newArticle.save()
+
+  return h.response(slug)
 }
 
 /**
@@ -89,7 +116,7 @@ const updateArticle = async (req, h) => {
 }
 
 /**
- * Returns an article by its author and slug
+ * Returns an article by its author and slug for edit purposes
  *
  * @param {object} req - request
  * @param {object} req.params - request parameters
@@ -99,14 +126,22 @@ const updateArticle = async (req, h) => {
  * @returns article
  * @author Grégory LATINIER
  */
-const getArticleByAuthorAndSlug = async (req, h) => {
+const getArticleForEdit = async (req, h) => {
+  const userId = req.auth.credentials.uid
   const slug = `${req.params.author}/${req.params.slug}`
-  const data = await Article.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] }).select('author body language proReview title _id')
-  return h.response(data)
+  const article = await Article.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] })
+    .populate('beneficiaries.user', 'username avatarUrl')
+    .select('author beneficiaries body language proReview title')
+  if (!article) return h.response({})
+  if (article.author.toString() === userId) {
+    return h.response(article)
+  }
+
+  throw Boom.unauthorized('general.unauthorized')
 }
 
 module.exports = {
   createArticle,
   updateArticle,
-  getArticleByAuthorAndSlug
+  getArticleForEdit
 }
