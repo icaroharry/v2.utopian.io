@@ -1,4 +1,3 @@
-/*
-export function someMutation (state) {
+export const setArticle = (state, article) => {
+  state.article = article || []
 }
-*/

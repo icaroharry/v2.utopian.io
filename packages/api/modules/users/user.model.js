@@ -47,6 +47,7 @@ const users = new Schema({
   job: { type: String },
   location: { type: String },
   name: { type: String },
+  reputation: { type: Number, default: 0 },
   resume: { type: String },
   skills: { type: Array },
   createdAt: { type: Date, default: Date.now() },

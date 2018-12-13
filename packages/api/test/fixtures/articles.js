@@ -10,7 +10,7 @@ module.exports = [
     'slug': 'gregory/article-fixture',
     'slugs': [],
     'title': 'Article fixture',
-    'views': 0,
+    'viewsIPs': ['92.168.125.12', '127.0.0.1'],
     'createdAt': new Date('2018-11-16T11:41:16.934Z'),
     '__v': 0
   }

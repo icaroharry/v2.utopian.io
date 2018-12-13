@@ -43,6 +43,10 @@
         "label": "Update my article",
         "successMsg": "The article was updated!"
       }
+    },
+    "view": {
+      "inCollaborationWith": "In collaboration with",
+      "views": "views | view | views"
     }
   },
   "components": {

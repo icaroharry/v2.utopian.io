@@ -26,3 +26,12 @@ export const fetchArticleForEdit = async (context, { author, slug }) => {
     url: `/v1/article/${author}/${slug}/edit`
   })
 }
+
+export const fetchArticle = async (context, { author, slug }) => {
+  const payload = await API.call({
+    context,
+    method: 'get',
+    url: `/v1/article/${author}/${slug}`
+  })
+  context.commit('setArticle', payload)
+}

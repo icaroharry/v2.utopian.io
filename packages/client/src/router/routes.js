@@ -55,6 +55,12 @@ export default (cookies) => ([
         meta: { auth: true }
       },
       {
+        path: 'articles/:author/:slug',
+        name: 'articles.view',
+        props: true,
+        component: () => import('src/pages/articles/view/view')
+      },
+      {
         path: 'profile',
         name: 'users.profile',
         props: true,

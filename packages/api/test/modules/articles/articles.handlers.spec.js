@@ -59,6 +59,8 @@ const getArticleForEditEndPoint = { method: 'GET', url: '/v1/article/gregory/art
 
 const getArticleNonExistingForEditEndPoint = { method: 'GET', url: '/v1/article/gregory/xxx/edit' }
 
+const getArticle = { method: 'GET', url: '/v1/article/gregory/article-fixture' }
+
 describe('create an article', () => {
   let response
   let payload
@@ -206,5 +208,25 @@ describe('get an article that doesn\'t exist for edit', () => {
 
   it('response should be empty', () => {
     assert.deepEqual(payload, {})
+  })
+})
+
+describe('get an article by its author and slug', () => {
+  let response
+  let payload
+
+  before(async () => {
+    response = await global.server.inject(getArticle)
+    payload = JSON.parse(response.payload)
+  })
+
+  it('should return a 200 status response', () => {
+    expect(response.statusCode).to.equal(200)
+  })
+
+  it('should have all the keys', () => {
+    expect(payload).to.have.all.keys(
+      'author', 'beneficiaries', 'body', 'language', 'proReview', 'title', 'views'
+    )
   })
 })

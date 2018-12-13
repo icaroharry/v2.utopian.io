@@ -66,6 +66,7 @@
     "eslint-plugin-vue": "4.7.1",
     "extra-watch-webpack-plugin": "1.0.3",
     "fs": "0.0.2",
+    "html-to-text": "4.0.0",
     "jest": "23.6.0",
     "jsonwebtoken": "8.4.0",
     "lint-staged": "8.1.0",

@@ -1,6 +1,7 @@
 const Boom = require('boom')
 const Mongoose = require('mongoose')
 const { slugify } = require('../../utils/slugify')
+const { getClientIp } = require('../../utils/request')
 const Article = require('./article.model')
 const User = require('../users/user.model')
 const Language = require('../languages/language.model')
@@ -140,8 +141,36 @@ const getArticleForEdit = async (req, h) => {
   throw Boom.unauthorized('general.unauthorized')
 }
 
+/**
+ * Returns an article by its author and slug
+ * Update the view count based on client IP
+ *
+ * @param {object} req - request
+ * @param {object} req.params - request parameters
+ * @param {string} req.params.author - article author's username as route element
+ * @param {string} req.params.slug - article title as route element
+ *
+ * @returns article
+ * @author Grégory LATINIER
+ */
+const getArticle = async (req, h) => {
+  const slug = `${req.params.author}/${req.params.slug}`
+  await Article.updateOne(
+    { $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }], deletedAt: null },
+    { $addToSet: { viewsIPs: getClientIp(req) } }
+  )
+  const articleDB = await Article.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }], deletedAt: null })
+    .populate('author', 'username avatarUrl job reputation')
+    .populate('beneficiaries.user', 'username avatarUrl')
+    .select('author beneficiaries body language proReview title viewsIPs -_id')
+  if (!articleDB) return h.response({})
+  const { viewsIPs, id, ...article } = articleDB.toJSON({ virtuals: true })
+  return h.response(article)
+}
+
 module.exports = {
   createArticle,
   updateArticle,
-  getArticleForEdit
+  getArticleForEdit,
+  getArticle
 }

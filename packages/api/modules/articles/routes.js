@@ -32,6 +32,16 @@ routes.push([
       tags: ['articles'],
       validate: Validate.getArticleForEdit
     }
+  },
+  {
+    method: 'GET',
+    path: '/v1/article/{author}/{slug}',
+    handler: (req, h) => Handlers.getArticle(req, h),
+    options: {
+      auth: false,
+      tags: ['articles'],
+      validate: Validate.getArticle
+    }
   }
 ])
 

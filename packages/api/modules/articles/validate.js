@@ -47,8 +47,21 @@ const getArticleForEdit = {
   }
 }
 
+/**
+ * Validate the article fetch
+ *
+ * @author Grégory LATINIER
+ */
+const getArticle = {
+  params: {
+    author: Joi.string().trim().required(),
+    slug: Joi.string().trim().required()
+  }
+}
+
 module.exports = {
   createArticle,
   updateArticle,
-  getArticleForEdit
+  getArticleForEdit,
+  getArticle
 }
