@@ -91,6 +91,7 @@ export default {
             this.imageObj.url = res.url
             resolve(res.url)
           }).catch(err => {
+            this.$q.loading.hide()
             this.setAppError('components.form.imageUploader.errors.fileUpload')
             throw new Error(err) // make sure Sentry knows about it
           })

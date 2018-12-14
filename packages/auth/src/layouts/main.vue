@@ -39,6 +39,8 @@ body
 .u-auth-layout
   .auth-pane
     position relative
+    height 100%
+    overflow auto
     .i18n-dropdown
       position absolute
       right 0

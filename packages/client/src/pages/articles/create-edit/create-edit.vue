@@ -231,9 +231,10 @@ div
     .q-item
       padding 3px 0
       .q-input
-        margin-right 10px
-        width 45px
         display inline-flex
+        margin-right 10px
+        padding 5px 8px
+        width 55px
       .q-btn
         margin-bottom 4px
 </style>

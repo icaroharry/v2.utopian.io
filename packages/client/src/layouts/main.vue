@@ -34,13 +34,13 @@ export default {
 </script>
 
 <template lang="pug">
-q-layout.u-layout.q-layout-wallet(view='lHh Lpr lFf')
+q-layout(view='lHh Lpr lFf')
   q-layout-header.layout-header(reveal)
     u-layout-toolbar
 
-  q-page-container.fit
+  q-page-container
     .container.container-page(
-      :class="{ 'container-large': ($route.meta.large === true), 'container-centered': ($route.meta.centered === true) }"
+      :class="{ 'container-full-width': ($route.meta.fullWidth === true) }"
     )
       transition(:duration="{ enter: 100, leave: 100 }", enter-active-class="animated fadeIn", leave-active-class="animated fadeOut")
         router-view(:key="$route.path")
@@ -53,9 +53,6 @@ q-layout.u-layout.q-layout-wallet(view='lHh Lpr lFf')
 
 body
   background-color: $grey-1
-
-  .u-app#q-app
-
   div, main
     &.q-layout-page.u-page
       padding: 24px 24px

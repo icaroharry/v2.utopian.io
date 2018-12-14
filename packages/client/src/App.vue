@@ -42,10 +42,7 @@ export default {
 }
 </script>
 
-<!-- import component template. -->
 <template lang="pug">
   q-layout.u-app#q-app(view="hHh LpR fff")
-    //div.u-app#q-app
-    // router view enabler.
     router-view
 </template>

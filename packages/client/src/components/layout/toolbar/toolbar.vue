@@ -23,8 +23,7 @@ export default {
     ...mapActions('auth', [
       'logout',
       'linkSteemAccount',
-      'startGithubLogin',
-      'startSteemConnectLogin'
+      'startGithubLogin'
     ]),
     async logoutAndRedirect () {
       await this.logout()
@@ -66,10 +65,6 @@ export default {
             img.avatar(:src="user.avatarUrl")
             q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]", style="z-index:500")
               q-list(dense, :link="true", separator)
-                q-item(v-if="!steemUser", @click.native="startSteemConnectLogin")
-                  q-item-side
-                    q-icon.q-item-icon.ut-steem
-                  q-item-main(:label="$t('navbar.linkSteemAccount')")
                 q-item(v-if="steemUser", :to="`/@${steemUser}`")
                   q-item-side
                     q-icon.q-item-icon.ut-steem

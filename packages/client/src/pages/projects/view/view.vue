@@ -172,13 +172,11 @@ export default {
           .q-card-main
             padding-bottom 8px
           h1
-            font-family 'Noto Sans', sans-serif
             font-size 32px
             margin 0
             word-break break-word
             max-height 70px
           h2
-            font-family 'Noto Sans', sans-serif
             font-size 15px
             margin 5px 0
           .owners
@@ -187,7 +185,6 @@ export default {
               height 27px
               width 27px
           p.desc
-            font-family 'Noto Sans', sans-serif
             font-size 15px
             margin 0
             word-break break-all
@@ -200,7 +197,6 @@ export default {
           @media (max-width $breakpoint-sm-max)
             width 100%
           .stat
-            font-family 'Noto Sans', sans-serif
             text-align center
             padding 5px
             padding-top 10px

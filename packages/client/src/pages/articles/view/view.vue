@@ -100,7 +100,6 @@ export default {
   .article-view
     .article-header
       margin-bottom 20px
-      font-family 'Noto Sans', sans-serif
       font-size 15px
       .author-info
         text-decoration none
@@ -124,7 +123,6 @@ export default {
       .collaboration
         h3
           font-weight 600
-          font-family 'Noto Sans', sans-serif
           font-size 15px
         img
           width 27px
@@ -147,12 +145,10 @@ export default {
         .q-btn
           padding 4px 8px
       .title
-        font-family 'Noto Sans', sans-serif
         font-size 32px
         font-weight bold
         color $grey-10
       .date
-        font-family 'Noto Sans', sans-serif
         font-size 15px
         color $grey-6
         padding 10px 0

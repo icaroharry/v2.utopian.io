@@ -481,7 +481,7 @@ div
     a
       text-decoration none
   .create-edit-project-progress
-    margin-top 38px
+    margin-top 28px
     background #fff
     @media (max-width $breakpoint-sm-max)
       margin-top 0
@@ -500,7 +500,6 @@ div
       text-align right
       text-transform uppercase
       color #9d9d9d
-      font-family 'Noto Sans', sans-serif
       padding-bottom 0
       font-size 12px
       min-height 12px

@@ -69,7 +69,7 @@ export default {
         text-align right
         text-transform uppercase
         color #9d9d9d
-        font-family 'Noto Sans', sans-serif
+        font-family $font-family-notosans
         padding-bottom 0
         font-size 12px
         min-height 12px

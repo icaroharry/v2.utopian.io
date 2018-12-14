@@ -224,7 +224,7 @@ div.profile-form
     .row.gutter-sm.q-mt-md
       .col-md-6.col-sm-12.col-xs-12
         // h4.q-mb-sm {{$t('users.profile.section.account')}}
-        q-card(square, color="white")
+        q-card(square)
           q-card-main
             q-field(:label="$t('users.profile.username.label')", orientation="vertical")
               q-input(v-model.trim.lazy="username", disable)
@@ -240,42 +240,46 @@ div.profile-form
       .col-md-6.col-sm-12.col-xs-12
         q-card(square, color="white")
           q-card-main
-            .row.gutter-sm
-              .col-md-12.col-sm-12.col-xs-12
-                q-field(:label="$t('users.profile.avatar.label')", :helper="$t('users.profile.avatar.helper')", orientation="vertical", :error="$v.images.avatarUrl.$error")
-                  .image-processor
-                    q-input(v-model.trim.lazy="avatar.url", :placeholder="$t('users.profile.avatar.placeholder')", @keyup.enter="updateImages")
-                      q-btn(slot="after", flat, color="primary", size="sm", @click.native="$refs.avatar.chooseFileWrapper()", icon="mdi-plus-circle", style="margin-right:-10px")
-                  u-image-processor.text-center(
-                    v-model="avatar"
-                    :imageObj="avatar"
-                    ref="avatar"
-                  )
-            q-card-separator
-            q-card-actions(align="end")
-              q-btn(color="neutral", text-color="black", v-if="avatar.imageValid", :label="$t('users.profile.clear')", @click="$refs.avatar.clear()")
-              q-btn(color="primary", v-if="avatar.imageValid", :label="$t('users.profile.update')", @click="updateImages('avatar')")
+            q-field(:label="$t('users.profile.avatar.label')", :helper="$t('users.profile.avatar.helper')", orientation="vertical", :error="$v.images.avatarUrl.$error")
+              .image-processor
+                q-input(
+                  v-model.trim.lazy="avatar.url"
+                  :placeholder="$t('users.profile.avatar.placeholder')"
+                  @keyup.enter="updateImages"
+                  :after="[{ icon: 'mdi-plus-circle', handler: () => { $refs.avatar.chooseFileWrapper() } }]"
+                )
+              u-image-processor.text-center(
+                v-model="avatar"
+                :imageObj="avatar"
+                ref="avatar"
+              )
+          q-card-separator
+          q-card-actions(align="end")
+            q-btn(color="neutral", text-color="black", v-if="avatar.imageValid", :label="$t('users.profile.clear')", @click="$refs.avatar.clear()")
+            q-btn(color="primary", v-if="avatar.imageValid", :label="$t('users.profile.update')", @click="updateImages('avatar')")
       .col-md-6.col-sm-12.col-xs-12
-        q-card(square, color="white")
+        q-card(square)
           q-card-main
-            .row.gutter-sm
-              .col-md-12.col-sm-12.col-xs-12
-                q-field(:label="$t('users.profile.cover.label')", orientation="vertical", :helper="$t('users.profile.cover.helper')", :error="$v.images.cover.$error")
-                  .image-processor
-                    q-input.col-11(v-model.trim.lazy="images.cover", :placeholder="$t('users.profile.cover.placeholder')", @keyup.enter="updateImages", style="margin-right:-10px")
-                      q-btn.col-1(slot="after", flat, color="primary", size="sm", @click.native="$refs.cover.chooseFileWrapper()", icon="mdi-plus-circle")
-                  u-image-processor.text-center(
-                    v-model="cover"
-                    :imageObj="cover"
-                    ref="cover"
-                  )
+            q-field(:label="$t('users.profile.cover.label')", orientation="vertical", :helper="$t('users.profile.cover.helper')", :error="$v.images.cover.$error")
+              .image-processor
+                q-input(
+                  v-model.trim.lazy="images.cover"
+                  :placeholder="$t('users.profile.cover.placeholder')"
+                  @keyup.enter="updateImages"
+                  :after="[{ icon: 'mdi-plus-circle', handler: () => { $refs.cover.chooseFileWrapper() } }]"
+                )
+              u-image-processor.text-center(
+                v-model="cover"
+                :imageObj="cover"
+                ref="cover"
+              )
           q-card-separator
           q-card-actions(align="end")
             q-btn(color="neutral", text-color="black", v-if="cover.imageValid", :label="$t('users.profile.clear')", @click="$refs.cover.clear()")
             q-btn(color="primary", v-if="cover.imageValid", :label="$t('users.profile.update')", @click="updateImages('cover')")
       .col-md-6.col-sm-12.col-xs-12
         h4.q-mb-sm {{$t('users.profile.section.job')}}
-        q-card(square, color="white")
+        q-card(square)
           q-card-main
             q-field(:label="$t('users.profile.job.label')", orientation="vertical")
               q-input(v-model.trim.lazy="job.job", :placeholder="$t('users.profile.job.placeholder')",  @keyup.enter="updateJob")
@@ -289,7 +293,7 @@ div.profile-form
             q-btn(color="primary", :label="$t('users.profile.update')", @click="updateJob")
       .col-md-6.col-sm-12.col-xs-12
         h4.q-mb-sm {{$t('users.profile.section.skills')}}
-        q-card(square, color="white")
+        q-card(square)
           q-card-main
             q-field(:count="30")
               q-chips-input(
@@ -306,6 +310,8 @@ div.profile-form
 
 <style lang="stylus">
 .profile-form
+  .q-card
+    background #fff
   img.header-image
     -webkit-mask-image -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)))
     mask-image linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0))

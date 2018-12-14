@@ -54,80 +54,78 @@ export default {
 <template lang="pug">
 div
   .header.q-pb-lg
-    q-page-container.container
-      .row
-        .col-lg-6.offset-lg-1.projects-slider
-          q-carousel.project-images(color="white", ref="mainCarousel")
-            q-carousel-slide(v-for="project in featuredProjects.slice(0, 3)", :img-src="project.medias.find(m => m.type === 'image').src", :key="project.slug")
-        .col-lg-4.text-center
-          q-carousel.project-info(color="white", ref="infoCarousel", no-swipe)
-            q-carousel-slide(v-for="project in featuredProjects.slice(0, 3)", :key="project.slug")
-              q-card.project-card
-                q-card-title
-                  | {{ project.name }}
-                  span(slot="subtitle")
-                    | {{ $t('homepage.by') }}&nbsp;
-                    span.text-dark.q-subheading {{ project.owner }}
-                q-card-main.q-title.text-weight-light.text-dusk
-                  | {{ project.description }}
-                q-card-actions(align="center")
-                  q-btn(:label="$t('homepage.contributeToProject')", color="primary" @click.native="goToProjectPage(project.slug)")
+    .row
+      .col-lg-6.offset-lg-1.projects-slider
+        q-carousel.project-images(color="white", ref="mainCarousel")
+          q-carousel-slide(v-for="project in featuredProjects.slice(0, 3)", :img-src="project.medias.find(m => m.type === 'image').src", :key="project.slug")
+      .col-lg-4.text-center
+        q-carousel.project-info(color="white", ref="infoCarousel", no-swipe)
+          q-carousel-slide(v-for="project in featuredProjects.slice(0, 3)", :key="project.slug")
+            q-card.project-card
+              q-card-title
+                | {{ project.name }}
+                span(slot="subtitle")
+                  | {{ $t('homepage.by') }}&nbsp;
+                  span.text-dark.q-subheading {{ project.owner }}
+              q-card-main.q-title.text-weight-light.text-dusk
+                | {{ project.description }}
+              q-card-actions(align="center")
+                q-btn(:label="$t('homepage.contributeToProject')", color="primary" @click.native="goToProjectPage(project.slug)")
 
-          q-btn.carousel-arrow(
-          flat,
-          round,
-          icon="mdi-arrow-left",
-          color="grey-8",
-          size="24px",
-          dense,
-          @click="carouselPrevious"
-          :disable="!carouselCanGoToPrevious"
-          )
-          q-btn.carousel-arrow(
-          flat,
-          round,
-          icon="mdi-arrow-right",
-          color="grey-8",
-          size="24px",
-          dense,
-          @click="carouselNext"
-          :disable="!carouselCanGoToNext"
-          )
+        q-btn.carousel-arrow(
+        flat,
+        round,
+        icon="mdi-arrow-left",
+        color="grey-8",
+        size="24px",
+        dense,
+        @click="carouselPrevious"
+        :disable="!carouselCanGoToPrevious"
+        )
+        q-btn.carousel-arrow(
+        flat,
+        round,
+        icon="mdi-arrow-right",
+        color="grey-8",
+        size="24px",
+        dense,
+        @click="carouselNext"
+        :disable="!carouselCanGoToNext"
+        )
 
   .main
-    q-page-container.container
-      .flex.justify-between.contributions-header
-        .q-title.q-my-lg.q-pt-lg {{$t('homepage.featuredProjects')}}
-        router-link.q-pt-lg(:to="{ name: 'project.search' }")
-          .pt
-            .text-right.mb {{$t('homepage.seeAllProjects')}}
-            hr
-      .row.projects.gutter-sm
-        .col-md-12.col-lg-4(v-for="project in featuredProjects")
-          q-card.inline.round-borders(color="white", text-color="grey-7")
-            q-card-media(:style="'background-image: url(' + project.medias.find(m => m.type === 'image').src + ')'" @click.native="goToProjectPage(project.slug)")
-            q-card-title(@click.native="goToProjectPage(project.slug)") {{project.name}}
-            q-card-main
-              p.short-description {{project.description}}
-              p
-                q-btn.tag(color="tertiary", dense, size="", outline, :key="tag", v-for="tag in project.tags")
-                  | {{tag}}
-              .author.items-center
-                .avatar
-                  img.align-bottom(:src="'https://steemitimages.com/u/' + project.owner +'/avatar'")
-                .author-details
-                  .name
-                    span {{ '@' + project.owner  }}
+    .flex.justify-between.contributions-header
+      .q-title.q-my-lg.q-pt-lg {{$t('homepage.featuredProjects')}}
+      router-link.q-pt-lg(:to="{ name: 'project.search' }")
+        .pt
+          .text-right.mb {{$t('homepage.seeAllProjects')}}
+          hr
+    .row.projects.gutter-sm
+      .col-md-12.col-lg-4(v-for="project in featuredProjects")
+        q-card.inline.round-borders(color="white", text-color="grey-7")
+          q-card-media(:style="'background-image: url(' + project.medias.find(m => m.type === 'image').src + ')'" @click.native="goToProjectPage(project.slug)")
+          q-card-title(@click.native="goToProjectPage(project.slug)") {{project.name}}
+          q-card-main
+            p.short-description {{project.description}}
+            p
+              q-btn.tag(color="tertiary", dense, size="", outline, :key="tag", v-for="tag in project.tags")
+                | {{tag}}
+            .author.items-center
+              .avatar
+                img.align-bottom(:src="'https://steemitimages.com/u/' + project.owner +'/avatar'")
+              .author-details
+                .name
+                  span {{ '@' + project.owner  }}
 
-      .row.submit-project.round-borders.justify-between.items-center.q-mt-lg
-        .row.no-wrap.items-center
-          img.blue-text(src="~assets/img/skyline.svg")
-          .row.column
-            p.blue-text.q-mb-sm {{$t('homepage.newProjectTitle')}}
-            p.q-mb-none {{$t('homepage.newProjectSubtitle')}}
-        div
-          q-btn(color="primary", @click="redirectToCreateProject")
-            | {{$t('homepage.submitYourProject')}}
+    .row.submit-project.round-borders.justify-between.items-center.q-mt-lg
+      .row.no-wrap.items-center
+        img.blue-text(src="~assets/img/skyline.svg")
+        .row.column
+          p.blue-text.q-mb-sm {{$t('homepage.newProjectTitle')}}
+          p.q-mb-none {{$t('homepage.newProjectSubtitle')}}
+      div
+        q-btn(color="primary", @click="redirectToCreateProject")
+          | {{$t('homepage.submitYourProject')}}
 
 </template>
 
