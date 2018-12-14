@@ -147,16 +147,6 @@ export default {
     },
 
     /**
-     * helper to add a class on fullscreen
-     *
-     * @param {boolean} e - true if "fullscreen"
-     * @author Daniel Thompson-Yvetot
-     */
-    fullscreenZindex (e) {
-      return this.fullScreen
-    },
-
-    /**
      * use as a polyfill to get the location of the range in the contenteditable
      *
      * @returns {object}
@@ -667,7 +657,7 @@ export default {
         placeholder="Search for a user"
         autofocus
         autocorrect="off"
-        :class="[ fullScreen ? 'superZ': 'normalZ' ]"
+        :class="[ fullScreenBoolean ? 'superZ': 'normalZ' ]"
         :style="userInputPosRendered"
         ref="userSearch"
         color="amber"

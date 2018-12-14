@@ -34,6 +34,7 @@ module.exports = function (ctx) {
         UTOPIAN_API: process.env.UTOPIAN_API,
         UTOPIAN_DOMAIN: process.env.UTOPIAN_DOMAIN,
         AUTH_DOMAIN: process.env.AUTH_DOMAIN,
+        IPFS_ENDPOINT: process.env.IPFS_ENDPOINT,
         GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
         SENTRY_DSN: process.env.SENTRY_DSN,
         SEO_FB_ID: process.env.SEO_FB_ID,
@@ -43,7 +44,6 @@ module.exports = function (ctx) {
       scopeHoisting: true,
       vueRouterMode: 'history',
       useNotifier: false,
-      vueCompiler: true,
       chainWebpack(chain) {
         chain.module.rule('lint')
         .test(/\.(js|vue)$/)

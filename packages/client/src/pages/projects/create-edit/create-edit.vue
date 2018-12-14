@@ -12,6 +12,20 @@ export default {
   },
   data () {
     return {
+      media5: {
+        ref: 'media5',
+        imageValid: false,
+        width: 2000,
+        height: 1130,
+        url: '',
+        buttons: {
+          rotate: true,
+          zoom: true,
+          upload: false,
+          clear: false,
+          url: false
+        }
+      },
       fixedProgress: false,
       formPercentage: 0,
       project: {

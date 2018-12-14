@@ -20,7 +20,7 @@
           p(v-html="stuff")
   </template>
 <script>
-import UWysiwyg from '@/components/form/wysiwyg'
+import UWysiwyg from 'src/components/form/wysiwyg'
 import QBreadcrumbs from 'quasar-framework/src/components/breadcrumbs/QBreadcrumbs'
 import QBreadcrumbsEl from 'quasar-framework/src/components/breadcrumbs/QBreadcrumbsEl'
 

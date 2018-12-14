@@ -54,6 +54,14 @@
       "language": {
         "label": "Language",
         "placeholder": "Select a language"
+      },
+      "imageUploader": {
+        "dragAndDrop": "Drag and drop here.",
+        "errors": {
+          "fileUpload": "An error occurred while uploading",
+          "fileTypeMismatch": "That file is of the wrong type",
+          "fileSizeExceed": "That file is too large"
+        }
       }
     },
     "tools": {
@@ -200,7 +208,7 @@
     "showMarkdown": "Toggle Markdown View",
     "showEditor": "Return to Editor",
     "imageEditor": "Edit your Image",
-    "dragAndDrop": "Drag and drop target",
+    "dragAndDrop": "Drag and drop here.",
     "fileTypeNotSupported": "We only support uploading images.",
     "gitComingSoon": "Git Repo Search Coming Soon!",
     "pasteError": "Unable to paste your resource. Try again with the button.",
@@ -224,14 +232,14 @@
       },
       "avatar": {
         "label": "Avatar URL",
-        "helper": "Set an URL or upload an image",
-        "placeholder": "Upload a file or set an url",
+        "helper": "Upload file, set URL or drag and drop.",
+        "placeholder": "Set URL",
         "preview": "Preview"
       },
       "cover": {
         "label": "Cover URL",
-        "helper": "Set an URL or upload an image",
-        "placeholder": "Upload a file or set an url",
+        "helper": "Upload file, set URL or drag and drop.",
+        "placeholder": "Set URL",
         "preview": "Preview"
       },
       "email": {
@@ -271,6 +279,7 @@
       "subtitle": "Make a great first impression with all the information about yourself and your career.",
       "title": "Let's update your profile",
       "update": "Update",
+      "clear": "Clear",
       "username": {
         "label": "Utopian username"
       }
@@ -343,9 +352,6 @@
         "ok": "Go back to app"
       }
     }
-  },
-  "errors": {
-    "fileUpload": "An error occurred while uploading"
   },
   "countables": {
     "articles": "Articles | Article | Articles",

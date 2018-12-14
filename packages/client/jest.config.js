@@ -36,8 +36,9 @@ module.exports = {
 		'^vue$': '<rootDir>/node_modules/vue/dist/vue.common.js',
 		'^quasar$': '<rootDir>/node_modules/quasar-framework/dist/umd/quasar.mat.umd.min.js',
 		'^~/(.*)$': '<rootDir>/$1',
-		'^src/(.*)$': '<rootDir>/src/$1'
-	},
+		'^src/(.*)$': '<rootDir>/src/$1',
+    '.*css$': '<rootDir>/test/jest/utils/stub.css'
+  },
 	transform: {
 		'.*\\.vue$': '<rootDir>/../testing/node_modules/vue-jest',
 		'.*\\.js$': '<rootDir>/../testing/node_modules/babel-jest'
