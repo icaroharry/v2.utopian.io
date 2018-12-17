@@ -18,4 +18,7 @@ module.exports.extendApp = function ({ app }) {
 
      Example: app.use(), app.get() etc
   */
+  app.get('*.map', (req, res) => {
+    res.status(404).send('404 | Page Not Found')
+  })
 }
