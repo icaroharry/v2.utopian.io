@@ -1,4 +1,4 @@
-FROM node:8.12-alpine
+FROM node:lts-alpine
 ADD . /opt/utopian
 WORKDIR /opt/utopian
 RUN yarn
