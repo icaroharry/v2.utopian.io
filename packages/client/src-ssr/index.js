@@ -19,7 +19,7 @@ const
   ssr = require('../ssr'),
   extension = require('./extension'),
   app = express(),
-  port = process.env.PORT || 3000
+  port = process.env.PORT || 8080
 
 const serve = (path, cache) => express.static(ssr.resolveWWW(path), {
   maxAge: cache ? 1000 * 60 * 60 * 24 * 30 : 0
