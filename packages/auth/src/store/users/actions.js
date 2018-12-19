@@ -26,14 +26,17 @@ export const saveUser = async (context, data) => {
     url: `/v1/user`,
     data
   })
-
+  let hostName = window && window.location.hostname
+  hostName = hostName && hostName.substring(hostName.lastIndexOf('.', hostName.lastIndexOf('.') - 1) + 1)
   Cookies.set('refresh_token', payload.tokens.refresh_token, {
     path: '/',
-    expires: 365
+    expires: 365,
+    domain: hostName
   })
   Cookies.set('access_token', payload.tokens.access_token, {
     path: '/',
-    expires: 365
+    expires: 365,
+    domain: hostName
   })
   return payload
 }

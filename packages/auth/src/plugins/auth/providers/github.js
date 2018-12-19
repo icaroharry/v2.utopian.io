@@ -14,14 +14,24 @@ export default async ({ currentRoute, store, redirect, ssrContext, redirectUrl }
       code
     })).data
 
+    let hostName
+    if (typeof window === 'undefined') {
+      hostName = ssrContext.req.headers.host.split(':')[0]
+    } else {
+      hostName = window && window.location.hostname
+    }
+    hostName = hostName && hostName.substring(hostName.lastIndexOf('.', hostName.lastIndexOf('.') - 1) + 1)
+
     const token = jwt.decode(accessToken)
     cookies.set('refresh_token', refreshToken, {
       path: '/',
-      expires: 365
+      expires: 365,
+      domain: hostName
     })
     cookies.set('access_token', accessToken, {
       path: '/',
-      expires: 365
+      expires: 365,
+      domain: hostName
     })
     await store.dispatch('api/setTokens', {
       accessToken,
