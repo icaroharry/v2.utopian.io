@@ -301,6 +301,7 @@ div.profile-form
               @duplicate="duplicatedSkills"
               @input="chipsInputChange"
               :placeholder="skills.length === 0 ? $t('users.profile.skills.placeholder') : ''"
+              :error="$v.skills.$invalid"
               )
                 q-autocomplete(@search="skillsAutocomplete", :min-characters="2", :max-results="10")
           q-card-separator

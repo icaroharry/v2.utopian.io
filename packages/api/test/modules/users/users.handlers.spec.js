@@ -210,4 +210,11 @@ describe('search for users\' skills', () => {
   it('should return 2 results', () => {
     assert.lengthOf(payload, 2)
   })
+
+  it('should return the array of objects containing data for the autocomplete', () => {
+    expect(payload).to.have.deep.members([
+      { _id: 'Cod', name: 'Cod', occurrences: 1 },
+      { _id: 'Code', name: 'Code', occurrences: 1 }
+    ])
+  })
 })
