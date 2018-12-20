@@ -142,7 +142,9 @@ export default {
         } else {
           const result = await this.updateProfileImages(this.images)
           if (result) {
-            this.updateAvatarUrl(res)
+            if (ref === 'avatar') {
+              this.updateAvatarUrl(res)
+            }
             this.setAppSuccess(`api.messages.${result}`)
           } else {
             this.setAppError('api.messages.updateFail')
