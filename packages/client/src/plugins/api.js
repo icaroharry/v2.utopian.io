@@ -41,6 +41,9 @@ export default class API {
     const headers = {
       'Accept': 'application/json'
     }
+    if (typeof window === 'undefined') {
+      headers['x-forwarded-for'] = context.rootState.utils.ssrIp
+    }
     const { accessToken, refreshToken } = context.rootState.api
     if (accessToken) {
       const decodedToken = jwt.decode(accessToken)

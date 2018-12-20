@@ -17,3 +17,7 @@ export const setAppError = (state, appError) => {
 export const setAppSuccess = (state, appSuccess) => {
   state.appSuccess = appSuccess
 }
+
+export const setSSRIp = (state, ssrIp) => {
+  state.ssrIp = ssrIp
+}
