@@ -31,6 +31,7 @@ const articles = new Schema({
   slugs: { type: Array, index: true },
   title: { type: String, required: true, text: true },
   viewsIPs: { type: Array, default: [] },
+  tags: { type: Array, required: true },
   createdAt: { type: Date, default: Date.now() },
   updatedAt: { type: Date },
   deletedAt: { type: Date }

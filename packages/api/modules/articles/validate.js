@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const { validation } = require('../../utils/constants')
 
 /**
  * Validate the article creation
@@ -14,7 +15,8 @@ const createArticle = {
     body: Joi.string().trim().max(250000).required(),
     language: Joi.string().trim().max(2).required(),
     proReview: Joi.boolean().required(),
-    title: Joi.string().trim().max(250).required()
+    title: Joi.string().trim().max(250).required(),
+    tags: Joi.array().min(1).max(5).unique().items(Joi.string().regex(validation.articleTag).trim().min(1).max(100)).required()
   }
 }
 
@@ -31,7 +33,8 @@ const updateArticle = {
     body: Joi.string().trim().max(250000).required(),
     language: Joi.string().trim().max(2).required(),
     proReview: Joi.boolean().required(),
-    title: Joi.string().trim().max(250).required()
+    title: Joi.string().trim().max(250).required(),
+    tags: Joi.array().min(1).max(5).unique().items(Joi.string().regex(validation.articleTag).trim().min(1).max(100)).required()
   }
 }
 
@@ -59,9 +62,17 @@ const getArticle = {
   }
 }
 
+const searchTags = {
+  payload: {
+    partial: Joi.string().trim().required().min(2).max(100),
+    tags: Joi.array().max(5).unique().items(Joi.string().regex(validation.articleTag).trim().min(1).max(100)).required()
+  }
+}
+
 module.exports = {
   createArticle,
   updateArticle,
   getArticleForEdit,
-  getArticle
+  getArticle,
+  searchTags
 }

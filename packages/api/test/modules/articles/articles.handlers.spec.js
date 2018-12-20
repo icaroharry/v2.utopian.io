@@ -18,7 +18,8 @@ const createArticleEndpoint = {
     body: 'Article body',
     language: 'en',
     proReview: true,
-    title: 'Article title'
+    title: 'Article title',
+    tags: ['post-test']
   }
 }
 
@@ -29,7 +30,8 @@ const updateArticleEndpoint = {
     body: 'Article body updated',
     language: 'en',
     proReview: false,
-    title: 'Article title updated'
+    title: 'Article title updated',
+    tags: ['post-test', 'post-update', 'c++', 'c#', '.net']
   }
 }
 
@@ -40,7 +42,8 @@ const updateArticleNotExistingEndpoint = {
     body: 'Article body not found',
     language: 'en',
     proReview: false,
-    title: 'Article title not found'
+    title: 'Article title not found',
+    tags: ['post-test', 'post-update', 'c++', 'c#', '.net']
   }
 }
 
@@ -51,7 +54,8 @@ const updateArticleUnsupportedLanguageEndpoint = {
     body: 'Article body updated',
     language: 'zh',
     proReview: false,
-    title: 'Article title updated'
+    title: 'Article title updated',
+    tags: ['post-test', 'post-update', 'c++', 'c#', '.net']
   }
 }
 
@@ -60,6 +64,15 @@ const getArticleForEditEndPoint = { method: 'GET', url: '/v1/article/gregory/art
 const getArticleNonExistingForEditEndPoint = { method: 'GET', url: '/v1/article/gregory/xxx/edit' }
 
 const getArticle = { method: 'GET', url: '/v1/article/gregory/article-fixture' }
+
+const searchTagsEndpoint = {
+  method: 'POST',
+  url: '/v1/article/searchTags',
+  payload: {
+    partial: 'po',
+    tags: ['post-test']
+  }
+}
 
 describe('create an article', () => {
   let response
@@ -184,7 +197,7 @@ describe('get an article by its author and slug for edit', () => {
 
   it('should have all the keys', () => {
     expect(payload).to.have.all.keys(
-      'author', 'beneficiaries', 'body', 'language', 'proReview', 'title', '_id'
+      'author', 'beneficiaries', 'body', 'language', 'proReview', 'title', 'tags', '_id'
     )
   })
 })
@@ -226,7 +239,33 @@ describe('get an article by its author and slug', () => {
 
   it('should have all the keys', () => {
     expect(payload).to.have.all.keys(
-      'author', 'beneficiaries', 'body', 'language', 'proReview', 'title', 'views'
+      'author', 'beneficiaries', 'body', 'language', 'proReview', 'title', 'views', 'tags'
     )
+  })
+})
+
+describe('search for articles\' tags', () => {
+  let response
+  let payload
+
+  before(async () => {
+    const token = generateAccessToken({ uid: '5bcaf95f3344e352e0921157', username: 'gregory' })
+    searchTagsEndpoint.headers = {
+      'Authorization': token
+    }
+    response = await global.server.inject(searchTagsEndpoint)
+    payload = JSON.parse(response.payload)
+  })
+
+  it('should return a 200 status response', () => {
+    expect(response.statusCode).to.equal(200)
+  })
+
+  it('should return 1 result', () => {
+    assert.lengthOf(payload, 1)
+  })
+
+  it('should return the array of objects containing data for the autocomplete', () => {
+    expect(payload).to.have.deep.members([{ _id: 'post-update', name: 'post-update', occurrences: 1 }])
   })
 })

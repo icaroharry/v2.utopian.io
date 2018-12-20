@@ -132,7 +132,7 @@ const getArticleForEdit = async (req, h) => {
   const slug = `${req.params.author}/${req.params.slug}`
   const article = await Article.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] })
     .populate('beneficiaries.user', 'username avatarUrl')
-    .select('author beneficiaries body language proReview title')
+    .select('author beneficiaries body language proReview title tags')
   if (!article) return h.response({})
   if (article.author.toString() === userId) {
     return h.response(article)
@@ -162,15 +162,41 @@ const getArticle = async (req, h) => {
   const articleDB = await Article.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }], deletedAt: null })
     .populate('author', 'username avatarUrl job reputation')
     .populate('beneficiaries.user', 'username avatarUrl')
-    .select('author beneficiaries body language proReview title viewsIPs -_id')
+    .select('author beneficiaries body language proReview title viewsIPs tags -_id')
   if (!articleDB) return h.response({})
   const { viewsIPs, id, ...article } = articleDB.toJSON({ virtuals: true })
   return h.response(article)
+}
+
+/**
+
+ * Returns options for the autocomplete based on the user input
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ * @payload {object} req.payload.partial - contains the term to be searched
+ *
+ * @returns contains the matched tags
+ * @author Adriel Santos
+ */
+
+const searchTags = async (req, h) => {
+  const tags = await Article.aggregate([
+    { '$unwind': '$tags' },
+    { '$match': { tags: { '$regex': `^${req.payload.partial}`, '$options': 'i', '$nin': req.payload.tags } } },
+    { '$group': { _id: '$tags', occurrences: { '$sum': 1 } } },
+    { '$limit': 10 },
+    { '$addFields': { name: '$_id' } },
+    { '$sort': { 'occurrences': -1, 'name': 1 } }
+  ])
+
+  return h.response(tags)
 }
 
 module.exports = {
   createArticle,
   updateArticle,
   getArticleForEdit,
-  getArticle
+  getArticle,
+  searchTags
 }

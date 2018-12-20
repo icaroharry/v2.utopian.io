@@ -42,6 +42,15 @@
       "update": {
         "label": "Update my article",
         "successMsg": "The article was updated!"
+      },
+      "tags": {
+        "label": "Tags",
+        "placeholder": "Add up up to 5 tags",
+        "errors": {
+          "invalidCharacters": "A tag can only have lowercase alphanumeric characters, '-', '+', '.', and '#'",
+          "duplicatedTags": "This tag is already in the list",
+          "maxItems": "You are allowed to add up to 5 tags"
+        }
       }
     },
     "view": {
@@ -273,7 +282,8 @@
         "placeholder": "Add your skills",
         "errors": {
           "duplicatedSkill": "This skill is already in the list",
-          "minSkillLength": "Skill must have at least 2 characters"
+          "minSkillLength": "Skill must have at least 2 characters",
+          "maxItems": "You are allowed to add up to 30 skills"
         }
       },
       "subtitle": "Make a great first impression with all the information about yourself and your career.",

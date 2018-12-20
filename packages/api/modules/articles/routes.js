@@ -42,6 +42,15 @@ routes.push([
       tags: ['articles'],
       validate: Validate.getArticle
     }
+  },
+  {
+    method: 'POST',
+    path: '/v1/article/searchTags',
+    handler: (req, h) => Handlers.searchTags(req, h),
+    options: {
+      tags: ['articles'],
+      validate: Validate.searchTags
+    }
   }
 ])
 

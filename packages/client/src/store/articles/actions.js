@@ -35,3 +35,12 @@ export const fetchArticle = async (context, { author, slug }) => {
   })
   context.commit('setArticle', payload)
 }
+
+export const searchTags = async (context, data) => {
+  return API.call({
+    context,
+    method: 'post',
+    url: '/v1/article/searchTags',
+    data
+  })
+}

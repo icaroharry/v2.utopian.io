@@ -18,7 +18,8 @@ export default {
         body: '',
         language: '',
         proReview: true,
-        title: ''
+        title: '',
+        tags: []
       },
       displaySearchBeneficiaries: false,
       beneficiariesSearchResult: '',
@@ -43,6 +44,10 @@ export default {
       proReview: { required },
       title: {
         required, maxLength: maxLength(250)
+      },
+      tags: {
+        required,
+        maxLength: maxLength(5)
       }
     }
   },
@@ -61,12 +66,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions('utils', ['setAppSuccess']),
+    ...mapActions('utils', ['setAppSuccess', 'setAppError']),
     ...mapActions('users', ['searchUsers']),
     ...mapActions('articles', [
       'fetchArticleForEdit',
       'saveArticle',
-      'updateArticle'
+      'updateArticle',
+      'searchTags'
     ]),
     async submit () {
       this.$v.article.$touch()
@@ -131,6 +137,34 @@ export default {
     },
     removeBeneficiary (id) {
       this.article.beneficiaries = this.article.beneficiaries.filter(u => u.user._id !== id)
+    },
+    duplicatedTags () {
+      this.setAppError('articles.createEdit.tags.errors.duplicatedTags')
+    },
+    async tagsAutocomplete (term, done) {
+      const data = {
+        partial: term,
+        tags: this.article.tags
+      }
+      let tags = await this.searchTags(data)
+      if (tags !== null) {
+        done(tags.map(tag => ({
+          value: tag._id,
+          label: `${tag.name} (${tag.occurrences})`
+        })))
+      }
+    },
+    chipsInputChange (newTags) {
+      const regex = /^[a-z0-9-+.#]*$/
+      const newTag = newTags[newTags.length - 1] 
+      if (!newTag.match(regex)) {
+        this.article.tags.pop()
+        this.setAppError('articles.createEdit.tags.errors.invalidCharacters')
+      }
+      if (newTags.length > 5) {
+        this.article.tags.pop()
+        this.setAppError('articles.createEdit.tags.errors.maxItems')
+      }
     }
   },
   computed: {
@@ -159,6 +193,15 @@ div
         u-wysiwyg(v-model="article.body", field="body")
     .col-md-4.col-sm-12.col-xs-12
       u-form-languages(v-model="article.language", field="language", :error="$v.article.language.$error", :required="true")
+      q-field(orientation="vertical", :label="$t('articles.createEdit.tags.label')", :count="5")
+        q-chips-input(
+          v-model="article.tags"
+          @duplicate="duplicatedTags"
+          @input="chipsInputChange"
+          :placeholder="article.tags.length === 0 ? $t('articles.createEdit.tags.placeholder') : ''"
+          :error="$v.article.tags.$error"
+        )
+          q-autocomplete(@search="tagsAutocomplete", :min-characters="2", :max-results="10")
       .flex.justify-between
         q-field(:label="$t('articles.createEdit.beneficiaries.label')")
         q-btn(

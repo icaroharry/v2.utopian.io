@@ -9,6 +9,7 @@ module.exports = [
     'proReview': true,
     'slug': 'gregory/article-fixture',
     'slugs': [],
+    'tags': ['test'],
     'title': 'Article fixture',
     'viewsIPs': ['92.168.125.12', '127.0.0.1'],
     'createdAt': new Date('2018-11-16T11:41:16.934Z'),

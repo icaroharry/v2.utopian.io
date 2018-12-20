@@ -181,13 +181,17 @@ export default {
         })))
       }
     },
-    duplicatedSkills (value) {
+    duplicatedSkills () {
       this.setAppError('users.profile.skills.errors.duplicatedSkill')
     },
-    chipsInputChange (newValues) {
-      if (newValues[newValues.length - 1].length < 2) {
+    chipsInputChange (newSkills) {
+      if (newSkills[newSkills.length - 1].length < 2) {
         this.skills.pop()
         this.setAppError('users.profile.skills.errors.minSkillLength')
+      }
+      if (newSkills.length > 30) {
+        this.skills.pop()
+        this.setAppError('users.profile.skills.errors.maxItems')
       }
     }
   },
