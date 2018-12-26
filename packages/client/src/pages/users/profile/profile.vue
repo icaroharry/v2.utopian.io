@@ -136,7 +136,7 @@ export default {
      * @author Daniel Thompson-Yvetot
      */
     updateImages (ref) {
-      this.$refs[ref].upload('image/png').then(async (res) => {
+      this.$refs[ref].upload('image/jpeg', 0.8).then(async (res) => {
         if (!res) {
           this.$v.images.$touch()
         } else {
@@ -203,6 +203,7 @@ export default {
     ])
   },
   watch: {
+    // these are important to keep the parent bindings when clearing the inputs
     'avatar.url': function (value) {
       this.images.avatarUrl = value
     },

@@ -23,7 +23,7 @@ const getPopulatedProject = async ({ slug }) =>
   })
     .populate('owners', 'username avatarUrl')
     .populate('collaborators.user', 'username avatarUrl')
-    .select('name repositories website docs license medias description details tags owners collaborators _id allowExternals')
+    .select('name avatarUrl repositories website docs license medias description details tags owners collaborators _id allowExternals')
 
 /**
  * Get a project by its owner and slug for editing purposes
@@ -60,7 +60,7 @@ const getProjectForEdit = async (req, h) => {
 }
 
 const getFeaturedProjects = async (req, h) => {
-  const projects = await Project.find({ featured: true, blacklisted: false }).select('description medias name owners slug tags -_id')
+  const projects = await Project.find({ featured: true, blacklisted: false }).select('description medias avatarUrl name owners slug tags -_id')
   return h.response(projects)
 }
 
@@ -336,7 +336,7 @@ const isProjectAdmin = async (req, h) => {
  */
 const getProjectView = async (req, h) => {
   const { owner, slug, tab } = req.params
-  let fields = 'name website medias description tags owners collaborators allowExternals documentation license createdAt updatedAt'
+  let fields = 'name avatarUrl website medias description tags owners collaborators allowExternals documentation license createdAt updatedAt'
   if (tab === 'details') {
     fields += ' details repositories'
   }

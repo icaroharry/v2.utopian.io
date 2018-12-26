@@ -119,9 +119,16 @@
         "label": "Documentation page",
         "placeholder": "https://quasar-framework.org/guide"
       },
+      "avatar": {
+        "label": "Project Avatar Image",
+        "placeholder": "Select an Image",
+        "helper": "Upload file, set URL or drag and drop."
+      },
       "images": {
         "label": "Images",
-        "help": "This is the first thing that people will see when they come across your project. 2000x1130 ideal for hi-res. Select a maximum of 5 images."
+        "helper": "This is the first thing that people will see when they come across your project. 1440x840 ideal for hi-res. Select a maximum of 6 images.",
+        "upload": "Upload",
+        "clear": "Clear"
       },
       "license": {
         "label": "License",
@@ -137,7 +144,7 @@
       },
       "projectDetails": {
         "label": "Project details",
-        "help": "Write everything about your project...",
+        "helper": "Write everything about your project...",
         "error": {
           "length": "You have exceeded the maximum length."
         }
@@ -151,7 +158,7 @@
       },
       "projectTags": {
         "label": "Project tags",
-        "help": "Please provide between 3 and 5 tags",
+        "helper": "Please provide between 3 and 5 tags",
         "placeholder": "javascript vuejs material-design",
         "error": {
           "exists": "Please do not use the same tag twice",

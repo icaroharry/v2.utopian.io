@@ -19,6 +19,7 @@ module.exports = [
       }
     ],
     'name': 'Quasar Framework',
+    'avatarUrl': 'https://img.utopian.io/QmTjLfpgSaz2jWuREv53PeoVhQL2xQtdVUda6UDN6fLRbU',
     'owners': [new Mongoose.Types.ObjectId('5bc798adad26d25470439533')],
     'repositories': [
       {
@@ -56,6 +57,7 @@ module.exports = [
       }
     ],
     'name': 'busy',
+    'avatarUrl': 'https://img.utopian.io/QmTjLfpgSaz2jWuREv53PeoVhQL2xQtdVUda6UDN6fLRbU',
     'owners': [new Mongoose.Types.ObjectId('5bee961699164e6d24cbd3ed')], // Add the busy project as an unclaimed project
     'repositories': [
       {
@@ -93,6 +95,7 @@ module.exports = [
       }
     ],
     'name': 'blacklisted',
+    'avatarUrl': 'https://img.utopian.io/QmTjLfpgSaz2jWuREv53PeoVhQL2xQtdVUda6UDN6fLRbU',
     'owners': [new Mongoose.Types.ObjectId('5bcaf95f3344e352e0921157')],
     'repositories': [
       {
@@ -129,6 +132,7 @@ module.exports = [
       }
     ],
     'name': 'Utopian',
+    'avatarUrl': 'https://img.utopian.io/QmTjLfpgSaz2jWuREv53PeoVhQL2xQtdVUda6UDN6fLRbU',
     'owners': [new Mongoose.Types.ObjectId('5bee961699164e6d24cbd3ee')],
     'repositories': [
       {

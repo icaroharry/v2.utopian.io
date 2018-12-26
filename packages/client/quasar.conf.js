@@ -25,7 +25,6 @@ module.exports = function (ctx) {
       'i18n',
       { path: 'markdown', server: false },
       { path: 'sentry', server: false },
-      { path: 'vue-gallery', server: false },
       'vuelidate'
     ],
     // build configuration.

@@ -20,10 +20,12 @@ export default {
    * @property {boolean}  imageObj.imageValid       - utility prop (required - set false)
    * @property {number}   imageObj.width            - image width in pixels (required)
    * @property {number}   imageObj.height           - image width in pixels (required)
+   * @property {string}   imageObj.type             - image type 'image/png' (default) / 'image/jpeg'
+   * @property {number}   imageObj.compression      - percent as decimal (e.g. 0.8)
    * @property {number}   imageObj.scale            - image scale // 1x, 2x, 3x, 4x (optional)
    * @property {string}   imageObj.src              - url for source
    * @property {boolean}  imageObj.avatar           - use 50% border radius
-   * @property {boolean}  imageObj.squareAvatar     - use 5% border radius
+   * @property {boolean}  imageObj.squareAvatar     - use 10% border radius
    * @property {number}   imageObj.fontSize         - use to scale placeholder text
    * @property {boolean}  imageObj.buttons.rotate   - show integrated rotate buttons
    * @property {boolean}  imageObj.buttons.zoom     - show integrated zoom buttons
@@ -93,6 +95,7 @@ export default {
           }).catch(err => {
             this.$q.loading.hide()
             this.setAppError('components.form.imageUploader.errors.fileUpload')
+            reject(err)
             throw new Error(err) // make sure Sentry knows about it
           })
         }, type, compressionRate)
@@ -126,7 +129,7 @@ export default {
   .avatar canvas
     border-radius 50%!important
   .squareAvatar canvas
-    border-radius 5%!important
+    border-radius 10%!important
 </style>
 <template lang="pug">
 q-no-ssr
@@ -146,13 +149,13 @@ q-no-ssr
         :show-remove-button="false"
         :show-loading="false"
         :placeholder-font-size="imageObj.fontSize || 14"
-        canvas-color="transparent"
+        canvas-color="white"
         initial-size="cover"
         @file-type-mismatch="onFileTypeMismatch()"
         @file-size-exceed="onFileSizeExceed()"
         @new-image-drawn="imageValidate(true)"
         @image-remove="imageValidate(false)"
-        auto-sizing,
+        :auto-sizing="true",
         prevent-white-space,
         replace-drop,
         disable-click-to-choose
@@ -161,15 +164,17 @@ q-no-ssr
           crossOrigin="anonymous"
           :src="imageObj.url"
           slot="initial"
+          style="display:none"
         )
     .col-1.items-center.justify-center(style="margin: auto")
-      q-btn.row(v-if="imageObj.buttons.rotate === true && imageObj.imageValid", flat, size="sm", color="primary", @click="pic.rotate(1)", icon="mdi-rotate-right")
-      q-btn.row(v-if="imageObj.buttons.rotate === true && imageObj.imageValid", flat, size="sm", color="primary", @click="pic.rotate(-1)", icon="mdi-rotate-left")
-      q-btn.row(v-if="imageObj.buttons.zoom === true && imageObj.imageValid", flat, size="sm", color="primary", @click="pic.zoomIn()", icon="mdi-magnify-plus")
-      q-btn.row(v-if="imageObj.buttons.zoom === true && imageObj.imageValid", flat, size="sm", color="primary", @click="pic.zoomOut()", icon="mdi-magnify-minus")
-      q-btn.row(v-if="imageObj.buttons.url === true && imageObj.imageValid", flat, size="sm", color="primary", @click="link = !link", icon="mdi-link")
-      q-btn.row(v-if="imageObj.buttons.upload === true && imageObj.imageValid", flat, size="sm", color="primary", @click="upload('image/png')", icon="mdi-checkbox-marked-circle-outline")
-      q-btn.row(v-if="imageObj.buttons.clear === true && imageObj.imageValid", flat, size="sm", color="primary", @click="clear()", icon="mdi-close-cancel")
+      q-btn.q-pa-sm.row(v-if="imageObj.buttons.clear === true && imageObj.imageValid", flat, size="sm", color="red-5", @click="clear()", icon="mdi-close-circle")
+      q-btn.q-pa-xs.row(v-if="imageObj.buttons.rotate === true && imageObj.imageValid", flat, size="sm", color="primary", @click="pic.rotate(1)", icon="mdi-rotate-right")
+      q-btn.q-pa-xs.row(v-if="imageObj.buttons.rotate === true && imageObj.imageValid", flat, size="sm", color="primary", @click="pic.rotate(-1)", icon="mdi-rotate-left")
+      q-btn.q-pa-xs.row(v-if="imageObj.buttons.zoom === true && imageObj.imageValid", flat, size="sm", color="primary", @click="pic.zoomIn()", icon="mdi-magnify-plus")
+      q-btn.q-pa-xs.row(v-if="imageObj.buttons.zoom === true && imageObj.imageValid", flat, size="sm", color="primary", @click="pic.zoomOut()", icon="mdi-magnify-minus")
+      q-btn.q-pa-xs.row(v-if="imageObj.buttons.url === true && imageObj.imageValid", flat, size="sm", color="primary", @click="link = !link", icon="mdi-link")
+      q-btn.q-pa-xs.row(v-if="imageObj.buttons.upload === true && imageObj.imageValid", flat, size="sm", color="green-5", @click="upload(imageObj.type || 'image/png', imageObj.compression || 1)", icon="mdi-checkbox-marked-circle-outline")
+
   q-input.row.items-center.justify-center(
     v-if="link"
     v-model="imageObj.url"

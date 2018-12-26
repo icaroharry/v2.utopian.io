@@ -5,6 +5,7 @@ const { generateAccessToken } = require('../../utils/authentication')
 
 const createProjectPayload = {
   name: 'Utopian',
+  avatarUrl: 'https://img.utopian.io/QmTjLfpgSaz2jWuREv53PeoVhQL2xQtdVUda6UDN6fLRbU',
   repositories: [
     {
       'id': 136034748,
@@ -68,7 +69,7 @@ describe('featured projects', () => {
 
   it('should have all the keys', () => {
     expect(payload[0]).to.have.all.keys(
-      'description', 'medias', 'name', 'owners', 'slug', 'tags'
+      'description', 'avatarUrl', 'medias', 'name', 'owners', 'slug', 'tags'
     )
   })
 })
@@ -92,7 +93,7 @@ describe('get the utopian project by its owner and slug', () => {
 
   it('should have all the keys', () => {
     expect(payload).to.have.all.keys(
-      'name', 'repositories', 'website', 'license', 'medias', 'description', 'details', 'tags', 'owners', 'collaborators', '_id', 'allowExternals'
+      'name', 'avatarUrl', 'repositories', 'website', 'license', 'medias', 'description', 'details', 'tags', 'owners', 'collaborators', '_id', 'allowExternals'
     )
   })
   it('should have utopian-io as owner', () => {
@@ -282,7 +283,7 @@ describe('get the utopian project view with the details tab information', () => 
 
   it('should have all the keys', () => {
     expect(payload).to.have.all.keys(
-      'name', 'repositories', 'website', 'license', 'medias', 'description', 'details', 'tags', 'owners', '_id', 'allowExternals',
+      'name', 'avatarUrl', 'repositories', 'website', 'license', 'medias', 'description', 'details', 'tags', 'owners', '_id', 'allowExternals',
       'collaborators', 'articlesCount', 'bountiesCount', 'contributorsCount', 'createdAt', 'updatedAt'
     )
   })

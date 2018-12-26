@@ -4,6 +4,7 @@ const Schema = Mongoose.Schema
 
 const projects = new Schema({
   allowExternals: { type: Boolean, required: true, default: true },
+  avatarUrl: { type: String, required: true },
   blacklisted: { type: Boolean, default: false },
   closedSource: { type: Boolean, default: false },
   collaborators: [{
