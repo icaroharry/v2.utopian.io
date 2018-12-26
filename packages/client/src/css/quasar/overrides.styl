@@ -24,3 +24,10 @@
 
 .q-field-bottom
   color #939393
+
+.q-field-with-error
+  .q-field-icon, .q-field-label, .q-field-bottom
+    color $negative
+  .q-if
+    &:before
+      border 1px solid $negative
