@@ -9,14 +9,13 @@ export default {
   },
   data () {
     return {
-      steemUser: null
+      searchText: null
     }
   },
   computed: {
     ...mapGetters('auth', [
       'guest',
-      'user',
-      'getBlockchainActiveAccount'
+      'user'
     ])
   },
   methods: {
@@ -25,16 +24,20 @@ export default {
       'linkSteemAccount',
       'startGithubLogin'
     ]),
+    ...mapActions('search', [
+      'searchArticles'
+    ]),
     async logoutAndRedirect () {
       await this.logout()
       this.$router.push({ path: `/${this.$route.params.locale}` })
     },
     redirectToLogin () {
       window.location = `${process.env.AUTH_DOMAIN}/${this.$route.params.locale}/login/?redirectUrl=${window.location.href}`
+    },
+    search () {
+      this.searchArticles(this.searchText)
+      this.$router.push({ path: `/${this.$route.params.locale}/search/articles` })
     }
-  },
-  mounted () {
-    this.steemUser = this.getBlockchainActiveAccount('steem')
   }
 }
 </script>
@@ -47,12 +50,26 @@ export default {
           img.u-logo.mobile-only(src="~assets/img/logo-icon.svg")
           img.u-logo.desktop-only(src="~assets/img/logo-white.svg")
       div
-        div.row(v-if="guest === true")
-          div.q-ma-sm
+        .row(v-if="guest === true")
+          .q-mt-sm.q-mr-lg
+            q-search(
+              v-model.trim.lazy="searchText"
+              @keyup.enter="search"
+              color="white"
+              dark
+            )
+          .q-ma-sm
             q-btn(@click.native="redirectToLogin", color="primary", icon="mdi-account", :label="$t('navbar.signIn')")
 
-        div.row(v-if="!guest")
-          div.q-mt-sm.q-mr-lg
+        .row(v-if="!guest")
+          .q-mt-sm.q-mr-lg
+            q-search(
+              v-model.trim.lazy="searchText"
+              @keyup.enter="search"
+              color="white"
+              dark
+            )
+          .q-mt-sm.q-mr-lg
             q-btn(color="primary", :label="$t('navbar.contribute')", icon="mdi-plus" )
             q-popover(self="top left", anchor="bottom left" style="z-index:500")
               q-list(dense, :link="true", separator)
@@ -61,14 +78,10 @@ export default {
                 q-item(:to="{ name: 'projects.create'}")
                   q-item-main(label="Add my project")
 
-          div.q-ma-sm
+          .q-ma-sm
             img.avatar(:src="user.avatarUrl")
             q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]", style="z-index:500")
               q-list(dense, :link="true", separator)
-                q-item(v-if="steemUser", :to="`/@${steemUser}`")
-                  q-item-side
-                    q-icon.q-item-icon.ut-steem
-                  q-item-main(:label="`@${steemUser}`")
                 q-item(:to="`/${$route.params.locale}/profile`")
                   q-item-side(icon="mdi-account")
                   q-item-main(:label="$t('navbar.profile')")
@@ -92,4 +105,7 @@ export default {
       width 36px
       border-radius 50%
       border: 2px solid rgba(white, 0.6)
+    .q-search
+      padding 2px 3px
+      height 36px
 </style>

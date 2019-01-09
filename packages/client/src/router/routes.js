@@ -68,16 +68,16 @@ export default (cookies) => ([
         meta: { auth: true }
       },
       {
-        path: 'i18n',
-        name: 'i18n.test',
+        path: 'search',
+        name: 'search',
         props: true,
-        component: () => import('src/pages/tests/i18n')
-      },
-      {
-        path: '/:locale/QEditor',
-        name: 'QEditor',
-        props: true,
-        component: () => import('@/pages/tests/QEditor.vue')
+        component: () => import('src/pages/search/articles/search-articles'),
+        children: [{
+          path: 'articles',
+          name: 'search.articles',
+          props: true,
+          component: () => import('src/pages/search/articles/search-articles')
+        }]
       }
     ]
   },
