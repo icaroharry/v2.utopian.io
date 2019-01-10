@@ -100,6 +100,32 @@ routes.push([
   },
   {
     method: 'POST',
+    path: '/v1/user/profile/workexperience',
+    handler: (req, h) => Handlers.createWorkExperience(req, h),
+    options: {
+      tags: ['users'],
+      validate: Validate.workExperience
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/user/profile/workexperience/{id}',
+    handler: (req, h) => Handlers.updateWorkExperience(req, h),
+    options: {
+      tags: ['users'],
+      validate: Validate.workExperience
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/user/profile/workexperience/{id}/remove',
+    handler: (req, h) => Handlers.deleteWorkExperience(req, h),
+    options: {
+      tags: ['users']
+    }
+  },
+  {
+    method: 'POST',
     path: '/v1/user/profile/searchSkills',
     handler: (req, h) => Handlers.searchUsersSkills(req, h),
     options: {

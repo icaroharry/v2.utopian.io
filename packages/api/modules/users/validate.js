@@ -48,6 +48,23 @@ const saveUser = {
   }
 }
 
+/**
+ * Validate a user's work experience
+ *
+ * @author East Mael
+ */
+const workExperience = {
+  payload: {
+    jobTitle: Joi.string().trim().required(),
+    company: Joi.string().trim().required(),
+    location: Joi.string().trim().optional().allow(''),
+    startDate: Joi.date(),
+    endDate: Joi.date().allow(null),
+    current: Joi.boolean(),
+    description: Joi.string().trim().optional().allow('')
+  }
+}
+
 const updateProfileMainInformation = {
   payload: {
     email: Joi.string().trim().optional().email().allow(''),
@@ -88,6 +105,7 @@ module.exports = {
   saveUser,
   getUsersByPartial,
   getUserByUsername: findByUsername,
+  workExperience,
   updateProfileMainInformation,
   updateProfileJob,
   updateProfileImages,

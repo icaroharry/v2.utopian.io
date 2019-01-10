@@ -44,6 +44,27 @@ const users = new Schema({
   }],
   cover: { type: String },
   email: { type: String },
+  workExperiences: [{
+    jobTitle: {
+      type: String,
+      required: true
+    },
+    company: {
+      type: String,
+      required: true
+    },
+    location: { type: String },
+    startDate: {
+      type: Date,
+      required: true
+    },
+    endDate: { type: Date },
+    current: {
+      type: Boolean,
+      default: false
+    },
+    description: { type: String }
+  }],
   job: { type: String },
   location: { type: String },
   name: { type: String },
@@ -81,7 +102,8 @@ users.methods.getEditableFields = function () {
     location: this.location,
     name: this.name,
     resume: this.resume,
-    skills: this.skills
+    skills: this.skills,
+    workExperiences: this.workExperiences
   }
 }
 

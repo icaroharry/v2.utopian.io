@@ -183,6 +183,82 @@ const searchUsersSkills = async (req, h) => {
   return h.response(skills)
 }
 
+/**
+ * Create user work experience
+ * @payload {object} req.payload - either main information, job or images data
+ * Create new user work experience
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ * @payload {object} req.payload
+ *
+ * @returns new work experience
+ * @author East Mael
+ */
+const createWorkExperience = async (req, h) => {
+  if (!req.auth.credentials.uid) {
+    throw Boom.unauthorized('general.unauthorized')
+  }
+
+  const user = await User.findOne({ _id: req.auth.credentials.uid })
+  const newWorkExperience = user.workExperiences.create(req.payload)
+  user.workExperiences.push(newWorkExperience)
+  const result = await user.save()
+
+  return h.response(result.workExperiences)
+}
+
+/**
+ * Update user work experience
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ * @payload {object} req.payload
+ *
+ * @returns updated work experience
+ * @author East Mael
+ */
+const updateWorkExperience = async (req, h) => {
+  if (!req.auth.credentials.uid) {
+    throw Boom.unauthorized('general.unauthorized')
+  }
+
+  const result = await User.findOneAndUpdate(
+    { _id: req.auth.credentials.uid, 'workExperiences._id': req.params.id },
+    { $set: { 'workExperiences.$': req.payload } },
+    { new: true }
+  )
+  if (result) {
+    return h.response(result.workExperiences)
+  }
+
+  throw Boom.badData('users.doesNotExist')
+}
+
+/**
+ * Delete work experience
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ * @payload {object} req.payload
+ *
+ * @returns updated work experience
+ * @author East Mael
+ */
+const deleteWorkExperience = async (req, h) => {
+  if (!req.auth.credentials.uid) {
+    throw Boom.unauthorized('general.unauthorized')
+  }
+
+  const result = await User.findOneAndUpdate(
+    { _id: req.auth.credentials.uid },
+    { $pull: { workExperiences: { _id: req.params.id } } },
+    { new: true }
+  )
+
+  return h.response(result.workExperiences)
+}
+
 module.exports = {
   createUser,
   getUsersByPartial,
@@ -191,5 +267,8 @@ module.exports = {
   updateProfile,
   searchUsersSkills,
   isUsernameAvailable,
-  hasClaimedBlockchainAccount
+  hasClaimedBlockchainAccount,
+  createWorkExperience,
+  updateWorkExperience,
+  deleteWorkExperience
 }

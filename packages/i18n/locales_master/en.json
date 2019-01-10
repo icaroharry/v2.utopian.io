@@ -7,8 +7,10 @@
   "debug": "Debug",
   "GDPR": "GDPR Acceptance",
   "common": {
+    "no": "No",
     "SEOTitle": "Utopian.io",
-    "SEOTitleTemplate": "Utopian.io, empowering open source"
+    "SEOTitleTemplate": "Utopian.io, empowering open source",
+    "yes": "Yes"
   },
   "articles": {
     "createEdit": {
@@ -299,6 +301,36 @@
       "clear": "Clear",
       "username": {
         "label": "Utopian username"
+      },
+      "workExperience": {
+        "label": "Work Experiences",
+        "tellUs": "Tell us about your different jobs and projects", 
+        "jobTitle": "Job Title",
+        "company": "Company",
+        "current": "Current",
+        "from": "From",
+        "to": "To",
+        "summary": "Summary",
+        "save": {
+          "label": "Save"
+        },
+        "update": {
+          "label": "Update"
+        },
+        "cancel": {
+          "label": "Cancel"
+        },
+        "edit": {
+          "label": "Edit"
+        },
+        "delete": {
+          "label": "Delete",
+          "title": "Remove this work experience",
+          "message": "Are you sure you want to remove this experience?"
+        },
+        "errors": {
+          "invalidEndDate": "The end date should be after the start date."
+        }
       }
     },
     "search": {
@@ -386,7 +418,8 @@
         "year": "numeric",
         "month": "short",
         "day": "numeric"
-      }
+      },
+      "inputShort": "M/D/YYYY"
     },
     "number": {
       "currency": {

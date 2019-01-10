@@ -3,6 +3,14 @@ const chai = require('chai')
 const { assert, expect } = chai
 const { generateAccessToken } = require('../../utils/authentication')
 
+const createWorkExperiencePayload = {
+  jobTitle: 'Sr. Software Developer',
+  company: 'Google, Inc.',
+  location: 'SF, USA',
+  startDate: new Date(),
+  description: 'A former Google software lead tech engineer'
+}
+
 const updateMainInformationEndpoint = {
   method: 'POST',
   url: '/v1/user/profile/maininformation',
@@ -36,6 +44,9 @@ const hasClaimedBlockchainAccountEndpoint = {
   method: 'POST',
   url: '/v1/user/blockchains/steem/claimed'
 }
+const createWorkExperienceEndpoint = { method: 'POST', url: '/v1/user/profile/workexperience', payload: createWorkExperiencePayload }
+const updateWorkExperienceEndpoint = { method: 'POST', url: '/v1/user/profile/workexperience/5c03d50cd269c81ddc57b44e', payload: createWorkExperiencePayload }
+const deleteWorkExperienceEndpoint = { method: 'POST', url: '/v1/user/profile/workexperience/5c03d50cd269c81ddc57b44d/remove' }
 
 const updateSkillsEndpoint = {
   method: 'POST',
@@ -216,5 +227,59 @@ describe('search for users\' skills', () => {
       { _id: 'Cod', name: 'Cod', occurrences: 1 },
       { _id: 'Code', name: 'Code', occurrences: 1 }
     ])
+  })
+})
+
+describe('create a work experience', () => {
+  let response
+  let payload
+
+  before(async () => {
+    const token = generateAccessToken({ uid: '5bf5d3d97314834af435cc4a', username: 'eastmael' })
+    createWorkExperienceEndpoint.headers = {
+      'Authorization': token
+    }
+    response = await global.server.inject(createWorkExperienceEndpoint)
+    payload = JSON.parse(response.payload)
+  })
+
+  it('should return a 200 status response', () => {
+    expect(response.statusCode).to.equal(200)
+  })
+
+  it('should return four (4) work experiences', () => {
+    assert.equal(payload.length, 4)
+  })
+})
+
+describe('update work experience', () => {
+  let response
+
+  before(async () => {
+    const token = generateAccessToken({ uid: '5bf5d3d97314834af435cc4a', username: 'eastmael' })
+    updateWorkExperienceEndpoint.headers = {
+      'Authorization': token
+    }
+    response = await global.server.inject(updateWorkExperienceEndpoint)
+  })
+
+  it('should return a 200 status response', () => {
+    expect(response.statusCode).to.equal(200)
+  })
+})
+
+describe('delete work experience', () => {
+  let response
+
+  before(async () => {
+    const token = generateAccessToken({ uid: '5bf5d3d97314834af435cc4a', username: 'eastmael' })
+    deleteWorkExperienceEndpoint.headers = {
+      'Authorization': token
+    }
+    response = await global.server.inject(deleteWorkExperienceEndpoint)
+  })
+
+  it('should return a 200 status response', () => {
+    expect(response.statusCode).to.equal(200)
   })
 })

@@ -62,6 +62,54 @@ module.exports = [
     'scopes': ['user'],
     'skills': ['Cod', 'Code']
   },
+  // GitHub account with Steem and Work Experience
+  {
+    '_id': new Mongoose.Types.ObjectId('5bf5d3d97314834af435cc4a'),
+    'scopes': ['user'],
+    'createdAt': new Date('2018-10-20T09:40:34.94Z'),
+    'username': 'eastmael',
+    'avatarUrl': 'https://avatars3.githubusercontent.com/u/29425738?v=4',
+    'authProviders': [{
+      'type': 'github',
+      'username': 'eastmaels',
+      'token': 'XXX'
+    }],
+    'blockchainAccounts': [{
+      'active': true,
+      'blockchain': 'steem',
+      'address': 'eastmael'
+    }],
+    'workExperiences': [
+      {
+        'current': true,
+        '_id': new Mongoose.Types.ObjectId('5c03d50cd269c81ddc57b44d'),
+        'jobTitle': 'Senior Software Developer',
+        'company': 'Google, Inc.',
+        'location': 'Tokyo, Japan',
+        'description': 'Works as a senior software developer at Google, Inc.',
+        'startDate': new Date('2018-12-02T15:00:00.000Z')
+      },
+      {
+        'current': false,
+        '_id': new Mongoose.Types.ObjectId('5c03d50cd269c81ddc57b44e'),
+        'jobTitle': 'Junior Software Developer',
+        'company': 'Google, Inc.',
+        'location': 'Tokyo, Japan',
+        'description': 'Worked as a junior software developer at Google, Inc.',
+        'startDate': new Date('2018-12-02T15:00:00.000Z')
+      },
+      {
+        'current': false,
+        '_id': new Mongoose.Types.ObjectId('5c03d50cd269c81ddc57b44f'),
+        'jobTitle': 'Intern',
+        'company': 'Google, Inc.',
+        'location': 'Tokyo, Japan',
+        'description': 'Worked as an intern at Google, Inc.',
+        'startDate': new Date('2018-12-02T15:00:00.000Z')
+      }
+    ],
+    '__v': 0
+  },
   // Account not linked to steem
   {
     '_id': new Mongoose.Types.ObjectId('5bc798adad26d25470439533'),
