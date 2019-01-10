@@ -88,7 +88,7 @@ export default {
                 q-item(@click.native="logoutAndRedirect")
                   q-item-side(icon="mdi-logout")
                   q-item-main(:label="$t('navbar.logOut')")
-      i18n-dropdown-switcher.float-right
+      // i18n-dropdown-switcher.float-right
 </template>
 
 <style lang="stylus">

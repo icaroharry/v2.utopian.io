@@ -14,89 +14,6 @@ export default {
         }
       })
     }
-  /*
-      // helpful: https://code.flickr.net/2012/12/10/drag-n-drop/
-      // https://github.com/github/paste-markdown/blob/master/src/paste-markdown-image-link.js
-
-      ---------
-      paste event graveyard
-      - note, this won't even work at all without enabling base64 upload to IPFS
-      - verified NOT to work on linux.
-      ---------
-
-      pasteCapture (e) {
-      // https://stackoverflow.com/questions/490908/paste-an-image-from-clipboard-using-javascript
-      // https://stackoverflow.com/questions/6333814/how-does-the-paste-image-from-clipboard-functionality-work-in-gmail-and-google-c
-      // http://joelb.me/blog/2011/code-snippet-accessing-clipboard-images-with-javascript/
-      // https://github.com/layerssss/paste.js/blob/master/paste.js
-      const items = (e.clipboardData || e.originalEvent.clipboardData).items
-      try {
-        if (items) {
-          for (const item of items) {
-            if (item.kind === 'file') {
-              e.preventDefault()
-              if (/^image\//.test(item.type)) {
-                const blob = item.getAsFile()
-
-                let loader = new Image()
-                loader.crossOrigin = 'anonymous'
-                loader.onload = () => {
-                  let newBlob, canvas, ctx, dataURL
-                  canvas = document.createElement('canvas')
-                  canvas.width = loader.width
-                  canvas.height = loader.height
-                  ctx = canvas.getContext('2d')
-                  ctx.drawImage(loader, 0, 0, canvas.width, canvas.height)
-                  dataURL = null
-                  try {
-                    dataURL = canvas.toDataURL('image/png')
-                    newBlob = this.dataURLtoBlob(dataURL)
-                  } catch (error) {}
-                  if (dataURL) {
-                    this.uploadFile(newBlob)
-                  }
-                }
-                let reader = new FileReader()
-                reader.onload = (evt) => {
-                  console.log(evt)
-                  // const newBlob = this.dataURLtoBlob(evt.target.result)
-                  // this.uploadFile(newBlob)
-                  // console.log(newBlob)
-                  loader.src = evt.target.result
-                }
-                // reader.readAsBinaryString(blob)
-                // reader.readAsArrayBuffer(blob)
-                reader.readAsDataURL(blob)
-              } else {
-                // not something we support :(
-                this.$q.notify(this.$t('editor.fileTypeNotSupported'))
-              }
-            } else {
-              console.log('clipboardData.items: not a file')
-            }
-          }
-        } else if (e.clipboardData.files) {
-          for (const item of e.clipboardData.files) {
-            if (item.kind === 'file') {
-              e.preventDefault()
-              if (/^image\//.test(item.type)) {
-                const blob = item.getAsFile()
-                this.uploadFile(blob)
-              } else {
-                // not something we support :(
-                this.$q.notify(this.$t('editor.fileTypeNotSupported'))
-              }
-            } else {
-              console.log('clipboardData.files: not a file')
-            }
-          }
-        }
-      } catch (err) {
-        console.log(err)
-        this.$q.notify(this.$t('editor.pasteError'))
-      }
-    },
-    */
   },
   methods: {
     ...mapActions('users', ['searchUsers']),
@@ -106,10 +23,6 @@ export default {
     handleChange (newVal) {
       this.$emit('input', newVal)
     },
-
-    /*
-                                  helpers
-    */
 
     /**
      * helper function to refocus on the contentEditable
@@ -172,10 +85,6 @@ export default {
     userHasScrolled (scroll) {
       this.scroll.position = scroll.position
     },
-
-    /*
-                                  @mentions
-    */
 
     /**
      * Reset the @mention search field, hide the field, focus on the contenteditable
@@ -343,12 +252,6 @@ export default {
         this.terms = ''
       }
     },
-
-    /*
-
-                                image upload
-
-     */
 
     /**
      * Submit file to IPFS, place returned URL into editor
@@ -583,7 +486,6 @@ export default {
       },
       toolbar: [
         [
-          'git',
           'getUser'
         ],
         [

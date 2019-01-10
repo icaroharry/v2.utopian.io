@@ -21,7 +21,7 @@ export default {
 <template lang="pug">
 q-layout.u-auth-layout.row
   .col-md-4.col-sm-12.col-xs-12.auth-pane
-    i18nDropdownSwitcher.i18n-dropdown
+    // i18nDropdownSwitcher.i18n-dropdown
     .flex.items-center.justify-center.full-height
       transition(:duration="{ enter: 100, leave: 100 }", enter-active-class="animated fadeIn", leave-active-class="animated fadeOut")
         .main-form
