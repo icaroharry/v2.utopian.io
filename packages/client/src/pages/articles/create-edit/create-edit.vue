@@ -2,22 +2,24 @@
 import { mapActions, mapGetters } from 'vuex'
 import { maxLength, required } from 'vuelidate/lib/validators'
 import UWysiwyg from 'src/components/form/wysiwyg'
+import UFormCategories from 'src/components/form/categories'
 import UFormLanguages from 'src/components/form/languages'
 
 export default {
   name: 'u-page-articles-create-edit',
   components: {
     UWysiwyg,
+    UFormCategories,
     UFormLanguages
   },
   data () {
     return {
       article: {
         _id: null,
-        beneficiaries: [],
+        category: null,
+        // beneficiaries: [],
         body: '',
-        language: '',
-        proReview: true,
+        proReview: false,
         title: '',
         tags: []
       },
@@ -28,22 +30,23 @@ export default {
   },
   validations: {
     article: {
+      /*
       beneficiaries: {
         maxTotalValue: (value) => value.reduce((percentage, user) => percentage + user.weight, 0) <= 100,
         minValue: (value) => !value.some(u => u.weight <= 1),
         maxLength: maxLength(50)
       },
+      */
       body: {
         required,
         maxLength: maxLength(250000)
       },
-      language: {
-        required,
-        maxLength: maxLength(2)
-      },
-      proReview: { required },
+      // proReview: { required },
       title: {
         required, maxLength: maxLength(250)
+      },
+      category: {
+        required
       },
       tags: {
         required,
@@ -82,7 +85,7 @@ export default {
       const { _id, author, beneficiaries, ...article } = this.article
       let result
       if (!_id) {
-        article.beneficiaries = beneficiaries
+        // article.beneficiaries = beneficiaries
         result = await this.saveArticle(article)
       } else {
         article._id = _id
@@ -192,7 +195,7 @@ div
       :helper="$t('articles.createEdit.body.help')", :error="$v.article.body.$error")
         u-wysiwyg(v-model="article.body", field="body")
     .col-md-4.col-sm-12.col-xs-12
-      u-form-languages(v-model="article.language", field="language", :error="$v.article.language.$error", :required="true")
+      u-form-categories(v-model="article.category", field="category", :error="$v.article.category.$error", :required="true")
       q-field(orientation="vertical", :label="$t('articles.createEdit.tags.label')", :count="5")
         q-chips-input(
           v-model="article.tags"
@@ -202,68 +205,69 @@ div
           :error="$v.article.tags.$error"
         )
           q-autocomplete(@search="tagsAutocomplete", :min-characters="2", :max-results="10")
-      .flex.justify-between
-        q-field(:label="$t('articles.createEdit.beneficiaries.label')")
-        q-btn(
-          v-if="article._id === null"
-          color="primary"
-          round
-          dense
-          :icon="displaySearchBeneficiaries ? 'mdi-minus' : 'mdi-plus'"
-          size="xs"
-          style="margin-top: 20px"
-          @click.native="toggleBeneficiariesSearch"
+      //-
+        .flex.justify-between
+          q-field(:label="$t('articles.createEdit.beneficiaries.label')")
+          q-btn(
+            v-if="article._id === null"
+            color="primary"
+            round
+            dense
+            :icon="displaySearchBeneficiaries ? 'mdi-minus' : 'mdi-plus'"
+            size="xs"
+            style="margin-top: 20px"
+            @click.native="toggleBeneficiariesSearch"
+          )
+        .q-field-bottom(v-html="article.beneficiaries.length === 0 ? $t('articles.createEdit.beneficiaries.helper') : $t('articles.createEdit.beneficiaries.authorShares', {authorShares })")
+        q-search(
+          ref="beneficiariesSearchInput"
+          :class="displaySearchBeneficiaries ? '' : 'hidden'"
+          v-model="beneficiariesSearchResult"
+          :placeholder="$t('articles.createEdit.beneficiaries.placeholder')"
         )
-      .q-field-bottom(v-html="article.beneficiaries.length === 0 ? $t('articles.createEdit.beneficiaries.helper') : $t('articles.createEdit.beneficiaries.authorShares', {authorShares })")
-      q-search(
-        ref="beneficiariesSearchInput"
-        :class="displaySearchBeneficiaries ? '' : 'hidden'"
-        v-model="beneficiariesSearchResult"
-        :placeholder="$t('articles.createEdit.beneficiaries.placeholder')"
-      )
-        q-autocomplete(
-          @search="searchBeneficiaries"
-          :min-characters="3"
-          :max-results="10"
-          :debounce="500"
-          @selected="addBeneficiary"
-          :value-field="v => v.label"
+          q-autocomplete(
+            @search="searchBeneficiaries"
+            :min-characters="3"
+            :max-results="10"
+            :debounce="500"
+            @selected="addBeneficiary"
+            :value-field="v => v.label"
+          )
+        q-list
+          q-item(v-for="(beneficiary, i) in article.beneficiaries", :key="beneficiary._id")
+            q-item-side(:avatar="beneficiary.user.avatarUrl")
+            q-item-main(:label="beneficiary.user.username")
+            q-item-side
+              q-input(
+                v-if="article._id === null"
+                v-model="article.beneficiaries[i].weight"
+                type="number"
+                :min="1"
+                :max="100"
+                :decimals="0"
+                maxlength="3"
+                suffix="%"
+                :error="$v.article.beneficiaries.$error"
+                :disabled="article._id !== null"
+                :readonly="article._id !== null"
+              )
+              strong(v-if="article._id !== null") {{article.beneficiaries[i].weight}}%
+              q-btn(
+                v-if="article._id === null"
+                round
+                dense
+                icon="mdi-minus"
+                color="red",
+                size="xs"
+                @click="() => removeBeneficiary(beneficiary.user._id)"
+              )
+        .q-field-bottom.text-negative(v-if="$v.article.beneficiaries.$error") {{$t('articles.createEdit.beneficiaries.errors.weight')}}
+        q-field(:label="$t('articles.createEdit.proReview.label')")
+        q-toggle(
+          v-model="article.proReview"
+          left-label
+          :label="`${$t('articles.createEdit.proReview.helper')} <strong>${$t('articles.createEdit.proReview.helperImportant')}</strong>`"
         )
-      q-list
-        q-item(v-for="(beneficiary, i) in article.beneficiaries", :key="beneficiary._id")
-          q-item-side(:avatar="beneficiary.user.avatarUrl")
-          q-item-main(:label="beneficiary.user.username")
-          q-item-side
-            q-input(
-              v-if="article._id === null"
-              v-model="article.beneficiaries[i].weight"
-              type="number"
-              :min="1"
-              :max="100"
-              :decimals="0"
-              maxlength="3"
-              suffix="%"
-              :error="$v.article.beneficiaries.$error"
-              :disabled="article._id !== null"
-              :readonly="article._id !== null"
-            )
-            strong(v-if="article._id !== null") {{article.beneficiaries[i].weight}}%
-            q-btn(
-              v-if="article._id === null"
-              round
-              dense
-              icon="mdi-minus"
-              color="red",
-              size="xs"
-              @click="() => removeBeneficiary(beneficiary.user._id)"
-            )
-      .q-field-bottom.text-negative(v-if="$v.article.beneficiaries.$error") {{$t('articles.createEdit.beneficiaries.errors.weight')}}
-      q-field(:label="$t('articles.createEdit.proReview.label')")
-      q-toggle(
-        v-model="article.proReview"
-        left-label
-        :label="`${$t('articles.createEdit.proReview.helper')} <strong>${$t('articles.createEdit.proReview.helperImportant')}</strong>`"
-      )
       q-btn.full-width.q-mt-lg(color="primary", :label="$t(`articles.createEdit.${article._id ? 'update' : 'save'}.label`)", @click="submit")
 </template>
 

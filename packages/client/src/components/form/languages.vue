@@ -30,7 +30,3 @@ q-field(:label="`${$t('components.form.language.label')}${required ? '*' : ''}`"
   :options="languages.map(o => ({value: o.lang, label: o.text}))"
   )
 </template>
-
-<style lang="stylus">
-
-</style>

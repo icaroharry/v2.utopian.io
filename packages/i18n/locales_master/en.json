@@ -62,6 +62,10 @@
   },
   "components": {
     "form": {
+      "categories": {
+        "label": "Category",
+        "placeholder": "Select a category"
+      },
       "language": {
         "label": "Language",
         "placeholder": "Select a language"
@@ -344,6 +348,7 @@
       },
       "general": {
         "500": "An unexpected occurred, please contact the support at support@utopian.io",
+        "categoryNotAvailable": "The selected category is not available",
         "documentDoesNotExist": "The document does not exist.",
         "documentUpdateUnauthorized": "You are not authorized to update this document.",
         "languageNotSupported": "This language is not currently supported",

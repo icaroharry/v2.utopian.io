@@ -3,8 +3,8 @@ const Mongoose = require('mongoose')
 const { slugify } = require('../../utils/slugify')
 const { getClientIp } = require('../../utils/request')
 const Article = require('./article.model')
+const Category = require('../categories/category.model')
 const User = require('../users/user.model')
-const Language = require('../languages/language.model')
 
 /**
  * Creates the article
@@ -24,10 +24,12 @@ const createArticle = async (req, h) => {
     slug += `-${Date.now()}`
   }
 
-  if (await Language.countDocuments({ lang: article.language }) === 0) {
-    throw Boom.badData('general.languageNotSupported')
-  }
-
+  /*
+    TODO language detection
+    if (await Language.countDocuments({ lang: article.language }) === 0) {
+      throw Boom.badData('general.languageNotSupported')
+    }
+  */
   const newArticle = new Article({
     author,
     slug,
@@ -56,6 +58,12 @@ const createArticle = async (req, h) => {
         })
       }
     }
+  }
+
+  // Does the category exists and is it available?
+  const category = await Category.countDocuments({ key: req.payload.category, active: true })
+  if (category === 0) {
+    throw Boom.badData('general.categoryNotAvailable')
   }
 
   await newArticle.save()
@@ -95,8 +103,17 @@ const updateArticle = async (req, h) => {
     }
   }
 
-  if (await Language.countDocuments({ lang: req.payload.language }) === 0) {
-    throw Boom.badData('general.languageNotSupported')
+  /*
+    TODO language detection
+    if (await Language.countDocuments({ lang: article.language }) === 0) {
+      throw Boom.badData('general.languageNotSupported')
+    }
+  */
+
+  // Does the category exists and is it available?
+  const category = await Category.countDocuments({ key: req.payload.category, active: true })
+  if (category === 0) {
+    throw Boom.badData('general.categoryNotAvailable')
   }
 
   const response = await Article.updateOne(

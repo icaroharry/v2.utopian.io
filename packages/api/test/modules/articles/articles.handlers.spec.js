@@ -7,6 +7,7 @@ const createArticleEndpoint = {
   method: 'POST',
   url: '/v1/article',
   payload: {
+    /*
     beneficiaries: [{
       user: {
         _id: '5ba3d89a197c286217e02d5f',
@@ -15,8 +16,9 @@ const createArticleEndpoint = {
       },
       weight: 50
     }],
+    */
     body: 'Article body',
-    language: 'en',
+    category: 'blog',
     proReview: true,
     title: 'Article title',
     tags: ['post-test']
@@ -28,7 +30,7 @@ const updateArticleEndpoint = {
   url: '/v1/article/5beeacddc4fc083ec0939a1e',
   payload: {
     body: 'Article body updated',
-    language: 'en',
+    category: 'development',
     proReview: false,
     title: 'Article title updated',
     tags: ['post-test', 'post-update', 'c++', 'c#', '.net']
@@ -40,21 +42,9 @@ const updateArticleNotExistingEndpoint = {
   url: '/v1/article/5beeacddc4fc083ec0000a1e',
   payload: {
     body: 'Article body not found',
-    language: 'en',
+    category: 'development',
     proReview: false,
     title: 'Article title not found',
-    tags: ['post-test', 'post-update', 'c++', 'c#', '.net']
-  }
-}
-
-const updateArticleUnsupportedLanguageEndpoint = {
-  method: 'POST',
-  url: '/v1/article/5beeacddc4fc083ec0939a1e',
-  payload: {
-    body: 'Article body updated',
-    language: 'zh',
-    proReview: false,
-    title: 'Article title updated',
     tags: ['post-test', 'post-update', 'c++', 'c#', '.net']
   }
 }
@@ -153,28 +143,6 @@ describe('update an article that doesn\'t exist', () => {
 
   it('should return a 422 status response', () => {
     expect(response.statusCode).to.equal(422)
-  })
-})
-
-describe('update an article with an unsupported language', () => {
-  let response
-  let payload
-
-  before(async () => {
-    const token = generateAccessToken({ uid: '5bcaf95f3344e352e0921157', username: 'gregory' })
-    updateArticleUnsupportedLanguageEndpoint.headers = {
-      'Authorization': token
-    }
-    response = await global.server.inject(updateArticleUnsupportedLanguageEndpoint)
-    payload = JSON.parse(response.payload)
-  })
-
-  it('should return a 422 status response', () => {
-    expect(response.statusCode).to.equal(422)
-  })
-
-  it('should return the error message general.languageNotSupported', () => {
-    assert.equal(payload.message, 'general.languageNotSupported')
   })
 })
 

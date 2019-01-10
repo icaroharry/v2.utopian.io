@@ -13,9 +13,9 @@ const createArticle = {
       weight: Joi.number().integer().required().min(1).max(100)
     }),
     body: Joi.string().trim().max(250000).required(),
-    language: Joi.string().trim().max(2).required(),
     proReview: Joi.boolean().required(),
     title: Joi.string().trim().max(250).required(),
+    category: Joi.string().trim().max(50).required(),
     tags: Joi.array().min(1).max(5).unique().items(Joi.string().regex(validation.articleTag).trim().min(1).max(100)).required()
   }
 }
@@ -31,9 +31,9 @@ const updateArticle = {
   },
   payload: {
     body: Joi.string().trim().max(250000).required(),
-    language: Joi.string().trim().max(2).required(),
     proReview: Joi.boolean().required(),
     title: Joi.string().trim().max(250).required(),
+    category: Joi.string().trim().max(50).required(),
     tags: Joi.array().min(1).max(5).unique().items(Joi.string().regex(validation.articleTag).trim().min(1).max(100)).required()
   }
 }

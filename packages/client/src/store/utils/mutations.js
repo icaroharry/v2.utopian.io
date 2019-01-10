@@ -2,6 +2,10 @@ export const pushLocalStorageValues = (state, values) => {
   state.localStorageData = state.localStorageData.concat(values)
 }
 
+export const setCategories = (state, categories) => {
+  state.categories = categories || []
+}
+
 export const setLanguages = (state, languages) => {
   state.languages = languages || []
 }

@@ -7,6 +7,17 @@ export const transferToLocalStorage = ({ state, commit }) => {
   commit('clearLocalStorageValues')
 }
 
+export const getCategories = async (context, lang) => {
+  if (context.rootState.utils.categories.length === 0) {
+    const payload = await API.call({
+      context,
+      method: 'get',
+      url: `/v1/categories/${lang}`
+    })
+    context.commit('setCategories', payload)
+  }
+}
+
 export const getLanguages = async (context) => {
   if (context.rootState.utils.languages.length === 0) {
     const payload = await API.call({
