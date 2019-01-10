@@ -264,6 +264,36 @@
         "placeholder": "Set URL",
         "preview": "Preview"
       },
+      "education": {
+        "degree": "Degree",
+        "field": "Field",
+        "from": "From",
+        "label": "Education",
+        "school": "School",
+        "summary": "Summary",
+        "tellUs": "What did you do in school?",
+        "to": "To",
+        "save": {
+          "label": "Save"
+        },
+        "update": {
+          "label": "Update"
+        },
+        "cancel": {
+          "label": "Cancel"
+        },
+        "edit": {
+          "label": "Edit"
+        },
+        "delete": {
+          "label": "Delete",
+          "title": "Remove this education",
+          "message": "Are you sure you want to remove this education?"
+        },
+        "errors": {
+          "invalidToYear": "The ending year should be after the starting year."
+        }
+      },
       "email": {
         "label": "Email",
         "placeholder": "example@domain.com"

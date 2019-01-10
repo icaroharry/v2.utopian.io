@@ -121,7 +121,35 @@ routes.push([
     path: '/v1/user/profile/workexperience/{id}/remove',
     handler: (req, h) => Handlers.deleteWorkExperience(req, h),
     options: {
-      tags: ['users']
+      tags: ['users'],
+      validate: Validate.deleteWorkExperience
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/user/profile/education',
+    handler: (req, h) => Handlers.createEducation(req, h),
+    options: {
+      tags: ['users'],
+      validate: Validate.education
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/user/profile/education/{id}',
+    handler: (req, h) => Handlers.updateEducation(req, h),
+    options: {
+      tags: ['users'],
+      validate: Validate.education
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/user/profile/education/{id}/remove',
+    handler: (req, h) => Handlers.deleteEducation(req, h),
+    options: {
+      tags: ['users'],
+      validate: Validate.deleteEducation
     }
   },
   {

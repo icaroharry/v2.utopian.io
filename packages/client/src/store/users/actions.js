@@ -77,6 +77,31 @@ export const deleteWorkExperience = async (context, _id) => {
   })
 }
 
+export const createEducation = async (context, data) =>
+  API.call({
+    context,
+    method: 'post',
+    url: '/v1/user/profile/education',
+    data
+  })
+
+export const updateEducation = async (context, { education, _id }) => {
+  return API.call({
+    context,
+    method: 'post',
+    url: `/v1/user/profile/education/${_id}`,
+    data: education
+  })
+}
+
+export const deleteEducation = async (context, _id) => {
+  return API.call({
+    context,
+    method: 'post',
+    url: `/v1/user/profile/education/${_id}/remove`
+  })
+}
+
 export const updateProfileMainInformation = async (context, data) =>
   API.call({
     context,

@@ -184,23 +184,21 @@ const searchUsersSkills = async (req, h) => {
 }
 
 /**
- * Create user work experience
- * @payload {object} req.payload - either main information, job or images data
  * Create new user work experience
  *
  * @param {object} req - request
  * @param {object} h - response
- * @payload {object} req.payload
+ * @payload {object} req.payload - work experience
  *
  * @returns new work experience
  * @author East Mael
  */
 const createWorkExperience = async (req, h) => {
-  if (!req.auth.credentials.uid) {
+  const user = await User.findOne({ _id: req.auth.credentials.uid })
+  if (!user) {
     throw Boom.unauthorized('general.unauthorized')
   }
 
-  const user = await User.findOne({ _id: req.auth.credentials.uid })
   const newWorkExperience = user.workExperiences.create(req.payload)
   user.workExperiences.push(newWorkExperience)
   const result = await user.save()
@@ -219,10 +217,6 @@ const createWorkExperience = async (req, h) => {
  * @author East Mael
  */
 const updateWorkExperience = async (req, h) => {
-  if (!req.auth.credentials.uid) {
-    throw Boom.unauthorized('general.unauthorized')
-  }
-
   const result = await User.findOneAndUpdate(
     { _id: req.auth.credentials.uid, 'workExperiences._id': req.params.id },
     { $set: { 'workExperiences.$': req.payload } },
@@ -240,23 +234,92 @@ const updateWorkExperience = async (req, h) => {
  *
  * @param {object} req - request
  * @param {object} h - response
- * @payload {object} req.payload
+ * @param {string} req.params.id - the id to delete
  *
  * @returns updated work experience
  * @author East Mael
  */
 const deleteWorkExperience = async (req, h) => {
-  if (!req.auth.credentials.uid) {
-    throw Boom.unauthorized('general.unauthorized')
-  }
-
   const result = await User.findOneAndUpdate(
     { _id: req.auth.credentials.uid },
     { $pull: { workExperiences: { _id: req.params.id } } },
     { new: true }
   )
+  if (result) {
+    return h.response(result.workExperiences)
+  }
 
-  return h.response(result.workExperiences)
+  throw Boom.badData('users.doesNotExist')
+}
+
+/**
+ * Create an education
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ * @payload {object} req.payload - new education
+ *
+ * @returns new work experience
+ * @author Grégory LATINIER
+ */
+const createEducation = async (req, h) => {
+  const user = await User.findOne({ _id: req.auth.credentials.uid })
+  if (!user) {
+    throw Boom.unauthorized('general.unauthorized')
+  }
+
+  const newEducation = user.education.create(req.payload)
+  user.education.push(newEducation)
+  const result = await user.save()
+
+  return h.response(result.education)
+}
+
+/**
+ * Update education
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ * @payload {object} req.payload
+ *
+ * @returns updated work experience
+ * @author East Mael
+ */
+const updateEducation = async (req, h) => {
+  const result = await User.findOneAndUpdate(
+    { _id: req.auth.credentials.uid, 'education._id': req.params.id },
+    { $set: { 'education.$': req.payload } },
+    { new: true }
+  )
+  if (result) {
+    return h.response(result.education)
+  }
+
+  throw Boom.badData('users.doesNotExist')
+}
+
+/**
+ * Delete an education
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ * @param {string} req.params.id - the id to delete
+ *
+ * @returns updated education
+ * @author Grégory LATINIER
+ */
+const deleteEducation = async (req, h) => {
+  const result = await User.findOneAndUpdate(
+    { _id: req.auth.credentials.uid },
+    { $pull: { education: { _id: req.params.id } } },
+    { new: true }
+  )
+
+  if (result) {
+    return h.response(result.education)
+  }
+
+  throw Boom.badData('users.doesNotExist')
 }
 
 module.exports = {
@@ -270,5 +333,8 @@ module.exports = {
   hasClaimedBlockchainAccount,
   createWorkExperience,
   updateWorkExperience,
-  deleteWorkExperience
+  deleteWorkExperience,
+  createEducation,
+  updateEducation,
+  deleteEducation
 }

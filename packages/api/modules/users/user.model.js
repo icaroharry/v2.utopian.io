@@ -43,26 +43,22 @@ const users = new Schema({
     data: { type: Object }
   }],
   cover: { type: String },
+  education: [{
+    field: { type: String, required: true },
+    degree: { type: String, required: true },
+    school: { type: String, required: true },
+    fromYear: { type: Number, required: true },
+    summary: { type: String },
+    toYear: { type: Number, required: true }
+  }],
   email: { type: String },
   workExperiences: [{
-    jobTitle: {
-      type: String,
-      required: true
-    },
-    company: {
-      type: String,
-      required: true
-    },
+    jobTitle: { type: String, required: true },
+    company: { type: String, required: true },
     location: { type: String },
-    startDate: {
-      type: Date,
-      required: true
-    },
+    startDate: { type: Date, required: true },
     endDate: { type: Date },
-    current: {
-      type: Boolean,
-      default: false
-    },
+    current: { type: Boolean, default: false },
     description: { type: String }
   }],
   job: { type: String },
@@ -97,6 +93,7 @@ users.methods.getEditableFields = function () {
     availableForHire: this.availableForHire,
     blockchainAccounts: this.blockchainAccounts,
     cover: this.cover,
+    education: this.education,
     email: this.email,
     job: this.job,
     location: this.location,

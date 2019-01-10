@@ -55,13 +55,51 @@ const saveUser = {
  */
 const workExperience = {
   payload: {
-    jobTitle: Joi.string().trim().required(),
-    company: Joi.string().trim().required(),
-    location: Joi.string().trim().optional().allow(''),
+    jobTitle: Joi.string().trim().max(200).required(),
+    company: Joi.string().trim().max(200).required(),
+    location: Joi.string().trim().optional().max(200).allow(''),
     startDate: Joi.date(),
     endDate: Joi.date().allow(null),
     current: Joi.boolean(),
-    description: Joi.string().trim().optional().allow('')
+    description: Joi.string().trim().optional().max(500).allow('')
+  }
+}
+
+/**
+ * Validate the id to delete
+ *
+ * @author Grégory LATINIER
+ */
+const deleteWorkExperience = {
+  params: {
+    id: validation.id
+  }
+}
+
+/**
+ * Validator for creating or updating the user education
+ *
+ * @author Grégory LATINIER
+ */
+const education = {
+  payload: {
+    field: Joi.string().trim().max(200).required(),
+    degree: Joi.string().trim().max(200).required(),
+    school: Joi.string().trim().max(200).required(),
+    fromYear: Joi.number().min(1900).max(10000).required(),
+    summary: Joi.string().trim().max(250).required(),
+    toYear: Joi.number().min(1900).max(10000).required()
+  }
+}
+
+/**
+ * Validate the id to delete
+ *
+ * @author Grégory LATINIER
+ */
+const deleteEducation = {
+  params: {
+    id: validation.id
   }
 }
 
@@ -76,8 +114,8 @@ const updateProfileMainInformation = {
 const updateProfileJob = {
   payload: {
     availableForHire: Joi.boolean(),
-    job: Joi.string().trim().optional().allow(''),
-    resume: Joi.string().trim().optional().allow('')
+    job: Joi.string().trim().optional().max(200).allow(''),
+    resume: Joi.string().trim().optional().max(250).allow('')
   }
 }
 
@@ -105,7 +143,10 @@ module.exports = {
   saveUser,
   getUsersByPartial,
   getUserByUsername: findByUsername,
+  education,
+  deleteEducation,
   workExperience,
+  deleteWorkExperience,
   updateProfileMainInformation,
   updateProfileJob,
   updateProfileImages,
