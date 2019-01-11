@@ -66,4 +66,4 @@ const projects = new Schema({
   deletedAt: { type: Date }
 })
 
-module.exports = Mongoose.model('Project', projects, 'projects')
+module.exports = Mongoose.model('Projects', projects, 'projects')

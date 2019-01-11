@@ -4,13 +4,15 @@ import { maxLength, required } from 'vuelidate/lib/validators'
 import UWysiwyg from 'src/components/form/wysiwyg'
 import UFormCategories from 'src/components/form/categories'
 import UFormLanguages from 'src/components/form/languages'
+import UFormProject from 'src/components/form/project'
 
 export default {
   name: 'u-page-articles-create-edit',
   components: {
     UWysiwyg,
     UFormCategories,
-    UFormLanguages
+    UFormLanguages,
+    UFormProject
   },
   data () {
     return {
@@ -20,9 +22,14 @@ export default {
         // beneficiaries: [],
         body: '',
         proReview: false,
+        project: {
+          _id: null,
+          name: ''
+        },
         title: '',
         tags: []
       },
+      projectError: null,
       displaySearchBeneficiaries: false,
       beneficiariesSearchResult: '',
       authorShares: 100
@@ -48,6 +55,7 @@ export default {
       category: {
         required
       },
+      project: {},
       tags: {
         required,
         maxLength: maxLength(5)
@@ -71,6 +79,7 @@ export default {
   methods: {
     ...mapActions('utils', ['setAppSuccess', 'setAppError']),
     ...mapActions('users', ['searchUsers']),
+    ...mapActions('projects', ['hasRole']),
     ...mapActions('articles', [
       'fetchArticleForEdit',
       'saveArticle',
@@ -82,7 +91,8 @@ export default {
       if (this.$v.article.$invalid) {
         return
       }
-      const { _id, author, beneficiaries, ...article } = this.article
+      const { _id, author, beneficiaries, project, ...article } = this.article
+      article.project = project._id
       let result
       if (!_id) {
         // article.beneficiaries = beneficiaries
@@ -96,6 +106,19 @@ export default {
           this.$router.push({ path: `/${this.$route.params.locale}/articles/${result}/edit` })
         }
         this.setAppSuccess(`articles.createEdit.${_id ? 'update' : 'save'}.successMsg`)
+      }
+    },
+    async selectProject (project) {
+      const hasRole = await this.hasRole({
+        project: project.value,
+        role: 'articles'
+      })
+      if (hasRole) {
+        this.article.project = { _id: project.value, name: project.label }
+        this.projectError = null
+      } else {
+        this.article.project = { _id: null, name: '' }
+        this.projectError = this.$t('articles.createEdit.project.errors.noPublicationRole')
       }
     },
     toggleBeneficiariesSearch () {
@@ -195,6 +218,7 @@ div
       :helper="$t('articles.createEdit.body.help')", :error="$v.article.body.$error")
         u-wysiwyg(v-model="article.body", field="body")
     .col-md-4.col-sm-12.col-xs-12
+      u-form-project(v-model="article.project.name", field="project", :error="$v.article.project.$error || projectError !== null", :errorLabel="projectError", :selected="selectProject")
       u-form-categories(v-model="article.category", field="category", :error="$v.article.category.$error", :required="true")
       q-field(orientation="vertical", :label="$t('articles.createEdit.tags.label')", :count="5")
         q-chips-input(

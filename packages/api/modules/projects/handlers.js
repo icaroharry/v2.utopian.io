@@ -361,6 +361,64 @@ const getProjectView = async (req, h) => {
   return h.response(project)
 }
 
+/**
+ * Get a list of projects matching the search
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ * @payload {string} term - search term to match the project name
+ *
+ * @returns List of projects
+ * @author Grégory LATINIER
+ */
+const searchProject = async (req, h) => {
+  const data = await Project.find(
+    { name: { '$regex': req.payload.term, '$options': 'i' } },
+    { name: 1, _id: 1 })
+    .sort({ name: 1 })
+    .limit(10)
+  if (data.length <= 0) {
+    return h.response('projects.search.notFound')
+  }
+
+  return h.response(data)
+}
+
+/**
+ * Check if a user has the required role to interact with a project
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+  @payload {string} project - the project to check
+ * @payload {string} role - the role to verify
+ *
+ * @returns boolean
+ * @author Grégory LATINIER
+ */
+const hasRole = async (req, h) => {
+  const userId = req.auth.credentials.uid
+  const { project, role } = req.payload
+  const projectDb = await Project.findOne({ _id: project }).select('allowExternals owners collaborators')
+  if (projectDb) {
+    if (projectDb.allowExternals) {
+      return h.response(true)
+    }
+
+    if (projectDb.owners && projectDb.owners.some((o) => o.toString() === userId)) {
+      return h.response(true)
+    }
+
+    if (projectDb.collaborators) {
+      const user = projectDb.collaborators.find((c) => c.user.toString() === userId)
+      if (user && user.roles.includes(role)) {
+        return h.response(true)
+      }
+    }
+  }
+
+  return h.response(false)
+}
+
 module.exports = {
   createProject,
   updateProject,
@@ -368,5 +426,7 @@ module.exports = {
   getFeaturedProjects,
   isNameAvailable,
   isProjectAdmin,
-  getProjectView
+  getProjectView,
+  searchProject,
+  hasRole
 }

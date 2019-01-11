@@ -4,7 +4,7 @@ const licenses = ['afl-3.0', 'apache-2.0', 'artistic-2.0', 'bs1-1.0', 'bsd-2-cla
 
 const validation = {
   articleTag: /^[a-z0-9-+.#]*$/,
-  id: Joi.string().trim().lowercase().required().regex(/^[a-f\d]{24}$/),
+  id: Joi.string().trim().lowercase().regex(/^[a-f\d]{24}$/),
   username: Joi.string().trim().lowercase().required().min(3).max(32).regex(/^[A-Za-z0-9]+(?:[._-][A-Za-z0-9]+)*$/)
 }
 

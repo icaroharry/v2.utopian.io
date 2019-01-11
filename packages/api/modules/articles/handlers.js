@@ -149,7 +149,8 @@ const getArticleForEdit = async (req, h) => {
   const slug = `${req.params.author}/${req.params.slug}`
   const article = await Article.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] })
     .populate('beneficiaries.user', 'username avatarUrl')
-    .select('author beneficiaries body language proReview title tags')
+    .populate('project', 'name')
+    .select('author beneficiaries body category language project proReview title tags')
   if (!article) return h.response({})
   if (article.author.toString() === userId) {
     return h.response(article)

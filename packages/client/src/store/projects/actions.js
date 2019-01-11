@@ -50,3 +50,19 @@ export const loadProject = async (context, { owner, slug, tab = 'details' }) => 
   })
   context.commit('setProject', payload)
 }
+
+export const searchProjects = async (context, term) =>
+  API.call({
+    context,
+    method: 'post',
+    url: '/v1/projects/search',
+    data: { term }
+  })
+
+export const hasRole = async (context, data) =>
+  API.call({
+    context,
+    method: 'post',
+    url: '/v1/projects/hasrole',
+    data
+  })

@@ -28,6 +28,11 @@
         "help": "What do you want to share with us? (Hint: Type @@ to find a username)"
       },
       "formTitle": "Write anything about a project",
+      "project": {
+        "errors": {
+          "noPublicationRole": "You don't have the right to publish content for this project."
+        }
+      },
       "proReview": {
         "label": "Pro Review",
         "helper": "The Pro Review option gives you higher chances to get additional incentives and more exposure on Utopian.",
@@ -66,10 +71,6 @@
         "label": "Category",
         "placeholder": "Select a category"
       },
-      "language": {
-        "label": "Language",
-        "placeholder": "Select a language"
-      },
       "imageUploader": {
         "dragAndDrop": "Drag and drop here.",
         "errors": {
@@ -77,6 +78,14 @@
           "fileTypeMismatch": "That file is of the wrong type",
           "fileSizeExceed": "That file is too large"
         }
+      },
+      "language": {
+        "label": "Language",
+        "placeholder": "Select a language"
+      },
+      "project": {
+        "label": "Project",
+        "placeholder": "Search for a project"
       }
     },
     "tools": {
@@ -218,6 +227,9 @@
       "writeArticle": {
         "label": "Write an article"
       }
+    },
+    "search": {
+      "notFound": "No projects found"
     }
   },
   "editor": {

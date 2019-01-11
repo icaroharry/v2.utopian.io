@@ -18,7 +18,6 @@ routes.push([
     path: '/v1/project/{owner}/{slug}',
     handler: (req, h) => Handlers.getProjectForEdit(req, h),
     options: {
-      auth: { access: { scope: ['user'] } },
       tags: ['projects'],
       validate: Validate.getProjectForEdit
     }
@@ -28,7 +27,6 @@ routes.push([
     path: '/v1/project/{id}',
     handler: (req, h) => Handlers.updateProject(req, h),
     options: {
-      auth: { access: { scope: ['user'] } },
       tags: ['projects'],
       validate: Validate.updateProject
     }
@@ -38,7 +36,6 @@ routes.push([
     path: '/v1/project',
     handler: (req, h) => Handlers.createProject(req, h),
     options: {
-      auth: { access: { scope: ['user'] } },
       tags: ['projects'],
       validate: Validate.createProject
     }
@@ -48,7 +45,6 @@ routes.push([
     path: '/v1/projects/isnameavailable',
     handler: (req, h) => Handlers.isNameAvailable(req, h),
     options: {
-      auth: { access: { scope: ['user'] } },
       tags: ['projects'],
       validate: Validate.isNameAvailable
     }
@@ -58,7 +54,6 @@ routes.push([
     path: '/v1/projects/isprojectadmin',
     handler: (req, h) => Handlers.isProjectAdmin(req, h),
     options: {
-      auth: { access: { scope: ['user'] } },
       tags: ['projects'],
       validate: Validate.isProjectAdmin
     }
@@ -71,6 +66,24 @@ routes.push([
       auth: false,
       tags: ['projects'],
       validate: Validate.getProjectView
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/projects/search',
+    handler: (req, h) => Handlers.searchProject(req, h),
+    options: {
+      tags: ['projects'],
+      validate: Validate.searchProject
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/projects/hasrole',
+    handler: (req, h) => Handlers.hasRole(req, h),
+    options: {
+      tags: ['projects'],
+      validate: Validate.hasRole
     }
   }
 ])

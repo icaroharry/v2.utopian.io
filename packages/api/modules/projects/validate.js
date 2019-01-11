@@ -1,5 +1,5 @@
 const Joi = require('joi')
-const { licenses } = require('../../utils/constants')
+const { licenses, validation } = require('../../utils/constants')
 
 const getProjectForEdit = {
   params: {
@@ -69,11 +69,26 @@ const isProjectAdmin = {
   }
 }
 
+const searchProject = {
+  payload: {
+    term: Joi.string().trim().min(3).max(100).required()
+  }
+}
+
+const hasRole = {
+  payload: {
+    project: validation.id,
+    role: Joi.string().trim().max(100).required()
+  }
+}
+
 module.exports = {
   createProject,
   updateProject,
   getProjectForEdit,
   isNameAvailable,
   isProjectAdmin,
-  getProjectView
+  getProjectView,
+  searchProject,
+  hasRole
 }
