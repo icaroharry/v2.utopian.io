@@ -165,7 +165,7 @@ describe('get an article by its author and slug for edit', () => {
 
   it('should have all the keys', () => {
     expect(payload).to.have.all.keys(
-      'author', 'beneficiaries', 'body', 'language', 'proReview', 'title', 'tags', '_id'
+      'author', 'beneficiaries', 'body', 'category', 'proReview', 'title', 'tags', '_id'
     )
   })
 })
@@ -207,7 +207,7 @@ describe('get an article by its author and slug', () => {
 
   it('should have all the keys', () => {
     expect(payload).to.have.all.keys(
-      'author', 'beneficiaries', 'body', 'language', 'proReview', 'title', 'views', 'tags'
+      'author', 'beneficiaries', 'body', 'lang', 'proReview', 'title', 'views', 'tags'
     )
   })
 })

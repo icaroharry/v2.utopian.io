@@ -23,9 +23,9 @@ const articles = new Schema({
       required: true
     }
   }],
-  body: { type: String, required: true, text: true },
+  body: { type: String, required: true },
   category: { type: String, required: true },
-  // language: { type: String, required: true },
+  lang: { type: String, required: true },
   project: { type: Schema.Types.ObjectId, ref: 'Projects' },
   proReview: { type: Boolean, required: true, default: true },
   slug: { type: String, required: true, index: true },

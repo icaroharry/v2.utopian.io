@@ -8,6 +8,14 @@ const sanitizeHtml = (html) => {
  })
 }
 
+const extractText = (html) => {
+  return sanitizer(html, {
+    allowedTags: [],
+    allowedAttributes: {}
+  })
+}
+
 module.exports = {
-  sanitizeHtml
+  sanitizeHtml,
+  extractText
 }

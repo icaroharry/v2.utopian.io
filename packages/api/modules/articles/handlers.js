@@ -1,7 +1,9 @@
 const Boom = require('boom')
 const Mongoose = require('mongoose')
+const Franc = require('franc')
 const { slugify } = require('../../utils/slugify')
-const { getClientIp } = require('../../utils/request')
+const { extractText, sanitizeHtml } = require('../../utils/html-sanitizer')
+// const { getClientIp } = require('../../utils/request')
 const Article = require('./article.model')
 const Category = require('../categories/category.model')
 const User = require('../users/user.model')
@@ -17,21 +19,19 @@ const User = require('../users/user.model')
 const createArticle = async (req, h) => {
   const author = req.auth.credentials.uid
   const username = req.auth.credentials.username
-  const { beneficiaries, ...article } = req.payload
+  const { beneficiaries, body, ...article } = req.payload
   let slug = `${username}/${slugify(article.title)}`
   // Count the author's articles using the slug or the slugs array attributes
   if (await Article.countDocuments({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }], author }) > 0) {
     slug += `-${Date.now()}`
   }
 
-  /*
-    TODO language detection
-    if (await Language.countDocuments({ lang: article.language }) === 0) {
-      throw Boom.badData('general.languageNotSupported')
-    }
-  */
+  const lang = Franc(extractText(body), {})
+
   const newArticle = new Article({
     author,
+    body: sanitizeHtml(article.body),
+    lang,
     slug,
     ...article
   })
@@ -103,12 +103,7 @@ const updateArticle = async (req, h) => {
     }
   }
 
-  /*
-    TODO language detection
-    if (await Language.countDocuments({ lang: article.language }) === 0) {
-      throw Boom.badData('general.languageNotSupported')
-    }
-  */
+  const lang = Franc(extractText(req.payload.body), {})
 
   // Does the category exists and is it available?
   const category = await Category.countDocuments({ key: req.payload.category, active: true })
@@ -119,6 +114,8 @@ const updateArticle = async (req, h) => {
   const response = await Article.updateOne(
     { author, _id: req.params.id },
     {
+      body: sanitizeHtml(req.payload.body),
+      lang,
       slug,
       slugs,
       updatedAt: Date.now(),
@@ -150,7 +147,7 @@ const getArticleForEdit = async (req, h) => {
   const article = await Article.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] })
     .populate('beneficiaries.user', 'username avatarUrl')
     .populate('project', 'name')
-    .select('author beneficiaries body category language project proReview title tags')
+    .select('author beneficiaries body category project proReview title tags')
   if (!article) return h.response({})
   if (article.author.toString() === userId) {
     return h.response(article)
@@ -173,14 +170,18 @@ const getArticleForEdit = async (req, h) => {
  */
 const getArticle = async (req, h) => {
   const slug = `${req.params.author}/${req.params.slug}`
+
+  // TODO view count todo => https://redditblog.com/2017/05/24/view-counting-at-reddit/
+  /*
   await Article.updateOne(
     { $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }], deletedAt: null },
     { $addToSet: { viewsIPs: getClientIp(req) } }
   )
+  */
   const articleDB = await Article.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }], deletedAt: null })
     .populate('author', 'username avatarUrl job reputation')
     .populate('beneficiaries.user', 'username avatarUrl')
-    .select('author beneficiaries body language proReview title viewsIPs tags -_id')
+    .select('author beneficiaries body lang proReview title viewsIPs tags -_id')
   if (!articleDB) return h.response({})
   const { viewsIPs, id, ...article } = articleDB.toJSON({ virtuals: true })
   return h.response(article)
