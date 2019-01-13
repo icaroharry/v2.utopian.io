@@ -245,7 +245,7 @@ export default {
         if (item.value !== null) {
           document.execCommand('delete')
           setTimeout(() => {
-            document.execCommand('insertHTML', false, `<a href="${process.env.UTOPIAN_DOMAIN}/en/user/${item.label}">@${item.label}</a>&nbsp;`)
+            document.execCommand('insertHTML', false, `<a href="${process.env.UTOPIAN_DOMAIN}/en/@${item.label}">@${item.label}</a>&nbsp;`)
           }, 1)
         }
         this.userInputPosRendered = false

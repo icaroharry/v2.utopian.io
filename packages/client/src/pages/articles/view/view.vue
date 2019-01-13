@@ -56,7 +56,6 @@ export default {
               strong {{article.author.username}}
               .reputation {{article.author.reputation.toFixed(0)}}
             .job {{article.author.job}}
-        q-btn(color="grey", label="Connect")
 
       .col-md-3.collaboration(v-if="article.beneficiaries.length > 0")
         h3 {{$t('articles.view.inCollaborationWith')}}:
@@ -67,9 +66,9 @@ export default {
       .col-md-9
         q-card
           q-card-title
-            .project.flex.items-center
-              img(:src="article.author.avatarUrl")
-              strong TODO Project
+            router-link.project.flex.items-center(v-if="article.project", :to="`/${$route.params.locale}/projects/${article.project.slug}`")
+              img(:src="article.project.avatarUrl")
+              strong {{ article.project.name }}
             .actions(slot="right")
               u-social-share(:title="article.title", :description="article.body")
               q-btn.edit-article(v-if="hasEditRights", color="primary", icon="mdi-pencil", flat, :to="`/${$route.params.locale}/articles/${$route.params.author}/${$route.params.slug}/edit`")
@@ -81,10 +80,6 @@ export default {
             | TAGS
         .article-footer.flex.justify-between.items-center
           | VOTE
-          .views.flex.items-center
-            q-icon(name="mdi-eye", size="24px")
-            strong {{article.views}}
-            | {{$tc('articles.view.views', article.views)}}
       .col-md-3
         q-card
           q-card-title
@@ -136,6 +131,7 @@ export default {
         font-weight 600
         font-size 15px
         color $grey-10
+        text-decoration none
         img
           height 35px
           width 35px

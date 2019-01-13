@@ -378,7 +378,6 @@ div
           @keyup.enter="submit"
           @blur="updateFormPercentage('name')"
         )
-          img.project-avatar(slot="before" :src="project.avatarUrl", style="margin-right:10px")
 
       q-card(square, color="white")
         q-card-main

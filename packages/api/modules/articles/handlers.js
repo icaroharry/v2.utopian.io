@@ -181,6 +181,7 @@ const getArticle = async (req, h) => {
   const articleDB = await Article.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }], deletedAt: null })
     .populate('author', 'username avatarUrl job reputation')
     .populate('beneficiaries.user', 'username avatarUrl')
+    .populate('project', 'avatarUrl name slug')
     .select('author beneficiaries body lang proReview title viewsIPs tags -_id')
   if (!articleDB) return h.response({})
   const { viewsIPs, id, ...article } = articleDB.toJSON({ virtuals: true })
