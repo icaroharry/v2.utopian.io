@@ -10,6 +10,7 @@ module.exports = [
     'avatarUrl': 'https: //join.utopian.io/img/logo.png',
     'authProviders': [],
     'blockchainAccounts': [],
+    'encryptionKey': 'ac9dcb1c0766d63c1ee51d97165a06f1',
     '__v': 0
   },
   // Utopian-io organization
@@ -21,6 +22,7 @@ module.exports = [
     'avatarUrl': 'https: //join.utopian.io/img/logo.png',
     'authProviders': [],
     'blockchainAccounts': [],
+    'encryptionKey': 'ac9dcb1c0766d63c1ee51d97165a06f2',
     '__v': 0
   },
   // GitHub account with Steem
@@ -40,6 +42,7 @@ module.exports = [
       'blockchain': 'steem',
       'address': 'gregory.latinier'
     }],
+    'encryptionKey': 'ac9dcb1c0766d63c1ee51d97165a06f3',
     '__v': 0
   },
   // GitHub account with Steem
@@ -58,6 +61,7 @@ module.exports = [
       'blockchain': 'steem',
       'address': 'icaro'
     }],
+    'encryptionKey': 'ac9dcb1c0766d63c1ee51d97165a06f4',
     '__v': 0,
     'scopes': ['user'],
     'skills': ['Cod', 'Code']
@@ -79,6 +83,7 @@ module.exports = [
       'blockchain': 'steem',
       'address': 'eastmael'
     }],
+    'encryptionKey': 'ac9dcb1c0766d63c1ee51d97165a06f5',
     'workExperiences': [
       {
         'current': true,
@@ -122,6 +127,7 @@ module.exports = [
       'token': 'XXX'
     }],
     'blockchainAccounts': [],
+    'encryptionKey': 'ac9dcb1c0766d63c1ee51d97165a06f6',
     '__v': 0,
     'scopes': ['user']
   }

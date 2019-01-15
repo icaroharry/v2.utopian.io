@@ -52,6 +52,13 @@ const users = new Schema({
     toYear: { type: Number, required: true }
   }],
   email: { type: String },
+  encryptionKey: { type: String, required: true },
+  job: { type: String },
+  location: { type: String },
+  name: { type: String },
+  reputation: { type: Number, default: 0 },
+  resume: { type: String },
+  skills: { type: Array },
   workExperiences: [{
     jobTitle: { type: String, required: true },
     company: { type: String, required: true },
@@ -61,12 +68,6 @@ const users = new Schema({
     current: { type: Boolean, default: false },
     description: { type: String }
   }],
-  job: { type: String },
-  location: { type: String },
-  name: { type: String },
-  reputation: { type: Number, default: 0 },
-  resume: { type: String },
-  skills: { type: Array },
   createdAt: { type: Date, default: Date.now() },
   updatedAt: { type: Date },
   deletedAt: { type: Date }

@@ -270,6 +270,36 @@
         "placeholder": "Set URL",
         "preview": "Preview"
       },
+      "blockchainForm": {
+        "resetKey": {
+          "dialog": {
+            "title": "Reset your encryption key",
+            "message": "Are you sure you want to reset your encryption key? This operation can't be cancelled."
+          },
+          "label": "Reset your encryption key",
+          "helper": "Resetting your encryption key will unsync your Steem account on all your devices. You won't be able to perform any blockchain related operation like voting or posting until you type your posting key again. You will still be able to receive tips.",
+          "success": "Your encryption key has been reset."
+        },
+        "add": {
+          "label": "Add account"
+        },
+        "address": {
+          "label": "Steem account",
+          "placeholder": "steem.account",
+          "errors": {
+            "notSync": "Account not synced on this device, please type your posting key."
+          }
+        },
+        "expirationDate": {
+          "label": "Expiration date",
+          "helper": "Leave it empty if you don't want the key to expire on this device."
+        },
+        "postingKey": {
+          "helper": "Do not use any other key than the posting key. It will be used to post and vote. The key is stored only on this device.",
+          "label": "Posting Key",
+          "placeholder": "5JMGzu..."
+        }
+      },
       "cover": {
         "label": "Cover URL",
         "helper": "Upload file, set URL or drag and drop.",
@@ -299,8 +329,10 @@
         },
         "delete": {
           "label": "Delete",
-          "title": "Remove this education",
-          "message": "Are you sure you want to remove this education?"
+          "dialog": {
+            "title": "Remove this education",
+            "message": "Are you sure you want to remove this education?"
+          }
         },
         "errors": {
           "invalidToYear": "The ending year should be after the starting year."
@@ -342,6 +374,14 @@
         }
       },
       "subtitle": "Make a great first impression with all the information about yourself and your career.",
+      "tabs": {
+        "main": "A few basic information",
+        "images": "Customize the look of your profile",
+        "school": "What did you do in school?",
+        "steem": "Manage your steem account",
+        "steemReset": "Reset your steem account",
+        "work": "Tell us about your career"
+      },
       "title": "Let's update your profile",
       "update": "Update",
       "clear": "Clear",
@@ -371,8 +411,10 @@
         },
         "delete": {
           "label": "Delete",
-          "title": "Remove this work experience",
-          "message": "Are you sure you want to remove this experience?"
+          "dialog": {
+            "title": "Remove this work experience",
+            "message": "Are you sure you want to remove this experience?"
+          }
         },
         "errors": {
           "invalidEndDate": "The end date should be after the start date."
@@ -400,6 +442,10 @@
       "github": {
         "getUserData": "An error occurred while retrieving your GitHub information, please re log.",
         "getUserPermission": "An error occurred while retrieving your GitHub information, please re log."
+      },
+      "profile": {
+        "encryptionKeyReset": "Your encryption key has been reset. Please update your posting key.",
+        "keyExpired": "Your posting key has expired. Please update it."
       },
       "projects": {
         "exists": "You already have a project with this name.",

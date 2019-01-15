@@ -151,11 +151,70 @@ export const updateProfileSkills = async (context, data) =>
  * @returns {Array} - contains the matched skills
  * @author Adriel Santos
  */
-
 export const searchUsersSkills = async (context, data) =>
   API.call({
     context,
     method: 'post',
     url: `/v1/user/profile/searchSkills`,
+    data
+  })
+
+/**
+ * Reset the encryption key used to cipher the steem posting on the device
+ *
+ * @param context
+ * @returns boolean
+ *
+ * @author Grégory LATINIER
+ */
+export const resetEncryptionKey = async (context) =>
+  API.call({
+    context,
+    method: 'get',
+    url: `/v1/user/profile/resetencryptionkey`
+  })
+
+/**
+ * Get the encryption key used to decipher the data on the device
+ *
+ * @param context
+ * @returns encryption key
+ *
+ * @author Grégory LATINIER
+ */
+export const getEncryptionKey = async (context) =>
+  API.call({
+    context,
+    method: 'get',
+    url: `/v1/user/profile/getencryptionkey`
+  })
+
+/**
+ * Link a blockchain account to a user
+ *
+ * @param context
+ * @param data
+ * @returns blockchainAccounts
+ */
+export const linkBlockchainAccount = async (context, data) =>
+  API.call({
+    context,
+    method: 'post',
+    url: `/v1/user/profile/linkblockchainaccount`,
+    data
+  })
+
+/**
+ * Unlink a blockchain account of a user
+ *
+ * @param context
+ * @param data
+ * @returns blockchainAccounts
+ */
+export const unlinkBlockchainAccount = async (context, data) =>
+  API.call({
+    context,
+    method: 'post',
+    url: `/v1/user/profile/unlinkblockchainaccount`,
     data
   })

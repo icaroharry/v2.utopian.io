@@ -1,10 +1,13 @@
 <script>
+import aesjs from 'aes-js'
 import { mapActions, mapGetters } from 'vuex'
 import { email, maxLength, required, requiredUnless, url } from 'vuelidate/lib/validators'
 import UImageProcessor from 'src/components/form/image-processor'
+import { SecurityUtilsMixin } from 'src/mixins/security-utils'
 
 export default {
-  name: 'u-page-users-edit',
+  name: 'u-page-profile-edit',
+  mixins: [SecurityUtilsMixin],
   components: {
     UImageProcessor
   },
@@ -13,6 +16,7 @@ export default {
       avatarPreview: '',
       coverPreview: '',
       username: '',
+      blockchainAccounts: [],
       mainInformation: {
         email: '',
         location: '',
@@ -81,6 +85,12 @@ export default {
           clear: false,
           url: false
         }
+      },
+      blockchainForm: {
+        address: '',
+        expirationDate: null,
+        postingKey: '',
+        collapsed: true
       }
     }
   },
@@ -135,6 +145,26 @@ export default {
     },
     skills: {
       maxLength: maxLength(30)
+    },
+    blockchainForm: {
+      address: {
+        required,
+        async accountExist (value) {
+          return (await this.$steem.Client.database.getAccounts([value])).some(u => u.name === value)
+        }
+      },
+      postingKey: {
+        required,
+        async validatePostingKey (value, vm) {
+          if (!vm.address) return false
+          const account = (await this.$steem.Client.database.getAccounts([vm.address])).find(u => u.name === vm.address)
+          try {
+            const privateKey = this.$steem.PrivateKey.fromString(value)
+            return privateKey.createPublic().toString() === account.posting.key_auths[0][0]
+          } catch { }
+          return false
+        }
+      }
     }
   },
   async mounted () {
@@ -163,6 +193,19 @@ export default {
       this.skills = result.skills
       this.workExperiences = result.workExperiences.sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
       this.education = result.education.sort((a, b) => b.fromYear - a.fromYear)
+      this.blockchainAccounts = result.blockchainAccounts
+      this.blockchainForm.collapsed = result.blockchainAccounts.length > 0
+      // Check that this device is sync
+      if (!localStorage.blockchainAccounts) {
+        for (let i = 0; i < this.blockchainAccounts.length; i += 1) {
+          this.blockchainAccounts[i].notSync = true
+        }
+      } else {
+        const accounts = JSON.parse(localStorage.blockchainAccounts)
+        for (let i = 0; i < this.blockchainAccounts.length; i += 1) {
+          this.blockchainAccounts[i].notSync = !accounts.some(a => a.address === this.blockchainAccounts[i].address)
+        }
+      }
     }
   },
   methods: {
@@ -178,7 +221,11 @@ export default {
       'updateProfileJob',
       'updateProfileImages',
       'updateProfileSkills',
-      'searchUsersSkills'
+      'searchUsersSkills',
+      'resetEncryptionKey',
+      'getEncryptionKey',
+      'linkBlockchainAccount',
+      'unlinkBlockchainAccount'
     ]),
     ...mapActions('auth', ['updateAvatarUrl']),
     ...mapActions('utils', ['setAppSuccess', 'setAppError']),
@@ -240,10 +287,10 @@ export default {
         this.workExperienceForm.endDate = null
       }
     },
-    async removeWorkExperience (id) {
+    async deleteWorkExperienceDialog (id) {
       this.$q.dialog({
-        title: this.$t('users.profile.workExperience.delete.title'),
-        message: this.$t('users.profile.workExperience.delete.message'),
+        title: this.$t('users.profile.workExperience.delete.dialog.title'),
+        message: this.$t('users.profile.workExperience.delete.dialog.message'),
         ok: this.$t('common.yes'),
         cancel: this.$t('common.no')
       }).then(async () => {
@@ -299,10 +346,10 @@ export default {
       this.educationForm.collapsed = false
       this.$nextTick(() => this.$refs.schoolInput.focus())
     },
-    async removeEducation (id) {
+    async deleteEducationDialog (id) {
       this.$q.dialog({
-        title: this.$t('users.profile.education.delete.title'),
-        message: this.$t('users.profile.education.delete.message'),
+        title: this.$t('users.profile.education.delete.dialog.title'),
+        message: this.$t('users.profile.education.delete.dialog.message'),
         ok: this.$t('common.yes'),
         cancel: this.$t('common.no')
       }).then(async () => {
@@ -390,6 +437,70 @@ export default {
         this.skills.pop()
         this.setAppError('users.profile.skills.errors.maxItems')
       }
+    },
+    resetEncryptionKeyDialog () {
+      this.$q.dialog({
+        title: this.$t('users.profile.blockchainForm.resetKey.dialog.title'),
+        message: this.$t('users.profile.blockchainForm.resetKey.dialog.message'),
+        ok: this.$t('common.yes'),
+        cancel: this.$t('common.no')
+      }).then(async () => {
+        const result = await this.resetEncryptionKey()
+        if (result) {
+          localStorage.removeItem('blockchainAccounts')
+          for (let i = 0; i < this.blockchainAccounts.length; i += 1) {
+            this.blockchainAccounts[i].notSync = true
+          }
+          this.setAppSuccess('users.profile.blockchainForm.resetKey.success')
+        }
+      })
+    },
+    async linkBlockchainAccountForm () {
+      this.$v.blockchainForm.$touch()
+      if (!this.$v.blockchainForm.$invalid) {
+        if (!localStorage.iv) {
+          localStorage.iv = this.random(16)
+        }
+        const key = aesjs.utils.utf8.toBytes(await this.getEncryptionKey())
+        const iv = aesjs.utils.utf8.toBytes(localStorage.iv)
+        const postingKey = aesjs.utils.utf8.toBytes(`ut-${this.blockchainForm.postingKey}`)
+        // eslint-disable-next-line
+        const aesCbc = new aesjs.ModeOfOperation.cbc(key, iv)
+        const encryptedKey = aesjs.utils.hex.fromBytes(aesCbc.encrypt(aesjs.padding.pkcs7.pad(postingKey)))
+        const blockchainAccounts = [{
+          blockchain: 'steem',
+          active: true,
+          address: this.blockchainForm.address,
+          expirationDate: this.blockchainForm.expirationDate,
+          encryptedKey
+        }]
+        localStorage.blockchainAccounts = JSON.stringify(blockchainAccounts)
+        this.blockchainAccounts = await this.linkBlockchainAccount({
+          blockchain: 'steem',
+          address: this.blockchainForm.address
+        })
+        this.clearBlockchainForm()
+      }
+    },
+    clearBlockchainForm () {
+      this.$v.blockchainForm.$reset()
+      this.blockchainForm.address = ''
+      this.blockchainForm.postingKey = ''
+      this.blockchainForm.collapsed = true
+    },
+    deleteBlockchainAccountDialog (address) {
+      this.blockchainAccounts = this.unlinkBlockchainAccount({ blockchain: 'steem', address })
+      localStorage.removeItem('blockchainAccounts')
+      this.$v.blockchainForm.$reset()
+      this.blockchainForm.address = ''
+      this.blockchainForm.postingKey = ''
+      this.blockchainForm.collapsed = false
+    },
+    editBlockchainAccountDialog (address) {
+      this.$v.blockchainForm.$reset()
+      this.blockchainForm.address = address
+      this.blockchainForm.postingKey = ''
+      this.blockchainForm.collapsed = false
     }
   },
   computed: {
@@ -424,8 +535,10 @@ export default {
     q-tab(name="images", slot="title", icon="mdi-image")
     q-tab(name="work", slot="title", icon="mdi-briefcase")
     q-tab(name="school", slot="title", icon="mdi-school")
+    q-tab(name="steem", slot="title", icon="icon-ut-steem")
 
     q-tab-pane(name="main")
+      h3 {{$t('users.profile.tabs.main')}}
       .row.justify-center
         .col-lg-6.col-md-6.col-sm-12.col-xs-12
           q-card(square)
@@ -443,6 +556,7 @@ export default {
               q-btn(color="primary", :label="$t('users.profile.update')", @click="updateMainInformation")
 
     q-tab-pane(name="images")
+      h3 {{$t('users.profile.tabs.images')}}
       .row.justify-center
         .col-lg-6.col-md-6.col-sm-12.col-xs-12
           q-card.q-mb-md(square)
@@ -487,6 +601,7 @@ export default {
               q-btn(color="primary", v-if="cover.imageValid", :label="$t('users.profile.update')", @click="updateImages('cover')")
 
     q-tab-pane(name="work")
+      h3 {{$t('users.profile.tabs.work')}}
       .row.justify-center
         .col-lg-6.col-md-6.col-sm-12.col-xs-12
           q-card.q-mb-md(square)
@@ -600,13 +715,14 @@ export default {
                     q-item(v-close-overlay, @click.native="loadWorkExperience(experience._id)")
                       q-item-side(icon="mdi-pencil")
                       q-item-main(:label="$t('users.profile.workExperience.edit.label')")
-                    q-item(v-close-overlay, @click.native="removeWorkExperience(experience._id)")
+                    q-item(v-close-overlay, @click.native="deleteWorkExperienceDialog(experience._id)")
                       q-item-side(icon="mdi-delete")
                       q-item-main(:label="$t('users.profile.workExperience.delete.label')")
             q-card-main
               p {{ experience.description }}
 
     q-tab-pane(name="school")
+      h3 {{$t('users.profile.tabs.school')}}
       .row.justify-center
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.flex.justify-between
           h4 {{ $t('users.profile.education.label') }}
@@ -698,11 +814,85 @@ export default {
                     q-item(v-close-overlay, @click.native="loadEducation(experience._id)")
                       q-item-side(icon="mdi-pencil")
                       q-item-main(:label="$t('users.profile.education.edit.label')")
-                    q-item(v-close-overlay, @click.native="removeEducation(experience._id)")
+                    q-item(v-close-overlay, @click.native="deleteEducationDialog(experience._id)")
                       q-item-side(icon="mdi-delete")
                       q-item-main(:label="$t('users.profile.education.delete.label')")
             q-card-main
               p {{ experience.summary }}
+
+    q-tab-pane(name="steem")
+      h3 {{$t('users.profile.tabs.steem')}}
+      .row.justify-center.q-mt-md(v-if="!blockchainForm.collapsed")
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12
+          q-card(square)
+            q-card-main
+              q-field(
+                :label="$t('users.profile.blockchainForm.address.label')"
+                :error="$v.blockchainForm.address.$error"
+                orientation="vertical"
+              )
+                q-input(
+                  v-model.trim.lazy="blockchainForm.address"
+                  prefix="@"
+                  :placeholder="$t('users.profile.blockchainForm.address.placeholder')"
+                  :debounce="500"
+                  @keyup.enter="linkBlockchainAccountForm"
+                )
+              q-field(
+                :helper="$t('users.profile.blockchainForm.postingKey.helper')"
+                :label="$t('users.profile.blockchainForm.postingKey.label')"
+                :error="$v.blockchainForm.postingKey.$error"
+                orientation="vertical"
+              )
+                q-input(
+                  v-model.trim.lazy="blockchainForm.postingKey"
+                  :placeholder="$t('users.profile.blockchainForm.postingKey.placeholder')"
+                  @keyup.enter="linkBlockchainAccountForm"
+                )
+              q-field(
+                :helper="$t('users.profile.blockchainForm.expirationDate.helper')"
+                :label="$t('users.profile.blockchainForm.expirationDate.label')"
+                orientation="vertical"
+              )
+                q-datetime(
+                  clearable
+                  :min="Date.now() + 7 * 24 * 60 * 60 * 1000"
+                  v-model.trim.lazy="blockchainForm.expirationDate"
+                  @keyup.enter="linkBlockchainAccountForm"
+                  :format="$t('formats.dateTime.inputShort')"
+                )
+            q-card-separator
+            q-card-actions(align="end")
+              q-btn(color="primary", :label="$t('users.profile.blockchainForm.add.label')", @click="linkBlockchainAccountForm")
+
+      .row.justify-center.q-mt-md(v-if="blockchainAccounts.length > 0")
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12
+          q-list(highlight)
+            q-item(
+              v-for="account in blockchainAccounts"
+              :key="account.address"
+            )
+              q-item-side
+                q-item-tile(avatar)
+                  img(:src="`https://steemitimages.com/u/${account.address}/avatar`")
+              q-item-main
+                a.steem-link(:href="`https://steemit.com/@${account.address}`", target="_blank") @{{account.address}}
+              q-item-side(right)
+                q-icon(v-if="account.notSync", name="mdi-alert", color="orange")
+                  q-tooltip(anchor="top middle", self="bottom middle", :offset="[0, 10]") {{$t('users.profile.blockchainForm.address.errors.notSync')}}
+                q-btn(flat, round, dense, icon="mdi-dots-vertical")
+                  q-popover
+                    q-list(link)
+                      q-item(v-close-overlay, @click.native="() => editBlockchainAccountDialog(account.address)")
+                        q-item-main(label="Edit")
+                      q-item(v-close-overlay, @click.native="() => deleteBlockchainAccountDialog(account.address)")
+                        q-item-main(label="Delete")
+      h3.q-mt-lg {{$t('users.profile.tabs.steemReset')}}
+        .row.justify-center
+          .column.col-lg-6.col-md-6.col-sm-12.col-xs-12.items-center
+            q-btn(color="warning", :label="$t('users.profile.blockchainForm.resetKey.label')", @click.native="resetEncryptionKeyDialog()")
+            i.reset-helper.q-mt-md {{$t('users.profile.blockchainForm.resetKey.helper')}}
+
 </template>
 
 <style lang="stylus">
@@ -717,4 +907,9 @@ export default {
     max-width 260px
   .q-card, .q-tabs-panes
     background #fff
+  .reset-helper
+    font-size 12px
+  .steem-link
+    text-decoration none
+    color #000
 </style>

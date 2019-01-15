@@ -160,6 +160,40 @@ routes.push([
       tags: ['users'],
       validate: Validate.searchUsersSkills
     }
+  },
+  {
+    method: 'GET',
+    path: '/v1/user/profile/resetencryptionkey',
+    handler: (req, h) => Handlers.resetEncryptionKey(req, h),
+    options: {
+      tags: ['users']
+    }
+  },
+  {
+    method: 'GET',
+    path: '/v1/user/profile/getencryptionkey',
+    handler: (req, h) => Handlers.getEncryptionKey(req, h),
+    options: {
+      tags: ['users']
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/user/profile/linkblockchainaccount',
+    handler: (req, h) => Handlers.linkBlockchainAccount(req, h),
+    options: {
+      tags: ['users'],
+      validate: Validate.linkBlockchainAccount
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/user/profile/unlinkblockchainaccount',
+    handler: (req, h) => Handlers.unlinkBlockchainAccount(req, h),
+    options: {
+      tags: ['users'],
+      validate: Validate.linkBlockchainAccount
+    }
   }
 ])
 

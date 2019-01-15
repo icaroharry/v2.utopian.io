@@ -4,6 +4,7 @@ const UtopianBlockchainAccounts = require('./utopianBlockchainAccounts.model')
 const RefreshToken = require('../auth/refreshtoken.model')
 const { getUserInformation } = require('../../utils/github')
 const { getAccessToken, getRefreshToken } = require('../../utils/token')
+const { random } = require('../../utils/security')
 
 const getUserByUsername = async (req, h) => {
   const user = await User.findOne({
@@ -34,9 +35,9 @@ const getUsersByPartial = async (req, h) => {
 }
 
 const isUsernameAvailable = async (req, h) => {
-  const user = await User.count({ username: req.params.username })
+  const user = await User.countDocuments({ username: req.params.username })
 
-  if (parseInt(user) !== 0) {
+  if (user > 0) {
     return h.response({ available: false })
   }
 
@@ -91,8 +92,8 @@ const generateUserTokens = async (user) => {
 const createUser = async (req, h) => {
   const githubUser = await getUserInformation(req.auth.credentials.providerToken)
 
-  const user = await User.count({ username: req.payload.username })
-  if (parseInt(user) !== 0) throw Boom.badData('users.usernameExists')
+  const user = await User.countDocuments({ username: req.payload.username })
+  if (user > 0) throw Boom.badData('users.usernameExists')
 
   const newUser = new User({
     username: req.payload.username,
@@ -102,13 +103,13 @@ const createUser = async (req, h) => {
       type: req.auth.credentials.providerType,
       username: githubUser.login,
       token: req.auth.credentials.providerToken
-    }]
+    }],
+    encryptionKey: random(32)
   })
 
   const data = (await newUser.save()).getPublicFields()
-  const tokens = await generateUserTokens(data)
 
-  data.tokens = tokens
+  data.tokens = await generateUserTokens(data)
   return h.response(data)
 }
 
@@ -322,6 +323,84 @@ const deleteEducation = async (req, h) => {
   throw Boom.badData('users.doesNotExist')
 }
 
+/**
+ * Reset the encryption key of the user. This will invalidate the ciphered data on all devices
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ *
+ * @returns boolean
+ * @author  Grégory LATINIER
+ */
+const resetEncryptionKey = async (req, h) => {
+  const result = await User.updateOne(
+    { _id: req.auth.credentials.uid },
+    { $set: { encryptionKey: random(32) } }
+  )
+
+  if (result.n === 1) {
+    return h.response(true)
+  }
+
+  throw Boom.badData('users.doesNotExist')
+}
+
+/**
+ * Get the encryption key of the user. This will decipher the data on the device requesting it
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ *
+ * @returns boolean
+ * @author  Grégory LATINIER
+ */
+const getEncryptionKey = async (req, h) => {
+  const user = await User.findOne({ _id: req.auth.credentials.uid }).select('encryptionKey')
+  return h.response(user.encryptionKey)
+}
+
+/**
+ * Add a blockchain account, for now the whole array is replaced
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ * @payload {object} req.payload
+ *
+ * @returns blockchainAccounts
+ * @author Grégory LATINIER
+ */
+const linkBlockchainAccount = async (req, h) => {
+  const result = await User.findOneAndUpdate(
+    { _id: req.auth.credentials.uid },
+    { $set: { blockchainAccounts: [{
+      active: true,
+      ...req.payload
+    }] } },
+    { new: true }
+  )
+  return h.response(result.blockchainAccounts)
+}
+
+/**
+ * Unlink a blockchain account, for now the whole array is replaced
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ * @payload {object} req.payload
+ *
+ * @returns blockchainAccounts
+ * @author Grégory LATINIER
+ */
+const unlinkBlockchainAccount = async (req, h) => {
+  const { address, blockchain } = req.payload
+  const result = await User.findOneAndUpdate(
+    { _id: req.auth.credentials.uid },
+    { $pull: { blockchainAccounts: { blockchain, address } } },
+    { new: true }
+  )
+  return h.response(result.blockchainAccounts)
+}
+
 module.exports = {
   createUser,
   getUsersByPartial,
@@ -336,5 +415,9 @@ module.exports = {
   deleteWorkExperience,
   createEducation,
   updateEducation,
-  deleteEducation
+  deleteEducation,
+  resetEncryptionKey,
+  getEncryptionKey,
+  linkBlockchainAccount,
+  unlinkBlockchainAccount
 }

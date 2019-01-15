@@ -139,6 +139,18 @@ const searchUsersSkills = {
   }
 }
 
+/**
+ * Link a block account to a user, only steem is handled for now
+ *
+ * @author Grégory LAITNIER
+ */
+const linkBlockchainAccount = {
+  payload: {
+    blockchain: Joi.string().required().trim().allow('steem'),
+    address: Joi.string().required().trim()
+  }
+}
+
 module.exports = {
   saveUser,
   getUsersByPartial,
@@ -153,5 +165,6 @@ module.exports = {
   updateProfileSkills,
   searchUsersSkills,
   isUsernameAvailable,
-  hasClaimedBlockchainAccount
+  hasClaimedBlockchainAccount,
+  linkBlockchainAccount
 }

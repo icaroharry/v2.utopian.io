@@ -14,7 +14,13 @@ export default {
     ...mapGetters('utils', ['appError', 'appSuccess'])
   },
   methods: {
-    ...mapActions('utils', ['transferToLocalStorage', 'clearAppError', 'clearAppSuccess'])
+    ...mapActions('users', ['getEncryptionKey']),
+    ...mapActions('utils', [
+      'clearAppError',
+      'clearAppSuccess',
+      'clearInvalidKeys',
+      'transferToLocalStorage'
+    ])
   },
   watch: {
     appError: function (value) {
@@ -38,8 +44,9 @@ export default {
       }
     }
   },
-  mounted () {
+  async mounted () {
     this.transferToLocalStorage()
+    this.clearInvalidKeys(await this.getEncryptionKey())
   }
 }
 </script>

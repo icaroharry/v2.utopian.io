@@ -25,6 +25,7 @@ module.exports = function (ctx) {
       'i18n',
       { path: 'markdown', server: false },
       { path: 'sentry', server: false },
+      { path: 'steem', server: false },
       'vuelidate'
     ],
     // build configuration.
