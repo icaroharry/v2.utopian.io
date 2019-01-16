@@ -77,7 +77,9 @@ export default {
             .date {{$d(article.createdAt, 'long')}}
             .article-body(v-html="article.body")
           q-card-actions
-            | TAGS
+            ul.article-tags
+              li(v-for="tag in article.tags")
+                | {{ tag }}
         .article-footer.flex.justify-between.items-center
           | VOTE
       .col-md-3
@@ -127,6 +129,7 @@ export default {
     .article-content
       .q-card
         background #fff
+        padding 0 10px
       .project
         font-weight 600
         font-size 15px
@@ -151,6 +154,20 @@ export default {
       .article-body
         img
           max-width 100%
+      .q-card-actions
+        border-top 1px solid $grey-4
+      ul.article-tags
+        padding 0
+        list-style none
+        font-weight 600
+        font-size 14px
+        li
+          display inline-block
+          border 1px solid $grey-4
+          border-radius 3px
+          padding 5px
+          &:not(:last-child)
+            margin-right 8px
   .article-footer
     margin-top 20px
     .views
