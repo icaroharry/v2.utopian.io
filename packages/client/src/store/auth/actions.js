@@ -25,6 +25,7 @@ export const logout = async (context) => {
   Cookies.remove('access_token')
   Cookies.remove('refresh_token')
   context.commit('clear')
+  localStorage.removeItem('blockchainAccounts')
 }
 
 export const startSteemConnectLogin = () => {

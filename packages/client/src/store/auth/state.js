@@ -1,4 +1,3 @@
 export default () => ({
-  user: null,
-  credentials: []
+  user: null
 })

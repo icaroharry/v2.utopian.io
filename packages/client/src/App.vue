@@ -11,7 +11,8 @@ export default {
     await authPlugin({ currentRoute, store, redirect, ssrContext })
   },
   computed: {
-    ...mapGetters('utils', ['appError', 'appSuccess'])
+    ...mapGetters('utils', ['appError', 'appSuccess']),
+    ...mapGetters('auth', ['guest'])
   },
   methods: {
     ...mapActions('users', ['getEncryptionKey']),
@@ -46,7 +47,9 @@ export default {
   },
   async mounted () {
     this.transferToLocalStorage()
-    this.clearInvalidKeys(await this.getEncryptionKey())
+    if (!this.guest) {
+      this.clearInvalidKeys(await this.getEncryptionKey())
+    }
   }
 }
 </script>
