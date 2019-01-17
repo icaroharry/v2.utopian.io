@@ -9,6 +9,7 @@ import github from './github'
 import projects from './projects'
 import search from './search'
 import users from './users'
+import votes from './votes'
 import utils from './utils'
 
 const modules = {
@@ -20,6 +21,7 @@ const modules = {
   projects,
   search,
   users,
+  votes,
   utils
 }
 

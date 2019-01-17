@@ -38,7 +38,7 @@ routes.push([
     path: '/v1/article/{author}/{slug}',
     handler: (req, h) => Handlers.getArticle(req, h),
     options: {
-      auth: false,
+      auth: { mode: 'optional' },
       tags: ['articles'],
       validate: Validate.getArticle
     }

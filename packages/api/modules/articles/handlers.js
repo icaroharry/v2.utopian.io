@@ -7,6 +7,7 @@ const { extractText, sanitizeHtml } = require('../../utils/html-sanitizer')
 const Article = require('./article.model')
 const Category = require('../categories/category.model')
 const User = require('../users/user.model')
+const Vote = require('../votes/vote.model')
 
 /**
  * Creates the article
@@ -182,9 +183,23 @@ const getArticle = async (req, h) => {
     .populate('author', 'username avatarUrl job reputation')
     .populate('beneficiaries.user', 'username avatarUrl')
     .populate('project', 'avatarUrl name slug')
-    .select('author beneficiaries body lang proReview title viewsIPs tags -_id')
+    .select('author beneficiaries body lang proReview title viewsIPs tags upVotes')
+
   if (!articleDB) return h.response({})
-  const { viewsIPs, id, ...article } = articleDB.toJSON({ virtuals: true })
+  const { viewsIPs, ...article } = articleDB.toJSON({ virtuals: true })
+
+  const user = req.auth.credentials && req.auth.credentials.uid
+  if (user) {
+    const vote = await Vote.findOne({
+      objRef: 'articles',
+      objId: article._id,
+      user
+    })
+    if (vote) {
+      article.userVote = vote.dir
+    }
+  }
+
   return h.response(article)
 }
 

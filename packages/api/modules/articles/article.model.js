@@ -33,6 +33,7 @@ const articles = new Schema({
   title: { type: String, required: true, text: true },
   viewsIPs: { type: Array, default: [] },
   tags: { type: Array, required: true },
+  upVotes: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now() },
   updatedAt: { type: Date },
   deletedAt: { type: Date }

@@ -1,13 +1,15 @@
 <script>
 import { mapGetters } from 'vuex'
 import USocialShare from 'src/components/tools/social-share'
+import UVote from 'src/components/tools/vote'
 import { TextUtilsMixin } from 'src/mixins/text-utils'
 
 export default {
   name: 'u-page-articles-view',
   mixins: [TextUtilsMixin],
   components: {
-    USocialShare
+    USocialShare,
+    UVote
   },
   preFetch ({ store, currentRoute }) {
     return store.dispatch('articles/fetchArticle', {
@@ -81,7 +83,12 @@ export default {
               li(v-for="tag in article.tags")
                 | {{ tag }}
         .article-footer.flex.justify-between.items-center
-          | VOTE
+          u-vote(
+            obj="articles"
+            :id="article._id"
+            :initialVoteCount="article.upVotes"
+            :initialUserVote="article.userVote"
+          )
       .col-md-3
         q-card
           q-card-title

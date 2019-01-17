@@ -207,7 +207,7 @@ describe('get an article by its author and slug', () => {
 
   it('should have all the keys', () => {
     expect(payload).to.have.all.keys(
-      'author', 'beneficiaries', 'body', 'lang', 'proReview', 'title', 'views', 'tags'
+      '_id', 'id', 'author', 'beneficiaries', 'body', 'lang', 'proReview', 'title', 'views', 'tags', 'upVotes'
     )
   })
 })
