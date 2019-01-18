@@ -8,6 +8,12 @@ const getToken = {
         then: Joi.string().trim().required(),
         otherwise: Joi.string().forbidden()
       }),
+    provider: Joi.string().trim().when('grant_type',
+      {
+        is: Joi.string().valid('authorization_code', 'refresh_token'),
+        then: Joi.string().trim().required(),
+        otherwise: Joi.string().forbidden()
+      }),
     grant_type: Joi.string().trim().allow('authorization_code', 'refresh_token', 'password'),
     username: Joi.string().trim().when('grant_type',
       {

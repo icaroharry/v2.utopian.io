@@ -3,14 +3,19 @@ const Boom = require('boom')
 const User = require('../users/user.model')
 const RefreshToken = require('./refreshtoken.model')
 const { getAccessToken, getRefreshToken } = require('../../utils/token')
-const { requestGitHubAccessToken, getUserInformation } = require('../../utils/github')
+const { getUserInformation, getProviderToken } = require('../../utils/auth')
 
 const getToken = async (req, h) => {
   if (req.payload.grant_type === 'authorization_code') {
-    const githubToken = await requestGitHubAccessToken(req.payload.code)
-    const githubUser = await getUserInformation(githubToken)
-    const user = await User.findOne({ authProviders: { $elemMatch: { type: 'github', username: githubUser.login } } })
+    const providerToken = await getProviderToken(req.payload.provider, req.payload.code)
+    const providerUser = await getUserInformation(req.payload.provider, providerToken)
 
+    const user = await User.findOne({
+      '$or': [
+        { authProviders: { $elemMatch: { type: req.payload.provider, username: providerUser.id } } },
+        { '$and': [{ email: { '$exists': true } }, { email: providerUser.email }] }
+      ]
+    })
     // The user doesn't exist so will generate a temporary token that will only allow
     // him to create his account
     // The github token is passed in the token so we can store it in the database once the account is created
@@ -18,8 +23,8 @@ const getToken = async (req, h) => {
       const token = getAccessToken({
         scopes: ['createAccount'],
         expiresIn: 1,
-        providerToken: githubToken,
-        providerType: 'github'
+        providerToken,
+        providerType: req.payload.provider
       })
 
       return h.response({
@@ -29,10 +34,22 @@ const getToken = async (req, h) => {
       })
     }
 
-    // Requesting a login from github have to override the existing access token
+    // If it's a new provider, save it in the user document.
+    // The token is not passed yet, because the next query to update the old token
+    // will also set the new one
     await User.updateOne(
-      { _id: user._id, 'authProviders.type': 'github' },
-      { $set: { 'authProviders.$.token': githubToken } }
+      { _id: user._id },
+      { $addToSet: { authProviders: {
+        type: req.payload.provider,
+        username: providerUser.id
+      } } }
+    )
+
+    // Requesting a login from github have to override the existing access token
+    // Also sets the token of a new provider
+    await User.updateOne(
+      { _id: user._id, 'authProviders.type': req.payload.provider },
+      { $set: { 'authProviders.$.token': providerToken } }
     )
 
     const refreshToken = getRefreshToken({ uid: user._id })

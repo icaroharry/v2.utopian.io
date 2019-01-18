@@ -13,7 +13,7 @@ const users = new Schema({
     _id: false,
     type: {
       type: String,
-      enum: ['github'],
+      enum: ['github', 'google', 'linkedin'],
       required: true
     },
     username: {

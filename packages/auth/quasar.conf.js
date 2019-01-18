@@ -26,7 +26,10 @@ module.exports = function (ctx) {
         GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
         SENTRY_DSN: process.env.SENTRY_DSN,
         STEEMCONNECT_CLIENT_ID: (process.env.STEEMCONNECT_CLIENT_ID || '"utopian.signin"'),
-        STEEM_API: (process.env.STEEM_API_DEV || '"https://api.steemit.com"')
+        STEEM_API: (process.env.STEEM_API_DEV || '"https://api.steemit.com"'),
+        GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+        LINKEDIN_CLIENT_ID: process.env.LINKEDIN_CLIENT_ID,
+        AUTH_DOMAIN: process.env.AUTH_DOMAIN
       },
       scopeHoisting: true,
       vueRouterMode: 'history',

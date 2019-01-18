@@ -443,6 +443,14 @@
         "getUserData": "An error occurred while retrieving your GitHub information, please re log.",
         "getUserPermission": "An error occurred while retrieving your GitHub information, please re log."
       },
+      "google": {
+        "getUserData": "An error occurred while retrieving your Google information, please re log.",
+        "getUserPermission": "An error occurred while retrieving your Google information, please re log."
+      },
+      "linkedin": {
+        "getUserData": "An error occurred while retrieving your Linkedin information, please re log.",
+        "getUserPermission": "An error occurred while retrieving your Linkedin information, please re log."
+      },
       "profile": {
         "encryptionKeyReset": "Your encryption key has been reset. Please update your posting key.",
         "keyExpired": "Your posting key has expired. Please update it."
@@ -470,6 +478,8 @@
   "auth": {
     "login": {
       "github": "Sign in with GitHub",
+      "google": "Sign in with Google",
+      "linkedin": "Sign in with Linkedin",
       "text": "Connect to Utopian using one of your social accounts.",
       "smallerText": "Don't worry, we won't post anything on your behalf."
     },

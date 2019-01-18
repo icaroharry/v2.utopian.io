@@ -1,5 +1,5 @@
 import { Cookies } from 'quasar'
-import gitHubLogin from './providers/github'
+import login from './login'
 import linkSteemAccount from './blockchains/steem'
 import { atob } from 'b2a'
 
@@ -23,8 +23,8 @@ export default async ({ currentRoute, store, redirect, ssrContext }) => {
   const stateVariables = atob(state).split('::')
   const loginState = stateVariables[0]
   const redirectUrl = stateVariables[1]
-  if (loginState === 'githublogin') {
-    await gitHubLogin({ currentRoute, store, redirect, ssrContext, redirectUrl })
+  if (loginState === 'githublogin' || loginState === 'googlelogin' || loginState === 'linkedinlogin') {
+    await login({ currentRoute, store, redirect, ssrContext, redirectUrl, provider: loginState.split('login')[0] })
   } else {
     // Prepare the tokens to enable authenticated calls to the API
     if (cookies.get('access_token')) {

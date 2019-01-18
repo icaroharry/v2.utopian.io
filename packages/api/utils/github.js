@@ -6,6 +6,7 @@ const query = `
     viewer {
       login
       avatarUrl
+      email
     }
   }
   `
@@ -34,7 +35,7 @@ const requestGitHubAccessToken = async (code) => {
   }
 }
 
-const getUserInformation = async (token) => {
+const getGitHubUserInformation = async (token) => {
   try {
     const githubResponse = await Axios({
       method: 'POST',
@@ -84,7 +85,7 @@ const getUserProjectPermission = async ({ token, owner, name }) => {
 }
 
 module.exports = {
-  getUserInformation,
+  getGitHubUserInformation,
   requestGitHubAccessToken,
   getUserProjectPermission
 }

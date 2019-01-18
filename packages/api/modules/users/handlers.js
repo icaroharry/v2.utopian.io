@@ -2,7 +2,7 @@ const Boom = require('boom')
 const User = require('./user.model')
 const UtopianBlockchainAccounts = require('./utopianBlockchainAccounts.model')
 const RefreshToken = require('../auth/refreshtoken.model')
-const { getUserInformation } = require('../../utils/github')
+const { getUserInformation } = require('../../utils/auth')
 const { getAccessToken, getRefreshToken } = require('../../utils/token')
 const { random } = require('../../utils/security')
 
@@ -90,18 +90,18 @@ const generateUserTokens = async (user) => {
 }
 
 const createUser = async (req, h) => {
-  const githubUser = await getUserInformation(req.auth.credentials.providerToken)
-
+  const providerUser = await getUserInformation(req.auth.credentials.providerType, req.auth.credentials.providerToken)
   const user = await User.countDocuments({ username: req.payload.username })
-  if (user > 0) throw Boom.badData('users.usernameExists')
+  if (parseInt(user) > 0) throw Boom.badData('users.usernameExists')
 
   const newUser = new User({
     username: req.payload.username,
-    avatarUrl: req.payload.avatarUrl || githubUser.avatarUrl,
+    email: providerUser.email,
+    avatarUrl: req.payload.avatarUrl || providerUser.avatarUrl,
     scopes: ['user'],
     authProviders: [{
       type: req.auth.credentials.providerType,
-      username: githubUser.login,
+      username: providerUser.id,
       token: req.auth.credentials.providerToken
     }],
     encryptionKey: random(32)

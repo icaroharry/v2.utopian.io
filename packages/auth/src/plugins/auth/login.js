@@ -2,7 +2,7 @@ import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import { Cookies } from 'quasar'
 
-export default async ({ currentRoute, store, redirect, ssrContext, redirectUrl }) => {
+export default async ({ currentRoute, store, redirect, ssrContext, redirectUrl, provider }) => {
   const code = currentRoute.query.code
   const locale = currentRoute.params.locale
 
@@ -11,7 +11,8 @@ export default async ({ currentRoute, store, redirect, ssrContext, redirectUrl }
     // TODO handle errors
     const { access_token: accessToken, refresh_token: refreshToken } = (await axios.post(`${process.env.UTOPIAN_API}/oauth/token`, {
       grant_type: 'authorization_code',
-      code
+      code,
+      provider
     })).data
 
     let hostName
