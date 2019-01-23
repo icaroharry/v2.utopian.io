@@ -1,4 +1,6 @@
 export default () => ({
-  search: null,
+  search: {
+    title: ''
+  },
   articles: []
 })

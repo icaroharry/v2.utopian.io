@@ -1,5 +1,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { required, minLength } from 'vuelidate/lib/validators'
 import i18nDropdownSwitcher from 'src/components/i18n/i18n-dropdown-switcher'
 
 export default {
@@ -9,7 +10,13 @@ export default {
   },
   data () {
     return {
-      searchText: null
+      searchText: ''
+    }
+  },
+  validations: {
+    searchText: { 
+      required,
+      minLength: minLength(1)
     }
   },
   computed: {
@@ -35,7 +42,17 @@ export default {
       window.location = `${process.env.AUTH_DOMAIN}/${this.$route.params.locale}/login/?redirectUrl=${window.location.href}`
     },
     search () {
-      this.searchArticles(this.searchText)
+      if (this.$v.searchText.$invalid) {
+        return
+      }
+      this.searchArticles({ 
+        title: this.searchText,
+        limit: 20,
+        skip: 0,
+        sortBy: {
+          createdAt: -1
+        }
+      })
       this.$router.push({ path: `/${this.$route.params.locale}/search/articles` })
     }
   }
@@ -57,6 +74,7 @@ export default {
               @keyup.enter="search"
               color="white"
               dark
+              :debounce="100"
             )
           .q-ma-sm
             q-btn(@click.native="redirectToLogin", color="primary", icon="mdi-account", :label="$t('navbar.signIn')")
@@ -68,6 +86,7 @@ export default {
               @keyup.enter="search"
               color="white"
               dark
+              :debounce="100"
             )
           .q-mt-sm.q-mr-lg
             q-btn(color="primary", :label="$t('navbar.contribute')", icon="mdi-plus" )

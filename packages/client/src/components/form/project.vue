@@ -49,7 +49,3 @@ q-field(:label="`${$t('components.form.project.label')}${required ? '*' : ''}`",
       :value-field="v => v.label"
     )
 </template>
-
-<style lang="stylus">
-
-</style>

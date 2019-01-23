@@ -1,12 +1,15 @@
 import API from 'src/plugins/api'
 
-export const searchArticles = async (context, search) => {
+export const searchArticles = async (context, data) => {
   const payload = await API.call({
     context,
     method: 'post',
     url: '/v1/search/articles',
-    data: { search }
+    data
   })
-  context.commit('setSearch', search)
+  if (data.skip === 0) {
+    context.commit('deleteAllArticles', data)
+  }
+  context.commit('setSearch', data)
   context.commit('setArticlesSearchResults', payload)
 }

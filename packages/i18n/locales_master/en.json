@@ -65,6 +65,67 @@
       "views": "views | view | views"
     }
   },
+  "search": {
+    "searchForm": {
+      "title": {
+        "placeholder": "Type your search",
+        "errors": {
+          "required": "A title for the article is required"
+        }
+      },
+      "categories": {
+        "label": "Categories"
+      },
+      "languages": {
+        "label": "Languages",
+        "placeholder": "Languages filter",
+        "errors": {
+          "maxItems": "You can add up to 5 languages"
+        }
+      },
+      "tags": {
+        "label": "Tags",
+        "placeholder": "Filter by tags",
+        "errors": {
+          "invalidCharacters": "A tag can only have lowercase alphanumeric characters, '-', '+', '.', and '#'",
+          "duplicatedTags": "This tag is already in the list",
+          "maxItems": "You are allowed to add up to 5 tags"
+        }
+      }
+    },
+    "clearAll": {
+      "label": "Clear all"
+    },
+    "sortBy": {
+      "placeholder": "Sort by",
+      "options": {
+        "newestDate": {
+          "label": "Date (newest)"
+        },
+        "oldestDate": {
+          "label": "Date (oldest)"
+
+        }
+      }
+    },
+    "loadMore": {
+      "label": "Load more"
+    },
+    "noResults": {
+      "label": "No results"
+    },
+    "message": {
+      "label": "Look for articles by using the filters"
+    },
+    "toggleFilters": {
+      "showFilters": {
+        "label": "Show filters"
+      },
+      "hideFilters": {
+        "label": "Hide filters"
+      }
+    }
+  },
   "components": {
     "form": {
       "categories": {
