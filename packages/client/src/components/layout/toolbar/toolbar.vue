@@ -14,7 +14,7 @@ export default {
     }
   },
   validations: {
-    searchText: { 
+    searchText: {
       required,
       minLength: minLength(1)
     }
@@ -45,7 +45,7 @@ export default {
       if (this.$v.searchText.$invalid) {
         return
       }
-      this.searchArticles({ 
+      this.searchArticles({
         title: this.searchText,
         limit: 20,
         skip: 0,
@@ -64,8 +64,8 @@ export default {
     .container.toolbar-container.row
       q-toolbar-title
         router-link(:to="{ name: 'home', params: 'locale' }")
-          img.u-logo.mobile-only(src="~assets/img/logo-icon.svg")
-          img.u-logo.desktop-only(src="~assets/img/logo-white.svg")
+          img.u-logo(v-if="$q.screen.lt.md", src="~assets/img/logo-icon.svg")
+          img.u-logo(v-if="!$q.screen.lt.md", src="~assets/img/logo-white.svg")
       div
         .row(v-if="guest === true")
           .q-mt-sm.q-mr-lg
@@ -80,16 +80,15 @@ export default {
             q-btn(@click.native="redirectToLogin", color="primary", icon="mdi-account", :label="$t('navbar.signIn')")
 
         .row(v-if="!guest")
+          q-search.q-mt-sm.q-mr-lg(
+            v-model.trim.lazy="searchText"
+            @keyup.enter="search"
+            color="white"
+            inverted
+            :debounce="100"
+          )
           .q-mt-sm.q-mr-lg
-            q-search(
-              v-model.trim.lazy="searchText"
-              @keyup.enter="search"
-              color="white"
-              inverted
-              :debounce="100"
-            )
-          .q-mt-sm.q-mr-lg
-            q-btn(color="primary", :label="$t('navbar.contribute')", icon="mdi-plus" )
+            q-btn(color="primary", :label="$q.screen.lt.md ? '' : $t('navbar.contribute')", icon="mdi-plus" )
             q-popover(self="top left", anchor="bottom left" style="z-index:500")
               q-list(dense, :link="true", separator)
                 q-item(:to="{ name: 'articles.create'}")
@@ -111,6 +110,7 @@ export default {
 </template>
 
 <style lang="stylus">
+  @import "~variables"
   .q-toolbar.u-toolbar
     height 60px
     div.toolbar-container
@@ -128,4 +128,9 @@ export default {
       padding 2px 3px
       height 36px
       color black !important
+      @media (max-width $breakpoint-sm-max)
+        max-width 140px
+    .q-mr-lg
+      @media (max-width $breakpoint-sm-max)
+        margin-right 12px
 </style>
