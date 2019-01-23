@@ -45,12 +45,29 @@ export const searchUsers = async (context, { term, count }) =>
     url: `/v1/users/${partialCleaner(term)}/${count}`
   })
 
+/**
+ * Load the user profile for edit
+ *
+ * @param context
+ * @returns editable user profile fields
+ * @author Grégory LATINIER
+ */
 export const fetchUserProfile = async (context) =>
   API.call({
     context,
     method: 'get',
     url: '/v1/user/profile'
   })
+
+export const fetchUserProfileWithTab = async (context, { username, tab }) => {
+  const profile = await API.call({
+    context,
+    method: 'get',
+    url: `/v1/user/profile/${username}/${tab}`
+  })
+  context.commit('setProfile', profile)
+  return profile
+}
 
 export const createWorkExperience = async (context, data) =>
   API.call({
@@ -60,22 +77,20 @@ export const createWorkExperience = async (context, data) =>
     data
   })
 
-export const updateWorkExperience = async (context, { workExperience, _id }) => {
-  return API.call({
+export const updateWorkExperience = async (context, { workExperience, _id }) =>
+  API.call({
     context,
     method: 'post',
     url: `/v1/user/profile/workexperience/${_id}`,
     data: workExperience
   })
-}
 
-export const deleteWorkExperience = async (context, _id) => {
-  return API.call({
+export const deleteWorkExperience = async (context, _id) =>
+  API.call({
     context,
     method: 'post',
     url: `/v1/user/profile/workexperience/${_id}/remove`
   })
-}
 
 export const createEducation = async (context, data) =>
   API.call({
@@ -85,22 +100,20 @@ export const createEducation = async (context, data) =>
     data
   })
 
-export const updateEducation = async (context, { education, _id }) => {
-  return API.call({
+export const updateEducation = async (context, { education, _id }) =>
+  API.call({
     context,
     method: 'post',
     url: `/v1/user/profile/education/${_id}`,
     data: education
   })
-}
 
-export const deleteEducation = async (context, _id) => {
-  return API.call({
+export const deleteEducation = async (context, _id) =>
+  API.call({
     context,
     method: 'post',
     url: `/v1/user/profile/education/${_id}/remove`
   })
-}
 
 export const updateProfileMainInformation = async (context, data) =>
   API.call({

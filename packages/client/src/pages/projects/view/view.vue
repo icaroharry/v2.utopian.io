@@ -7,11 +7,15 @@ export default {
   components: {
     USocialShare
   },
-  preFetch ({ store, currentRoute }) {
+  preFetch ({ store, currentRoute, redirect }) {
     return store.dispatch('projects/loadProject', {
       owner: currentRoute.params.owner,
       slug: currentRoute.params.slug,
       tab: currentRoute.params.tab
+    }).then(data => {
+      if (!data) {
+        redirect(`/${currentRoute.params.locale}/not-found`)
+      }
     })
   },
   data () {

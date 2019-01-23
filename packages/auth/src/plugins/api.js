@@ -20,8 +20,12 @@ export default class API {
         context.commit('utils/setAppError', 'unexpected', { root: true })
       // Token not valid anymore
       } else if (err.response.data.statusCode === 401) {
-        Cookies.remove('access_token')
-        Cookies.remove('refresh_token')
+        if (typeof window !== 'undefined') {
+          let domain = window.location.hostname
+          domain = domain.substring(domain.lastIndexOf('.', domain.lastIndexOf('.') - 1) + 1)
+          Cookies.remove('access_token', { path: '/', domain })
+          Cookies.remove('refresh_token', { path: '/', domain })
+        }
         context.commit('auth/clear', { root: true })
         context.commit('utils/setAppError', 'api.errors.general.unauthorized', { root: true })
       // Validation errors
@@ -60,8 +64,12 @@ export default class API {
               headers['Authorization'] = response.data.access_token
             }
           } catch (err) {
-            Cookies.remove('access_token')
-            Cookies.remove('refresh_token')
+            if (typeof window !== 'undefined') {
+              let domain = window.location.hostname
+              domain = domain.substring(domain.lastIndexOf('.', domain.lastIndexOf('.') - 1) + 1)
+              Cookies.remove('access_token', { path: '/', domain })
+              Cookies.remove('refresh_token', { path: '/', domain })
+            }
             context.commit('auth/clear', { root: true })
           }
         }

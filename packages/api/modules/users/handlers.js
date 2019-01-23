@@ -136,6 +136,37 @@ const getUserProfile = async (req, h) => {
 }
 
 /**
+ * Load the user information with the selected tab
+ *
+ * @param {object} req - request
+ * @param {object} req.params - request parameters
+ * @param {string} req.params.username - the user to retrieve the information
+ * @param {string} req.params.tab - the tab to load
+ * @param {object} h - response
+ *
+ * @returns user info with selected tab
+ * @author Grégory LATINIER
+ */
+const getProfileWithTab = async (req, h) => {
+  const { username, tab } = req.params
+  const user = await User.findOne({
+    username
+  })
+
+  if (!user) return h.response(null)
+
+  let tabData
+  if (tab === 'details') {
+    tabData = user.getDetails()
+  }
+
+  return h.response({
+    header: user.getHeader(),
+    [tab]: tabData
+  })
+}
+
+/**
  * Update the user's profile
  * This method is used by 3 different endpoints that differentiate the page's forms
  *
@@ -419,5 +450,6 @@ module.exports = {
   resetEncryptionKey,
   getEncryptionKey,
   linkBlockchainAccount,
-  unlinkBlockchainAccount
+  unlinkBlockchainAccount,
+  getProfileWithTab
 }

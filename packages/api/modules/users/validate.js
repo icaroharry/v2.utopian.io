@@ -151,6 +151,13 @@ const linkBlockchainAccount = {
   }
 }
 
+const getProfileWithTab = {
+  params: {
+    username: Joi.string().required().trim(),
+    tab: Joi.string().required().trim().allow('details', 'blog')
+  }
+}
+
 module.exports = {
   saveUser,
   getUsersByPartial,
@@ -166,5 +173,6 @@ module.exports = {
   searchUsersSkills,
   isUsernameAvailable,
   hasClaimedBlockchainAccount,
-  linkBlockchainAccount
+  linkBlockchainAccount,
+  getProfileWithTab
 }

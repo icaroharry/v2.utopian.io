@@ -11,10 +11,14 @@ export default {
     USocialShare,
     UVote
   },
-  preFetch ({ store, currentRoute }) {
+  preFetch ({ store, currentRoute, redirect }) {
     return store.dispatch('articles/fetchArticle', {
       author: currentRoute.params.author,
       slug: currentRoute.params.slug
+    }).then(data => {
+      if (!data) {
+        redirect(`/${currentRoute.params.locale}/not-found`)
+      }
     })
   },
   meta () {

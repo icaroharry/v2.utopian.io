@@ -63,6 +63,16 @@ routes.push([
     }
   },
   {
+    method: 'GET',
+    path: '/v1/user/profile/{username}/{tab}',
+    handler: (req, h) => Handlers.getProfileWithTab(req, h),
+    options: {
+      auth: false,
+      tags: ['users'],
+      validate: Validate.getProfileWithTab
+    }
+  },
+  {
     method: 'POST',
     path: '/v1/user/profile/maininformation',
     handler: (req, h) => Handlers.updateProfile(req, h),

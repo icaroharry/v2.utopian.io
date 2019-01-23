@@ -49,6 +49,7 @@ export const loadProject = async (context, { owner, slug, tab = 'details' }) => 
     url: `/v1/project/${owner}/${slug}/${tab}`
   })
   context.commit('setProject', payload)
+  return payload
 }
 
 export const searchProjects = async (context, term) =>

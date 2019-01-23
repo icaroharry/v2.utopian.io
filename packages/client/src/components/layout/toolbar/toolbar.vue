@@ -73,7 +73,7 @@ export default {
               v-model.trim.lazy="searchText"
               @keyup.enter="search"
               color="white"
-              dark
+              inverted
               :debounce="100"
             )
           .q-ma-sm
@@ -85,7 +85,7 @@ export default {
               v-model.trim.lazy="searchText"
               @keyup.enter="search"
               color="white"
-              dark
+              inverted
               :debounce="100"
             )
           .q-mt-sm.q-mr-lg
@@ -101,7 +101,7 @@ export default {
             img.avatar(:src="user.avatarUrl")
             q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]", style="z-index:500")
               q-list(dense, :link="true", separator)
-                q-item(:to="`/${$route.params.locale}/profile`")
+                q-item(:to="`/${$route.params.locale}/@${user.username}`")
                   q-item-side(icon="mdi-account")
                   q-item-main(:label="$t('navbar.profile')")
                 q-item(@click.native="logoutAndRedirect")
@@ -127,4 +127,5 @@ export default {
     .q-search
       padding 2px 3px
       height 36px
+      color black !important
 </style>

@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken'
 import { Cookies } from 'quasar'
-import linkSteemAccount from './blockchains/steem'
 
 /**
  * Manages the authentication and linking blockchain accounts
@@ -16,14 +15,6 @@ import linkSteemAccount from './blockchains/steem'
  */
 export default async ({ currentRoute, store, redirect, ssrContext }) => {
   const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
-
-  // Login with any external provider
-  const loginState = currentRoute.query.state
-  // Prepare the tokens to enable authenticated calls to the API
-  // Link blockchain accounts
-  if (loginState === 'steemconnectlogin') {
-    await linkSteemAccount({ currentRoute, store })
-  }
 
   // Load the user information
   if (cookies.get('access_token')) {

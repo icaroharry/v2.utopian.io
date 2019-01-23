@@ -62,10 +62,17 @@ export default (cookies) => ([
       },
       {
         path: 'profile',
-        name: 'users.profile',
+        name: 'users.profile.edit',
         props: true,
         component: () => import('src/pages/users/profile/edit/profile-edit'),
         meta: { auth: true }
+      },
+      {
+        path: '@:username',
+        name: 'users.profile.view',
+        props: true,
+        component: () => import('src/pages/users/profile/view/profile-view'),
+        meta: { fullWidth: true }
       },
       {
         path: 'search',

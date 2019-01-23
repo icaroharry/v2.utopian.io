@@ -185,7 +185,8 @@ const getArticle = async (req, h) => {
     .populate('project', 'avatarUrl name slug')
     .select('author beneficiaries body lang proReview title viewsIPs tags upVotes')
 
-  if (!articleDB) return h.response({})
+  if (!articleDB) return h.response(null)
+
   const { viewsIPs, ...article } = articleDB.toJSON({ virtuals: true })
 
   const user = req.auth.credentials && req.auth.credentials.uid

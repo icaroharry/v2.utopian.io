@@ -120,6 +120,7 @@ export default {
 .image-processor
   .croppa-container, .croppa-container canvas
     max-width 100%
+    height auto!important
     background-color transparent!important
   .croppa-container canvas
     border 5px solid #999

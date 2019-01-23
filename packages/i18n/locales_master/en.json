@@ -322,8 +322,10 @@
   },
   "users": {
     "profile": {
+      "aboutMe": "About me",
       "availableForHire": {
-        "label": "Available for hire?"
+        "label": "Available for hire?",
+        "text": "You can hire me!"
       },
       "avatar": {
         "label": "Avatar URL",
@@ -407,6 +409,7 @@
         "label": "Title",
         "placeholder": "What is you current position?"
       },
+      "joinedOn": "Joined on",
       "location": {
         "label": "Location",
         "placeholder": "Paris, France"

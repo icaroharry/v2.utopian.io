@@ -105,6 +105,34 @@ users.methods.getEditableFields = function () {
   }
 }
 
+users.methods.getHeader = function () {
+  return {
+    joined: this.createdAt,
+    username: this.username,
+    avatarUrl: this.avatarUrl,
+    cover: this.cover,
+    job: this.job,
+    availableForHire: this.availableForHire,
+    name: this.name,
+    location: this.location,
+    authProviders: this.authProviders.map((authProvider) => {
+      return { username: authProvider.username, type: authProvider.type }
+    }),
+    blockchainAccounts: this.blockchainAccounts.map((account) => {
+      return { address: account.address, blockchain: account.blockchain }
+    })
+  }
+}
+
+users.methods.getDetails = function () {
+  return {
+    resume: this.resume,
+    skills: this.skills,
+    education: this.education,
+    workExperiences: this.workExperiences
+  }
+}
+
 users.methods.encryptPassword = function (password) {
   return crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex')
 }

@@ -34,6 +34,7 @@ export const fetchArticle = async (context, { author, slug }) => {
     url: `/v1/article/${author}/${slug}`
   })
   context.commit('setArticle', payload)
+  return payload
 }
 
 export const searchTags = async (context, data) => {

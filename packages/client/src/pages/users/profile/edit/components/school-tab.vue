@@ -217,11 +217,10 @@ q-tab-pane(name="school")
                 :label="!educationForm._id ? $t('users.profile.education.save.label') : $t('users.profile.education.update.label')"
                 @click="saveEducation"
               )
-  .row.justify-center
+  .row.justify-center(v-if="education.length > 0")
     .col-lg-6.col-md-6.col-sm-12.col-xs-12
       q-card.q-mt-md(
         square
-        v-if="education.length > 0"
         v-for="experience in education"
         :key="experience._id"
       )
@@ -240,5 +239,5 @@ q-tab-pane(name="school")
                   q-item-main(:label="$t('users.profile.education.delete.label')")
         q-card-main
           p {{ experience.summary }}
-    
+
 </template>

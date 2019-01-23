@@ -22,8 +22,10 @@ export const logout = async (context) => {
       data: { token }
     })
   }
-  Cookies.remove('access_token')
-  Cookies.remove('refresh_token')
+  let domain = window.location.hostname
+  domain = domain.substring(domain.lastIndexOf('.', domain.lastIndexOf('.') - 1) + 1)
+  Cookies.remove('access_token', { path: '/', domain })
+  Cookies.remove('refresh_token', { path: '/', domain })
   context.commit('clear')
   localStorage.removeItem('blockchainAccounts')
 }

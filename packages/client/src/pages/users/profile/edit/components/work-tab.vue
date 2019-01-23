@@ -344,11 +344,10 @@ q-tab-pane(name="work")
                 :label="!workExperienceForm._id ? $t('users.profile.workExperience.save.label') : $t('users.profile.workExperience.update.label')"
                 @click="saveWorkExperience"
               )
-  .row.justify-center
+  .row.justify-center(v-if="workExperiences.length > 0")
     .col-lg-6.col-md-6.col-sm-12.col-xs-12
       q-card.q-mt-md(
         square
-        v-if="workExperiences.length > 0"
         v-for="experience in workExperiences"
         :key="experience._id"
       )

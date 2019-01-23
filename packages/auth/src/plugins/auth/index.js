@@ -1,6 +1,5 @@
 import { Cookies } from 'quasar'
 import login from './login'
-import linkSteemAccount from './blockchains/steem'
 import { atob } from 'b2a'
 
 /**
@@ -33,10 +32,5 @@ export default async ({ currentRoute, store, redirect, ssrContext }) => {
         refreshToken: cookies.get('refresh_token')
       })
     }
-  }
-
-  // Link blockchain accounts
-  if (loginState === 'steemconnectlogin') {
-    await linkSteemAccount({ currentRoute, store, redirectUrl })
   }
 }

@@ -349,6 +349,8 @@ const getProjectView = async (req, h) => {
     .populate('owners', 'username avatarUrl')
     .select(fields)
 
+  if (!projectDB) return h.response(null)
+
   const project = projectDB.toJSON()
   // articles contribution counts
   project.articlesCount = await Article.countDocuments({ project: project._id })

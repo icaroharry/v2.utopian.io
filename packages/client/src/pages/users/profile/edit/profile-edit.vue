@@ -72,6 +72,7 @@ export default {
 <template lang="pug">
 .profile-form
   h3 {{$t('users.profile.title')}}
+    q-btn(color="primary", icon="mdi-eye", flat, :to="`/${$route.params.locale}/@${mainInformation.username}`")
   h4 {{$t('users.profile.subtitle')}}
   q-tabs(animated, swipeable, align="justify")
     q-tab(default, name="main", slot="title", icon="mdi-account-card-details")
