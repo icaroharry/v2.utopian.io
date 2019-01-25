@@ -43,7 +43,7 @@ export default {
 q-tab-pane(name="main")
   h3 {{$t('users.profile.tabs.main')}}
   .row.justify-center
-    .col-lg-6.col-md-6.col-sm-12.col-xs-12
+    .col-lg-10.col-md-10.col-sm-12.col-xs-12
       q-card(square)
         q-card-main
           q-field(

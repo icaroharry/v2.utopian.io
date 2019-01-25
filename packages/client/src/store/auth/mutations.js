@@ -14,3 +14,7 @@ export const clear = (state) => {
 export const updateAvatarUrl = (state, avatarUrl) => {
   state.user.avatarUrl = avatarUrl
 }
+
+export const setSteemStatus = (state, status) => {
+  state.steemEnabled = status
+}

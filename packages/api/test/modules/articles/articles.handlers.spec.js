@@ -74,7 +74,7 @@ describe('create an article', () => {
       'Authorization': token
     }
     response = await global.server.inject(createArticleEndpoint)
-    payload = response.payload
+    payload = JSON.parse(response.payload)
   })
 
   it('should return a 200 status response', () => {
@@ -82,7 +82,7 @@ describe('create an article', () => {
   })
 
   it('should return the slug', () => {
-    assert.equal(payload, 'gregory/article-title')
+    assert.equal(payload.slug, 'gregory/article-title')
   })
 })
 
@@ -96,7 +96,7 @@ describe('update an article', () => {
       'Authorization': token
     }
     response = await global.server.inject(updateArticleEndpoint)
-    payload = response.payload
+    payload = JSON.parse(response.payload)
   })
 
   it('should return a 200 status response', () => {
@@ -104,7 +104,7 @@ describe('update an article', () => {
   })
 
   it('should return the slug', () => {
-    assert.equal(payload, 'gregory/article-title-updated')
+    assert.equal(payload.slug, 'gregory/article-title-updated')
   })
 })
 
@@ -165,7 +165,7 @@ describe('get an article by its author and slug for edit', () => {
 
   it('should have all the keys', () => {
     expect(payload).to.have.all.keys(
-      'author', 'beneficiaries', 'body', 'category', 'proReview', 'title', 'tags', '_id'
+      'author', 'beneficiaries', 'blockchains', 'body', 'category', 'proReview', 'title', 'tags', '_id'
     )
   })
 })

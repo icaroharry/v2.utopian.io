@@ -63,4 +63,5 @@ export const clearInvalidKeys = ({ commit }, encryptionKey) => {
       }
     } catch (e) {}
   }
+  commit('auth/setSteemStatus', !!localStorage.blockchainAccounts, { root: true })
 }

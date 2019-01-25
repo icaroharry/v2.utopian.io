@@ -65,7 +65,13 @@ export default (cookies) => ([
         name: 'users.profile.edit',
         props: true,
         component: () => import('src/pages/users/profile/edit/profile-edit'),
-        meta: { auth: true }
+        meta: { auth: true },
+        children: [{
+          path: ':tab',
+          name: 'users.profile.edit.tab',
+          props: true,
+          component: () => import('src/pages/users/profile/edit/profile-edit')
+        }]
       },
       {
         path: '@:username',

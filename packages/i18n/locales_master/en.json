@@ -12,6 +12,79 @@
     "SEOTitleTemplate": "Utopian.io, empowering open source",
     "yes": "Yes"
   },
+  "components": {
+    "form": {
+      "categories": {
+        "label": "Category",
+        "placeholder": "Select a category"
+      },
+      "imageUploader": {
+        "dragAndDrop": "Drag and drop here.",
+        "errors": {
+          "fileUpload": "An error occurred while uploading",
+          "fileTypeMismatch": "That file is of the wrong type",
+          "fileSizeExceed": "That file is too large"
+        }
+      },
+      "language": {
+        "label": "Language",
+        "placeholder": "Select a language"
+      },
+      "project": {
+        "label": "Project",
+        "placeholder": "Search for a project"
+      },
+      "wysiwyg": {
+        "userSearch": "Search for a user",
+        "userNotFound": "No users found",
+        "findGitIssue": "Insert a link to a Git issue",
+        "findUserName": "Insert a link to a User profile",
+        "uploadImage": "Insert an Image",
+        "markdownPreview": "Markdown Preview",
+        "showMarkdown": "Toggle Markdown View",
+        "showEditor": "Return to Editor",
+        "imageEditor": "Edit your Image",
+        "dragAndDrop": "Drag and drop here.",
+        "fileTypeNotSupported": "We only support uploading images.",
+        "gitComingSoon": "Git Repo Search Coming Soon!",
+        "pasteError": "Unable to paste your resource. Try again with the button.",
+        "notAvailableInFullScreen": "This feature not available in full-screen mode.",
+        "fileUpload": {
+          "error": {
+            "unexpected": "An error occurred while uploading your file."
+          }
+        }
+      }
+    },
+    "layout": {
+      "toolbar": {
+        "addProject": "Add my project",
+        "contribute": "contribute",
+        "linkSteem": "Link my Steem account",
+        "logOut": "Log out",
+        "profile": "Profile",
+        "signIn": "sign in",
+        "writeArticle": "Write an article"
+      }
+    },
+    "tools": {
+      "socialShare": {
+        "copyToClipboard": {
+          "label": "Copy",
+          "success": "Url copied to clipboard"
+        }
+      }
+    }
+  },
+  "mixins": {
+    "steem": {
+      "postFooter": "Original content published on utopian.io",
+      "errors": {
+        "keys": "We couldn,t publish to the blockchain, your encryption was probably reset, please update your posting key.",
+        "unexpected": "An unexpected error occurred, please check your Steem credential and the blockchain status and try again."
+      }
+    }
+  },
   "articles": {
     "createEdit": {
       "beneficiaries": {
@@ -21,6 +94,11 @@
         "authorShares": "You have <strong>{authorShares}%</strong> of the shares",
         "errors": {
           "weight": "The total beneficiaries percentage can't exceed 100%. Each percentages must be greater than 1."
+        }
+      },
+      "blockchains": {
+        "steem": {
+          "external": "View it on Steemit.com"
         }
       },
       "body": {
@@ -65,104 +143,6 @@
       "views": "views | view | views"
     }
   },
-  "search": {
-    "searchForm": {
-      "title": {
-        "placeholder": "Type your search",
-        "errors": {
-          "required": "A title for the article is required"
-        }
-      },
-      "categories": {
-        "label": "Categories"
-      },
-      "languages": {
-        "label": "Languages",
-        "placeholder": "Languages filter",
-        "errors": {
-          "maxItems": "You can add up to 5 languages"
-        }
-      },
-      "tags": {
-        "label": "Tags",
-        "placeholder": "Filter by tags",
-        "errors": {
-          "invalidCharacters": "A tag can only have lowercase alphanumeric characters, '-', '+', '.', and '#'",
-          "duplicatedTags": "This tag is already in the list",
-          "maxItems": "You are allowed to add up to 5 tags"
-        }
-      }
-    },
-    "clearAll": {
-      "label": "Clear all"
-    },
-    "sortBy": {
-      "placeholder": "Sort by",
-      "options": {
-        "newestDate": {
-          "label": "Date (newest)"
-        },
-        "oldestDate": {
-          "label": "Date (oldest)"
-
-        }
-      }
-    },
-    "loadMore": {
-      "label": "Load more"
-    },
-    "noResults": {
-      "label": "No results"
-    },
-    "message": {
-      "label": "Look for articles by using the filters"
-    },
-    "toggleFilters": {
-      "showFilters": {
-        "label": "Show filters"
-      },
-      "hideFilters": {
-        "label": "Hide filters"
-      }
-    }
-  },
-  "components": {
-    "form": {
-      "categories": {
-        "label": "Category",
-        "placeholder": "Select a category"
-      },
-      "imageUploader": {
-        "dragAndDrop": "Drag and drop here.",
-        "errors": {
-          "fileUpload": "An error occurred while uploading",
-          "fileTypeMismatch": "That file is of the wrong type",
-          "fileSizeExceed": "That file is too large"
-        }
-      },
-      "language": {
-        "label": "Language",
-        "placeholder": "Select a language"
-      },
-      "project": {
-        "label": "Project",
-        "placeholder": "Search for a project"
-      }
-    },
-    "tools": {
-      "socialShare": {
-        "copyToClipboard": {
-          "label": "Copy",
-          "success": "Url copied to clipboard"
-        }
-      }
-    }
-  },
-  "fileUpload": {
-    "error": {
-      "unexpected": "An error occurred while uploading your file."
-    }
-  },
   "homepage": {
     "by": "by",
     "contributeToProject" : "contribute to this project",
@@ -171,6 +151,10 @@
     "newProjectSubtitle": "Connect with thousands of open source contributors.",
     "seeAllProjects": "See all projects",
     "submitYourProject": "Submit your project"
+  },
+  "notFound": {
+    "goBack": "Go back",
+    "title": "Sorry, nothing here"
   },
   "projects": {
     "createEdit": {
@@ -293,32 +277,66 @@
       "notFound": "No projects found"
     }
   },
-  "editor": {
-    "userSearch": "Search for a user",
-    "userNotFound": "No users found",
-    "findGitIssue": "Insert a link to a Git issue",
-    "findUserName": "Insert a link to a User profile",
-    "uploadImage": "Insert an Image",
-    "markdownPreview": "Markdown Preview",
-    "showMarkdown": "Toggle Markdown View",
-    "showEditor": "Return to Editor",
-    "imageEditor": "Edit your Image",
-    "dragAndDrop": "Drag and drop here.",
-    "fileTypeNotSupported": "We only support uploading images.",
-    "gitComingSoon": "Git Repo Search Coming Soon!",
-    "pasteError": "Unable to paste your resource. Try again with the button.",
-    "notAvailableInFullScreen": "This feature not available in full-screen mode."
-  },
-  "navbar": {
-    "contribute": "contribute",
-    "linkSteemAccount": "Link your Steem account",
-    "logOut": "Log out",
-    "profile": "Profile",
-    "signIn": "sign in"
-  },
-  "notFound": {
-    "goBack": "Go back",
-    "title": "Sorry, nothing here"
+  "search": {
+    "searchForm": {
+      "title": {
+        "placeholder": "Type your search",
+        "errors": {
+          "required": "A title for the article is required"
+        }
+      },
+      "categories": {
+        "label": "Categories"
+      },
+      "languages": {
+        "label": "Languages",
+        "placeholder": "Languages filter",
+        "errors": {
+          "maxItems": "You can add up to 5 languages"
+        }
+      },
+      "tags": {
+        "label": "Tags",
+        "placeholder": "Filter by tags",
+        "errors": {
+          "invalidCharacters": "A tag can only have lowercase alphanumeric characters, '-', '+', '.', and '#'",
+          "duplicatedTags": "This tag is already in the list",
+          "maxItems": "You are allowed to add up to 5 tags"
+        }
+      }
+    },
+    "clearAll": {
+      "label": "Clear all"
+    },
+    "sortBy": {
+      "placeholder": "Sort by",
+      "options": {
+        "newestDate": {
+          "label": "Date (newest)"
+        },
+        "oldestDate": {
+          "label": "Date (oldest)"
+
+        }
+      }
+    },
+    "loadMore": {
+      "label": "Load more"
+    },
+    "noResults": {
+      "label": "No results"
+    },
+    "message": {
+      "label": "Look for articles by using the filters"
+    },
+    "toggleFilters": {
+      "showFilters": {
+        "label": "Show filters"
+      },
+      "hideFilters": {
+        "label": "Hide filters"
+      }
+    }
   },
   "users": {
     "profile": {
@@ -454,7 +472,7 @@
       },
       "workExperience": {
         "label": "Work Experiences",
-        "tellUs": "Tell us about your different jobs and projects", 
+        "tellUs": "Tell us about your different jobs and projects",
         "jobTitle": "Job Title",
         "company": "Company",
         "current": "Current",
@@ -568,11 +586,6 @@
         "ok": "Go back to app"
       }
     }
-  },
-  "countables": {
-    "articles": "Articles | Article | Articles",
-    "bounties": "Bounties | Bounty | Bounties",
-    "contributors": "Contributors | Contributor | Contributors"
   },
   "formats": {
     "dateTime": {

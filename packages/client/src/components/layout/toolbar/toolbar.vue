@@ -22,7 +22,8 @@ export default {
   computed: {
     ...mapGetters('auth', [
       'guest',
-      'user'
+      'user',
+      'steemEnabled'
     ])
   },
   methods: {
@@ -77,7 +78,7 @@ export default {
               :debounce="100"
             )
           .q-ma-sm
-            q-btn(@click.native="redirectToLogin", color="primary", icon="mdi-account", :label="$t('navbar.signIn')")
+            q-btn(@click.native="redirectToLogin", color="primary", icon="mdi-account", :label="$t('components.layout.toolbar.signIn')")
 
         .row(v-if="!guest")
           q-search.q-mt-sm.q-mr-lg(
@@ -88,13 +89,15 @@ export default {
             :debounce="100"
           )
           .q-mt-sm.q-mr-lg
-            q-btn(color="primary", :label="$q.screen.lt.md ? '' : $t('navbar.contribute')", icon="mdi-plus" )
+            q-btn(color="primary", :label="$q.screen.lt.md ? '' : $t('components.layout.toolbar.contribute')", icon="mdi-plus" )
             q-popover(self="top left", anchor="bottom left" style="z-index:500")
               q-list(dense, :link="true", separator)
-                q-item(:to="{ name: 'articles.create'}")
-                  q-item-main(label="Write an article")
-                q-item(:to="{ name: 'projects.create'}")
-                  q-item-main(label="Add my project")
+                q-item(v-if="!steemEnabled", :to="`/${$route.params.locale}/profile/steem`")
+                  q-item-main(:label="$t('components.layout.toolbar.linkSteem')")
+                q-item(v-if="steemEnabled", :to="`/${$route.params.locale}/articles/create`")
+                  q-item-main(:label="$t('components.layout.toolbar.writeArticle')")
+                q-item(:to="`/${$route.params.locale}/projects/create`")
+                  q-item-main(:label="$t('components.layout.toolbar.addProject')")
 
           .q-ma-sm
             img.avatar(:src="user.avatarUrl")
@@ -102,10 +105,10 @@ export default {
               q-list(dense, :link="true", separator)
                 q-item(:to="`/${$route.params.locale}/@${user.username}`")
                   q-item-side(icon="mdi-account")
-                  q-item-main(:label="$t('navbar.profile')")
+                  q-item-main(:label="$t('components.layout.toolbar.profile')")
                 q-item(@click.native="logoutAndRedirect")
                   q-item-side(icon="mdi-logout")
-                  q-item-main(:label="$t('navbar.logOut')")
+                  q-item-main(:label="$t('components.layout.toolbar.logOut')")
       // i18n-dropdown-switcher.float-right
 </template>
 

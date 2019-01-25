@@ -28,7 +28,7 @@ const createArticle = {
  */
 const updateArticle = {
   params: {
-    id: Joi.string().trim().required()
+    id: validation.id.required()
   },
   payload: {
     body: Joi.string().trim().max(250000).required(),
@@ -38,6 +38,19 @@ const updateArticle = {
     tags: Joi.array().min(1).max(5).unique().items(Joi.string().regex(validation.articleTag).trim().min(1).max(100)).required(),
     title: Joi.string().trim().max(250).required()
   }
+}
+
+/**
+ * Update the blockchain data needed to interact with it
+ *
+ * @author Grégory LATINIER
+ */
+const updateBlockchainData = {
+  params: {
+    id: validation.id.required(),
+    blockchain: Joi.string().required().allow('steem')
+  },
+  payload: Joi.object().required()
 }
 
 /**
@@ -74,6 +87,7 @@ const searchTags = {
 module.exports = {
   createArticle,
   updateArticle,
+  updateBlockchainData,
   getArticleForEdit,
   getArticle,
   searchTags

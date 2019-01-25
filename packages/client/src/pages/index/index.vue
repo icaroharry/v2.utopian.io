@@ -96,7 +96,7 @@ div
   .main
     .flex.justify-between.contributions-header
       .q-title.q-my-lg.q-pt-lg {{$t('homepage.featuredProjects')}}
-      router-link.q-pt-lg(:to="{ name: 'project.search' }")
+      router-link.q-pt-lg(to="/")
         .pt
           .text-right.mb {{$t('homepage.seeAllProjects')}}
           hr

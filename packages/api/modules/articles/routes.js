@@ -25,6 +25,16 @@ routes.push([
     }
   },
   {
+    method: 'POST',
+    path: '/v1/article/blockchains/{blockchain}/{id}',
+    handler: (req, h) => Handlers.updateBlockchainData(req, h),
+    options: {
+      auth: { access: { scope: ['user'] } },
+      tags: ['articles'],
+      validate: Validate.updateBlockchainData
+    }
+  },
+  {
     method: 'GET',
     path: '/v1/article/{author}/{slug}/edit',
     handler: (req, h) => Handlers.getArticleForEdit(req, h),

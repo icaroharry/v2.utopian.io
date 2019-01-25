@@ -23,6 +23,11 @@ const articles = new Schema({
       required: true
     }
   }],
+  blockchains: [{
+    _id: false,
+    data: { type: Object, required: true },
+    name: { type: String, required: true }
+  }],
   body: { type: String, required: true },
   category: { type: String, required: true },
   lang: { type: String, required: true },

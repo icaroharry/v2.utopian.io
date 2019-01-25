@@ -75,11 +75,11 @@ export default {
     q-btn(color="primary", icon="mdi-eye", flat, :to="`/${$route.params.locale}/@${mainInformation.username}`")
   h4 {{$t('users.profile.subtitle')}}
   q-tabs(animated, swipeable, align="justify")
-    q-tab(default, name="main", slot="title", icon="mdi-account-card-details")
-    q-tab(name="images", slot="title", icon="mdi-image")
-    q-tab(name="work", slot="title", icon="mdi-briefcase")
-    q-tab(name="school", slot="title", icon="mdi-school")
-    q-tab(name="steem", slot="title", icon="icon-ut-steem")
+    q-tab(:default="!$route.params.tab", name="main", slot="title", icon="mdi-account-card-details")
+    q-tab(:default="$route.params.tab === 'images'", name="images", slot="title", icon="mdi-image")
+    q-tab(:default="$route.params.tab === 'work'", name="work", slot="title", icon="mdi-briefcase")
+    q-tab(:default="$route.params.tab === 'school'", name="school", slot="title", icon="mdi-school")
+    q-tab(:default="$route.params.tab === 'steem'", name="steem", slot="title", icon="icon-ut-steem")
 
     main-tab(:pMainInformation="mainInformation")
     images-tab(:pImages="images")

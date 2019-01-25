@@ -44,6 +44,7 @@ export default {
       'unlinkBlockchainAccount'
     ]),
     ...mapActions('utils', ['setAppSuccess', 'setAppError']),
+    ...mapActions('auth', ['setSteemStatus']),
     isSteemAddressValid: debounce(async function () {
       this.blockchainForm.addressValidatorStatus = 'checking'
       this.blockchainForm.addressValidatorStatus = (await this.$steem.Client.database.getAccounts([this.blockchainForm.address])).some(u => u.name === this.blockchainForm.address)
@@ -77,6 +78,7 @@ export default {
             this.blockchainAccounts[i].notSync = true
           }
           this.setAppSuccess('users.profile.blockchainForm.resetKey.success')
+          this.setSteemStatus(false)
         }
       })
     },
@@ -105,6 +107,7 @@ export default {
           address: this.blockchainForm.address
         })
         this.clearBlockchainForm()
+        this.setSteemStatus(true)
       }
     },
     clearBlockchainForm () {
@@ -116,6 +119,7 @@ export default {
     deleteBlockchainAccountDialog (address) {
       this.blockchainAccounts = this.unlinkBlockchainAccount({ blockchain: 'steem', address })
       localStorage.removeItem('blockchainAccounts')
+      this.setSteemStatus(false)
       this.$v.blockchainForm.$reset()
       this.blockchainForm.address = ''
       this.blockchainForm.postingKey = ''
@@ -141,7 +145,7 @@ export default {
 q-tab-pane(name="steem")
   h3 {{$t('users.profile.tabs.steem')}}
   .row.justify-center.q-mt-md(v-if="!blockchainForm.collapsed")
-    .col-lg-6.col-md-6.col-sm-12.col-xs-12
+    .col-lg-10.col-md-10.col-sm-12.col-xs-12
       q-card(square)
         q-card-main
           q-field(
@@ -191,7 +195,7 @@ q-tab-pane(name="steem")
           )
 
   .row.justify-center.q-mt-md(v-if="blockchainAccounts.length > 0")
-    .col-lg-6.col-md-6.col-sm-12.col-xs-12
+    .col-lg-10.col-md-10.col-sm-12.col-xs-12
       q-list(highlight)
         q-item(
           v-for="account in blockchainAccounts"
@@ -218,7 +222,7 @@ q-tab-pane(name="steem")
                     q-item-main(label="Delete")
   h3.q-mt-lg {{$t('users.profile.tabs.steemReset')}}
     .row.justify-center
-      .column.col-lg-6.col-md-6.col-sm-12.col-xs-12.items-center
+      .column.col-lg-10.col-md-10.col-sm-12.col-xs-12.items-center
         q-btn(
           color="warning"
           :label="$t('users.profile.blockchainForm.resetKey.label')"

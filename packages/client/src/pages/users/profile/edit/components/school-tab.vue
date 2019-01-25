@@ -122,7 +122,7 @@ export default {
 q-tab-pane(name="school")
   h3 {{$t('users.profile.tabs.school')}}
   .row.justify-center
-    .col-lg-6.col-md-6.col-sm-12.col-xs-12.flex.justify-between
+    .col-lg-10.col-md-10.col-sm-12.col-xs-12.flex.justify-between
       h4 {{ $t('users.profile.education.label') }}
       q-btn(
         round
@@ -132,7 +132,7 @@ q-tab-pane(name="school")
         :icon="educationForm.collapsed ? 'mdi-plus' : 'mdi-minus'", @click="() => educationForm.collapsed ? openEducationForm() : closeEducationForm()"
       )
   .row.justify-center
-    .col-lg-6.col-md-6.col-sm-12.col-xs-12
+    .col-lg-10.col-md-10.col-sm-12.col-xs-12
       q-card(square, :class="education.length === 0 ? 'q-mt-md' : ''")
         q-card-title(v-if="education.length === 0")
           | {{ $t('users.profile.education.tellUs') }}
@@ -218,7 +218,7 @@ q-tab-pane(name="school")
                 @click="saveEducation"
               )
   .row.justify-center(v-if="education.length > 0")
-    .col-lg-6.col-md-6.col-sm-12.col-xs-12
+    .col-lg-10.col-md-10.col-sm-12.col-xs-12
       q-card.q-mt-md(
         square
         v-for="experience in education"

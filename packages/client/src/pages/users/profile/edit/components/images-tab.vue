@@ -116,7 +116,7 @@ export default {
 q-tab-pane(name="images")
   h3 {{$t('users.profile.tabs.images')}}
   .row.justify-center
-    .col-lg-6.col-md-6.col-sm-12.col-xs-12
+    .col-lg-10.col-md-10.col-sm-12.col-xs-12
       q-card.q-mb-md(square)
         q-card-main
           q-field(
@@ -153,7 +153,7 @@ q-tab-pane(name="images")
             @click="updateImages('avatar')"
           )
   .row.justify-center
-    .col-lg-6.col-md-6.col-sm-12.col-xs-12
+    .col-lg-10.col-md-10.col-sm-12.col-xs-12
       q-card(square)
         q-card-main
           q-field(

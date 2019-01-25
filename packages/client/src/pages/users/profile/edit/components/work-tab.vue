@@ -184,7 +184,7 @@ export default {
 q-tab-pane(name="work")
   h3 {{$t('users.profile.tabs.work')}}
   .row.justify-center
-    .col-lg-6.col-md-6.col-sm-12.col-xs-12
+    .col-lg-10.col-md-10.col-sm-12.col-xs-12
       q-card.q-mb-md(square)
         q-card-main
           q-field(
@@ -222,7 +222,7 @@ q-tab-pane(name="work")
             @click="updateJob"
           )
   .row.justify-center
-    .col-lg-6.col-md-6.col-sm-12.col-xs-12
+    .col-lg-10.col-md-10.col-sm-12.col-xs-12
       q-card.q-mb-md(square)
         q-card-main
           q-field(
@@ -251,7 +251,7 @@ q-tab-pane(name="work")
           )
 
   .row.justify-center
-    .col-lg-6.col-md-6.col-sm-12.col-xs-12.flex.justify-between
+    .col-lg-10.col-md-10.col-sm-12.col-xs-12.flex.justify-between
       h4 {{ $t('users.profile.workExperience.label') }}
       q-btn(
         round
@@ -262,7 +262,7 @@ q-tab-pane(name="work")
         @click="() => workExperienceForm.collapsed ? openWorkExperienceForm() : closeWorkExperienceForm()"
       )
   .row.justify-center
-    .col-lg-6.col-md-6.col-sm-12.col-xs-12
+    .col-lg-10.col-md-10.col-sm-12.col-xs-12
       q-card(square, :class="workExperiences.length === 0 ? 'q-mt-md' : ''")
         q-card-title(v-if="workExperiences.length === 0")
           | {{ $t('users.profile.workExperience.tellUs') }}
@@ -345,7 +345,7 @@ q-tab-pane(name="work")
                 @click="saveWorkExperience"
               )
   .row.justify-center(v-if="workExperiences.length > 0")
-    .col-lg-6.col-md-6.col-sm-12.col-xs-12
+    .col-lg-10.col-md-10.col-sm-12.col-xs-12
       q-card.q-mt-md(
         square
         v-for="experience in workExperiences"

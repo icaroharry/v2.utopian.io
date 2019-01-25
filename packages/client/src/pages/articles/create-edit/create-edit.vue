@@ -5,9 +5,11 @@ import UWysiwyg from 'src/components/form/wysiwyg'
 import UFormCategories from 'src/components/form/categories'
 import UFormLanguages from 'src/components/form/languages'
 import UFormProject from 'src/components/form/project'
+import { SteemAccountRequiredMixin, SteemBroadcastMixin } from 'src/mixins/steem'
 
 export default {
   name: 'u-page-articles-create-edit',
+  mixins: [SteemAccountRequiredMixin, SteemBroadcastMixin],
   components: {
     UWysiwyg,
     UFormCategories,
@@ -29,6 +31,8 @@ export default {
         title: '',
         tags: []
       },
+      blockchains: [],
+      submitting: false,
       projectError: null,
       displaySearchBeneficiaries: false,
       beneficiariesSearchResult: '',
@@ -69,9 +73,18 @@ export default {
         slug: this.$route.params.slug
       })
       if (!result || (this.user.uid !== result.author)) {
-        this.$router.push({ path: '/notfound' })
+        this.$router.push({ path: `/${this.$route.params.locale}/notfound` })
       } else {
-        this.article = result
+        this.article._id = result._id
+        this.article.body = result.body
+        this.article.category = result.category
+        this.article.proReview = result.proReview
+        if (result.project) {
+          this.article.project = result.project
+        }
+        this.article.tags = result.tags
+        this.article.title = result.title
+        this.blockchains = result.blockchains
         this.$v.article.$touch()
       }
     }
@@ -84,15 +97,20 @@ export default {
       'fetchArticleForEdit',
       'saveArticle',
       'updateArticle',
+      'updateBlockchainData',
       'searchTags'
     ]),
     async submit () {
+      this.submitting = true
       this.$v.article.$touch()
       if (this.$v.article.$invalid) {
         return
       }
-      const { _id, author, beneficiaries, project, ...article } = this.article
-      article.project = project._id
+      const { _id, beneficiaries, project, ...article } = this.article
+      if (project) {
+        article.project = project._id
+      }
+
       let result
       if (!_id) {
         // article.beneficiaries = beneficiaries
@@ -102,10 +120,30 @@ export default {
         result = await this.updateArticle(article)
       }
       if (result) {
+        const tags = result.tags
+        if (!tags.includes('utopian-io')) tags.push('utopian-io')
+        if (!tags.includes(result.category)) tags.push(result.category)
+        const permlink = `${result.slug.split('/')[1]}-${Date.now()}`
+        const blockchainData = await this.broadcast({
+          url: `/${this.$route.params.locale}/articles/${result.slug}`,
+          body: result.body,
+          permlink,
+          tags,
+          title: result.title,
+          blockchain: this.blockchains.find(b => b.name === 'steem')
+        })
+        if (blockchainData) {
+          this.blockchains = await this.updateBlockchainData({
+            id: result._id,
+            blockchain: 'steem',
+            data: blockchainData
+          })
+        }
         if (!_id) {
-          this.$router.push({ path: `/${this.$route.params.locale}/articles/${result}/edit` })
+          this.$router.push({ path: `/${this.$route.params.locale}/articles/${result.slug}/edit` })
         }
         this.setAppSuccess(`articles.createEdit.${_id ? 'update' : 'save'}.successMsg`)
+        this.submitting = false
       }
     },
     async selectProject (project) {
@@ -182,7 +220,7 @@ export default {
     },
     chipsInputChange (newTags) {
       const regex = /^[a-z0-9-+.#]*$/
-      const newTag = newTags[newTags.length - 1] 
+      const newTag = newTags[newTags.length - 1]
       if (!newTag.match(regex)) {
         this.article.tags.pop()
         this.setAppError('articles.createEdit.tags.errors.invalidCharacters')
@@ -191,6 +229,10 @@ export default {
         this.article.tags.pop()
         this.setAppError('articles.createEdit.tags.errors.maxItems')
       }
+    },
+    getSteemitUrl () {
+      const { data } = this.blockchains.find(b => b.name === 'steem')
+      return `https://steemit.com/${data.parentPermlink}/@${data.author}/${data.permlink}`
     }
   },
   computed: {
@@ -213,14 +255,14 @@ div
   .row.gutter-sm.article-form-container
     .col-md-8.col-sm-12.col-xs-12
       q-field(:label="`${$t('articles.createEdit.title.label')}*`", orientation="vertical", :error="$v.article.title.$error")
-        q-input(v-model.trim.lazy="article.title", maxlength="250", :placeholder="$t('articles.createEdit.title.placeholder')", @keyup.enter="submit")
+        q-input(v-model.trim="article.title", maxlength="250", :placeholder="$t('articles.createEdit.title.placeholder')", @keyup.enter="submit")
       q-field.q-field-no-input(:label="`${$t('articles.createEdit.body.label')}*`", orientation="vertical",
       :helper="$t('articles.createEdit.body.help')", :error="$v.article.body.$error")
-        u-wysiwyg(v-model="article.body", field="body")
+        u-wysiwyg(v-model="article.body", field="body", context="article")
     .col-md-4.col-sm-12.col-xs-12
       u-form-project(v-model="article.project.name", field="project", :error="$v.article.project.$error || projectError !== null", :errorLabel="projectError", :selected="selectProject")
       u-form-categories(v-model="article.category", field="category", :error="$v.article.category.$error", :required="true")
-      q-field(orientation="vertical", :label="$t('articles.createEdit.tags.label')", :count="5")
+      q-field(orientation="vertical", :label="`${$t('articles.createEdit.tags.label')}*`", :count="5")
         q-chips-input(
           v-model="article.tags"
           @duplicate="duplicatedTags"
@@ -292,7 +334,19 @@ div
           left-label
           :label="`${$t('articles.createEdit.proReview.helper')} <strong>${$t('articles.createEdit.proReview.helperImportant')}</strong>`"
         )
-      q-btn.full-width.q-mt-lg(color="primary", :label="$t(`articles.createEdit.${article._id ? 'update' : 'save'}.label`)", @click="submit")
+      //
+      q-btn.full-width.q-mt-lg(
+        color="primary"
+        :label="$t(`articles.createEdit.${article._id ? 'update' : 'save'}.label`)"
+        @click="submit"
+        :loading="submitting"
+      )
+      a.steemit-link(
+        v-if="blockchains.some(b => b.name === 'steem')"
+        :href="getSteemitUrl()"
+        target="_blank"
+      )
+        | {{$t('articles.createEdit.blockchains.steem.external')}}
 </template>
 
 <style lang="stylus">
@@ -308,4 +362,10 @@ div
         width 55px
       .q-btn
         margin-bottom 4px
+  .steemit-link
+    display block
+    font-size 12px
+    text-decoration none
+    margin-top 5px
+    color #06D6A9
 </style>

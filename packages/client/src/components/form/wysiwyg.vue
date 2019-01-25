@@ -2,7 +2,7 @@
 import { mapActions } from 'vuex'
 export default {
   name: 'u-wysiwyg',
-  props: ['value', 'field'],
+  props: ['value', 'field', 'context'],
   mounted () {
     // stop all other drag events!
     // this is so ugly I want to apologize.
@@ -194,11 +194,11 @@ export default {
       let child = this.getCaretTopPoint()
       const parent = document.getElementById('CE').getBoundingClientRect()
       const relativePos = {}
-      relativePos.top = this.scroll.position + child.top + 3
+      relativePos.top = this.scroll.position + child.top - 8
       if (child.left + offset + 250 >= parent.width) {
         relativePos.left = parent.width - 255
       } else {
-        relativePos.left = child.left + offset - 15
+        relativePos.left = child.left + offset - 12
       }
       this.userInputPosRendered = `position:absolute;width:250px;top:${relativePos.top}px;left:${relativePos.left}px`
       this.keycode = null // cleanup
@@ -245,7 +245,7 @@ export default {
         if (item.value !== null) {
           document.execCommand('delete')
           setTimeout(() => {
-            document.execCommand('insertHTML', false, `<a href="${process.env.UTOPIAN_DOMAIN}/en/@${item.label}">@${item.label}</a>&nbsp;`)
+            document.execCommand('insertHTML', false, `<a href="${process.env.UTOPIAN_DOMAIN}/en/@${item.label}" class="mention-link">@${item.label}</a>&nbsp;`)
           }, 1)
         }
         this.userInputPosRendered = false
@@ -353,7 +353,7 @@ export default {
         }
       } catch (err) {
         console.log(err)
-        this.$q.notify(this.$t('editor.pasteError'))
+        this.$q.notify(this.$t('components.form.wysiwyg.pasteError'))
       }
     },
 
@@ -379,14 +379,14 @@ export default {
                 this.uploadFile(blob)
               } else {
                 // not something we support :(
-                this.$q.notify(this.$t('editor.fileTypeNotSupported'))
+                this.$q.notify(this.$t('components.form.wysiwyg.fileTypeNotSupported'))
               }
             }
           }
         }
       } catch (err) {
         console.log(err)
-        this.$q.notify(this.$t('editor.pasteError'))
+        this.$q.notify(this.$t('components.form.wysiwyg.pasteError'))
       }
     },
 
@@ -404,7 +404,7 @@ export default {
             this.$refs.file.val = null
           } else {
             // not something we support :(
-            this.$q.notify(this.$t('editor.fileTypeNotSupported'))
+            this.$q.notify(this.$t('components.form.wysiwyg.fileTypeNotSupported'))
           }
         }
       }
@@ -418,7 +418,7 @@ export default {
      */
     markdown () {
       if (this.fullScreenBoolean === true) {
-        this.$q.notify(this.$t('editor.notAvailableInFullScreen'))
+        this.$q.notify(this.$t('components.form.wysiwyg.notAvailableInFullScreen'))
       } else {
         this.markdownMD = this.$turndown.turndown(this.value)
         this.markdownHTML = this.$marked(this.markdownMD)
@@ -432,7 +432,7 @@ export default {
      * @author Daniel Thompson-Yvetot
      */
     craftGithub () {
-      this.$q.notify(this.$t('editor.gitComingSoon'))
+      this.$q.notify(this.$t('components.form.wysiwyg.gitComingSoon'))
     }
   },
   data () {
@@ -451,7 +451,6 @@ export default {
         position: 0
       },
       keycode: '',
-      findUser: false,
       users: {}, // results array for @mention
       fullScreenBoolean: false,
       showMarkdown: false,
@@ -466,22 +465,22 @@ export default {
         git: {
           handler: () => this.craftGithub(),
           icon: 'fab fa-git',
-          tip: this.$t('editor.findGitIssue')
+          tip: this.$t('components.form.wysiwyg.findGitIssue')
         },
         getUser: {
           handler: () => this.buttonPrep(15),
           icon: 'fas fa-at',
-          tip: this.$t('editor.findUsername')
+          tip: this.$t('components.form.wysiwyg.findUserName')
         },
         upload: {
           handler: () => this.$refs.file.click(),
           icon: 'far fa-image',
-          tip: this.$t('editor.uploadImage')
+          tip: this.$t('components.form.wysiwyg.uploadImage')
         },
         markdown: {
           handler: () => this.markdown('handler'),
           icon: 'fab fa-markdown',
-          tip: this.$t('editor.showMarkdown')
+          tip: this.$t('components.form.wysiwyg.showMarkdown')
         }
       },
       toolbar: [
@@ -494,7 +493,7 @@ export default {
             fixedLabel: true,
             fixedIcon: false,
             list: 'no-icons',
-            options: ['p', 'h3', 'h4', 'code']
+            options: ['p', 'h1', 'h2', 'h3', 'h4', 'code']
           },
           {
             icon: this.$q.icon.editor.removeFormat,
@@ -518,7 +517,8 @@ export default {
             options: ['unordered', 'ordered', 'quote', 'hr']
           }
         ],
-        ['link', 'upload', 'fullscreen', 'markdown']
+        ['link', 'upload'],
+        ['fullscreen', 'markdown']
       ]
     }
   }
@@ -549,7 +549,7 @@ export default {
         :field="field"
         :toolbar="toolbar"
         :definitions="definitions"
-        :content-style="{ fontFamily: 'Noto Sans',     fontSize: '0.8em!important' }"
+        :content-class="context ? `context-${context} post-view` : 'post-view'"
       )
       q-input(
         v-if="userInputPosRendered"
@@ -577,10 +577,10 @@ export default {
         )
 
     // FYI, the following is merely using the quasar class styling to stay visually identical.
-    .q-editor.markdown.z-top(v-if="showMarkdown")
+    .q-components.form.wysiwyg.markdown.z-top(v-if="showMarkdown")
       .q-editor-toolbar.row.full-width
         h4(style="margin: auto 0 6px 10px")
-          strong {{ $t('editor.markdownPreview') }}
+          strong {{ $t('components.form.wysiwyg.markdownPreview') }}
         q-btn-group(style="margin: 0 0 0 auto")
           q-btn(
             v-if="showMarkdown"
@@ -589,7 +589,7 @@ export default {
             @click.native="showMarkdown = false"
             icon="fab fa-html5"
           )
-            span &nbsp;&nbsp;{{ $t('editor.showEditor') }}
+            span &nbsp;&nbsp;{{ $t('components.form.wysiwyg.showEditor') }}
           q-btn(v-if="markdownCode" flat icon="fas fa-code" @click="markdownCode = false" style="margin: 0 0 0 auto")
           q-btn(v-else, flat icon="fab fa-markdown" @click="markdownCode = true" style="margin: 0 0 0 auto")
       .row.bg-white
@@ -614,7 +614,7 @@ export default {
 <style lang="stylus">
   @import "~variables"
   .findUser
-    height 26px
+    height 36px
     font-family 'Noto Sans'
     outline-color transparent!important
     padding-left 2px!important
@@ -623,17 +623,14 @@ export default {
     z-index 6001
   .normalZ
     z-index 1000
-  .fullScreen
-    position absolute
-    top 5px
-    right 10px
-    z-index 10000
-    opacity 0.3
+  .fullscreen
+    background $grey-12
+    .context-article
+      width calc(1200px - 25%)
+      margin 0 auto
+      padding 16px
   .q-if-addon-left
     margin 5px 0 0 -2px
-  a.mention-link, a.mention-link:visited, a.mention-link:hover
-    color #E9DC51!important
-    text-decoration-line: none!important
   .q-editor-content::selection, .q-editor-content *::selection
     background-color rgba(255, 255, 100, 0.7)
     color #032764
@@ -668,4 +665,14 @@ export default {
   .nodrag
     border 4px transparent
     opacity 1
+  .q-popover
+    h1
+      font-size 28px
+    h2
+      font-size 24px
+    h3
+      font-size 20px
+    h4
+      font-size 18px
+
 </style>

@@ -81,7 +81,7 @@ export default {
           q-card-main
             .title {{article.title}}
             .date {{$d(article.createdAt, 'long')}}
-            .article-body(v-html="article.body")
+            .post-view(v-html="article.body")
           q-card-actions
             ul.article-tags
               li(v-for="tag in article.tags")
@@ -162,9 +162,6 @@ export default {
         font-size 15px
         color $grey-6
         padding 10px 0
-      .article-body
-        img
-          max-width 100%
       .q-card-actions
         border-top 1px solid $grey-4
       ul.article-tags

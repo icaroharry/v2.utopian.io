@@ -31,7 +31,7 @@ const createArticle = async (req, h) => {
 
   const newArticle = new Article({
     author,
-    body: sanitizeHtml(article.body),
+    body: sanitizeHtml(body),
     lang,
     slug,
     ...article
@@ -67,9 +67,16 @@ const createArticle = async (req, h) => {
     throw Boom.badData('general.categoryNotAvailable')
   }
 
-  await newArticle.save()
+  const response = await newArticle.save()
 
-  return h.response(slug)
+  return h.response({
+    _id: response._id,
+    body: response.body,
+    category: response.category,
+    slug: response.slug,
+    tags: response.tags,
+    title: response.title
+  })
 }
 
 /**
@@ -112,7 +119,7 @@ const updateArticle = async (req, h) => {
     throw Boom.badData('general.categoryNotAvailable')
   }
 
-  const response = await Article.updateOne(
+  const response = await Article.findOneAndUpdate(
     { author, _id: req.params.id },
     {
       body: sanitizeHtml(req.payload.body),
@@ -121,14 +128,67 @@ const updateArticle = async (req, h) => {
       slugs,
       updatedAt: Date.now(),
       ...req.payload
-    }
+    },
+    { new: true }
   )
 
-  if (response.n === 1) {
-    return h.response(slug)
+  if (response) {
+    return h.response({
+      _id: response._id,
+      body: response.body,
+      category: response.category,
+      slug: response.slug,
+      tags: response.tags,
+      title: response.title
+    })
   }
 
   throw Boom.badData('general.updateFail')
+}
+
+/**
+ * Updates the article's blockchain data
+ *
+ * @param {object} req - request
+ * @param {object} req.params - request parameters
+ * @param {string} req.params.id -  article ObjectID as route element
+ * @param {string} req.params.blockchain -  article blockchain as route element
+ * @payload {object} req.payload - blockchain data
+ *
+ * @returns blockchain data
+ * @author Grégory LATINIER
+ */
+const updateBlockchainData = async (req, h) => {
+  const author = req.auth.credentials.uid
+  const article = await Article.findOne({ author, _id: req.params.id })
+  if (!article) {
+    throw Boom.badData('articles.doesNotExist')
+  }
+
+  let result
+  if (article.blockchains.some((b) => b.name === req.params.blockchain)) {
+    result = await Article.findOneAndUpdate(
+      { author, _id: req.params.id, 'blockchains.name': req.params.blockchain },
+      {
+        $set: {
+          'blockchains.$': {
+            name: req.params.blockchain,
+            data: req.payload
+          }
+        }
+      },
+      { new: true }
+    )
+  } else {
+    const newBlockchain = article.blockchains.create({
+      name: req.params.blockchain,
+      data: req.payload
+    })
+    article.blockchains.push(newBlockchain)
+    result = await article.save()
+  }
+
+  return h.response(result.blockchains)
 }
 
 /**
@@ -148,7 +208,7 @@ const getArticleForEdit = async (req, h) => {
   const article = await Article.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] })
     .populate('beneficiaries.user', 'username avatarUrl')
     .populate('project', 'name')
-    .select('author beneficiaries body category project proReview title tags')
+    .select('author beneficiaries body category project proReview title tags blockchains')
   if (!article) return h.response({})
   if (article.author.toString() === userId) {
     return h.response(article)
@@ -232,6 +292,7 @@ const searchTags = async (req, h) => {
 module.exports = {
   createArticle,
   updateArticle,
+  updateBlockchainData,
   getArticleForEdit,
   getArticle,
   searchTags

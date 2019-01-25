@@ -12,8 +12,7 @@ module.exports = function (ctx) {
     preFetch: true,
     supportIE: false,
     // list of animations to load.
-    // todo: thin this out because it bloats the final package size
-    animations: 'all', // animations: []
+    animations: [],
     // list of css files to load (including pre-processors).
     css: ['app.styl'],
     // quasar extras.
