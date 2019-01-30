@@ -1,10 +1,12 @@
 const Boom = require('boom')
 const User = require('./user.model')
+const Article = require('../articles/article.model')
 const UtopianBlockchainAccounts = require('./utopianBlockchainAccounts.model')
 const RefreshToken = require('../auth/refreshtoken.model')
 const { getUserInformation } = require('../../utils/auth')
 const { getAccessToken, getRefreshToken } = require('../../utils/token')
 const { random } = require('../../utils/security')
+const { extractText } = require('../../utils/html-sanitizer')
 
 const getUserByUsername = async (req, h) => {
   const user = await User.findOne({
@@ -160,10 +162,86 @@ const getProfileWithTab = async (req, h) => {
     tabData = user.getDetails()
   }
 
+  if (tab === 'blog') {
+    tabData = await Article.find({
+      author: user._id })
+      .sort({ createdAt: -1 })
+      .limit(20)
+      .populate('author', 'username avatarUrl')
+
+    tabData.forEach((article) => {
+      article.body = extractText(article.body).substr(0, 250)
+    })
+  }
+
   return h.response({
     header: user.getHeader(),
     [tab]: tabData
   })
+}
+
+/**
+ * Load the user details
+ *
+ * @param {object} req - request
+ * @param {object} req.params - request parameters
+ * @param {string} req.params.username - the user to retrieve the information
+ * @param {object} h - response
+ *
+ * @returns user details
+ * @author Adriel Santos
+ */
+const getProfileDetails = async (req, h) => {
+  const { username } = req.params
+  const user = await User.findOne({
+    username
+  })
+  return h.response(user.getDetails())
+}
+
+/**
+ * Load the user updates
+ *
+ * @param {object} req - request
+ * @param {object} req.params - request parameters
+ * @param {string} req.params.username - the user to retrieve the information
+ * @param {string} req.params.title - article title to be searched
+ * @param {number} req.params.limit - max limit of documents
+ * @param {number} req.params.skip - quantity of documents to be skipped
+ * @param {object} req.params.sortBy - sort by object
+ * @param {object} req.params.sortBy.createdAt - order by oldest or newest date
+ * @param {object} h - response
+ *
+ * @returns user updates
+ * @author Adriel Santos
+ */
+const getProfileArticles = async (req, h) => {
+  const { title, limit, skip, sortBy } = req.payload
+  const { username } = req.params
+  const optionalConditions = {}
+  const user = await User.findOne({
+    username
+  })
+  if (!user) {
+    return h.response([])
+  }
+
+  if (title) {
+    optionalConditions.title = { '$regex': title, '$options': 'i' }
+  }
+
+  const articles = await Article.find({
+    author: user._id,
+    ...optionalConditions })
+    .sort(sortBy)
+    .limit(limit)
+    .skip(skip)
+    .populate('author', 'username avatarUrl')
+
+  articles.forEach((article) => {
+    article.body = extractText(article.body).substr(0, 250)
+  })
+  return h.response(articles)
 }
 
 /**
@@ -451,5 +529,7 @@ module.exports = {
   getEncryptionKey,
   linkBlockchainAccount,
   unlinkBlockchainAccount,
-  getProfileWithTab
+  getProfileWithTab,
+  getProfileDetails,
+  getProfileArticles
 }

@@ -269,8 +269,35 @@
         "bounties": "Bounties | Bounty | Bounties",
         "contributors": "Contributors | Contributor | Contributors"
       },
+      "tabs": {
+        "bounties": "Bounties",
+        "details": "Details",
+        "updates": "Updates"
+      },
       "writeArticle": {
         "label": "Write an article"
+      },
+      "updates": {
+        "sortBy": {
+          "placeholder": "Sort by",
+          "options": {
+            "newestDate": {
+              "label": "Date (newest)"
+            },
+            "oldestDate": {
+              "label": "Date (oldest)"
+            }
+          }
+        },
+        "search": {
+          "placeholder": "Type your search"
+        },
+        "loadMore": {
+          "label": "Load more"
+        },
+        "noUpdates": {
+          "label": "No updates found"
+        }
       }
     },
     "search": {
@@ -316,7 +343,6 @@
         },
         "oldestDate": {
           "label": "Date (oldest)"
-
         }
       }
     },
@@ -423,6 +449,12 @@
         "label": "Email",
         "placeholder": "example@domain.com"
       },
+      "header": {
+        "tabs": {
+          "blog": "Blog",
+          "details": "Details"
+        }
+      },
       "job": {
         "label": "Title",
         "placeholder": "What is you current position?"
@@ -466,6 +498,28 @@
       },
       "title": "Let's update your profile",
       "update": "Update",
+      "blog": {
+        "search": {
+          "placeholder": "Type your search"
+        },
+        "loadMore": {
+          "label": "Load more"
+        },
+        "sortBy": {
+          "placeholder": "Sort by",
+          "options": {
+            "newestDate": {
+              "label": "Date (newest)"
+            },
+            "oldestDate": {
+              "label": "Date (oldest)"
+            }
+          }
+        },
+        "noArticles": {
+          "label": "No articles found"
+        }
+      },
       "clear": "Clear",
       "username": {
         "label": "Utopian username"

@@ -1,7 +1,11 @@
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'side-information',
-  props: ['header']
+  computed: {
+    ...mapGetters('users', ['header'])
+  }
 }
 </script>
 
@@ -12,16 +16,16 @@ export default {
     .row.items-center
       .col-2
         q-icon(
-        name="mdi-clock-outline"
-        size="28px"
+          name="mdi-clock-outline"
+          size="28px"
         )
       .col-10
         | {{ $d(new Date(header.joined), 'long') }}
     .row.items-center.q-mt-xs(v-if="header.location")
       .col-2
         q-icon(
-        name="mdi-map-marker"
-        size="28px"
+          name="mdi-map-marker"
+          size="28px"
         )
       .col-10
         | {{ header.location }}
@@ -30,26 +34,26 @@ export default {
     .row.items-center.q-mt-xs(v-if="header.authProviders.some(a => a.type === 'github')")
       .col-2
         q-icon(
-        name="mdi-github-circle"
-        size="28px"
+          name="mdi-github-circle"
+          size="28px"
         )
       .col-10
         a(
-        :href="`https://github.com/${header.authProviders.find(a => a.type === 'github').username}`"
-        target="_blank"
+          :href="`https://github.com/${header.authProviders.find(a => a.type === 'github').username}`"
+          target="_blank"
         ) {{`https://github.com/${header.authProviders.find(a => a.type === 'github').username}`}}
     .row.items-center.q-mt-xs(v-if="header.blockchainAccounts.some(a => a.blockchain === 'steem')")
       .col-2
         q-icon(
-        name="icon-ut-steem"
-        size="28px"
+          name="icon-ut-steem"
+          size="28px"
         )
       .col-10
         a(
-        :href="`https://steemit.com/@${header.blockchainAccounts.find(a => a.blockchain === 'steem').address}`"
-        target="_blank"
+          :href="`https://steemit.com/@${header.blockchainAccounts.find(a => a.blockchain === 'steem').address}`"
+          target="_blank"
         ) {{`https://steemit.com/@${header.blockchainAccounts.find(a => a.blockchain === 'steem').address}`}}
-    
+
 </template>
 
 <style lang="stylus">

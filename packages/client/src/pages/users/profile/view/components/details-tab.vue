@@ -1,12 +1,24 @@
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'profile-view-details-tab',
-  props: ['details']
+  methods: {
+    ...mapActions('users', ['getUserDetails']),
+    async initTab () {
+      if (!this.details || this.header.username !== this.$route.params.username) {
+        await this.getUserDetails(this.$route.params.username)
+      }
+    }
+  },
+  computed: {
+    ...mapGetters('users', ['details', 'header'])
+  }
 }
 </script>
 
 <template lang="pug">
-q-tab-pane(name="details")
+q-tab-pane(name="details", v-if="details")
   .resume
     h3 {{ $t('users.profile.aboutMe') }}
     p {{ details.resume }}

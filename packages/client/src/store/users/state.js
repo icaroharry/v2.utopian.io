@@ -1,4 +1,7 @@
 export default () => ({
   user: null,
-  profile: null
+  profile: {
+    details: null,
+    articles: []
+  }
 })

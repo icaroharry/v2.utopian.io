@@ -2,12 +2,14 @@
 import { mapGetters } from 'vuex'
 import SideInformation from './components/side-information'
 import DetailsTab from './components/details-tab'
+import BlogTab from './components/blog-tab'
 
 export default {
-  name: 'u-page-profile-view',
+  name: 'page-profile-view',
   components: {
     SideInformation,
-    DetailsTab
+    DetailsTab,
+    BlogTab
   },
   preFetch ({ store, currentRoute, redirect }) {
     return store.dispatch('users/fetchUserProfileWithTab', {
@@ -19,8 +21,22 @@ export default {
       }
     })
   },
+  data: function () {
+    return {
+      selectedTab: this.$route.params.tab || 'details',
+      blog: {
+        limit: 20,
+        skip: 0
+      }
+    }
+  },
+  methods: {
+    initTab (tabName) {
+      this.$refs[tabName].initTab()
+    }
+  },
   computed: {
-    ...mapGetters('users', ['profile']),
+    ...mapGetters('users', ['header']),
     ...mapGetters('auth', ['user'])
   }
 }
@@ -28,19 +44,35 @@ export default {
 
 <template lang="pug">
 .profile-view
-  .profile-view-header(:style="{'background-image': `url(${profile.header.cover})`}")
+  .profile-view-header(:style="{'background-image': `url(${header.cover})`}")
   .row.profile-content
-    side-information(:header="profile.header")
+    side-information
     .col-9
       .profile-name.q-mt-md
-        | {{ profile.header.name || profile.header.username}}
-        q-btn.edit-profile(v-if="user && profile.header.username === user.username", color="primary", icon="mdi-pencil", flat, :to="`/${$route.params.locale}/profile`")
-      .profile-job {{ profile.header.job }}
-      q-tabs.q-mt-md(animated, swipeable, inverted, align="justify")
-        q-tab(default, name="details", slot="title", label="Details")
-        q-tab(name="blog", slot="title", label="Blog")
-
-        details-tab(:details="profile.details")
+        | {{ header.name || header.username}}
+        q-btn.edit-profile(
+          v-if="user && header.username === user.username"
+          color="primary"
+          icon="mdi-pencil"
+          flat
+          :to="`/${$route.params.locale}/profile`"
+        )
+      .profile-job {{ header.job }}
+      q-tabs.q-mt-md(v-model="selectedTab", animated, swipeable, inverted, align="justify")
+        q-tab(
+          name="details"
+          slot="title"
+          :label="$t('users.profile.header.tabs.details')"
+          @select="() => this.initTab('detailsTab')"
+        )
+        q-tab(
+          name="blog"
+          slot="title"
+          :label="$t('users.profile.header.tabs.blog')"
+          @select="() => this.initTab('blogTab')"
+        )
+        details-tab(ref="detailsTab")
+        blog-tab(ref="blogTab")
 </template>
 
 <style lang="stylus">

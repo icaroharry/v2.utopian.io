@@ -1,12 +1,23 @@
 <script>
+import { mapGetters } from 'vuex'
 export default {
-  name: 'u-article-card',
-  props: ['article']
-} 
+  name: 'article-card',
+  props: ['article'],
+  computed: {
+    ...mapGetters('auth', ['user'])
+  }
+}
 </script>
 
 <template lang="pug">
   q-card.article-card
+    q-btn.edit-article(
+      v-if="user && article.author.username === user.username"
+      color="primary"
+      icon="mdi-pencil"
+      flat
+      :to="`/${$route.params.locale}/articles/${article.slug}/edit`"
+    )
     q-card-title
       .row.author.justify-between
         .row
@@ -26,10 +37,17 @@ export default {
   .article-card
     padding 20px
     background-color #fff
+    position relative
+    .edit-article
+      position absolute
+      top 5px
+      right 5px
+      padding 4px
     .author
       img
         width 40px
         height 40px
+        border-radius 50%
       .username
         margin-left 20px
     .link

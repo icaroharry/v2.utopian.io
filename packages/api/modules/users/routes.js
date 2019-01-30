@@ -74,6 +74,26 @@ routes.push([
   },
   {
     method: 'POST',
+    path: '/v1/user/profile/{username}/details',
+    handler: (req, h) => Handlers.getProfileDetails(req, h),
+    options: {
+      auth: false,
+      tags: ['users'],
+      validate: Validate.getProfileDetails
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/user/profile/{username}/articles',
+    handler: (req, h) => Handlers.getProfileArticles(req, h),
+    options: {
+      auth: false,
+      tags: ['users'],
+      validate: Validate.getProfileArticles
+    }
+  },
+  {
+    method: 'POST',
     path: '/v1/user/profile/maininformation',
     handler: (req, h) => Handlers.updateProfile(req, h),
     options: {

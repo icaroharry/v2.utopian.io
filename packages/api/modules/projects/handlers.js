@@ -5,7 +5,7 @@ const Article = require('../articles/article.model')
 const Project = require('./project.model')
 const User = require('../users/user.model')
 const { getUserProjectPermission } = require('../../utils/github')
-const { sanitizeHtml } = require('../../utils/html-sanitizer')
+const { sanitizeHtml, extractText } = require('../../utils/html-sanitizer')
 
 /**
  * Get a project with its populated fields for update
@@ -336,10 +336,6 @@ const isProjectAdmin = async (req, h) => {
  */
 const getProjectView = async (req, h) => {
   const { owner, slug, tab } = req.params
-  let fields = 'name avatarUrl website medias description tags owners collaborators allowExternals documentation license createdAt updatedAt'
-  if (tab === 'details') {
-    fields += ' details repositories'
-  }
 
   const projectDB = await Project.findOne({
     $or: [{ slugs: { $elemMatch: { $eq: `${owner}/${slug}` } } }, { slug: `${owner}/${slug}` }],
@@ -347,7 +343,7 @@ const getProjectView = async (req, h) => {
     deletedAt: null
   })
     .populate('owners', 'username avatarUrl')
-    .select(fields)
+    .select('name avatarUrl website medias description tags owners collaborators allowExternals documentation license createdAt updatedAt details repositories')
 
   if (!projectDB) return h.response(null)
 
@@ -360,7 +356,52 @@ const getProjectView = async (req, h) => {
   // TODO contributors count
   project.contributorsCount = 0
 
+  if (tab === 'updates') {
+    project.updates = await Article.find({
+      project: project._id })
+      .sort({ createdAt: -1 })
+      .limit(20)
+      .populate('author', 'username avatarUrl')
+  }
+
   return h.response(project)
+}
+/**
+ * Load the project updates
+ *
+ * @param {object} req - request
+ * @param {object} req.params - request parameters
+ * @param {string} req.params.project - the project to retrieve the information
+ * @param {string} req.params.title - article title to be searched
+ * @param {number} req.params.limit - max limit of documents
+ * @param {number} req.params.skip - quantity of documents to be skipped
+ * @param {object} req.params.sortBy - sort by object
+ * @param {object} req.params.sortBy.createdAt - order by oldest or newest date
+ * @param {object} h - response
+ *
+ * @returns project updates
+ * @author Adriel Santos
+ */
+
+const getUpdates = async (req, h) => {
+  const { project, title, limit, skip, sortBy } = req.payload
+  const optionalConditions = {}
+  if (title) {
+    optionalConditions.title = { '$regex': title, '$options': 'i' }
+  }
+
+  const articles = await Article.find({
+    project,
+    ...optionalConditions })
+    .sort(sortBy)
+    .limit(limit)
+    .skip(skip)
+    .populate('author', 'username avatarUrl')
+
+  articles.forEach((article) => {
+    article.body = extractText(article.body).substr(0, 250)
+  })
+  return h.response(articles)
 }
 
 /**
@@ -430,5 +471,6 @@ module.exports = {
   isProjectAdmin,
   getProjectView,
   searchProject,
-  hasRole
+  hasRole,
+  getUpdates
 }

@@ -69,6 +69,47 @@ export const fetchUserProfileWithTab = async (context, { username, tab }) => {
   return profile
 }
 
+/**
+ * Load the user details
+ *
+ * @param context
+ * @param username
+ *
+ * @returns user details
+ * @author Adriel Santos
+ */
+export const getUserDetails = async (context, username) => {
+  const details = await API.call({
+    context,
+    method: 'post',
+    url: `/v1/user/profile/${username}/details`
+  })
+  context.commit('setProfileDetails', details)
+}
+
+/**
+ * Load the user articles
+ *
+ * @param context
+ * @param search
+ *
+ * @returns user details
+ * @author Adriel Santos
+ */
+export const getUserArticles = async (context, search) => {
+  const { username, ...data } = search
+  const articles = await API.call({
+    context,
+    method: 'post',
+    url: `/v1/user/profile/${username}/articles`,
+    data
+  })
+  if (data.skip === 0) {
+    context.commit('deleteProfileArticles')
+  }
+  context.commit('setProfileArticles', articles)
+}
+
 export const createWorkExperience = async (context, data) =>
   API.call({
     context,

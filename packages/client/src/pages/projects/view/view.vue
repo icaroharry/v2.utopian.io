@@ -1,11 +1,15 @@
 <script>
 import { mapGetters } from 'vuex'
-import USocialShare from 'src/components/tools/social-share'
+import SocialShare from 'src/components/tools/social-share'
+import DetailsTab from './components/details-tab'
+import UpdatesTab from './components/updates-tab'
 
 export default {
   name: 'u-page-projects-view',
   components: {
-    USocialShare
+    SocialShare,
+    DetailsTab,
+    UpdatesTab
   },
   preFetch ({ store, currentRoute, redirect }) {
     return store.dispatch('projects/loadProject', {
@@ -78,6 +82,11 @@ export default {
       }
       return false
     }
+  },
+  methods: {
+    initTab (tabName) {
+      this.$refs[tabName].initTab()
+    }
   }
 }
 </script>
@@ -93,7 +102,7 @@ export default {
         q-card(color="white", text-color="black", dark)
           q-card-title
             .title-actions
-              u-social-share(:title="project.name", :description="project.description")
+              social-share(:title="project.name", :description="project.description")
               q-btn.edit-project(v-if="hasEditRights", color="primary", icon="mdi-pencil", flat, :to="`/${$route.params.locale}/projects/${$route.params.owner}/${$route.params.slug}/edit`")
             h1 {{project.name}}
             h2 {{$t('projects.view.createdBy')}}
@@ -119,10 +128,25 @@ export default {
             .stat-title {{project.contributorsCount}}
             .stat-subtitle {{$tc('projects.view.stats.contributors', project.contributorsCount)}}
     q-tabs(v-model="defaultTab", color="white", text-color="black", underline-color="primary")
-      q-tab(slot="title" name="articles" label="Blog")
-      q-tab(slot="title" name="bounties" label="Bounties")
-      q-tab(slot="title" name="details" label="Details")
+      q-tab(
+        slot="title"
+        name="updates"
+        :label="$t('projects.view.tabs.updates')"
+        @select="() => this.initTab('updatesTab')"
+      )
+      q-tab(
+        slot="title"
+        name="bounties"
+        :label="$t('projects.view.tabs.bounties')"
+      )
+      q-tab(
+        slot="title"
+        name="details"
+        :label="$t('projects.view.tabs.details')"
+      )
 
+      updates-tab(ref="updatesTab")
+      details-tab
 </template>
 
 <style lang="stylus">

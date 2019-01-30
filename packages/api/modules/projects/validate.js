@@ -12,7 +12,7 @@ const getProjectView = {
   params: {
     owner: Joi.string().trim().required(),
     slug: Joi.string().trim().required(),
-    tab: Joi.string().trim().required().allow('blog', 'bounties', 'details')
+    tab: Joi.string().trim().required().allow('updates', 'bounties', 'details')
   }
 }
 
@@ -82,6 +82,16 @@ const hasRole = {
   }
 }
 
+const getUpdates = {
+  payload: {
+    title: Joi.string().trim().max(100).optional().allow(''),
+    project: validation.id.required(),
+    limit: Joi.number().required().max(20),
+    skip: Joi.number().required(),
+    sortBy: Joi.object().keys({ createdAt: Joi.number().valid(-1, 1) }).required()
+  }
+}
+
 module.exports = {
   createProject,
   updateProject,
@@ -90,5 +100,6 @@ module.exports = {
   isProjectAdmin,
   getProjectView,
   searchProject,
-  hasRole
+  hasRole,
+  getUpdates
 }

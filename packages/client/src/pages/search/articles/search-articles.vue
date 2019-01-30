@@ -14,6 +14,7 @@ export default {
   },
   async mounted () {
     await this.getCategories(this.$route.params.locale)
+    this.disableLoadMore = this.articles.length < this.searchForm.limit
   },
   data: function () {
     return {
@@ -205,10 +206,9 @@ export default {
           q-select(v-model="searchForm.sortBy", :options="sortByOptions", :placeholder="$t('search.sortBy.placeholder')", @input="() => {resetFlags();filterArticles()}")
         u-article-card.q-mb-md(v-for="article in articles", :key="article._id", :article="article")
         .flex.justify-center
-          q-btn(color="primary", :label="$t('search.loadMore.label')", @click="loadMore", v-if="!this.disableLoadMore && this.articles.length > 0")
-          q-card(v-if="this.articles.length === 0")
-            q-card-title(v-if="searchMessage") {{this.$t('search.message.label')}}
-            q-card-title(v-else="searchMessage") {{this.$t('search.noResults.label')}}
+          q-btn(color="primary", :label="$t('search.loadMore.label')", @click="loadMore", v-if="!disableLoadMore && articles.length > 0")
+          div(v-if="articles.length === 0 && searchMessage") {{this.$t('search.message.label')}}
+          div(v-else="articles.length === 0 && searchMessage") {{this.$t('search.noResults.label')}}
 </template>
 <style lang="stylus">
   .sort-by

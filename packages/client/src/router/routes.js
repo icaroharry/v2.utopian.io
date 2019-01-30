@@ -78,7 +78,14 @@ export default (cookies) => ([
         name: 'users.profile.view',
         props: true,
         component: () => import('src/pages/users/profile/view/profile-view'),
-        meta: { fullWidth: true }
+        meta: { fullWidth: true },
+        children: [{
+          path: ':tab',
+          name: 'users.profile.view.tab',
+          props: true,
+          component: () => import('src/pages/users/profile/view/profile-view'),
+          meta: { fullWidth: true }
+        }]
       },
       {
         path: 'search',

@@ -79,6 +79,15 @@ routes.push([
   },
   {
     method: 'POST',
+    path: '/v1/project/updates',
+    handler: (req, h) => Handlers.getUpdates(req, h),
+    options: {
+      tags: ['projects'],
+      validate: Validate.getUpdates
+    }
+  },
+  {
+    method: 'POST',
     path: '/v1/projects/hasrole',
     handler: (req, h) => Handlers.hasRole(req, h),
     options: {
