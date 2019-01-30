@@ -61,6 +61,20 @@ export default (cookies) => ([
         component: () => import('src/pages/articles/view/view')
       },
       {
+        path: 'bounties/create',
+        name: 'bounties.create',
+        props: true,
+        component: () => import('src/pages/bounties/create-edit/create-edit'),
+        meta: { auth: true }
+      },
+      {
+        path: 'bounties/:author/:slug/edit',
+        name: 'bounties.edit',
+        props: true,
+        component: () => import('src/pages/bounties/create-edit/create-edit'),
+        meta: { auth: true }
+      },
+      {
         path: 'profile',
         name: 'users.profile.edit',
         props: true,

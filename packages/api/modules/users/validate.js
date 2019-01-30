@@ -58,7 +58,7 @@ const workExperience = {
     jobTitle: Joi.string().trim().max(200).required(),
     company: Joi.string().trim().max(200).required(),
     location: Joi.string().trim().optional().max(200).allow(''),
-    startDate: Joi.date(),
+    startDate: Joi.date().required(),
     endDate: Joi.date().allow(null),
     current: Joi.boolean(),
     description: Joi.string().trim().optional().max(500).allow('')

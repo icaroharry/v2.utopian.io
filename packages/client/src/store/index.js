@@ -5,6 +5,7 @@ import api from './api'
 import auth from './auth'
 import articles from './articles'
 import blockchainSteem from './blockchains/steem'
+import bounties from './bounties'
 import github from './github'
 import projects from './projects'
 import search from './search'
@@ -17,6 +18,7 @@ const modules = {
   articles,
   auth,
   blockchainSteem,
+  bounties,
   github,
   projects,
   search,

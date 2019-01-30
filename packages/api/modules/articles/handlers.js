@@ -14,7 +14,7 @@ const Vote = require('../votes/vote.model')
  *
  * @payload {object} req.payload - article data
  *
- * @returns updated slug
+ * @returns updated data needed to publish to the blockchain
  * @author Grégory LATINIER
  */
 const createArticle = async (req, h) => {

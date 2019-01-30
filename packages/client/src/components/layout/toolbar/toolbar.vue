@@ -94,10 +94,12 @@ export default {
               q-list(dense, :link="true", separator)
                 q-item(v-if="!steemEnabled", :to="`/${$route.params.locale}/profile/steem`")
                   q-item-main(:label="$t('components.layout.toolbar.linkSteem')")
-                q-item(v-if="steemEnabled", :to="`/${$route.params.locale}/articles/create`")
-                  q-item-main(:label="$t('components.layout.toolbar.writeArticle')")
                 q-item(:to="`/${$route.params.locale}/projects/create`")
                   q-item-main(:label="$t('components.layout.toolbar.addProject')")
+                q-item(v-if="steemEnabled", :to="`/${$route.params.locale}/articles/create`")
+                  q-item-main(:label="$t('components.layout.toolbar.writeArticle')")
+                q-item(v-if="steemEnabled", :to="`/${$route.params.locale}/bounties/create`")
+                  q-item-main(:label="$t('components.layout.toolbar.createBounty')")
 
           .q-ma-sm
             img.avatar(:src="user.avatarUrl")

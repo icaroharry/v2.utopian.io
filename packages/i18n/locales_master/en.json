@@ -60,6 +60,7 @@
       "toolbar": {
         "addProject": "Add my project",
         "contribute": "contribute",
+        "createBounty": "Create a bounty",
         "linkSteem": "Link my Steem account",
         "logOut": "Log out",
         "profile": "Profile",
@@ -141,6 +142,44 @@
     "view": {
       "inCollaborationWith": "In collaboration with",
       "views": "views | view | views"
+    }
+  },
+  "bounties": {
+    "createEdit": {
+      "body": {
+        "label": "Content",
+        "help": "What do you want to share with us? (Hint: Type @@ to find a username)"
+      },
+      "deadline": {
+        "label": "Deadline",
+        "help": "If no solution is submitted by the deadline, the bounty will be returned."
+      },
+      "formTitle": "What do you need to be done?",
+      "issue": {
+        "label": "Linked issue",
+        "placeholder": "Add the related issue"
+      },
+      "project": {
+        "errors": {
+          "noPublicationRole": "You don't have the right to create a bounty for this project."
+        }
+      },
+      "title": {
+        "label": "Bounty title",
+        "placeholder": "Add a title"
+      },
+      "save": {
+        "label": "Publish my bounty",
+        "successMsg": "The bounty was published!"
+      },
+      "skills": {
+        "label": "Skills",
+        "placeholder": "Search for the needed skills"
+      },
+      "update": {
+        "label": "Update my bounty",
+        "successMsg": "The bounty was updated!"
+      }
     }
   },
   "homepage": {

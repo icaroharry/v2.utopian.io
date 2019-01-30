@@ -1,20 +1,18 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { maxLength, required } from 'vuelidate/lib/validators'
-import UWysiwyg from 'src/components/form/wysiwyg'
-import UFormCategories from 'src/components/form/categories'
-import UFormLanguages from 'src/components/form/languages'
-import UFormProject from 'src/components/form/project'
+import FormWysiwyg from 'src/components/form/wysiwyg'
+import FormCategories from 'src/components/form/categories'
+import FormProject from 'src/components/form/project'
 import { SteemAccountRequiredMixin, SteemBroadcastMixin } from 'src/mixins/steem'
 
 export default {
   name: 'u-page-articles-create-edit',
   mixins: [SteemAccountRequiredMixin, SteemBroadcastMixin],
   components: {
-    UWysiwyg,
-    UFormCategories,
-    UFormLanguages,
-    UFormProject
+    FormWysiwyg,
+    FormCategories,
+    FormProject
   },
   data () {
     return {
@@ -52,12 +50,12 @@ export default {
         required,
         maxLength: maxLength(250000)
       },
+      category: {
+        required
+      },
       // proReview: { required },
       title: {
         required, maxLength: maxLength(250)
-      },
-      category: {
-        required
       },
       project: {},
       tags: {
@@ -104,6 +102,7 @@ export default {
       this.submitting = true
       this.$v.article.$touch()
       if (this.$v.article.$invalid) {
+        this.submitting = false
         return
       }
       const { _id, beneficiaries, project, ...article } = this.article
@@ -143,8 +142,8 @@ export default {
           this.$router.push({ path: `/${this.$route.params.locale}/articles/${result.slug}/edit` })
         }
         this.setAppSuccess(`articles.createEdit.${_id ? 'update' : 'save'}.successMsg`)
-        this.submitting = false
       }
+      this.submitting = false
     },
     async selectProject (project) {
       const hasRole = await this.hasRole({
@@ -254,15 +253,47 @@ div
   h3 {{$t('articles.createEdit.formTitle')}}
   .row.gutter-sm.article-form-container
     .col-md-8.col-sm-12.col-xs-12
-      q-field(:label="`${$t('articles.createEdit.title.label')}*`", orientation="vertical", :error="$v.article.title.$error")
-        q-input(v-model.trim="article.title", maxlength="250", :placeholder="$t('articles.createEdit.title.placeholder')", @keyup.enter="submit")
-      q-field.q-field-no-input(:label="`${$t('articles.createEdit.body.label')}*`", orientation="vertical",
-      :helper="$t('articles.createEdit.body.help')", :error="$v.article.body.$error")
-        u-wysiwyg(v-model="article.body", field="body", context="article")
+      q-field(
+        :label="`${$t('articles.createEdit.title.label')}*`"
+        orientation="vertical"
+        :error="$v.article.title.$error"
+      )
+        q-input(
+          v-model.trim="article.title"
+          maxlength="250"
+          :placeholder="$t('articles.createEdit.title.placeholder')"
+          @keyup.enter="submit"
+        )
+      q-field.q-field-no-input(
+        :label="`${$t('articles.createEdit.body.label')}*`"
+        orientation="vertical"
+        :helper="$t('articles.createEdit.body.help')"
+        :error="$v.article.body.$error"
+      )
+        form-wysiwyg(
+          v-model="article.body"
+          field="body"
+          context="article"
+        )
     .col-md-4.col-sm-12.col-xs-12
-      u-form-project(v-model="article.project.name", field="project", :error="$v.article.project.$error || projectError !== null", :errorLabel="projectError", :selected="selectProject")
-      u-form-categories(v-model="article.category", field="category", :error="$v.article.category.$error", :required="true")
-      q-field(orientation="vertical", :label="`${$t('articles.createEdit.tags.label')}*`", :count="5")
+      form-project(
+        v-model="article.project.name"
+        field="project"
+        :error="$v.article.project.$error || projectError !== null"
+        :errorLabel="projectError"
+        :selected="selectProject"
+      )
+      form-categories(
+        v-model="article.category"
+        field="category"
+        :error="$v.article.category.$error"
+        :required="true"
+      )
+      q-field(
+        orientation="vertical"
+        :label="`${$t('articles.createEdit.tags.label')}*`"
+        :count="5"
+      )
         q-chips-input(
           v-model="article.tags"
           @duplicate="duplicatedTags"
