@@ -82,7 +82,8 @@
       "postFooter": "Original content published on utopian.io",
       "errors": {
         "keys": "We couldn,t publish to the blockchain, your encryption was probably reset, please update your posting key.",
-        "unexpected": "An unexpected error occurred, please check your Steem credential and the blockchain status and try again."
+        "unexpected": "An unexpected error occurred, please check your Steem credential and the blockchain status and try again.",
+        "STEEM_MIN_ROOT_COMMENT_INTERVAL": "You can only publish every 5 minutes"
       }
     }
   },
@@ -146,6 +147,11 @@
   },
   "bounties": {
     "createEdit": {
+      "blockchains": {
+        "steem": {
+          "external": "View it on Steemit.com"
+        }
+      },
       "body": {
         "label": "Content",
         "help": "What do you want to share with us? (Hint: Type @@ to find a username)"

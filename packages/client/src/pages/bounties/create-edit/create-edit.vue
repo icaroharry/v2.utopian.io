@@ -4,9 +4,11 @@ import { maxLength, required, url } from 'vuelidate/lib/validators'
 import FormWysiwyg from 'src/components/form/wysiwyg'
 import FormCategories from 'src/components/form/categories'
 import FormProject from 'src/components/form/project'
+import { SteemAccountRequiredMixin, SteemBroadcastMixin } from 'src/mixins/steem'
 
 export default {
   name: 'page-bounties-create-edit',
+  mixins: [SteemAccountRequiredMixin, SteemBroadcastMixin],
   components: {
     FormWysiwyg,
     FormCategories,
@@ -27,6 +29,7 @@ export default {
         skills: [],
         title: ''
       },
+      blockchains: [],
       submitting: false,
       projectError: null
     }
@@ -78,6 +81,7 @@ export default {
         }
         this.bounty.skills = result.skills || []
         this.bounty.title = result.title
+        this.blockchains = result.blockchains
       }
     }
   },
@@ -88,7 +92,8 @@ export default {
     ...mapActions('bounties', [
       'fetchBountyForEdit',
       'saveBounty',
-      'updateBounty'
+      'updateBounty',
+      'updateBlockchainData'
     ]),
     async submit () {
       this.submitting = true
@@ -110,6 +115,25 @@ export default {
         result = await this.updateBounty(bounty)
       }
       if (result) {
+        const tags = ['utopian-io', result.category].concat(result.skills)
+        const permlink = `${result.slug.split('/')[1]}-${Date.now()}`
+        const blockchainData = await this.broadcast({
+          url: `/${this.$route.params.locale}/bounties/${result.slug}`,
+          body: result.body,
+          permlink,
+          tags,
+          title: result.title,
+          blockchain: this.blockchains && this.blockchains.find(b => b.name === 'steem'),
+          context: 'bounty',
+          category: result.category
+        })
+        if (blockchainData) {
+          this.blockchains = await this.updateBlockchainData({
+            id: result._id,
+            blockchain: 'steem',
+            data: blockchainData
+          })
+        }
         if (!_id) {
           this.$router.push({ path: `/${this.$route.params.locale}/bounties/${result.slug}/edit` })
         }
@@ -252,4 +276,20 @@ div
         @click="submit"
         :loading="submitting"
       )
+      a.steemit-link(
+        v-if="blockchains.some(b => b.name === 'steem')"
+        :href="getSteemitUrl()"
+        target="_blank"
+      )
+        | {{$t('bounties.createEdit.blockchains.steem.external')}}
 </template>
+
+<style lang="stylus">
+  .bounty-form-container
+    .steemit-link
+      display block
+      font-size 12px
+      text-decoration none
+      margin-top 5px
+      color #06D6A9
+</style>

@@ -47,12 +47,14 @@ export const SteemBroadcastMixin = {
      * @param title
      * @param url
      * @param blockchain - existing publication
+     * @param context - what is being published
+     * @param category
      *
      * @returns blockchain data with transaction IDs
      *
      * @author Grégory LATINIER
      */
-    async broadcast ({ body, permlink, tags, title, url, blockchain }) {
+    async broadcast ({ body, permlink, tags, title, url, blockchain, context, category }) {
       try {
         const accounts = JSON.parse(localStorage.blockchainAccounts)
         const encryptionKey = await this.getEncryptionKey()
@@ -66,10 +68,10 @@ export const SteemBroadcastMixin = {
         const privateKey = this.$steem.PrivateKey.fromString(postingKey)
         const author = accounts[0].address
         const jsonMetadata = JSON.stringify({ app: 'utopian.io', format: 'markdown', tags })
-        // TODO dynamic beneficiaries depending on the category
         const parentPermlink = 'utopian-io'
         let transaction
         if (!blockchain) {
+          const beneficiaries = await getBeneficiairies({ context })
           transaction = await this.$steem.Client.broadcast.commentWithOptions(
             {
               author,
@@ -83,11 +85,11 @@ export const SteemBroadcastMixin = {
               author,
               permlink,
               max_accepted_payout: '1000000.000 SBD',
-              percent_steem_dollars: 0, // <= FULL STEEM POWER scale value from 10000 to 0 (10000 == 100%)
+              percent_steem_dollars: getPercentSteemDollars(context),
               allow_votes: true,
               allow_curation_rewards: true,
               extensions: [
-                [0, { beneficiaries: [{ account: 'utopian.pay', weight: 500 }] }]
+                [0, { beneficiaries }]
               ]
             },
             privateKey)
@@ -121,12 +123,41 @@ export const SteemBroadcastMixin = {
         // TODO display a more precise message for other cases, blockchain related
         if (e.toString().includes('Non-base58 character')) {
           this.setAppError(this.$t('mixins.steem.errors.keys'))
+        } else if (e.toString().includes('STEEM_MIN_ROOT_COMMENT_INTERVAL')) {
+          this.setAppError(this.$t('mixins.steem.errors.STEEM_MIN_ROOT_COMMENT_INTERVAL'))
         } else {
           this.setAppError(this.$t('mixins.steem.errors.unexpected'))
         }
 
         return null
       }
+    },
+    getSteemitUrl () {
+      const { data } = this.blockchains.find(b => b.name === 'steem')
+      return `https://steemit.com/${data.parentPermlink}/@${data.author}/${data.permlink}`
     }
+  }
+}
+
+// FULL STEEM POWER scale value from 10000 to 0 (10000 == 100%)
+const getPercentSteemDollars = (context) => {
+  switch (context) {
+    case 'article':
+      return 5000
+    case 'bounty':
+      return 10000
+    default:
+      return 5000
+  }
+}
+
+// TODO dynamic beneficiaries depending on the category
+const getBeneficiairies = async ({ context }) => {
+  if (context === 'article') {
+    return [{ account: 'utopian.pay', weight: 500 }]
+  } else if (context === 'bounty') {
+    return [{ account: 'utopian.pay', weight: 10000 }]
+  } else if (context === 'bounty-solution') {
+    return [{ account: 'utopian.pay', weight: 1500 }]
   }
 }

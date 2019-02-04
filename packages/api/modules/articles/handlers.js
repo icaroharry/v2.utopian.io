@@ -95,7 +95,7 @@ const updateArticle = async (req, h) => {
   const username = req.auth.credentials.username
   const articleDb = await Article.findOne({ author, _id: req.params.id })
   if (!articleDb) {
-    throw Boom.badData('general.documentUpdateUnauthorized')
+    throw Boom.badData('general.documentDoesNotExist')
   }
 
   // Was the title updated? If yes we need to archive the previous slug
@@ -173,7 +173,8 @@ const updateBlockchainData = async (req, h) => {
         $set: {
           'blockchains.$': {
             name: req.params.blockchain,
-            data: req.payload
+            data: req.payload,
+            updatedAt: Date.now()
           }
         }
       },
@@ -182,7 +183,8 @@ const updateBlockchainData = async (req, h) => {
   } else {
     const newBlockchain = article.blockchains.create({
       name: req.params.blockchain,
-      data: req.payload
+      data: req.payload,
+      updatedAt: Date.now()
     })
     article.blockchains.push(newBlockchain)
     result = await article.save()

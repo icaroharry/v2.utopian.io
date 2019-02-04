@@ -7,7 +7,7 @@ import FormProject from 'src/components/form/project'
 import { SteemAccountRequiredMixin, SteemBroadcastMixin } from 'src/mixins/steem'
 
 export default {
-  name: 'u-page-articles-create-edit',
+  name: 'page-articles-create-edit',
   mixins: [SteemAccountRequiredMixin, SteemBroadcastMixin],
   components: {
     FormWysiwyg,
@@ -83,7 +83,6 @@ export default {
         this.article.tags = result.tags
         this.article.title = result.title
         this.blockchains = result.blockchains
-        this.$v.article.$touch()
       }
     }
   },
@@ -129,7 +128,9 @@ export default {
           permlink,
           tags,
           title: result.title,
-          blockchain: this.blockchains.find(b => b.name === 'steem')
+          blockchain: this.blockchains && this.blockchains.find(b => b.name === 'steem'),
+          context: 'article',
+          category: result.category
         })
         if (blockchainData) {
           this.blockchains = await this.updateBlockchainData({
@@ -228,10 +229,6 @@ export default {
         this.article.tags.pop()
         this.setAppError('articles.createEdit.tags.errors.maxItems')
       }
-    },
-    getSteemitUrl () {
-      const { data } = this.blockchains.find(b => b.name === 'steem')
-      return `https://steemit.com/${data.parentPermlink}/@${data.author}/${data.permlink}`
     }
   },
   computed: {

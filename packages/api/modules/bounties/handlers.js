@@ -45,6 +45,7 @@ const createBounty = async (req, h) => {
     _id: response._id,
     body: response.body,
     category: response.category,
+    skills: response.skills,
     slug: response.slug,
     title: response.title
   })
@@ -66,7 +67,7 @@ const updateBounty = async (req, h) => {
   const username = req.auth.credentials.username
   const bountyDb = await Bounty.findOne({ author, _id: req.params.id })
   if (!bountyDb) {
-    throw Boom.badData('general.documentUpdateUnauthorized')
+    throw Boom.badData('general.documentDoesNotExist')
   }
 
   // Was the title updated? If yes we need to archive the previous slug
@@ -108,6 +109,7 @@ const updateBounty = async (req, h) => {
       _id: response._id,
       body: response.body,
       category: response.category,
+      skills: response.skills,
       slug: response.slug,
       title: response.title
     })
@@ -133,7 +135,7 @@ const getBountyForEdit = async (req, h) => {
   const bounty = await Bounty.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] })
     .populate('assignees', 'username avatarUrl')
     .populate('project', 'name')
-    .select('author assignees body category deadline issue project status title skills')
+    .select('author assignees body category deadline issue project status title skills blockchains')
   if (!bounty) return h.response({})
   if (bounty.author.toString() === userId) {
     return h.response(bounty)
@@ -142,8 +144,56 @@ const getBountyForEdit = async (req, h) => {
   throw Boom.unauthorized('general.unauthorized')
 }
 
+/**
+ * Updates the bounty's blockchain data
+ *
+ * @param {object} req - request
+ * @param {object} req.params - request parameters
+ * @param {string} req.params.id -  bounty ObjectID as route element
+ * @param {string} req.params.blockchain -  article blockchain as route element
+ * @payload {object} req.payload - blockchain data
+ *
+ * @returns blockchain data
+ * @author Grégory LATINIER
+ */
+const updateBlockchainData = async (req, h) => {
+  const author = req.auth.credentials.uid
+  const bounty = await Bounty.findOne({ author, _id: req.params.id })
+  if (!bounty) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  let result
+  if (bounty.blockchains.some((b) => b.name === req.params.blockchain)) {
+    result = await Bounty.findOneAndUpdate(
+      { author, _id: req.params.id, 'blockchains.name': req.params.blockchain },
+      {
+        $set: {
+          'blockchains.$': {
+            name: req.params.blockchain,
+            data: req.payload,
+            updatedAt: Date.now()
+          }
+        }
+      },
+      { new: true }
+    )
+  } else {
+    const newBlockchain = bounty.blockchains.create({
+      name: req.params.blockchain,
+      data: req.payload,
+      updatedAt: Date.now()
+    })
+    bounty.blockchains.push(newBlockchain)
+    result = await bounty.save()
+  }
+
+  return h.response(result.blockchains)
+}
+
 module.exports = {
   createBounty,
   updateBounty,
-  getBountyForEdit
+  getBountyForEdit,
+  updateBlockchainData
 }
