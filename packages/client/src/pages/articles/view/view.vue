@@ -1,15 +1,17 @@
 <script>
 import { mapGetters } from 'vuex'
-import USocialShare from 'src/components/tools/social-share'
-import UVote from 'src/components/tools/vote'
+import SocialShare from 'src/components/tools/social-share'
+import Vote from 'src/components/tools/vote'
+import Tip from 'src/components/tools/tip'
 import { TextUtilsMixin } from 'src/mixins/text-utils'
 
 export default {
   name: 'u-page-articles-view',
   mixins: [TextUtilsMixin],
   components: {
-    USocialShare,
-    UVote
+    Tip,
+    SocialShare,
+    Vote
   },
   preFetch ({ store, currentRoute, redirect }) {
     return store.dispatch('articles/fetchArticle', {
@@ -76,18 +78,23 @@ export default {
               img(:src="article.project.avatarUrl")
               strong {{ article.project.name }}
             .actions(slot="right")
-              u-social-share(:title="article.title", :description="article.body")
+              social-share(:title="article.title", :description="article.body")
               q-btn.edit-article(v-if="hasEditRights", color="primary", icon="mdi-pencil", flat, :to="`/${$route.params.locale}/articles/${$route.params.author}/${$route.params.slug}/edit`")
           q-card-main
             .title {{article.title}}
             .date {{$d(article.createdAt, 'long')}}
             .post-view(v-html="article.body")
-          q-card-actions
+          q-card-actions.flex.justify-between.items-center
             ul.article-tags
               li(v-for="tag in article.tags")
                 | {{ tag }}
+            tip(
+              obj="articles"
+              :id="article._id"
+              :url="`/${$route.params.locale}/articles/${$route.params.author}/${$route.params.slug}`"
+            )
         .article-footer.flex.justify-between.items-center
-          u-vote(
+          vote(
             obj="articles"
             :id="article._id"
             :initialVoteCount="article.upVotes"

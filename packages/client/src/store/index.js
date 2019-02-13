@@ -9,9 +9,10 @@ import bounties from './bounties'
 import github from './github'
 import projects from './projects'
 import search from './search'
+import tips from './tips'
 import users from './users'
-import votes from './votes'
 import utils from './utils'
+import votes from './votes'
 
 const modules = {
   api,
@@ -22,9 +23,10 @@ const modules = {
   github,
   projects,
   search,
+  tips,
   users,
-  votes,
-  utils
+  utils,
+  votes
 }
 
 // enable vuex.

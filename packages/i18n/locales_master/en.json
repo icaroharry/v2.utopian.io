@@ -74,11 +74,57 @@
           "label": "Copy",
           "success": "Url copied to clipboard"
         }
+      },
+      "tip": {
+        "anonymous": "Tip anonymously",
+        "anonymousTooltip": "You will remain anonymous in Utopian only, not in the blockchain transactions",
+        "back": "Back",
+        "close": "Close",
+        "label": "Tip",
+        "next": "Next",
+        "steemAccountFunds": "Your account <strong>@{address}</strong> currently holds <strong>{steem}</strong>",
+        "steemDisabled": "Please link your Steem account before tipping in STEEM",
+        "steps": {
+          "1": {
+            "title": "Choose a currency"
+          },
+          "2": {
+            "activeKey": {
+              "label": "Steem active key",
+              "helper": "Your key will not be transmitted to our server."
+            },
+            "steem": {
+              "helper": "Cost free transaction, Utopian doesn't charge any fees.",
+              "label": "Steem",
+              "placeholder": "0.001 minimum"
+            },
+            "steemDollar": {
+              "helper": "Cost free transaction, Utopian doesn't charge any fees.",
+              "label": "Steem Dollar",
+              "placeholder": "0.001 minimum"
+            },
+            "title": "Tip"
+          },
+          "3": {
+            "steemInfo": "You will send <strong>{steem} STEEM</strong> as <strong>@{senderSteem}</strong> to <strong>{author}</strong>",
+            "title": "Confirmation",
+            "verify": "Please check the information before tipping the author."
+          },
+          "4": {
+            "others": "Check out the other <a href='/{locale}/@{username}/blog'>articles</a> or <a href='/{locale}/@{username}/projects'>projects</a> of {username}. You will probably find something interesting!",
+            "steemSuccess": "Your tip was successfully broadcast to the blockchain. You can verify the transaction using the link below.",
+            "title": "Transaction"
+          }
+        },
+        "subtitle": "Show your support by sending a tip with any of the coins listed below.",
+        "tip": "Tip",
+        "title": "Send a tip to <strong>{user}</strong>"
       }
     }
   },
   "mixins": {
     "steem": {
+      "memoTip": "You received a tip from a Utopian Colony user for this contribution: ",
       "postFooter": "Original content published on utopian.io",
       "errors": {
         "keys": "We couldn,t publish to the blockchain, your encryption was probably reset, please update your posting key.",

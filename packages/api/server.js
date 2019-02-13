@@ -1,21 +1,27 @@
 const Glue = require('glue')
 const manifest = require('./config/manifest')
 exports.startServer = async (start) => {
-  const server = await Glue.compose(
-    manifest,
-    {
-      relativeTo: __dirname
+  try {
+    const server = await Glue.compose(
+      manifest,
+      {
+        relativeTo: __dirname
+      }
+    )
+
+    await server.initialize()
+
+    if (!start) {
+      return server
     }
-  )
-  await server.initialize()
 
-  if (!start) {
+    await server.start()
+
     return server
+  } catch (e) {
+    console.log(e)
   }
-
-  await server.start()
-
-  return server
+  return null
 }
 
 if (!module.parent) {

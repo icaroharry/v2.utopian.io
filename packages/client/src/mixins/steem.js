@@ -4,7 +4,7 @@ import { mapActions, mapGetters } from 'vuex'
 /**
  * Add this mixin to your page if it requires an active steem account
  */
-export const SteemAccountRequiredMixin = {
+export const SteemAccountRequired = {
   computed: {
     ...mapGetters('auth', ['steemEnabled'])
   },
@@ -20,7 +20,7 @@ export const SteemAccountRequiredMixin = {
 /**
  * Add this mixin to your page if you need to broadcast content
  */
-export const SteemBroadcastMixin = {
+export const SteemPost = {
   methods: {
     ...mapActions('users', ['getEncryptionKey']),
     ...mapActions('utils', ['setAppError']),
@@ -54,7 +54,7 @@ export const SteemBroadcastMixin = {
      *
      * @author Grégory LATINIER
      */
-    async broadcast ({ body, permlink, tags, title, url, blockchain, context, category }) {
+    async post ({ body, permlink, tags, title, url, blockchain, context, category }) {
       try {
         const accounts = JSON.parse(localStorage.blockchainAccounts)
         const encryptionKey = await this.getEncryptionKey()
@@ -159,5 +159,64 @@ const getBeneficiairies = async ({ context }) => {
     return [{ account: 'utopian.pay', weight: 10000 }]
   } else if (context === 'bounty-solution') {
     return [{ account: 'utopian.pay', weight: 1500 }]
+  }
+}
+
+export const SteemTransfer = {
+  computed: {
+    ...mapGetters('auth', ['steemEnabled'])
+  },
+  methods: {
+    async loadAccountFunds () {
+      const accounts = JSON.parse(localStorage.blockchainAccounts)
+      const account = (await this.$steem.Client.database.getAccounts([accounts[0].address])).find(u => u.name === accounts[0].address)
+      if (account) {
+        return {
+          address: account.name,
+          steem: account.balance,
+          sbd: account.sbd_balance,
+          sp: account.vesting_shares
+        }
+      }
+      return null
+    },
+    getSteemSenderUser () {
+      const accounts = JSON.parse(localStorage.blockchainAccounts)
+      return accounts[0].address
+    },
+    async transfer ({ steem, sbd, key, from, to, url }) {
+      const memo = `${this.$t('mixins.steem.memoTip')} ${window.location.protocol}//${window.location.host}${url}`
+      const operations = []
+      if (steem) {
+        operations.push([
+          'transfer',
+          {
+            amount: `${steem} STEEM`,
+            from,
+            to,
+            memo
+          }
+        ])
+      }
+      if (sbd) {
+        operations.push([
+          'transfer',
+          {
+            amount: `${sbd} SBD`,
+            from,
+            to,
+            memo
+          }
+        ])
+      }
+      try {
+        const privateKey = this.$steem.PrivateKey.fromString(key)
+        return await this.$steem.Client.broadcast.sendOperations(operations, privateKey)
+      } catch (e) {
+        // TODO display a more precise message for other cases, blockchain related
+        console.log(e)
+        this.setAppError(this.$t('mixins.steem.errors.unexpected'))
+      }
+    }
   }
 }

@@ -1,8 +1,15 @@
 <script>
 import { mapGetters } from 'vuex'
+import Vote from 'src/components/tools/vote'
+import Tip from 'src/components/tools/tip'
+
 export default {
   name: 'article-card',
   props: ['article'],
+  components: {
+    Tip,
+    Vote
+  },
   computed: {
     ...mapGetters('auth', ['user'])
   }
@@ -31,6 +38,18 @@ export default {
       div(v-html="article.body")
       .row
         .tags(v-for="tag in article.tags", :key="tag") {{tag}}
+    q-card-actions.flex.justify-between.items-center
+      vote(
+        obj="articles"
+        :id="article._id"
+        :initialVoteCount="article.upVotes"
+        :initialUserVote="article.userVote"
+      )
+      tip(
+        obj="articles"
+        :id="article._id"
+        :url="`/${$route.params.locale}/articles/${article.slug}`"
+      )
 </template>
 
 <style lang="stylus">

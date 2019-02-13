@@ -4,11 +4,11 @@ import { maxLength, required, url } from 'vuelidate/lib/validators'
 import FormWysiwyg from 'src/components/form/wysiwyg'
 import FormCategories from 'src/components/form/categories'
 import FormProject from 'src/components/form/project'
-import { SteemAccountRequiredMixin, SteemBroadcastMixin } from 'src/mixins/steem'
+import { SteemAccountRequired, SteemPost } from 'src/mixins/steem'
 
 export default {
   name: 'page-bounties-create-edit',
-  mixins: [SteemAccountRequiredMixin, SteemBroadcastMixin],
+  mixins: [SteemAccountRequired, SteemPost],
   components: {
     FormWysiwyg,
     FormCategories,
@@ -117,7 +117,7 @@ export default {
       if (result) {
         const tags = ['utopian-io', result.category].concat(result.skills)
         const permlink = `${result.slug.split('/')[1]}-${Date.now()}`
-        const blockchainData = await this.broadcast({
+        const blockchainData = await this.post({
           url: `/${this.$route.params.locale}/bounties/${result.slug}`,
           body: result.body,
           permlink,
