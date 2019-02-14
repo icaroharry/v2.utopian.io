@@ -1,8 +1,14 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
-  name: 'u-vote',
-  props: ['obj', 'id', 'initialVoteCount', 'initialUserVote'],
+  name: 'vote',
+  props: {
+    obj: String,
+    id: String,
+    initialVoteCount: Number,
+    initialUserVote: Number,
+    compact: Boolean
+  },
   data () {
     return {
       voteCount: this.initialVoteCount,
@@ -39,7 +45,7 @@ export default {
 </script>
 
 <template lang="pug">
-.vote-component.flex.items-center
+.vote-component.flex.items-center(:class="compact ? 'compact' : ''")
   q-btn(
   color="white"
   :text-color="userVote === 1 ? 'primary' : 'black'"
@@ -72,6 +78,9 @@ export default {
 
 <style lang="stylus">
 .vote-component
+  &.compact
+    .q-btn
+      font-size 12px
   .q-btn
     font-size 16px
   .votes

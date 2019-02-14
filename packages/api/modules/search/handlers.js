@@ -1,4 +1,6 @@
 const Article = require('../articles/article.model')
+const Vote = require('../votes/vote.model')
+
 const { extractText } = require('../../utils/html-sanitizer')
 
 /**
@@ -37,11 +39,27 @@ const searchArticles = async (req, h) => {
     .limit(limit)
     .skip(skip)
     .populate('author', 'username avatarUrl')
+    .select('author body createdAt slug tags title upVotes')
+    .lean()
+
+  const user = req.auth.credentials && req.auth.credentials.uid
+  let votes
+  if (user) {
+    const ids = articles.map((a) => a._id)
+    votes = await Vote.find({
+      objRef: 'articles',
+      objId: { $in: ids },
+      user
+    })
+  }
 
   articles.forEach((article) => {
     article.body = extractText(article.body).substr(0, 250)
+    if (votes) {
+      const vote = votes.find((v) => v.objId.toString() === article._id.toString())
+      article.userVote = vote && vote.dir
+    }
   })
-
   return h.response(articles)
 }
 

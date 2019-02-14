@@ -38,12 +38,14 @@ export default {
       div(v-html="article.body")
       .row
         .tags(v-for="tag in article.tags", :key="tag") {{tag}}
-    q-card-actions.flex.justify-between.items-center
+    q-card-actions.flex.justify-between.items-center(:class="!user ? 'reverse' : ''")
       vote(
+        v-if="user"
         obj="articles"
         :id="article._id"
         :initialVoteCount="article.upVotes"
         :initialUserVote="article.userVote"
+        compact
       )
       tip(
         obj="articles"
