@@ -1,5 +1,6 @@
 const Vote = require('./vote.model')
 const Article = require('../articles/article.model')
+const Bounty = require('../bounties/bounty.model')
 
 /**
  * Vote on an object
@@ -18,7 +19,7 @@ const cast = async (req, h) => {
   const user = req.auth.credentials.uid
   const vote = await Vote.findOne({ user, objRef: obj, objId: id })
 
-  let ObjToVote = null
+  let entity = null
   let dirToVote = null
   // First time voting on the object
   if (!vote && dir !== 0) {
@@ -50,14 +51,17 @@ const cast = async (req, h) => {
   if (dirToVote !== null) {
     switch (obj) {
     case 'articles':
-      ObjToVote = Article
+      entity = Article
+      break
+    case 'bounties':
+      entity = Bounty
       break
     default:
       break
     }
 
-    if (ObjToVote) {
-      const updatedObj = await ObjToVote.findOneAndUpdate(
+    if (entity) {
+      const updatedObj = await entity.findOneAndUpdate(
         { _id: id },
         { $inc: { upVotes: dirToVote } },
         { new: true }

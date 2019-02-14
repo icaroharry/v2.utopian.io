@@ -33,6 +33,18 @@ const getBountyForEdit = {
 }
 
 /**
+ * Validate the bounty fetch
+ *
+ * @author Grégory LATINIER
+ */
+const getBounty = {
+  params: {
+    author: Joi.string().trim().required(),
+    slug: Joi.string().trim().required()
+  }
+}
+
+/**
  * Update the blockchain data needed to interact with it
  *
  * @author Grégory LATINIER
@@ -49,5 +61,6 @@ module.exports = {
   createBounty,
   updateBounty,
   getBountyForEdit,
+  getBounty,
   updateBlockchainData
 }

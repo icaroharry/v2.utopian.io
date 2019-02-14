@@ -34,6 +34,16 @@ routes.push([
     }
   },
   {
+    method: 'GET',
+    path: '/v1/bounty/{author}/{slug}',
+    handler: (req, h) => Handlers.getBounty(req, h),
+    options: {
+      auth: { mode: 'optional' },
+      tags: ['bounties'],
+      validate: Validate.getBounty
+    }
+  },
+  {
     method: 'POST',
     path: '/v1/bounty/blockchains/{blockchain}/{id}',
     handler: (req, h) => Handlers.updateBlockchainData(req, h),

@@ -25,6 +25,16 @@ export const fetchBountyForEdit = async (context, { author, slug }) =>
     url: `/v1/bounty/${author}/${slug}/edit`
   })
 
+export const fetchBounty = async (context, { author, slug }) => {
+  const payload = await API.call({
+    context,
+    method: 'get',
+    url: `/v1/bounty/${author}/${slug}`
+  })
+  context.commit('setBounty', payload)
+  return payload
+}
+
 export const updateBlockchainData = async (context, { id, blockchain, data }) =>
   API.call({
     context,

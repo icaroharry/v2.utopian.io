@@ -75,6 +75,12 @@ export default (cookies) => ([
         meta: { auth: true }
       },
       {
+        path: 'bounties/:author/:slug',
+        name: 'bounties.view',
+        props: true,
+        component: () => import('src/pages/bounties/view/view')
+      },
+      {
         path: 'profile',
         name: 'users.profile.edit',
         props: true,

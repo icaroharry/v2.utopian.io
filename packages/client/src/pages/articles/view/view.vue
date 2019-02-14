@@ -6,7 +6,7 @@ import Tip from 'src/components/tools/tip'
 import { TextUtilsMixin } from 'src/mixins/text-utils'
 
 export default {
-  name: 'u-page-articles-view',
+  name: 'page-articles-view',
   mixins: [TextUtilsMixin],
   components: {
     Tip,
@@ -38,8 +38,8 @@ export default {
         ogImage: { property: 'og:image', content: this.extractFirstImage(this.article.body) },
         ogDescription: { property: 'og:description', content: this.htmlToTextTruncate(this.article.body, 200) },
         articlePublishedTime: { name: 'article:published_time', content: this.article.createdAt },
-        articleModifiedTime: { name: 'article:modified_time', content: this.article.updatedAt }
-        // TODO articleTag: { name: 'article:tag', content: this.article.tags.join(' ') }
+        articleModifiedTime: { name: 'article:modified_time', content: this.article.updatedAt },
+        articleTag: { name: 'article:tag', content: this.article.tags.join(' ') }
       }
     }
   },

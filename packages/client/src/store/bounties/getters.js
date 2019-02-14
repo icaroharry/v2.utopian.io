@@ -1,1 +1,1 @@
-export const article = ({ bounty }) => bounty
+export const bounty = ({ bounty }) => bounty

@@ -24,6 +24,7 @@ const bounties = new Schema({
   slugs: { type: Array, index: true },
   status: { type: String, required: true, enum: ['open', 'cancelled', 'solved', 'dispute'], default: 'open' },
   title: { type: String, required: true, text: true },
+  upVotes: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now() },
   updatedAt: { type: Date },
   deletedAt: { type: Date }

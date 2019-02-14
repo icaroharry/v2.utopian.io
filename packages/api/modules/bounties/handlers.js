@@ -5,6 +5,7 @@ const { extractText, sanitizeHtml } = require('../../utils/html-sanitizer')
 
 const Bounty = require('./bounty.model')
 const Category = require('../categories/category.model')
+const Vote = require('../votes/vote.model')
 
 /**
  * Creates the bounty
@@ -145,6 +146,44 @@ const getBountyForEdit = async (req, h) => {
 }
 
 /**
+ * Returns a bounty by its author and slug
+ *
+ * @param {object} req - request
+ * @param {object} req.params - request parameters
+ * @param {string} req.params.author - bounty author's username as route element
+ * @param {string} req.params.slug - bounty title as route element
+ *
+ * @returns bounty
+ * @author Grégory LATINIER
+ */
+const getBounty = async (req, h) => {
+  const slug = `${req.params.author}/${req.params.slug}`
+
+  // TODO view count todo => https://redditblog.com/2017/05/24/view-counting-at-reddit/
+  const bounty = await Bounty.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }], deletedAt: null })
+    .populate('author', 'username avatarUrl job reputation')
+    .populate('assignees', 'username avatarUrl')
+    .populate('project', 'avatarUrl name slug')
+    .select('author assignees body category deadline issue project viewsIPs skills status title upVotes')
+    .lean()
+  if (!bounty) return h.response(null)
+
+  const user = req.auth.credentials && req.auth.credentials.uid
+  if (user) {
+    const vote = await Vote.findOne({
+      objRef: 'bounties',
+      objId: bounty._id,
+      user
+    })
+    if (vote) {
+      bounty.userVote = vote.dir
+    }
+  }
+
+  return h.response(bounty)
+}
+
+/**
  * Updates the bounty's blockchain data
  *
  * @param {object} req - request
@@ -195,5 +234,6 @@ module.exports = {
   createBounty,
   updateBounty,
   getBountyForEdit,
+  getBounty,
   updateBlockchainData
 }
