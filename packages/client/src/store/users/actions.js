@@ -110,6 +110,29 @@ export const getUserArticles = async (context, search) => {
   context.commit('setProfileArticles', articles)
 }
 
+/**
+ * Load the user projects - owner or collaborator
+ *
+ * @param context
+ * @param search
+ *
+ * @returns user details
+ * @author Adriel Santos
+ */
+export const getUserProjects = async (context, search) => {
+  const { username, ...data } = search
+  const projects = await API.call({
+    context,
+    method: 'post',
+    url: `/v1/user/profile/${username}/projects`,
+    data
+  })
+  if (data.skip === 0) {
+    context.commit('deleteProfileProjects')
+  }
+  context.commit('setProfileProjects', projects)
+}
+
 export const createWorkExperience = async (context, data) =>
   API.call({
     context,

@@ -19,3 +19,17 @@ export const deleteProfileArticles = (state) => {
     articles: []
   }
 }
+
+export const setProfileProjects = (state, projects) => {
+  state.profile = {
+    ...state.profile,
+    projects: state.profile.projects.concat(projects)
+  }
+}
+
+export const deleteProfileProjects = (state) => {
+  state.profile = {
+    ...state.profile,
+    projects: []
+  }
+}

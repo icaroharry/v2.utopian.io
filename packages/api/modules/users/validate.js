@@ -154,7 +154,7 @@ const linkBlockchainAccount = {
 const getProfileWithTab = {
   params: {
     username: Joi.string().required().trim(),
-    tab: Joi.string().required().trim().allow('details', 'updates')
+    tab: Joi.string().required().trim().valid('details', 'blog', 'projects')
   }
 }
 
@@ -176,6 +176,17 @@ const getProfileArticles = {
   }
 }
 
+const getProfileProjects = {
+  params: {
+    username: Joi.string().required().trim()
+  },
+  payload: {
+    title: Joi.string().trim().max(100).optional().allow(''),
+    limit: Joi.number().required().max(20),
+    skip: Joi.number().required()
+  }
+}
+
 module.exports = {
   saveUser,
   getUsersByPartial,
@@ -194,5 +205,6 @@ module.exports = {
   linkBlockchainAccount,
   getProfileWithTab,
   getProfileDetails,
-  getProfileArticles
+  getProfileArticles,
+  getProfileProjects
 }

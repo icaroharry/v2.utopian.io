@@ -68,6 +68,11 @@
         "writeArticle": "Write an article"
       }
     },
+    "list": {
+      "projectCard": {
+        "contributions": "contributions"
+      }
+    },
     "tools": {
       "socialShare": {
         "copyToClipboard": {
@@ -543,7 +548,8 @@
       "header": {
         "tabs": {
           "blog": "Blog",
-          "details": "Details"
+          "details": "Details",
+          "projects": "Projects"
         }
       },
       "job": {
@@ -609,6 +615,17 @@
         },
         "noArticles": {
           "label": "No articles found"
+        }
+      },
+      "projects": {
+        "search": {
+          "placeholder": "Type your search"
+        },
+        "loadMore": {
+          "label": "Load more"
+        },
+        "noProjects": {
+          "label": "No projects found"
         }
       },
       "clear": "Clear",

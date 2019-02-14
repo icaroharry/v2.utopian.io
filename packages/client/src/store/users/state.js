@@ -2,6 +2,7 @@ export default () => ({
   user: null,
   profile: {
     details: null,
-    articles: []
+    articles: [],
+    projects: []
   }
 })

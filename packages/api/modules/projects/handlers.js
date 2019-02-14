@@ -2,6 +2,7 @@ const Boom = require('boom')
 const Mongoose = require('mongoose')
 const { slugify } = require('../../utils/slugify')
 const Article = require('../articles/article.model')
+const Bounty = require('../bounties/bounty.model')
 const Project = require('./project.model')
 const User = require('../users/user.model')
 const { getUserProjectPermission } = require('../../utils/github')
@@ -60,7 +61,32 @@ const getProjectForEdit = async (req, h) => {
 }
 
 const getFeaturedProjects = async (req, h) => {
-  const projects = await Project.find({ featured: true, blacklisted: false }).select('description medias avatarUrl name owners slug tags -_id')
+  let projects = await Project.find({ featured: true, blacklisted: false })
+    .select('owners collaborators slug medias name description avatarUrl tags contributionsCount id')
+    .populate('owners', 'username avatarUrl')
+    .populate('collaborators.user', 'username avatarUrl')
+    .lean()
+
+  const projectsId = projects.map((project) => project._id)
+  const articles = await Article.aggregate([
+    { '$match': { project: { '$in': projectsId } } },
+    { '$group': { '_id': '$project', 'occurrences': { '$sum': 1 } } }
+  ])
+  const bounties = await Bounty.aggregate([
+    { '$match': { project: { '$in': projectsId } } },
+    { '$group': { '_id': '$project', 'occurrences': { '$sum': 1 } } }
+  ])
+  projects = projects.map((project, index) => {
+    const articleFromProject = articles.find((article) => article._id.toString() === project._id.toString())
+    const bountiesFromProject = bounties.find((bounty) => bounty._id.toString() === project._id.toString())
+    const articlesCount = articleFromProject ? articleFromProject.occurrences : 0
+    const bountiesCount = bountiesFromProject ? bountiesFromProject.occurrences : 0
+    return {
+      ...project,
+      contributionsCount: articlesCount + bountiesCount
+    }
+  })
+
   return h.response(projects)
 }
 

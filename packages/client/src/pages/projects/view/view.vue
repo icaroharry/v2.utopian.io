@@ -196,7 +196,7 @@ export default {
       .column
         z-index 2
         .q-card
-          max-width 470px
+          width 470px
           .q-card-main
             padding-bottom 8px
           h1

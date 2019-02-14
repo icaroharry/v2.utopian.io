@@ -1,6 +1,8 @@
 const Boom = require('boom')
 const User = require('./user.model')
 const Article = require('../articles/article.model')
+const Project = require('../projects/project.model')
+const Bounty = require('../bounties/bounty.model')
 const UtopianBlockchainAccounts = require('./utopianBlockchainAccounts.model')
 const RefreshToken = require('../auth/refreshtoken.model')
 const { getUserInformation } = require('../../utils/auth')
@@ -174,6 +176,10 @@ const getProfileWithTab = async (req, h) => {
     })
   }
 
+  if (tab === 'projects') {
+    tabData = await loadProfileProjects({ user, ...req.payload })
+  }
+
   return h.response({
     header: user.getHeader(),
     [tab]: tabData
@@ -242,6 +248,86 @@ const getProfileArticles = async (req, h) => {
     article.body = extractText(article.body).substr(0, 250)
   })
   return h.response(articles)
+}
+
+/**
+ * Load the user projects - owner or collaborator
+ *
+ * @param {object} req - request
+ * @param {object} req.params - request parameters
+ * @param {string} req.params.username - the user to retrieve the information
+ * @param {string} req.params.title - article title to be searched
+ * @param {number} req.params.limit - max limit of documents
+ * @param {number} req.params.skip - quantity of documents to be skipped
+ * @param {object} h - response
+ *
+ * @returns user projects - owner or collaborator
+ * @author Adriel Santos
+ */
+const getProfileProjects = async (req, h) => {
+  const { username } = req.params
+  const user = await User.findOne({
+    username
+  })
+  if (!user) {
+    return h.response([])
+  }
+
+  const projects = await loadProfileProjects({ user, ...req.payload })
+
+  return h.response(projects)
+}
+
+/**
+ * Returns user projects
+ *
+ * @param {object} param.user - user
+ * @param {object} param.title - article title to be searched
+ * @param {string} param.limit - max limit of documents
+ * @param {string} param.skip - quantity of documents to be skipped
+ * @returns user projects - owner or collaborator
+ * @author Adriel Santos
+ */
+
+const loadProfileProjects = async ({ user, title = '', limit = 20, skip = 0 }) => {
+  const optionalConditions = {}
+
+  if (title) {
+    optionalConditions.name = { '$regex': title, '$options': 'i' }
+  }
+
+  let projects = await Project.find({
+    '$or': [{ owners: user._id }, { 'collaborators.user': user._id }],
+    ...optionalConditions })
+    .select('owners collaborators slug medias name description tags contributionsCount id')
+    .sort({ name: 1 })
+    .limit(limit)
+    .skip(skip)
+    .populate('owners', 'username avatarUrl')
+    .populate('collaborators.user', 'username avatarUrl')
+    .lean()
+
+  const projectsId = projects.map((project) => project._id)
+  const articles = await Article.aggregate([
+    { '$match': { project: { '$in': projectsId } } },
+    { '$group': { '_id': '$project', 'occurrences': { '$sum': 1 } } }
+  ])
+  const bounties = await Bounty.aggregate([
+    { '$match': { project: { '$in': projectsId } } },
+    { '$group': { '_id': '$project', 'occurrences': { '$sum': 1 } } }
+  ])
+  projects = projects.map((project, index) => {
+    const articleFromProject = articles.find((article) => article._id.toString() === project._id.toString())
+    const bountiesFromProject = bounties.find((bounty) => bounty._id.toString() === project._id.toString())
+    const articlesCount = articleFromProject ? articleFromProject.occurrences : 0
+    const bountiesCount = bountiesFromProject ? bountiesFromProject.occurrences : 0
+    return {
+      ...project,
+      contributionsCount: articlesCount + bountiesCount
+    }
+  })
+
+  return projects
 }
 
 /**
@@ -531,5 +617,6 @@ module.exports = {
   unlinkBlockchainAccount,
   getProfileWithTab,
   getProfileDetails,
-  getProfileArticles
+  getProfileArticles,
+  getProfileProjects
 }

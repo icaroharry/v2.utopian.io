@@ -3,13 +3,15 @@ import { mapGetters } from 'vuex'
 import SideInformation from './components/side-information'
 import DetailsTab from './components/details-tab'
 import BlogTab from './components/blog-tab'
+import ProjectsTab from './components/projects-tab'
 
 export default {
   name: 'page-profile-view',
   components: {
     SideInformation,
     DetailsTab,
-    BlogTab
+    BlogTab,
+    ProjectsTab
   },
   preFetch ({ store, currentRoute, redirect }) {
     return store.dispatch('users/fetchUserProfileWithTab', {
@@ -71,8 +73,15 @@ export default {
           :label="$t('users.profile.header.tabs.blog')"
           @select="() => this.initTab('blogTab')"
         )
+        q-tab(
+          name="projects"
+          slot="title"
+          :label="$t('users.profile.header.tabs.projects')"
+          @select="() => this.initTab('projectsTab')"
+        )
         details-tab(ref="detailsTab")
         blog-tab(ref="blogTab")
+        projects-tab(ref="projectsTab")
 </template>
 
 <style lang="stylus">

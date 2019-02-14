@@ -63,13 +63,9 @@ describe('featured projects', () => {
     assert.equal(payload[0].name, 'Quasar Framework')
   })
 
-  it('should not return the _id field', () => {
-    expect(payload[0]).to.not.have.property('_id')
-  })
-
   it('should have all the keys', () => {
     expect(payload[0]).to.have.all.keys(
-      'description', 'avatarUrl', 'medias', 'name', 'owners', 'slug', 'tags'
+      'description', 'avatarUrl', 'medias', 'name', 'owners', 'slug', 'tags', 'contributionsCount', '_id'
     )
   })
 })

@@ -86,8 +86,7 @@ export default {
             .post-view(v-html="article.body")
           q-card-actions.flex.justify-between.items-center
             ul.article-tags
-              li(v-for="tag in article.tags")
-                | {{ tag }}
+              li(v-for="tag in article.tags") {{ tag }}
             tip(
               obj="articles"
               :id="article._id"

@@ -1,11 +1,15 @@
 <script>
 import { mapGetters } from 'vuex'
+import ProjectCard from 'src/components/list/project-card'
 
 export default {
   preFetch ({ store }) {
     return store.dispatch('projects/getFeaturedProjects')
   },
   name: 'u-page-index',
+  components: {
+    ProjectCard
+  },
   data () {
     return {
       contributions: [],
@@ -100,23 +104,8 @@ div
         .pt
           .text-right.mb {{$t('homepage.seeAllProjects')}}
           hr
-    .row.projects.gutter-sm
-      .col-md-12.col-lg-4(v-for="project in featuredProjects")
-        q-card.inline.round-borders(color="white", text-color="grey-7")
-          q-card-media(:style="'background-image: url(' + project.medias.find(m => m.type === 'image').src + ')'" @click.native="goToProjectPage(project.slug)")
-          q-card-title(@click.native="goToProjectPage(project.slug)") {{project.name}}
-          q-card-main
-            p.short-description {{project.description}}
-            p
-              q-btn.tag(color="tertiary", dense, size="", outline, :key="tag", v-for="tag in project.tags")
-                | {{tag}}
-            .author.items-center
-              .avatar
-                img.align-bottom(:src="'https://steemitimages.com/u/' + project.owner +'/avatar'")
-              .author-details
-                .name
-                  span {{ '@' + project.owner  }}
-
+    .row.flex.justify-between
+      project-card.featured-projects.col-md-12.col-lg-4(v-for="project in featuredProjects", :key="project._id", :project="project")
     .row.submit-project.round-borders.justify-between.items-center.q-mt-lg
       .row.no-wrap.items-center
         img.blue-text(src="~assets/img/skyline.svg")
@@ -205,6 +194,11 @@ div
         max-height none !important
       }
     }
+  }
+
+  .featured-projects { 
+    margin-bottom 10px
+    margin-right -10px
   }
 
   .projects {
