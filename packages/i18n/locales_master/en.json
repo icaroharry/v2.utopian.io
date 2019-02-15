@@ -13,6 +13,19 @@
     "yes": "Yes"
   },
   "components": {
+    "comments": {
+      "title": "Discussion",
+      "commentBox": {
+        "uploadImage": "Drag and drop an image to upload it",
+        "button": "Comment"
+      },
+      "commentCard": {
+        "actions": {
+          "delete": "Delete",
+          "edit": "Edit"
+        }
+      }
+    },
     "form": {
       "categories": {
         "label": "Category",

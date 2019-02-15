@@ -1,5 +1,6 @@
 <script>
 import { mapGetters } from 'vuex'
+import Comments from 'src/components/tools/comments'
 import SocialShare from 'src/components/tools/social-share'
 import Vote from 'src/components/tools/vote'
 import Tip from 'src/components/tools/tip'
@@ -9,19 +10,20 @@ export default {
   name: 'page-articles-view',
   mixins: [TextUtilsMixin],
   components: {
+    Comments,
     Tip,
     SocialShare,
     Vote
   },
-  preFetch ({ store, currentRoute, redirect }) {
-    return store.dispatch('articles/fetchArticle', {
+  async preFetch ({ store, currentRoute, redirect }) {
+    const data = await store.dispatch('articles/fetchArticle', {
       author: currentRoute.params.author,
       slug: currentRoute.params.slug
-    }).then(data => {
-      if (!data) {
-        redirect(`/${currentRoute.params.locale}/not-found`)
-      }
     })
+
+    if (!data) {
+      redirect(`/${currentRoute.params.locale}/not-found`)
+    }
   },
   meta () {
     return {
@@ -107,6 +109,9 @@ export default {
             | Coins
           q-card-actions
             q-btn(color="primary" label="Send a tip")
+      .col-12.article-comments(v-if="article._id")
+        comments(obj="article", :id="article._id")
+
 </template>
 
 <style lang="stylus">
