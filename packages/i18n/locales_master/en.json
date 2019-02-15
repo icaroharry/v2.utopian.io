@@ -70,7 +70,9 @@
     },
     "list": {
       "projectCard": {
-        "contributions": "contributions"
+        "contributions": "contributions",
+        "previewDescription": "In a few words, what is your project about?",
+        "previewTitle": "Project preview card"
       }
     },
     "tools": {

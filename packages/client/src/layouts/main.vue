@@ -1,10 +1,10 @@
 <script>
-import ULayoutToolbar from 'src/components/layout/toolbar/toolbar'
+import Toolbar from 'src/components/layout/toolbar/toolbar'
 
 export default {
   name: 'u-layout-main',
   components: {
-    ULayoutToolbar
+    Toolbar
   },
   data () {
     return {
@@ -35,8 +35,11 @@ export default {
 
 <template lang="pug">
 q-layout(view='lHh Lpr lFf')
-  q-layout-header.layout-header(reveal)
-    u-layout-toolbar
+  q-layout-header.layout-header(
+    reveal
+    @reveal="(state) => $root.$emit('toolbarReveal', state)"
+  )
+    toolbar
 
   q-page-container
     .container.container-page(

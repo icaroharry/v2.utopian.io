@@ -28,19 +28,20 @@ export default {
         flat
         :to="`/${$route.params.locale}/projects/${project.slug}/edit`"
       )
-      img.main-media(v-if="project.medias", :src="project.medias[0].src")
+      img.main-media(v-if="project.medias.find(m => m.type === 'image')", :src="project.medias.find(m => m.type === 'image').src")
       .project-content.q-px-md.q-pb-md
         q-card-title
-          h3(v-if="project.name") {{project.name}}
+          h3 {{project.name || $t('components.list.projectCard.previewTitle') }}
           .owners.row.inline(v-if="project.owners", v-for="owner in project.owners")
             router-link.q-pr-xs(:to="`/${$route.params.locale}/@${owner.username}`")
               img(:src="owner.avatarUrl")
               q-tooltip(anchor="top middle", self="bottom middle", :offset="[0, 10]") {{owner.username}}
         q-card-main
-          .description(v-if="project.description") {{project.description}}
+          .description {{project.description || $t('components.list.projectCard.previewDescription')}}
           .row
             .tags.flex.justify-start
-              .tag(v-if="project.tags", v-for="tag in project.tags", :key="tag") {{tag}}
+              .tag(v-show="project.tags.length > 0", v-for="tag in project.tags", :key="tag") {{tag}}
+              .tag(v-show="project.tags.length === 0", v-for="tag in ['tag 1', 'tag 2', 'tag 3']", :key="tag") {{tag}}
             .contributions(v-if="project.contributionsCount !== undefined") {{project.contributionsCount}}
               q-icon.icon(name="mdi-file-document-box-multiple-outline")
               q-tooltip(anchor="top middle", self="bottom middle", :offset="[0, 10]") {{this.$t('components.list.projectCard.contributions')}}
@@ -75,23 +76,26 @@ export default {
           height 27px
           width 27px
       .description
-        justify-content space-between
-        margin-bottom 65px
+        white-space pre-wrap
         font-size 14px
-        height 90px
+        height 110px
         overflow hidden
+        margin-bottom 20px
+        position relative
       .description::before
         content ''
         width 100%
-        height 86%
+        height 110px
         position absolute
         left 0
         top 0
-        background linear-gradient(transparent 350px, #FFF)
-        pointer-events none
+        background linear-gradient(transparent 70%, white)
+      .description::after
+        content ''
+        clear: both
       .tags
         position absolute
-        bottom 20px
+        bottom 10px
         max-width 80%
         .tag
           border 1px solid gray

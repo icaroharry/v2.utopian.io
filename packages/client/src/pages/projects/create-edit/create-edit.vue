@@ -4,13 +4,15 @@ import { maxLength, minLength, required, requiredUnless, url } from 'vuelidate/l
 import { LicencesMixin } from 'src/mixins/licences'
 import FormWysiwyg from 'src/components/form/wysiwyg'
 import ImageProcessor from 'src/components/form/image-processor'
+import ProjectCard from 'src/components/list/project-card'
 
 export default {
   name: 'page-projects-create-edit',
   mixins: [LicencesMixin],
   components: {
     FormWysiwyg,
-    ImageProcessor
+    ImageProcessor,
+    ProjectCard
   },
   data () {
     return {
@@ -47,7 +49,8 @@ export default {
           url: false
         }
       },
-      fixedProgress: false,
+      fixedPreview: false,
+      fixedTop: '45',
       formPercentage: 0,
       project: {
         name: '',
@@ -136,6 +139,9 @@ export default {
       }
     }
   },
+  created () {
+    this.$root.$on('toolbarReveal', this.setFixedTop);
+  },
   async mounted () {
     if (this.$route.params && this.$route.params.slug) {
       const result = await this.fetchProject({
@@ -156,7 +162,6 @@ export default {
       }
     }
   },
-
   methods: {
     ...mapActions('github', [
       'searchGithubRepository',
@@ -200,7 +205,7 @@ export default {
       this.setAppError('fileUpload.error.unexpected')
     },
     scrollHandler ({ position }) {
-      this.fixedProgress = position > 120
+      this.fixedPreview = position > 120
     },
     searchGithubRepositoryWrapper (query, done) {
       this.searchGithubRepository(query).then(done)
@@ -341,6 +346,9 @@ export default {
         this.setAppSuccess(`projects.createEdit.${_id ? 'update' : 'save'}.successMsg`)
       }
       this.submitting = false
+    },
+    setFixedTop (state) {
+      this.fixedTop = state ? '45' : '5'
     }
   },
   computed: {
@@ -627,14 +635,9 @@ div
 
     .col-md-4.col-sm-12.col-xs-12
       q-scroll-observable(@scroll="scrollHandler")
-      q-list(separator, :class="fixedProgress ? 'fixed' : ''").create-edit-project-progress
-        q-list-header {{ formPercentage }}% {{$t('projects.createEdit.completed')}}
-        q-item
-          q-item-main
-            q-progress(:percentage="formPercentage", height="10px")
-        q-item
-          q-item-main
-            q-btn.full-width(color="primary", :label="project._id ? $t('projects.createEdit.update.label') : $t('projects.createEdit.save.label')", @click="submit")
+      div(:class="fixedPreview ? `fixed fixed-${fixedTop}` : ''").create-edit-project-preview
+        project-card.q-mb-lg(:project="project")
+        q-btn.full-width(color="primary", :label="project._id ? $t('projects.createEdit.update.label') : $t('projects.createEdit.save.label')", @click="submit")
 
 </template>
 <style lang="stylus">
@@ -676,14 +679,16 @@ div
       right 5px
     a
       text-decoration none
-  .create-edit-project-progress
+  .create-edit-project-preview
     margin-top 28px
     background #fff
     @medias (max-width $breakpoint-sm-max)
       margin-top 0
-
-    &.fixed
+    &.fixed-45
       top 45px
+    &.fixed-5
+      top -20px
+    &.fixed
       width inherit
       max-width ($breakpoint-lg-max / 3 - 22)px
       @medias (min-width $breakpoint-md-min) and (max-width $breakpoint-md-max)
@@ -691,24 +696,4 @@ div
       @medias (max-width $breakpoint-sm-max)
         position  initial
         max-width inherit
-
-    .q-list-header
-      text-align right
-      text-transform uppercase
-      color #9d9d9d
-      padding-bottom 0
-      font-size 12px
-      min-height 12px
-      line-height 12px
-
-    .q-progress
-      border-radius 5px
-      margin-bottom 20px
-      .q-progress-track
-        background-color #e0e2e5
-        opacity 1
-
-    button
-      margin-top 8px
-
 </style>
