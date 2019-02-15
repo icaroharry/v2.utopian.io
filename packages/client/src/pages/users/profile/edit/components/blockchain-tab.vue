@@ -5,7 +5,7 @@ import { mapActions } from 'vuex'
 import { debounce } from 'quasar'
 import { SecurityUtilsMixin } from 'src/mixins/security-utils'
 export default {
-  name: 'profile-edit-blockchain-tab',
+  name: 'page-profile-edit-blockchain-tab',
   props: ['pBlockchainAccounts'],
   mixins: [SecurityUtilsMixin],
   data () {
@@ -130,6 +130,7 @@ export default {
       this.blockchainForm.address = address
       this.blockchainForm.postingKey = ''
       this.blockchainForm.collapsed = false
+      this.isSteemAddressValid()
     }
   },
   watch: {
@@ -190,7 +191,7 @@ q-tab-pane(name="steem")
         q-card-actions(align="end")
           q-btn(
             color="primary"
-            :label="$t('users.profile.blockchainForm.add.label')"
+            :label="$t('users.profile.blockchainForm.save.label')"
             @click="linkBlockchainAccountForm"
           )
 

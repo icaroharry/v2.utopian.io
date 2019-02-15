@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'details-tab'
+  name: 'page-projects-view-details-tab'
 }
 </script>
 

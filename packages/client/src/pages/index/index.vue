@@ -6,7 +6,7 @@ export default {
   preFetch ({ store }) {
     return store.dispatch('projects/getFeaturedProjects')
   },
-  name: 'u-page-index',
+  name: 'page-index',
   components: {
     ProjectCard
   },

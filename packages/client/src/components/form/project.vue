@@ -1,7 +1,7 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
-  name: 'u-form-project',
+  name: 'form-project',
   props: ['value', 'field', 'error', 'errorLabel', 'required', 'selected'],
   methods: {
     ...mapActions('projects', ['searchProjects']),

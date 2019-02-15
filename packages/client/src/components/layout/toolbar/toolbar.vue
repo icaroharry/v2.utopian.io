@@ -4,7 +4,7 @@ import { required, minLength } from 'vuelidate/lib/validators'
 import i18nDropdownSwitcher from 'src/components/i18n/i18n-dropdown-switcher'
 
 export default {
-  name: 'u-layout-toolbar',
+  name: 'layout-toolbar',
   components: {
     i18nDropdownSwitcher
   },

@@ -13,7 +13,7 @@ import { mapActions } from 'vuex'
 */
 
 export default {
-  name: 'u-image-processor',
+  name: 'image-processor',
   /**
    * @typedef  {Object}   imageObj
    * @property {string}   imageObj.ref              - Ref for the croppa instance (required)

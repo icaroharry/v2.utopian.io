@@ -2,7 +2,7 @@
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  name: 'u-form-categories',
+  name: 'form-categories',
   props: ['value', 'field', 'error', 'required'],
   async created () {
     await this.getCategories(this.$route.params.locale)

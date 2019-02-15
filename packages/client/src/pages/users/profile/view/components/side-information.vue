@@ -2,7 +2,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'side-information',
+  name: 'page-profile-view-side-information',
   computed: {
     ...mapGetters('users', ['header'])
   }

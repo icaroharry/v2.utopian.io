@@ -3,7 +3,7 @@ import { mapActions } from 'vuex'
 import { maxLength, required, requiredUnless } from 'vuelidate/lib/validators'
 
 export default {
-  name: 'profile-edit-work-tab',
+  name: 'page-profile-edit-work-tab',
   props: ['pJob', 'pSkills', 'pWorkExperiences'],
   data () {
     return {

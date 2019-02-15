@@ -3,7 +3,7 @@ import { mapActions, mapGetters } from 'vuex'
 import ArticleCard from 'src/components/list/article-card'
 
 export default {
-  name: 'view-updates-tab',
+  name: 'page-projects-view-updates-tab',
   components: {
     ArticleCard
   },

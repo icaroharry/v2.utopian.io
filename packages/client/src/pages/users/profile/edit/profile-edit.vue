@@ -7,7 +7,7 @@ import WorkTab from './components/work-tab'
 import BlockchainTab from './components/blockchain-tab'
 
 export default {
-  name: 'u-page-profile-edit',
+  name: 'page-profile-edit',
   components: {
     MainTab,
     ImagesTab,

@@ -2,7 +2,7 @@
 import { mapActions } from 'vuex'
 
 export default {
-  name: 'u-social-share',
+  name: 'social-share',
   props: ['title', 'description'],
   data () {
     return {

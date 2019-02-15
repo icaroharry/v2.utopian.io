@@ -1,7 +1,7 @@
 <script crossorigin="anonymous">
 import { mapActions } from 'vuex'
 export default {
-  name: 'u-wysiwyg',
+  name: 'wysiwyg',
   props: ['value', 'field', 'context'],
   mounted () {
     // stop all other drag events!
@@ -436,6 +436,14 @@ export default {
     }
   },
   data () {
+    let formattingOptions = ['p', 'h1', 'h2', 'h3', 'h4', 'code']
+    let rightSide = ['fullscreen', 'markdown']
+    if (this.context === 'comment') {
+      formattingOptions = ['p', 'code']
+      rightSide = []
+    } else if (this.context === 'project') {
+      rightSide = ['fullscreen']
+    }
     return {
       userInputPos: {
         top: 0,
@@ -493,7 +501,7 @@ export default {
             fixedLabel: true,
             fixedIcon: false,
             list: 'no-icons',
-            options: ['p', 'h1', 'h2', 'h3', 'h4', 'code']
+            options: formattingOptions
           },
           {
             icon: this.$q.icon.editor.removeFormat,
@@ -518,7 +526,7 @@ export default {
           }
         ],
         ['link', 'upload'],
-        ['fullscreen', 'markdown']
+        rightSide
       ]
     }
   }

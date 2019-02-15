@@ -2,7 +2,7 @@
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  name: 'u-form-languages',
+  name: 'form-languages',
   props: ['value', 'field', 'error', 'required'],
   async created () {
     await this.getLanguages()

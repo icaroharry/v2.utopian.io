@@ -1,13 +1,13 @@
 <script>
 import { mapActions } from 'vuex'
 import { required, url } from 'vuelidate/lib/validators'
-import UImageProcessor from 'src/components/form/image-processor'
+import ImageProcessor from 'src/components/form/image-processor'
 
 export default {
-  name: 'profile-edit-images-tab',
+  name: 'page-profile-edit-images-tab',
   props: ['pImages'],
   components: {
-    UImageProcessor
+    ImageProcessor
   },
   data () {
     return {
@@ -132,7 +132,7 @@ q-tab-pane(name="images")
                 @keyup.enter="updateImages"
                 :after="[{ icon: 'mdi-plus-circle', handler: () => { $refs.avatar.chooseFileWrapper() } }]"
               )
-            u-image-processor.text-center(
+            image-processor.text-center(
               v-model="avatar"
               :imageObj="avatar"
               ref="avatar"
@@ -169,7 +169,7 @@ q-tab-pane(name="images")
                 @keyup.enter="updateImages"
                 :after="[{ icon: 'mdi-plus-circle', handler: () => { $refs.cover.chooseFileWrapper() } }]"
               )
-            u-image-processor.text-center(
+            image-processor.text-center(
               v-model="cover"
               :imageObj="cover"
               ref="cover"

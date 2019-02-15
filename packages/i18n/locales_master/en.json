@@ -483,9 +483,6 @@
           "helper": "Resetting your encryption key will unsync your Steem account on all your devices. You won't be able to perform any blockchain related operation like voting or posting until you type your posting key again. You will still be able to receive tips.",
           "success": "Your encryption key has been reset."
         },
-        "add": {
-          "label": "Add account"
-        },
         "address": {
           "label": "Steem account",
           "placeholder": "steem.account",
@@ -501,6 +498,9 @@
           "helper": "Do not use any other key than the posting key. It will be used to post and vote. The key is stored only on this device.",
           "label": "Posting Key",
           "placeholder": "5JMGzu..."
+        },
+        "save": {
+          "label": "Save"
         }
       },
       "cover": {

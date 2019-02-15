@@ -3,7 +3,7 @@ import { mapActions } from 'vuex'
 import { maxLength, required } from 'vuelidate/lib/validators'
 
 export default {
-  name: 'profile-edit-school-tab',
+  name: 'page-profile-edit-school-tab',
   props: ['pEducation'],
   data () {
     return {

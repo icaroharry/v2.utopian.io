@@ -2,15 +2,15 @@
 import { mapGetters, mapActions } from 'vuex'
 import { LanguagesMixin } from 'src/mixins/languages'
 import { maxLength } from 'vuelidate/lib/validators'
-import UFormProject from 'src/components/form/project'
-import UArticleCard from 'src/components/list/article-card'
+import FormProject from 'src/components/form/project'
+import ArticleCard from 'src/components/list/article-card'
 
 export default {
-  name: 'u-page-search-articles',
+  name: 'page-search-articles',
   mixins: [LanguagesMixin],
   components: {
-    UFormProject,
-    UArticleCard
+    FormProject,
+    ArticleCard
   },
   async mounted () {
     await this.getCategories(this.$route.params.locale)
@@ -180,7 +180,7 @@ export default {
           @keyup.enter="() => {resetFlags();filterArticles()}"
         )
         div(v-if="!$q.screen.xs || showFilters")
-          u-form-project(v-model="searchForm.project.label", field="project", :selected="selectProject", @input="() => {checkProject();resetFlags();filterArticles()}")
+          form-project(v-model="searchForm.project.label", field="project", :selected="selectProject", @input="() => {checkProject();resetFlags();filterArticles()}")
           q-card
             q-field(:label="$t('search.searchForm.categories.label')")
             div(v-for="category in categories", :key="category.key")
@@ -204,7 +204,7 @@ export default {
       .q-mr-lg
         .flex.justify-end.q-mb-md
           q-select(v-model="searchForm.sortBy", :options="sortByOptions", :placeholder="$t('search.sortBy.placeholder')", @input="() => {resetFlags();filterArticles()}")
-        u-article-card.q-mb-md(v-for="article in articles", :key="article._id", :article="article")
+        article-card.q-mb-md(v-for="article in articles", :key="article._id", :article="article")
         .flex.justify-center
           q-btn(color="primary", :label="$t('search.loadMore.label')", @click="loadMore", v-if="!disableLoadMore && articles.length > 0")
           div(v-if="articles.length === 0 && searchMessage") {{this.$t('search.message.label')}}

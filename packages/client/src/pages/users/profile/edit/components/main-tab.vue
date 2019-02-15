@@ -2,7 +2,7 @@
 import { email } from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
 export default {
-  name: 'profile-edit-main-tab',
+  name: 'page-profile-edit-main-tab',
   props: ['pMainInformation'],
   data () {
     return {

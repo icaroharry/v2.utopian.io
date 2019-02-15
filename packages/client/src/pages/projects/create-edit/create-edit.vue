@@ -2,15 +2,15 @@
 import { mapActions, mapGetters } from 'vuex'
 import { maxLength, minLength, required, requiredUnless, url } from 'vuelidate/lib/validators'
 import { LicencesMixin } from 'src/mixins/licences'
-import UWysiwyg from 'src/components/form/wysiwyg'
-import UImageProcessor from 'src/components/form/image-processor'
+import FormWysiwyg from 'src/components/form/wysiwyg'
+import ImageProcessor from 'src/components/form/image-processor'
 
 export default {
-  name: 'u-page-projects-create-edit',
+  name: 'page-projects-create-edit',
   mixins: [LicencesMixin],
   components: {
-    UWysiwyg,
-    UImageProcessor
+    FormWysiwyg,
+    ImageProcessor
   },
   data () {
     return {
@@ -394,7 +394,7 @@ div
                 @keyup.enter="updateImages"
                 :after="[{ icon: 'mdi-plus-circle', handler: () => { $refs.avatarUrl.chooseFileWrapper() } }]"
               )
-            u-image-processor.text-center(
+            image-processor.text-center(
               v-model="project.avatarUrl"
               :imageObj="avatar"
               ref="avatarUrl"
@@ -485,7 +485,7 @@ div
         :helper="$t('projects.createEdit.projectDetails.helper')"
         :error="$v.project.details.$error"
       )
-        u-wysiwyg(v-model="project.details", :onChange="updateFormPercentage", field="details")
+        form-wysiwyg(v-model="project.details", :onChange="updateFormPercentage", field="details", context="project")
 
       q-field(
         :label="`${$t('projects.createEdit.projectTags.label')}*`"
@@ -605,7 +605,7 @@ div
             @keyup.enter="updateImages"
             :after="[{ icon: 'mdi-plus-circle', handler: () => { $refs.medias.chooseFileWrapper() } }]"
           )
-        u-image-processor.text-center(
+        image-processor.text-center(
           v-model="medias"
           :imageObj="medias"
           ref="medias"

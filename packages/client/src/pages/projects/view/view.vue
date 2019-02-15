@@ -5,7 +5,7 @@ import DetailsTab from './components/details-tab'
 import UpdatesTab from './components/updates-tab'
 
 export default {
-  name: 'u-page-projects-view',
+  name: 'page-projects-view',
   components: {
     SocialShare,
     DetailsTab,
