@@ -2,7 +2,17 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'project-card',
-  props: ['project'],
+  props: {
+    project: Object,
+    preview: Boolean
+  },
+  methods: {
+    goToProject () {
+      if (this.project.slug) {
+        this.$router.push({ path: `/${this.$route.params.locale}/projects/${this.project.slug}` })
+      }
+    }
+  },
   computed: {
     ...mapGetters('auth', ['user']),
     hasEditRights () {
@@ -20,41 +30,43 @@ export default {
 
 <template lang="pug">
   q-card.project-card.bg-white
-    router-link.router-link(:to="`/${$route.params.locale}/projects/${project.slug}/view`")
-      q-btn.edit-project(
-        v-if="project.owners && project.collaborators && hasEditRights"
-        color="primary"
-        icon="mdi-pencil"
-        flat
-        :to="`/${$route.params.locale}/projects/${project.slug}/edit`"
-      )
-      img.main-media(v-if="project.medias.find(m => m.type === 'image')", :src="project.medias.find(m => m.type === 'image').src")
-      .project-content.q-px-md.q-pb-md
-        q-card-title
-          h3 {{project.name || $t('components.list.projectCard.previewTitle') }}
-          .owners.row.inline(v-if="project.owners", v-for="owner in project.owners")
-            router-link.q-pr-xs(:to="`/${$route.params.locale}/@${owner.username}`")
-              img(:src="owner.avatarUrl")
-              q-tooltip(anchor="top middle", self="bottom middle", :offset="[0, 10]") {{owner.username}}
-        q-card-main
-          .description {{project.description || $t('components.list.projectCard.previewDescription')}}
-          .row
-            .tags.flex.justify-start
-              .tag(v-show="project.tags.length > 0", v-for="tag in project.tags", :key="tag") {{tag}}
-              .tag(v-show="project.tags.length === 0", v-for="tag in ['tag 1', 'tag 2', 'tag 3']", :key="tag") {{tag}}
-            .contributions(v-if="project.contributionsCount !== undefined") {{project.contributionsCount}}
-              q-icon.icon(name="mdi-file-document-box-multiple-outline")
-              q-tooltip(anchor="top middle", self="bottom middle", :offset="[0, 10]") {{this.$t('components.list.projectCard.contributions')}}
+    q-btn.edit-project(
+      v-if="!preview && project.owners && project.collaborators && hasEditRights"
+      color="primary"
+      icon="mdi-pencil"
+      flat
+      :to="`/${$route.params.locale}/projects/${project.slug}/edit`"
+    )
+    img.main-media(
+      v-if="project.medias.find(m => m.type === 'image')"
+      :src="project.medias.find(m => m.type === 'image').src"
+      @click="goToProject"
+    )
+    .project-content.q-px-md.q-pb-md
+      q-card-title
+        h3.project-link(@click="goToProject") {{project.name || $t('components.list.projectCard.previewTitle') }}
+        .owners.row.inline(v-if="project.owners", v-for="owner in project.owners")
+          router-link.user-link.q-pr-xs(:to="`/${$route.params.locale}/@${owner.username}`")
+            img(:src="owner.avatarUrl")
+            q-tooltip(anchor="top middle", self="bottom middle", :offset="[0, 10]") {{owner.username}}
+      q-card-main
+        .description {{project.description || $t('components.list.projectCard.previewDescription')}}
+        .row
+          .tags.flex.justify-start
+            .tag(v-show="project.tags.length > 0", v-for="tag in project.tags", :key="tag") {{tag}}
+            .tag(v-show="project.tags.length === 0", v-for="tag in ['tag 1', 'tag 2', 'tag 3']", :key="tag") {{tag}}
+          .contributions {{project.contributionsCount || 0}}
+            q-icon.icon(name="mdi-file-document-box-multiple-outline")
 
 </template>
 
 <style lang="stylus">
   .project-card
     position relative
-    .router-link
-      text-decoration none
-      color #000
+    .project-link
+      cursor pointer
     .main-media
+      cursor pointer
       height 200px
       width 100%
       object-fit cover
@@ -108,7 +120,7 @@ export default {
         font-size 14px
         position absolute
         right 10px
-        bottom 30px
+        bottom 15px
         .icon
           color #000
           font-size 18px

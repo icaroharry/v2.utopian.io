@@ -89,7 +89,7 @@ describe('get the utopian project by its owner and slug', () => {
 
   it('should have all the keys', () => {
     expect(payload).to.have.all.keys(
-      'name', 'avatarUrl', 'repositories', 'website', 'license', 'medias', 'description', 'details', 'tags', 'owners', 'collaborators', '_id', 'allowExternals'
+      'name', 'avatarUrl', 'repositories', 'website', 'license', 'medias', 'description', 'details', 'tags', 'owners', 'collaborators', '_id', 'slug', 'allowExternals'
     )
   })
   it('should have utopian-io as owner', () => {

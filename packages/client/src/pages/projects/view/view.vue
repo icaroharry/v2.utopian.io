@@ -111,7 +111,7 @@ export default {
                 img(:src="owner.avatarUrl")
                 q-tooltip(anchor="top middle", self="bottom middle", :offset="[0, 10]") {{owner.username}}
           q-card-main
-            p.desc {{project.description}}
+            .description {{project.description}}
           q-card-actions.q-mb-md(align="around")
             q-btn(:disabled="tooltipBounties !== null", size="md", color="primary", :label="$t('projects.view.addBounty.label')", to="/")
               q-tooltip(v-if="tooltipBounties !== null", :offset="[0, 10]") {{$t(tooltipBounties)}}
@@ -212,12 +212,24 @@ export default {
               border-radius 50%
               height 27px
               width 27px
-          p.desc
-            font-size 15px
-            margin 0
-            word-break break-all
-            max-height 80px
-            overflow-y auto
+          .description
+            white-space pre-wrap
+            font-size 14px
+            height 80px
+            overflow hidden
+            margin-bottom 20px
+            position relative
+          .description::before
+            content ''
+            width 100%
+            height 80px
+            position absolute
+            left 0
+            top 0
+            background linear-gradient(transparent 70%, white)
+          .description::after
+            content ''
+            clear: both
         .stats
           width 66%
           background-color $grey-1

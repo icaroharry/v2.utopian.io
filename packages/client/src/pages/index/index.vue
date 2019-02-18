@@ -44,13 +44,7 @@ export default {
   computed: {
     ...mapGetters('projects', [
       'featuredProjects'
-    ]),
-    carouselCanGoToNext () {
-      return this.isMounted ? this.$refs.mainCarousel.canGoToNext : false
-    },
-    carouselCanGoToPrevious () {
-      return this.isMounted ? this.$refs.mainCarousel.canGoToPrevious : false
-    }
+    ])
   }
 }
 </script>
@@ -61,40 +55,38 @@ div
     .row
       .col-lg-6.offset-lg-1.projects-slider
         q-carousel.project-images(color="white", ref="mainCarousel")
-          q-carousel-slide(v-for="project in featuredProjects.slice(0, 3)", :img-src="project.medias.find(m => m.type === 'image').src", :key="project.slug")
+          q-carousel-slide(v-for="project in featuredProjects.slice(0, 3)", :img-src="project.medias.find(m => m.type === 'image').src", :key="`ci_${project.slug}`")
       .col-lg-4.text-center
         q-carousel.project-info(color="white", ref="infoCarousel", no-swipe)
-          q-carousel-slide(v-for="project in featuredProjects.slice(0, 3)", :key="project.slug")
-            q-card.project-card
-              q-card-title
-                | {{ project.name }}
-                span(slot="subtitle")
-                  | {{ $t('homepage.by') }}&nbsp;
-                  span.text-dark.q-subheading {{ project.owner }}
-              q-card-main.q-title.text-weight-light.text-dusk
-                | {{ project.description }}
+          q-carousel-slide(v-for="project in featuredProjects.slice(0, 3)", :key="`cs_${project.slug}`")
+            q-card
+              q-card-title {{ project.name }}
+                div.flex.q-pt-md(slot="subtitle")
+                  div {{ $t('homepage.by') }}&nbsp;
+                  router-link.owners.q-pr-xs(v-for="owner in project.owners", :to="`/${$route.params.locale}/@${owner.username}`")
+                    img(:src="owner.avatarUrl")
+                    q-tooltip(anchor="top middle", self="bottom middle", :offset="[0, 10]") {{owner.username}})
+              q-card-main.description {{ project.description }}
               q-card-actions(align="center")
                 q-btn(:label="$t('homepage.contributeToProject')", color="primary" @click.native="goToProjectPage(project.slug)")
 
         q-btn.carousel-arrow(
-        flat,
-        round,
-        icon="mdi-arrow-left",
-        color="grey-8",
-        size="24px",
-        dense,
-        @click="carouselPrevious"
-        :disable="!carouselCanGoToPrevious"
+          flat,
+          round,
+          icon="mdi-arrow-left",
+          color="grey-8",
+          size="24px",
+          dense,
+          @click="carouselPrevious"
         )
         q-btn.carousel-arrow(
-        flat,
-        round,
-        icon="mdi-arrow-right",
-        color="grey-8",
-        size="24px",
-        dense,
-        @click="carouselNext"
-        :disable="!carouselCanGoToNext"
+          flat,
+          round,
+          icon="mdi-arrow-right",
+          color="grey-8",
+          size="24px",
+          dense,
+          @click="carouselNext"
         )
 
   .main
@@ -105,7 +97,7 @@ div
           .text-right.mb {{$t('homepage.seeAllProjects')}}
           hr
     .row.flex.justify-between
-      project-card.featured-projects.col-md-12.col-lg-4(v-for="project in featuredProjects", :key="project._id", :project="project")
+      project-card.featured-projects.col-md-12.col-lg-4(v-for="project in featuredProjects", :key="project.slug", :project="project")
     .row.submit-project.round-borders.justify-between.items-center.q-mt-lg
       .row.no-wrap.items-center
         img.blue-text(src="~assets/img/skyline.svg")
@@ -121,198 +113,109 @@ div
 <style lang="stylus">
   @import "~variables"
 
-  .menu {
+  .menu
     text-transform uppercase
-    a {
+    a
       text-decoration none
       color #000
       margin 0 20px
-      @media screen and (min-width: $breakpoint-md) {
+      @media screen and (min-width: $breakpoint-md)
         margin 0 40px
-      }
-    }
-  }
 
-  div.header {
+  div.header
     border-bottom solid 1px $grey-3
     background #fff
-    .container {
-      @media screen and (max-width: $breakpoint-md) {
+    .container
+      @media screen and (max-width: $breakpoint-md)
         padding 0
-      }
-    }
-
-    .project-images {
+    .owners
+      img
+        border-radius 50%
+        height 27px
+        width 27px
+    .project-images
       height 380px
-      @media screen and (max-width: $breakpoint-sm) {
+      @media screen and (max-width: $breakpoint-sm)
         height 250px
-      }
-    }
 
-    .project-info {
+    .project-info
       background #fff
-      @media screen and (min-width: $breakpoint-md) {
+      @media screen and (min-width: $breakpoint-md)
         box-shadow 0 0 25px rgba(0, 0, 0, .1)
         margin-left: -50px
-      }
-    }
-    .q-carousel-slide {
-      @media screen and (max-width: $breakpoint-md) {
+      .q-card-container
+        padding 4px 16px
+      .description
+        white-space pre-wrap
+        font-size 14px
+        height 110px
+        overflow hidden
+        margin-bottom 20px
+        position relative
+      .description::before
+        content ''
+        width 100%
+        height 110px
+        position absolute
+        left 0
+        top 0
+        background linear-gradient(transparent 70%, white)
+      .description::after
+        content ''
+        clear: both
+
+    .q-carousel-slide
+      @media screen and (max-width: $breakpoint-md)
         padding 0
-      }
-      .q-card {
+      .q-card
         box-shadow none
-        .q-card-title {
+        .q-card-title
           font-size 1.5rem
-        }
-      }
-    }
-  }
 
-  div.main {
-    .q-layout-page-container {
+  div.main
+    .q-layout-page-container
       padding-top 0 !important
-    }
-  }
 
-  .contributions {
-    .u-post-preview {
-      background-color #fff !important
-      padding 15px
-      min-height 234px
-      border-top-width 7px !important
-      .item-category > span {
-        color $grey-6
-        font-weight normal
-      }
-      .q-item-main {
-        display flex
-        flex-direction column
-        justify-content space-between
-      }
-      .q-item-except {
-        max-height none !important
-      }
-    }
-  }
-
-  .featured-projects { 
+  .featured-projects
     margin-bottom 10px
     margin-right -10px
-  }
 
-  .projects {
-    .q-card-title {
-      line-height 1em
-      font-size 1.2em
-      color $grey-9
-    }
-    .q-card-media {
-      height 210px
-      background-size cover
-      background-position center center
-    }
-    .q-card {
-      min-height 420px
-      box-shadow none
-      border solid 1px #e0e2e5
-    }
-    .q-card-main {
-      font-size 1rem
-    }
-    .short-description {
-      height 75px
-    }
-    .tags {
-      white-space word-wrap
-      padding-bottom 10px
-    }
-    .tag {
-      color $grey-7 !important
-      background-color $grey-3 !important
-      border none !important
-      margin-right 5px
-      &:last-child {
-        margin-right 0
-      }
-    }
-    .author {
-      display flex
-      font-weight 600
-      .author-details {
-        .name {
-          line-height 14px
-          font-size 14px
-          vertical-align middle
-        }
-      }
-    }
-    .avatar {
-      margin-right 5px
-      img {
-        width 28px
-        height 28px
-        border-radius 4px
-      }
-    }
-  }
-
-  .submit-project {
+  .submit-project
     padding 0 50px
     background-color #FFF
     margin-bottom 50px
     border solid 1px #e0e2e5
-    @media screen and (max-width: $breakpoint-md) {
+    @media screen and (max-width: $breakpoint-md)
       padding 0 24px
       flex-direction column
-    }
-    > .row {
-      @media screen and (max-width: $breakpoint-sm) {
+    > .row
+      @media screen and (max-width: $breakpoint-sm)
         flex-direction column
-      }
-    }
-    img {
+    img
       height 62px
       margin 24px 0
-    }
-    .blue-text {
+    .blue-text
       color $primary
       font-size 1.3rem
-    }
-    p {
+    p
       margin-left 50px
-      @media screen and (max-width: $breakpoint-sm) {
+      @media screen and (max-width: $breakpoint-sm)
         margin-left 0
         text-align center
-      }
-    }
-    button {
-      @media screen and (max-width: $breakpoint-md) {
+    button
+      @media screen and (max-width: $breakpoint-md)
         margin-bottom 24px
-      }
-      @media screen and (max-width: $breakpoint-sm) {
+      @media screen and (max-width: $breakpoint-sm)
         margin-top 24px
-      }
-    }
-  }
 
-  .contributions-header {
-    .q-title {
-      text-transform uppercase
-    }
-    a {
+  .contributions-header
+    a
       text-decoration none
       color #000
-    }
-    .pt {
+    .pt
       padding-top 10px
-      .mb {
+      .mb
         margin-bottom -5px
-      }
-      .mt {
+      .mt
         margin-top -5px
-      }
-    }
-  }
-
 </style>

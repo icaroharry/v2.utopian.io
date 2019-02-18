@@ -24,7 +24,7 @@ const getPopulatedProject = async ({ slug }) =>
   })
     .populate('owners', 'username avatarUrl')
     .populate('collaborators.user', 'username avatarUrl')
-    .select('name avatarUrl repositories website docs license medias description details tags owners collaborators _id allowExternals')
+    .select('name avatarUrl repositories website docs license medias description details tags slug owners collaborators _id allowExternals')
 
 /**
  * Get a project by its owner and slug for editing purposes

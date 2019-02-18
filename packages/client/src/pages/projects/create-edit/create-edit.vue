@@ -51,7 +51,6 @@ export default {
       },
       fixedPreview: false,
       fixedTop: '45',
-      formPercentage: 0,
       project: {
         name: '',
         closedSource: false,
@@ -140,7 +139,7 @@ export default {
     }
   },
   created () {
-    this.$root.$on('toolbarReveal', this.setFixedTop);
+    this.$root.$on('toolbarReveal', this.setFixedTop)
   },
   async mounted () {
     if (this.$route.params && this.$route.params.slug) {
@@ -158,7 +157,6 @@ export default {
         this.project = result
         this.avatar.url = result.avatarUrl
         this.$v.project.$touch()
-        this.updateFormPercentage()
       }
     }
   },
@@ -196,7 +194,6 @@ export default {
           // its the avatar
           this.project.avatarUrl = res
         }
-        this.updateFormPercentage(ref)
       }).catch(err => {
         throw new Error(err)
       })
@@ -216,7 +213,6 @@ export default {
           const project = { type: 'github', ...item }
           if (await this.isProjectAdmin(project)) {
             this.project.repositories.push(project)
-            this.updateFormPercentage('repositories')
           } else {
             this.setAppError('projects.createEdit.repositories.error.notProjectAdmin')
           }
@@ -226,7 +222,6 @@ export default {
     },
     removeRepository (id) {
       this.project.repositories = this.project.repositories.filter(r => r.id !== id)
-      this.updateFormPercentage('repositories')
     },
     searchOwners (term, done) {
       this.searchUsers({ term, count: 10 })
@@ -305,21 +300,6 @@ export default {
     },
     removeMedia (src) {
       this.project.medias = this.project.medias.filter(m => m.src !== src)
-      this.updateFormPercentage('medias')
-    },
-    updateFormPercentage (field) {
-      if (field) {
-        this.$v.project[field].$touch()
-      }
-      const fields = Object.keys(this.$v.project.$params)
-      const completed = fields.reduce((count, key) => {
-        if (this.$v.project[key].$error) return count
-        if (typeof this.project[key] === 'string' && this.project[key] !== '') return count + 1
-        if (key === 'repositories' && this.project.closedSource) return count + 1
-        if (Array.isArray(this.project[key]) && this.project[key].length > 0) return count + 1
-        return count
-      }, 0)
-      this.formPercentage = Math.round(completed / fields.length * 100)
     },
     async submit () {
       this.$v.project.$touch()
@@ -327,7 +307,7 @@ export default {
         return
       }
       this.submitting = true
-      const { closedSource, _id, ...project } = this.project
+      const { closedSource, _id, slug, ...project } = this.project
       if (project.docs === '') { delete project.docs }
       if (project.website === '') { delete project.website }
       let result
@@ -384,7 +364,6 @@ div
           maxlength="50"
           :placeholder="$t('projects.createEdit.projectName.placeholder')"
           @keyup.enter="submit"
-          @blur="updateFormPercentage('name')"
         )
 
       q-card(square, color="white")
@@ -429,10 +408,9 @@ div
         :error="$v.project.repositories.$error"
       )
         q-search(
-          v-model="repositorySearch",
-          :placeholder="$t('projects.createEdit.repositories.placeholder')",
-          icon="mdi-github-circle", :disable="project.closedSource",
-          @blur="updateFormPercentage('repositories')"
+          v-model="repositorySearch"
+          :placeholder="$t('projects.createEdit.repositories.placeholder')"
+          icon="mdi-github-circle", :disable="project.closedSource"
         )
           q-autocomplete(
             @search="searchGithubRepositoryWrapper"
@@ -472,10 +450,14 @@ div
           :options="licenses"
           :before="[{ icon: 'mdi-file-outline' }]"
           filter, autofocus-filter,
-          @blur="updateFormPercentage('license')"
         )
 
-      q-field(:label="`${$t('projects.createEdit.shortDescription.label')}*`", :count="250", orientation="vertical", :error="$v.project.description.$error")
+      q-field(
+        :label="`${$t('projects.createEdit.shortDescription.label')}*`"
+        :count="250"
+        orientation="vertical"
+        :error="$v.project.description.$error"
+      )
         q-input(
           v-model="project.description"
           :placeholder="$t('projects.createEdit.shortDescription.placeholder')"
@@ -483,8 +465,6 @@ div
           maxlength="250"
           :max-height="150"
           rows="7"
-          @keyup.enter="submit"
-          @blur="updateFormPercentage('description')"
         )
 
       q-field.q-field-no-input(
@@ -493,7 +473,11 @@ div
         :helper="$t('projects.createEdit.projectDetails.helper')"
         :error="$v.project.details.$error"
       )
-        form-wysiwyg(v-model="project.details", :onChange="updateFormPercentage", field="details", context="project")
+        form-wysiwyg(
+          v-model="project.details"
+          field="details"
+          context="project"
+        )
 
       q-field(
         :label="`${$t('projects.createEdit.projectTags.label')}*`"
@@ -503,26 +487,55 @@ div
       )
         q-chips-input(v-model="project.tags"
           :placeholder="project.tags.length === 0 ? $t('projects.createEdit.projectTags.placeholder') : ''"
-          clearable,
-          @blur="updateFormPercentage('tags')"
+          clearable
         )
 
-      q-field(:label="$t('projects.createEdit.webPage.label')", orientation="vertical", :error="$v.project.website.$error")
-        q-input(v-model="project.website", maxlength="1000", :placeholder="$t('projects.createEdit.webPage.placeholder')", @keyup.enter="submit", @blur="updateFormPercentage('website')")
+      q-field(
+        :label="$t('projects.createEdit.webPage.label')"
+        orientation="vertical"
+        :error="$v.project.website.$error"
+      )
+        q-input(
+          v-model="project.website"
+          maxlength="1000"
+          :placeholder="$t('projects.createEdit.webPage.placeholder')"
+          @keyup.enter="submit"
+        )
 
-      q-field(:label="$t('projects.createEdit.documentationPage.label')", orientation="vertical", :error="$v.project.docs.$error")
-        q-input(v-model="project.docs", maxlength="1000", :placeholder="$t('projects.createEdit.documentationPage.placeholder')", @keyup.enter="submit", @blur="updateFormPercentage('docs')")
+      q-field(
+        :label="$t('projects.createEdit.documentationPage.label')"
+        orientation="vertical"
+        :error="$v.project.docs.$error"
+      )
+        q-input(
+          v-model="project.docs"
+          maxlength="1000"
+          :placeholder="$t('projects.createEdit.documentationPage.placeholder')"
+          @keyup.enter="submit"
+        )
 
       q-field
-        q-toggle.u-forms-toggle(v-model="project.allowExternals", :label="$t('projects.createEdit.allowExternals.label')")
-
-      q-field(:label="$t('projects.createEdit.owners.label')", orientation="vertical")
-        q-search(
-          v-model="ownersSearch",
-          :placeholder="$t('projects.createEdit.owners.placeholder')",
+        q-toggle.forms-toggle(
+          v-model="project.allowExternals"
+          :label="$t('projects.createEdit.allowExternals.label')"
         )
-          q-autocomplete(@search="searchOwners", :min-characters="3", :max-results="10", :debounce="500", @selected="addOwner",
-          :value-field="v => v.label")
+
+      q-field(
+        :label="$t('projects.createEdit.owners.label')"
+        orientation="vertical"
+      )
+        q-search(
+          v-model="ownersSearch"
+          :placeholder="$t('projects.createEdit.owners.placeholder')"
+        )
+          q-autocomplete(
+            @search="searchOwners"
+            :min-characters="3"
+            :max-results="10"
+            :debounce="500"
+            @selected="addOwner"
+            :value-field="v => v.label"
+          )
 
       q-field(v-if="project.owners.filter(u => u._id !== user.uid).length > 0")
         .row.gutter-sm
@@ -533,13 +546,23 @@ div
                 router-link(slot="subtitle", :to="`/${$route.params.locale}/@${owner.username}`") {{owner.username}}
                 q-btn(round, dense, icon="mdi-minus", color="red", size="xs" @click="() => removeOwner(owner._id)")
 
-      q-field(:label="$t('projects.createEdit.collaborators.label')", orientation="vertical", :helper="$t('projects.createEdit.collaborators.helper')")
+      q-field(
+        :label="$t('projects.createEdit.collaborators.label')"
+        orientation="vertical"
+        :helper="$t('projects.createEdit.collaborators.helper')"
+      )
         q-search(
-          v-model="collaboratorsSearch",
-          :placeholder="$t('projects.createEdit.collaborators.placeholder')",
+          v-model="collaboratorsSearch"
+          :placeholder="$t('projects.createEdit.collaborators.placeholder')"
         )
-          q-autocomplete(@search="searchCollaborators", :min-characters="3", :max-results="10", :debounce="500", @selected="addCollaborator",
-          :value-field="v => v.label")
+          q-autocomplete(
+            @search="searchCollaborators"
+            :min-characters="3"
+            :max-results="10"
+            :debounce="500"
+            @selected="addCollaborator"
+            :value-field="v => v.label"
+          )
 
       q-field(v-if="project.collaborators.length > 0")
         .row.gutter-sm
@@ -551,9 +574,9 @@ div
                 q-btn(round, dense, icon="mdi-minus", color="red", size="xs" @click="() => removeCollaborator(collaborator.user._id)")
               q-card-main.column.items-center
                 .column
-                  q-toggle.u-forms-toggle(v-model="project.collaborators[collabIdx].roles", val="project", :label="$t('projects.createEdit.collaborators.roles.project')")
-                  q-toggle.u-forms-toggle(v-model="project.collaborators[collabIdx].roles", val="articles", :label="$t('projects.createEdit.collaborators.roles.articles')")
-                  q-toggle.u-forms-toggle(v-model="project.collaborators[collabIdx].roles", val="bounties", :label="$t('projects.createEdit.collaborators.roles.bounties')")
+                  q-toggle.forms-toggle(v-model="project.collaborators[collabIdx].roles", val="project", :label="$t('projects.createEdit.collaborators.roles.project')")
+                  q-toggle.forms-toggle(v-model="project.collaborators[collabIdx].roles", val="articles", :label="$t('projects.createEdit.collaborators.roles.articles')")
+                  q-toggle.forms-toggle(v-model="project.collaborators[collabIdx].roles", val="bounties", :label="$t('projects.createEdit.collaborators.roles.bounties')")
 
       q-field(
         :label="`${$t('projects.createEdit.images.label')}*`"
@@ -636,7 +659,7 @@ div
     .col-md-4.col-sm-12.col-xs-12
       q-scroll-observable(@scroll="scrollHandler")
       div(:class="fixedPreview ? `fixed fixed-${fixedTop}` : ''").create-edit-project-preview
-        project-card.q-mb-lg(:project="project")
+        project-card.q-mb-lg(:project="project", preview)
         q-btn.full-width(color="primary", :label="project._id ? $t('projects.createEdit.update.label') : $t('projects.createEdit.save.label')", @click="submit")
 
 </template>
