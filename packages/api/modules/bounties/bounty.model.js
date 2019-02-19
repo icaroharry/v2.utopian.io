@@ -7,6 +7,17 @@ const bounties = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Users'
   }],
+  activity: [
+    {
+      _id: false,
+      user: { type: Schema.Types.ObjectId, ref: 'Users', required: true },
+      color: { type: String, required: true },
+      icon: { type: String, required: true },
+      key: { type: String, required: true },
+      data: { type: Object },
+      createdAt: { type: Date, default: Date.now() }
+    }
+  ],
   author: { type: Schema.Types.ObjectId, ref: 'Users', required: true },
   blockchains: [{
     _id: false,

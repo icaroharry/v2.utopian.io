@@ -106,7 +106,7 @@ export default {
               q-btn.edit-project(v-if="hasEditRights", color="primary", icon="mdi-pencil", flat, :to="`/${$route.params.locale}/projects/${$route.params.owner}/${$route.params.slug}/edit`")
             h1 {{project.name}}
             h2 {{$t('projects.view.createdBy')}}
-            .owners.row.inline(v-for="owner in project.owners")
+            .owners.row.inline(v-for="owner in project.owners", :key="owner._id")
               router-link.q-pr-xs(:to="`/${$route.params.locale}/@${owner.username}`")
                 img(:src="owner.avatarUrl")
                 q-tooltip(anchor="top middle", self="bottom middle", :offset="[0, 10]") {{owner.username}}

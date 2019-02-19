@@ -163,8 +163,9 @@ const getBounty = async (req, h) => {
   const bounty = await Bounty.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }], deletedAt: null })
     .populate('author', 'username avatarUrl job reputation')
     .populate('assignees', 'username avatarUrl')
+    .populate('activity.user', 'username avatarUrl')
     .populate('project', 'avatarUrl name slug')
-    .select('author assignees body category deadline issue project viewsIPs skills status title upVotes')
+    .select('activity author assignees body category deadline issue project viewsIPs skills status title upVotes')
     .lean()
   if (!bounty) return h.response(null)
 

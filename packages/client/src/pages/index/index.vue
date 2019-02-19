@@ -63,7 +63,7 @@ div
               q-card-title {{ project.name }}
                 div.flex.q-pt-md(slot="subtitle")
                   div {{ $t('homepage.by') }}&nbsp;
-                  router-link.owners.q-pr-xs(v-for="owner in project.owners", :to="`/${$route.params.locale}/@${owner.username}`")
+                  router-link.owners.q-pr-xs(v-for="owner in project.owners", :to="`/${$route.params.locale}/@${owner.username}`", :key="owner._id")
                     img(:src="owner.avatarUrl")
                     q-tooltip(anchor="top middle", self="bottom middle", :offset="[0, 10]") {{owner.username}})
               q-card-main.description {{ project.description }}
@@ -152,6 +152,7 @@ div
         overflow hidden
         margin-bottom 20px
         position relative
+        text-align left
       .description::before
         content ''
         width 100%

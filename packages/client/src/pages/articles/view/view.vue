@@ -110,6 +110,7 @@ export default {
           q-card-actions
             q-btn(color="primary" label="Send a tip")
       .col-12.article-comments(v-if="article._id")
+        .q-title {{ $t('components.comments.title') }}
         comments(obj="article", :id="article._id")
 
 </template>

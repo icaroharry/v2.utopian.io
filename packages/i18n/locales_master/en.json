@@ -212,6 +212,9 @@
     }
   },
   "bounties": {
+    "activity": {
+      "solution": "<strong>@{user}</strong> has submitted a solution"
+    },
     "createEdit": {
       "blockchains": {
         "steem": {
@@ -251,6 +254,13 @@
       "update": {
         "label": "Update my bounty",
         "successMsg": "The bounty was updated!"
+      }
+    },
+    "view": {
+      "tabs": {
+        "discussion": "Discussion",
+        "proposals": "Proposals",
+        "activity": "Activity"
       }
     }
   },

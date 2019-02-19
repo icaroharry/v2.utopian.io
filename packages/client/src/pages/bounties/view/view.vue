@@ -1,15 +1,19 @@
 <script>
 import { mapGetters } from 'vuex'
+import Comments from 'src/components/tools/comments'
 import SocialShare from 'src/components/tools/social-share'
 import Vote from 'src/components/tools/vote'
 import { TextUtilsMixin } from 'src/mixins/text-utils'
+import ActivityTab from './components/activity-tab'
 
 export default {
   name: 'page-bounties-view',
   mixins: [TextUtilsMixin],
   components: {
+    Comments,
     SocialShare,
-    Vote
+    Vote,
+    ActivityTab
   },
   preFetch ({ store, currentRoute, redirect }) {
     return store.dispatch('bounties/fetchBounty', {
@@ -52,42 +56,62 @@ export default {
 </script>
 
 <template lang="pug">
-  .bounty-view
-    .row.gutter-md.bounty-header
-      .col-md-9.flex.justify-between.items-center
-        router-link.author-info.flex.items-center(:to="`/${$route.params.locale}/@${bounty.author.username}`")
-          img(:src="bounty.author.avatarUrl")
-          div
-            .author.flex
-              strong {{bounty.author.username}}
-              .reputation {{bounty.author.reputation.toFixed(0)}}
-            .job {{bounty.author.job}}
+.bounty-view
+  .row.gutter-md.bounty-header
+    .col-md-9.flex.justify-between.items-center
+      router-link.author-info.flex.items-center(:to="`/${$route.params.locale}/@${bounty.author.username}`")
+        img(:src="bounty.author.avatarUrl")
+        div
+          .author.flex
+            strong {{bounty.author.username}}
+            .reputation {{bounty.author.reputation.toFixed(0)}}
+          .job {{bounty.author.job}}
 
-    .row.gutter-md.bounty-content
-      .col-md-9
-        q-card
-          q-card-title
-            router-link.project.flex.items-center(v-if="bounty.project", :to="`/${$route.params.locale}/projects/${bounty.project.slug}`")
-              img(:src="bounty.project.avatarUrl")
-              strong {{ bounty.project.name }}
-            .actions(slot="right")
-              social-share(:title="bounty.title", :description="bounty.body")
-              q-btn.edit-bounty(v-if="hasEditRights", color="primary", icon="mdi-pencil", flat, :to="`/${$route.params.locale}/bounties/${$route.params.author}/${$route.params.slug}/edit`")
-          q-card-main
-            .title {{bounty.title}}
-            .date {{$d(bounty.createdAt, 'long')}}
-            .post-view(v-html="bounty.body")
-          q-card-actions.flex.justify-between.items-center
-            ul.bounty-skills
-              li(v-for="skill in bounty.skills")
-                | {{ skill }}
-        .bounty-footer.flex.justify-between.items-center
-          vote(
-            obj="bounties"
-            :id="bounty._id"
-            :initialVoteCount="bounty.upVotes"
-            :initialUserVote="bounty.userVote"
-          )
+  .row.gutter-md.bounty-content
+    .col-md-9
+      q-card
+        q-card-title
+          router-link.project.flex.items-center(v-if="bounty.project", :to="`/${$route.params.locale}/projects/${bounty.project.slug}`")
+            img(:src="bounty.project.avatarUrl")
+            strong {{ bounty.project.name }}
+          .actions(slot="right")
+            social-share(:title="bounty.title", :description="bounty.body")
+            q-btn.edit-bounty(v-if="hasEditRights", color="primary", icon="mdi-pencil", flat, :to="`/${$route.params.locale}/bounties/${$route.params.author}/${$route.params.slug}/edit`")
+        q-card-main
+          .title {{bounty.title}}
+          .date {{$d(bounty.createdAt, 'long')}}
+          .post-view(v-html="bounty.body")
+        q-card-actions.flex.justify-between.items-center
+          ul.bounty-skills
+            li(v-for="skill in bounty.skills")
+              | {{ skill }}
+      .bounty-footer.flex.justify-between.items-center
+        vote(
+          obj="bounties"
+          :id="bounty._id"
+          :initialVoteCount="bounty.upVotes"
+          :initialUserVote="bounty.userVote"
+        )
+  q-tabs.q-mt-md(color="white", text-color="black", underline-color="primary")
+    q-tab(
+      default
+      slot="title"
+      name="discussion"
+      :label="$t('bounties.view.tabs.discussion')"
+    )
+    q-tab(
+      slot="title"
+      name="proposals"
+      :label="$t('bounties.view.tabs.proposals')"
+    )
+    q-tab(
+      slot="title"
+      name="activity"
+      :label="$t('bounties.view.tabs.activity')"
+    )
+    q-tab-pane(name="discussion")
+      comments(obj="bounty", :id="bounty._id")
+    activity-tab(:activity="bounty.activity")
 </template>
 
 <style lang="stylus">
