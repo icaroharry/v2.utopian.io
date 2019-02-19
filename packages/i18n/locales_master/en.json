@@ -14,17 +14,19 @@
   },
   "components": {
     "comments": {
-      "title": "Discussion",
       "commentBox": {
         "uploadImage": "Drag and drop an image to upload it",
-        "button": "Comment"
+        "update": "Update",
+        "save": "Comment"
       },
       "commentCard": {
         "actions": {
           "delete": "Delete",
           "edit": "Edit"
         }
-      }
+      },
+      "loadMore": "Load more",
+      "title": "Discussion"
     },
     "form": {
       "categories": {

@@ -22,6 +22,26 @@ routes.push([
       tags: ['comments'],
       validate: Validate.getComments
     }
+  },
+  {
+    method: 'POST',
+    path: '/v1/comment/{id}',
+    handler: (req, h) => Handlers.updateComment(req, h),
+    options: {
+      auth: { access: { scope: ['user'] } },
+      tags: ['comments'],
+      validate: Validate.updateComment
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/comment/{id}/delete',
+    handler: (req, h) => Handlers.deleteComment(req, h),
+    options: {
+      auth: { access: { scope: ['user'] } },
+      tags: ['comments'],
+      validate: Validate.deleteComment
+    }
   }
 ])
 

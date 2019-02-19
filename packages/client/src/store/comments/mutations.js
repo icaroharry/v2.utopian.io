@@ -9,3 +9,12 @@ export const addNewComment = (state, newComment) => {
 export const clearComments = (state) => {
   state.comments = []
 }
+
+export const deleteComment = (state, { id }) => {
+  state.comments = state.comments.filter((comment) => comment._id !== id)
+}
+
+export const updateComment = (state, upToDateComment) => {
+  state.comments = state.comments.map((comment) =>
+    (comment._id === upToDateComment._id) ? upToDateComment : comment)
+}

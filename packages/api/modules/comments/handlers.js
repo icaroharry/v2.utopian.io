@@ -9,7 +9,7 @@ const Comment = require('./comment.model')
  *
  * @payload {object} req.payload - comment data
  *
- * @returns slug
+ * @returns {object} - new comment
  * @author Ícaro Harry
  */
 const createComment = async (req, h) => {
@@ -45,6 +45,64 @@ const createComment = async (req, h) => {
 }
 
 /**
+ * Updates a comment
+ *
+ * @payload {object} req.payload - comment data
+ *
+ * @returns {object} - updated comment
+ * @author Ícaro Harry
+ */
+const updateComment = async (req, h) => {
+  const author = req.auth.credentials.uid
+  const commentDb = await Comment.findOne({ author, _id: req.params.id })
+  if (!commentDb) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  const response = await Comment.findOneAndUpdate(
+    { author, _id: req.params.id },
+    {
+      body: sanitizeHtml(req.payload.body),
+      updatedAt: Date.now()
+    },
+    { new: true }
+  )
+
+  if (response) {
+    return h.response(await Comment.populate(response, [{ path: 'author', select: 'username avatarUrl' }]))
+  }
+
+  throw Boom.badData('general.updateFail')
+}
+
+/**
+ * Deletes a comment
+ *
+ * @returns bool
+ * @author Ícaro Harry
+ */
+const deleteComment = async (req, h) => {
+  const author = req.auth.credentials.uid
+  const commentDb = await Comment.findOne({ author, _id: req.params.id })
+  if (!commentDb) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  const response = await Comment.findOneAndUpdate(
+    { author, _id: req.params.id },
+    {
+      deletedAt: Date.now()
+    }
+  )
+
+  if (response) {
+    return h.response(true)
+  }
+
+  throw Boom.badData('general.deleteFail')
+}
+
+/**
  * Returns an array of comments of a given article
  *
  * @param {object} req - request
@@ -55,18 +113,19 @@ const createComment = async (req, h) => {
  * @author Ícaro Harry
  */
 const getComments = async (req, h) => {
-  const comments = await Comment.find({ objId: req.params.objId, objRef: req.params.objRef })
+  const comments = await Comment.find({ objId: req.params.objId, objRef: req.params.objRef, deletedAt: null })
     .limit(req.query.limit)
     .skip(req.query.skip)
     .populate('author', 'username avatarUrl')
     .select('author body createdAt')
     .sort({ createdAt: 'desc' })
 
-  if (!comments) return h.response([])
-  return h.response(comments)
+  return h.response(comments || [])
 }
 
 module.exports = {
   createComment,
-  getComments
+  getComments,
+  updateComment,
+  deleteComment
 }

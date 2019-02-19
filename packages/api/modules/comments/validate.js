@@ -30,7 +30,31 @@ const getComments = {
   }
 }
 
+/**
+ * Validate the comment delete
+ *
+ * @author Ícaro Harry
+ */
+const deleteComment = {
+  params: {
+    id: validation.id.required()
+  }
+}
+
+/**
+ * Validate the comment update
+ *
+ * @author Ícaro Harry
+ */
+const updateComment = {
+  payload: {
+    body: Joi.string().trim().max(250000).required()
+  }
+}
+
 module.exports = {
   createComment,
-  getComments
+  getComments,
+  updateComment,
+  deleteComment
 }
