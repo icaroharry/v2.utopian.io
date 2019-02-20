@@ -134,6 +134,7 @@ module.exports = [
     'name': 'Utopian',
     'avatarUrl': 'https://img.utopian.io/QmTjLfpgSaz2jWuREv53PeoVhQL2xQtdVUda6UDN6fLRbU',
     'owners': [new Mongoose.Types.ObjectId('5bee961699164e6d24cbd3ee')],
+    'collaborators': [],
     'repositories': [
       {
         'id': 136034748,

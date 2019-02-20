@@ -8,28 +8,32 @@ export const saveComment = async (context, data) => {
     data
   })
 
-  return context.commit('addNewComment', newComment)
+  context.commit('addNewComment', newComment)
 }
 
-export const updateComment = async (context, data) => {
+export const updateComment = async (context, { body, id }) => {
   const newComment = await API.call({
     context,
     method: 'post',
-    url: `/v1/comment/${data.id}`,
-    data: { body: data.body }
+    url: `/v1/comment/${id}`,
+    data: {
+      body
+    }
   })
 
-  return context.commit('updateComment', newComment)
+  context.commit('updateComment', newComment)
 }
 
-export const deleteComment = async (context, data) => {
+export const deleteComment = async (context, id) => {
   const deleted = await API.call({
     context,
     method: 'post',
-    url: `/v1/comment/${data.id}/delete`
+    url: `/v1/comment/${id}/delete`
   })
 
-  if (deleted) return context.commit('deleteComment', { id: data.id })
+  if (deleted) {
+    context.commit('deleteComment', id)
+  }
 }
 
 export const fetchComments = async (context, { objRef, objId, skip = 0, limit = 10 }) => {
@@ -39,5 +43,9 @@ export const fetchComments = async (context, { objRef, objId, skip = 0, limit = 
     url: `/v1/comment/${objRef}/${objId}?skip=${skip}&limit=${limit}`
   })
 
-  return context.commit('setComments', payload)
+  context.commit('setComments', {
+    ...payload,
+    skip: skip + limit,
+    limit
+  })
 }

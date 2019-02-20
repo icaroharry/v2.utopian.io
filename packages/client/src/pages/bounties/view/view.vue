@@ -5,15 +5,17 @@ import SocialShare from 'src/components/tools/social-share'
 import Vote from 'src/components/tools/vote'
 import { TextUtilsMixin } from 'src/mixins/text-utils'
 import ActivityTab from './components/activity-tab'
+import ProposalsTab from './components/proposals-tab'
 
 export default {
   name: 'page-bounties-view',
   mixins: [TextUtilsMixin],
   components: {
+    ActivityTab,
     Comments,
+    ProposalsTab,
     SocialShare,
-    Vote,
-    ActivityTab
+    Vote
   },
   preFetch ({ store, currentRoute, redirect }) {
     return store.dispatch('bounties/fetchBounty', {
@@ -111,6 +113,11 @@ export default {
     )
     q-tab-pane(name="discussion")
       comments(obj="bounty", :id="bounty._id")
+    proposals-tab(
+      :id="bounty._id"
+      :status="bounty.status"
+      :userProposal="bounty.userProposal"
+    )
     activity-tab(:activity="bounty.activity")
 </template>
 

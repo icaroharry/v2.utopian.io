@@ -68,7 +68,7 @@ const users = new Schema({
     current: { type: Boolean, default: false },
     description: { type: String }
   }],
-  createdAt: { type: Date, default: Date.now() },
+  createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date },
   deletedAt: { type: Date }
 })

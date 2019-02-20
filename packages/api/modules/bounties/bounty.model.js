@@ -15,7 +15,7 @@ const bounties = new Schema({
       icon: { type: String, required: true },
       key: { type: String, required: true },
       data: { type: Object },
-      createdAt: { type: Date, default: Date.now() }
+      createdAt: { type: Date, default: Date.now }
     }
   ],
   author: { type: Schema.Types.ObjectId, ref: 'Users', required: true },
@@ -36,7 +36,7 @@ const bounties = new Schema({
   status: { type: String, required: true, enum: ['open', 'cancelled', 'solved', 'dispute'], default: 'open' },
   title: { type: String, required: true, text: true },
   upVotes: { type: Number, default: 0 },
-  createdAt: { type: Date, default: Date.now() },
+  createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date },
   deletedAt: { type: Date }
 })

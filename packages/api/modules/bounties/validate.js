@@ -57,10 +57,66 @@ const updateBlockchainData = {
   payload: Joi.object().required()
 }
 
+/**
+ * Validate the proposal creation
+ *
+ * @author Grégory LATINIER
+ */
+const createProposal = {
+  payload: {
+    body: Joi.string().trim().max(250000).required(),
+    bounty: validation.id.required()
+  }
+}
+
+/**
+ * Validate the proposals fetch
+ *
+ * @author Grégory LATINIER
+ */
+const getProposals = {
+  params: {
+    id: validation.id.required()
+  },
+  query: {
+    limit: Joi.number().required().max(20),
+    skip: Joi.number().required()
+  }
+}
+
+/**
+ * Validate the proposal delete
+ *
+ * @author Grégory LATINIER
+ */
+const deleteProposal = {
+  params: {
+    id: validation.id.required()
+  }
+}
+
+/**
+ * Validate the proposal update
+ *
+ * @author Grégory LATINIER
+ */
+const updateProposal = {
+  params: {
+    id: validation.id.required()
+  },
+  payload: {
+    body: Joi.string().trim().max(250000).required()
+  }
+}
+
 module.exports = {
   createBounty,
   updateBounty,
   getBountyForEdit,
   getBounty,
-  updateBlockchainData
+  updateBlockchainData,
+  createProposal,
+  updateProposal,
+  deleteProposal,
+  getProposals
 }

@@ -65,7 +65,7 @@ div
                   div {{ $t('homepage.by') }}&nbsp;
                   router-link.owners.q-pr-xs(v-for="owner in project.owners", :to="`/${$route.params.locale}/@${owner.username}`", :key="owner._id")
                     img(:src="owner.avatarUrl")
-                    q-tooltip(anchor="top middle", self="bottom middle", :offset="[0, 10]") {{owner.username}})
+                    q-tooltip(anchor="top middle", self="bottom middle", :offset="[0, 10]") {{owner.username}}
               q-card-main.description {{ project.description }}
               q-card-actions(align="center")
                 q-btn(:label="$t('homepage.contributeToProject')", color="primary" @click.native="goToProjectPage(project.slug)")

@@ -9,7 +9,6 @@ routes.push([
     path: '/v1/bounty',
     handler: (req, h) => Handlers.createBounty(req, h),
     options: {
-      auth: { access: { scope: ['user'] } },
       tags: ['bounties'],
       validate: Validate.createBounty
     }
@@ -19,7 +18,6 @@ routes.push([
     path: '/v1/bounty/{id}',
     handler: (req, h) => Handlers.updateBounty(req, h),
     options: {
-      auth: { access: { scope: ['user'] } },
       tags: ['bounties'],
       validate: Validate.updateBounty
     }
@@ -48,9 +46,45 @@ routes.push([
     path: '/v1/bounty/blockchains/{blockchain}/{id}',
     handler: (req, h) => Handlers.updateBlockchainData(req, h),
     options: {
-      auth: { access: { scope: ['user'] } },
       tags: ['bounties'],
       validate: Validate.updateBlockchainData
+    }
+  },
+  {
+    method: 'GET',
+    path: '/v1/bounty/{id}/proposals',
+    handler: (req, h) => Handlers.getProposals(req, h),
+    options: {
+      auth: false,
+      tags: ['proposals'],
+      validate: Validate.getProposals
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/bounty/proposal',
+    handler: (req, h) => Handlers.createProposal(req, h),
+    options: {
+      tags: ['proposals'],
+      validate: Validate.createProposal
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/bounty/proposal/{id}',
+    handler: (req, h) => Handlers.updateProposal(req, h),
+    options: {
+      tags: ['proposals'],
+      validate: Validate.updateProposal
+    }
+  },
+  {
+    method: 'POST',
+    path: '/v1/bounty/proposal/{id}/delete',
+    handler: (req, h) => Handlers.deleteProposal(req, h),
+    options: {
+      tags: ['proposals'],
+      validate: Validate.deleteProposal
     }
   }
 ])

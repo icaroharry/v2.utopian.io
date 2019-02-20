@@ -39,7 +39,7 @@ const articles = new Schema({
   viewsIPs: { type: Array, default: [] },
   tags: { type: Array, required: true },
   upVotes: { type: Number, default: 0 },
-  createdAt: { type: Date, default: Date.now() },
+  createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date },
   deletedAt: { type: Date }
 })

@@ -363,22 +363,18 @@ const isProjectAdmin = async (req, h) => {
 const getProjectView = async (req, h) => {
   const { owner, slug, tab } = req.params
 
-  const projectDB = await Project.findOne({
+  const project = await Project.findOne({
     $or: [{ slugs: { $elemMatch: { $eq: `${owner}/${slug}` } } }, { slug: `${owner}/${slug}` }],
     blacklisted: false,
     deletedAt: null
   })
     .populate('owners', 'username avatarUrl')
     .select('name avatarUrl website medias description tags owners collaborators allowExternals documentation license createdAt updatedAt details repositories')
+    .lean()
+  if (!project) return h.response(null)
 
-  if (!projectDB) return h.response(null)
-
-  const project = projectDB.toJSON()
-  // articles contribution counts
   project.articlesCount = await Article.countDocuments({ project: project._id })
-
-  // TODO bounties count
-  project.bountiesCount = 0
+  project.bountiesCount = await Bounty.countDocuments({ project: project._id })
   // TODO contributors count
   project.contributorsCount = 0
 

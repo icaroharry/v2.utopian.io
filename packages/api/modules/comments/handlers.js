@@ -2,6 +2,7 @@ const Boom = require('boom')
 const { slugify } = require('../../utils/slugify')
 const { sanitizeHtml } = require('../../utils/html-sanitizer')
 const Article = require('../articles/article.model')
+const Bounty = require('../bounties/bounty.model')
 const Comment = require('./comment.model')
 
 /**
@@ -22,6 +23,9 @@ const createComment = async (req, h) => {
   switch (comment.objRef) {
   case 'article':
     parentDocument = await Article.findOne({ _id: comment.objId })
+    break
+  case 'bounty':
+    parentDocument = await Bounty.findOne({ _id: comment.objId })
     break
   }
 
@@ -113,14 +117,23 @@ const deleteComment = async (req, h) => {
  * @author Ícaro Harry
  */
 const getComments = async (req, h) => {
-  const comments = await Comment.find({ objId: req.params.objId, objRef: req.params.objRef, deletedAt: null })
-    .limit(req.query.limit)
-    .skip(req.query.skip)
-    .populate('author', 'username avatarUrl')
-    .select('author body createdAt')
-    .sort({ createdAt: 'desc' })
+  const { limit, skip } = req.query
+  let total = -1
+  if (skip === 0) {
+    total = await Comment.countDocuments({ objId: req.params.objId, objRef: req.params.objRef, deletedAt: null })
+  }
 
-  return h.response(comments || [])
+  const comments = await Comment.find({ objId: req.params.objId, objRef: req.params.objRef, deletedAt: null })
+    .limit(limit)
+    .skip(skip)
+    .populate('author', 'username avatarUrl')
+    .select('author body objId createdAt')
+    .sort({ createdAt: 1 })
+
+  return h.response({
+    comments: comments || [],
+    total
+  })
 }
 
 module.exports = {

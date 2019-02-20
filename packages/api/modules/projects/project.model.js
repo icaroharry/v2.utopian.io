@@ -61,7 +61,7 @@ const projects = new Schema({
   slugs: { type: Array, index: true },
   tags: { type: Array, required: true },
   website: { type: String },
-  createdAt: { type: Date, default: Date.now() },
+  createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date },
   deletedAt: { type: Date }
 })

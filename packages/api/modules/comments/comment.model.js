@@ -13,7 +13,7 @@ const comments = new Schema({
   objRef: { type: String, required: true },
   objId: { type: Schema.Types.ObjectId, required: true },
   slug: { type: String, required: true, index: true },
-  createdAt: { type: Date, default: Date.now() },
+  createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date },
   deletedAt: { type: Date }
 })

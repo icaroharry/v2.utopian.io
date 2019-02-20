@@ -440,9 +440,48 @@ export default {
     let rightSide = ['fullscreen', 'markdown']
     if (this.context === 'comment') {
       formattingOptions = ['p', 'code']
-      rightSide = []
+      rightSide = null
     } else if (this.context === 'project') {
       rightSide = ['fullscreen']
+    }
+    const toolbar = [
+      [
+        'getUser'
+      ],
+      [
+        {
+          icon: this.$q.icon.editor.formatting,
+          fixedLabel: true,
+          fixedIcon: false,
+          list: 'no-icons',
+          options: formattingOptions
+        },
+        {
+          icon: this.$q.icon.editor.removeFormat,
+          fixedIcon: false,
+          fixedLabel: true,
+          list: 'only-icons',
+          options: ['bold', 'italic', 'strike', 'underline', 'removeFormat']
+        }
+      ],
+      [
+        {
+          icon: this.$q.icon.editor.align,
+          fixedLabel: true,
+          list: 'only-icons',
+          options: ['left', 'center', 'right', 'justify']
+        },
+        {
+          icon: this.$q.icon.editor.unorderedList,
+          fixedLabel: true,
+          list: 'only-icons',
+          options: ['unordered', 'ordered', 'quote', 'hr']
+        }
+      ],
+      ['link', 'upload']
+    ]
+    if (rightSide) {
+      toolbar.push(rightSide)
     }
     return {
       userInputPos: {
@@ -491,43 +530,7 @@ export default {
           tip: this.$t('components.form.wysiwyg.showMarkdown')
         }
       },
-      toolbar: [
-        [
-          'getUser'
-        ],
-        [
-          {
-            icon: this.$q.icon.editor.formatting,
-            fixedLabel: true,
-            fixedIcon: false,
-            list: 'no-icons',
-            options: formattingOptions
-          },
-          {
-            icon: this.$q.icon.editor.removeFormat,
-            fixedIcon: false,
-            fixedLabel: true,
-            list: 'only-icons',
-            options: ['bold', 'italic', 'strike', 'underline', 'removeFormat']
-          }
-        ],
-        [
-          {
-            icon: this.$q.icon.editor.align,
-            fixedLabel: true,
-            list: 'only-icons',
-            options: ['left', 'center', 'right', 'justify']
-          },
-          {
-            icon: this.$q.icon.editor.unorderedList,
-            fixedLabel: true,
-            list: 'only-icons',
-            options: ['unordered', 'ordered', 'quote', 'hr']
-          }
-        ],
-        ['link', 'upload'],
-        rightSide
-      ]
+      toolbar
     }
   }
 }

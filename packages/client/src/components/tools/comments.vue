@@ -1,83 +1,73 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
-import Wysiwyg from 'src/components/form/wysiwyg'
 import Comment from 'src/components/form/comment'
 import Vote from 'src/components/tools/vote'
 
 export default {
   name: 'comments',
   props: ['obj', 'id'],
-  components: { Wysiwyg, Vote, Comment },
+  components: {
+    Comment,
+    Vote
+  },
   data () {
     return {
       loading: false,
       editing: false,
-      disableLoadMore: true,
-      body: '',
-      editBody: '',
-      skip: 0,
-      limit: 10
+      disableLoadMore: true
     }
   },
-  methods: {
-    ...mapActions('comments', ['fetchComments', 'deleteComment', 'updateComment']),
-    ...mapMutations('comments', ['clearComments']),
-    async remove (payload) {
+  async mounted () {
+    if (this.comments.length === 0 || this.comments[0].objId !== this.id) {
       this.loading = true
-      await this.deleteComment(payload)
+      this.clearComments()
+      await this.fetchComments({ objRef: this.obj, objId: this.id })
+      this.loading = false
+    }
+    this.disableLoadMore = this.comments.length >= this.total
+  },
+  methods: {
+    ...mapActions('comments', ['fetchComments', 'deleteComment']),
+    ...mapMutations('comments', ['clearComments']),
+    async remove (id) {
+      this.loading = true
+      await this.deleteComment(id)
       this.loading = false
     },
     toggleEdit () {
       this.editing = false
     },
     async loadMore () {
-      this.skip += this.limit
-      const numberOfComments = this.comments.length
       await this.fetchComments({ objRef: this.obj, objId: this.id, skip: this.skip, limit: this.limit })
-      const numberOfNewComments = this.comments.length - numberOfComments
-
-      if (numberOfNewComments < this.limit) {
-        this.disableLoadMore = true
-      }
+      this.disableLoadMore = this.comments.length >= this.total
     }
   },
   computed: {
     ...mapGetters('auth', ['user']),
-    ...mapGetters('comments', ['comments'])
-  },
-  async mounted () {
-    this.loading = true
-
-    if (this.comments.length > 0 && this.comments[0].objId !== this.id) {
-      this.clearComments()
-    }
-
-    await this.fetchComments({ objRef: this.obj, objId: this.id })
-    if (this.comments.length === this.limit) {
-      this.disableLoadMore = false
-    }
-
-    this.loading = false
+    ...mapGetters('comments', ['comments', 'skip', 'limit', 'total'])
   }
 }
 </script>
 
 <template lang="pug">
 .comments
-  .row
+  .row(v-if="user")
     .col-9.inline.comment-box.q-mt-lg
       comment
   .row.q-mt-md
     .col-9.inline.comment-list
-      .row.q-mt-sm(v-if="comments.length > 0" v-for="comment in comments")
+      .row.q-mt-sm(
+        v-if="comments.length > 0"
+        v-for="comment in comments"
+      )
         comment.full-width(
           :id="comment._id"
           :body="comment.body"
           :update="true"
-          v-if="editing === comment._id"
+          v-if="user && editing === comment._id"
           @save="toggleEdit"
         )
-        div(v-else).comment-card.row.q-mt-sm.full-width
+        .comment-card.row.q-mt-sm.full-width(v-else)
           router-link.col-auto(:to="`/${$route.params.locale}/@${comment.author.username}`")
             img.avatar.q-mr-md(:src="comment.author.avatarUrl")
           q-card.col.shadow-1.bg-white
@@ -86,8 +76,8 @@ export default {
                 .q-body-2.text-weight-bold {{comment.author.username}}
               div(slot="right") {{$d(new Date(comment.createdAt), 'long')}}
                 q-icon.q-pl-md(
-                  v-if="comment.author._id === user.uid"
-                  name="more_vert"
+                  v-if="user && comment.author._id === user.uid"
+                  name="mdi-dots-vertical"
                 )
                   q-popover
                     q-list(link class="no-border")
@@ -99,7 +89,7 @@ export default {
                         q-item-main(:label="$t('components.comments.commentCard.actions.edit')")
                       q-item(
                         v-close-overlay
-                        @click.native="remove({ id: comment._id })"
+                        @click.native="remove(comment._id)"
                       )
                         q-item-side(icon="mdi-delete")
                         q-item-main(:label="$t('components.comments.commentCard.actions.delete')")
@@ -114,7 +104,10 @@ export default {
                 compact
               )
       q-inner-loading(:visible="loading")
-        q-spinner(size="50px" color="primary")
+        q-spinner(
+          size="50px"
+          color="primary"
+        )
       .row.justify-center.q-mt-md
         q-btn(
           v-if="!disableLoadMore && comments.length > 0"

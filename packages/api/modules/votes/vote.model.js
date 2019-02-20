@@ -6,7 +6,7 @@ const votes = new Schema({
   objId: { type: Schema.Types.ObjectId, required: true },
   user: { type: Schema.Types.ObjectId, ref: 'Users', required: true },
   dir: { type: Number, enum: [0, 1], required: true },
-  createdAt: { type: Date, default: Date.now() },
+  createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date }
 })
 

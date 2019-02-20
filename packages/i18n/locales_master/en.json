@@ -215,6 +215,7 @@
   },
   "bounties": {
     "activity": {
+      "proposal": "<strong>@{user}</strong> has made a proposal",
       "solution": "<strong>@{user}</strong> has submitted a solution"
     },
     "createEdit": {
@@ -259,6 +260,13 @@
       }
     },
     "view": {
+      "proposals": {
+        "delete": "Delete",
+        "edit": "Edit",
+        "loadMore": "Load more",
+        "save": "Save",
+        "update": "Update"
+      },
       "tabs": {
         "discussion": "Discussion",
         "proposals": "Proposals",

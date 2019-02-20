@@ -9,7 +9,6 @@ routes.push([
     path: '/v1/comment',
     handler: (req, h) => Handlers.createComment(req, h),
     options: {
-      auth: { access: { scope: ['user'] } },
       tags: ['comments'],
       validate: Validate.createComment
     }
@@ -19,6 +18,7 @@ routes.push([
     path: '/v1/comment/{objRef}/{objId}',
     handler: (req, h) => Handlers.getComments(req, h),
     options: {
+      auth: false,
       tags: ['comments'],
       validate: Validate.getComments
     }
@@ -28,7 +28,6 @@ routes.push([
     path: '/v1/comment/{id}',
     handler: (req, h) => Handlers.updateComment(req, h),
     options: {
-      auth: { access: { scope: ['user'] } },
       tags: ['comments'],
       validate: Validate.updateComment
     }
@@ -38,7 +37,6 @@ routes.push([
     path: '/v1/comment/{id}/delete',
     handler: (req, h) => Handlers.deleteComment(req, h),
     options: {
-      auth: { access: { scope: ['user'] } },
       tags: ['comments'],
       validate: Validate.deleteComment
     }

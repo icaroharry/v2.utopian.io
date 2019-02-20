@@ -9,7 +9,7 @@ const { validation } = require('../../utils/constants')
 const createComment = {
   payload: {
     body: Joi.string().trim().max(250000).required(),
-    objRef: Joi.string().trim().required().allow('article'),
+    objRef: Joi.string().trim().required().allow('article', 'bounty'),
     objId: validation.id.required()
   }
 }
@@ -21,7 +21,7 @@ const createComment = {
  */
 const getComments = {
   params: {
-    objRef: Joi.string().allow(['article']),
+    objRef: Joi.string().allow(['article', 'bounty']),
     objId: validation.id.required()
   },
   query: {
@@ -47,6 +47,9 @@ const deleteComment = {
  * @author Ícaro Harry
  */
 const updateComment = {
+  params: {
+    id: validation.id.required()
+  },
   payload: {
     body: Joi.string().trim().max(250000).required()
   }

@@ -1,7 +1,11 @@
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-  name: 'bounty-view-tab-activity',
-  props: ['activity']
+  name: 'bounty-view-activity-tab',
+  computed: {
+    ...mapGetters('bounties', ['activity'])
+  }
 }
 </script>
 
@@ -18,7 +22,7 @@ q-tab-pane.bounty-activity(name="activity")
       .q-timeline-title(slot="title")
         .flex.items-center.timeline-content
           img.timeline-avatar.q-mr-sm(:src="entry.user.avatarUrl")
-          div(v-html="$t(entry.key, { ...entry.data, user: entry.user.username })")
+          div(v-html="$t(`bounties.activity.${entry.key}`, { ...entry.data, user: entry.user.username })")
       .q-timeline-subtitle.activity-date(slot="subtitle") {{ $d(new Date(entry.createdAt), 'short') }}
 </template>
 

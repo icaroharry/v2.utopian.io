@@ -9,7 +9,7 @@ const tips = new Schema({
   amount: { type: Number, required: true },
   anonymous: { type: Boolean, required: true, default: false },
   data: { type: Object },
-  createdAt: { type: Date, default: Date.now() }
+  createdAt: { type: Date, default: Date.now }
 })
 
 module.exports = Mongoose.model('Tip', tips, 'tips')

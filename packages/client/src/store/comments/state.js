@@ -1,3 +1,7 @@
 export default () => ({
-  comments: []
+  comments: [],
+  newCommentsIds: [],
+  skip: 0,
+  limit: 10,
+  total: 0
 })

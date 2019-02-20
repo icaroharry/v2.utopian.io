@@ -5,6 +5,7 @@ const { extractText, sanitizeHtml } = require('../../utils/html-sanitizer')
 
 const Bounty = require('./bounty.model')
 const Category = require('../categories/category.model')
+const Proposal = require('./proposal.model')
 const Vote = require('../votes/vote.model')
 
 /**
@@ -179,6 +180,11 @@ const getBounty = async (req, h) => {
     if (vote) {
       bounty.userVote = vote.dir
     }
+
+    const proposal = await Proposal.countDocuments({ author: user, bounty: bounty._id })
+    if (proposal > 0) {
+      bounty.userProposal = true
+    }
   }
 
   return h.response(bounty)
@@ -231,10 +237,162 @@ const updateBlockchainData = async (req, h) => {
   return h.response(result.blockchains)
 }
 
+/**
+ * Creates the proposal
+ *
+ * @payload {object} req.payload - proposal data
+ *
+ * @returns {object} - new proposal
+ * @author Grégory LATINIER
+ */
+const createProposal = async (req, h) => {
+  const author = req.auth.credentials.uid
+  const { body, bounty } = req.payload
+  const proposalDb = await Proposal.countDocuments({ author, bounty })
+  if (proposalDb > 0) {
+    throw Boom.badData('bounty.proposal.exists')
+  }
+
+  const bountyDb = await Bounty.findOne({ _id: bounty }).select('activity status')
+  if (!bountyDb) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  if (bountyDb.status !== 'open') {
+    throw Boom.badData('bounty.notAvailable')
+  }
+
+  const newProposal = new Proposal({
+    author,
+    body: sanitizeHtml(body),
+    bounty
+  })
+
+  await newProposal.save()
+  const proposal = await Proposal.populate(newProposal, [{ path: 'author', select: 'username avatarUrl' }])
+  let activity
+  if (!bountyDb.activity.some((a) => a.user.toString() === author && a.key === 'proposal')) {
+    activity = {
+      user: author,
+      color: 'primary',
+      icon: 'mdi-file-document',
+      key: 'proposal',
+      data: {},
+      createdAt: Date.now()
+    }
+    bountyDb.activity.push(bountyDb.activity.create(activity))
+    await bountyDb.save()
+    activity.user = proposal.author
+  }
+
+  return h.response({
+    proposal,
+    activity
+  })
+}
+
+/**
+ * Updates a proposal
+ *
+ * @payload {object} req.payload - proposal data
+ *
+ * @returns {object} - updated proposal
+ * @author Grégory LATINIER
+ */
+const updateProposal = async (req, h) => {
+  const author = req.auth.credentials.uid
+  const proposalDb = await Proposal.findOne({ author, _id: req.params.id })
+  if (!proposalDb) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  const bountyDb = await Bounty.findOne({ _id: proposalDb.bounty }).select('assignees')
+  if (bountyDb.assignees && bountyDb.assignees.length > 0) {
+    throw Boom.badData('bounty.notAvailable')
+  }
+
+  const response = await Proposal.findOneAndUpdate(
+    { author, _id: req.params.id },
+    {
+      body: sanitizeHtml(req.payload.body),
+      updatedAt: Date.now()
+    },
+    { new: true }
+  )
+
+  if (response) {
+    return h.response(await Proposal.populate(response, [{ path: 'author', select: 'username avatarUrl' }]))
+  }
+
+  throw Boom.badData('general.updateFail')
+}
+
+/**
+ * Deletes a proposal
+ *
+ * @returns bool
+ * @author Grégory LATINIER
+ */
+const deleteProposal = async (req, h) => {
+  const author = req.auth.credentials.uid
+  const proposalDb = await Proposal.findOne({ author, _id: req.params.id })
+  if (!proposalDb) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  const bountyDb = await Bounty.findOne({ _id: proposalDb.bounty }).select('assignees')
+  if (bountyDb.assignees && bountyDb.assignees.length > 0) {
+    throw Boom.badData('bounty.notAvailable')
+  }
+
+  const response = await Proposal.deleteOne({ author, _id: req.params.id })
+
+  if (response.n === 1) {
+    return h.response(true)
+  }
+
+  throw Boom.badData('general.deleteFail')
+}
+
+/**
+ * Returns an array of proposals of a given bounty
+ *
+ * @param {object} req - request
+ * @param {object} req.params - request parameters
+ * @param {string} req.params.author - bounty author
+ * @param {string} req.params.slug - bounty slug
+ *
+ * @returns comments
+ * @author Grégory LATINIER
+ */
+const getProposals = async (req, h) => {
+  const { limit, skip } = req.query
+  let total = -1
+  if (skip === 0) {
+    total = await Proposal.countDocuments({ bounty: req.params.id })
+  }
+
+  const proposals = await Proposal.find({ bounty: req.params.id })
+    .limit(limit)
+    .skip(skip)
+    .populate('author', 'username avatarUrl')
+    .select('author body createdAt')
+    .sort({ createdAt: 'asc' })
+
+  return h.response({
+    proposals: proposals || [],
+    total
+  })
+}
+
 module.exports = {
   createBounty,
   updateBounty,
   getBountyForEdit,
   getBounty,
-  updateBlockchainData
+  updateBlockchainData,
+  createProposal,
+  updateProposal,
+  deleteProposal,
+  getProposals
 }
