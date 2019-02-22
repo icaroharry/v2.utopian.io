@@ -2,6 +2,7 @@ const Boom = require('boom')
 const { slugify } = require('../../utils/slugify')
 const { sanitizeHtml } = require('../../utils/html-sanitizer')
 const Article = require('../articles/article.model')
+const Vote = require('../votes/vote.model')
 const Bounty = require('../bounties/bounty.model')
 const Comment = require('./comment.model')
 
@@ -127,8 +128,25 @@ const getComments = async (req, h) => {
     .limit(limit)
     .skip(skip)
     .populate('author', 'username avatarUrl')
-    .select('author body objId createdAt')
+    .select('author body objId createdAt upVotes')
     .sort({ createdAt: 1 })
+    .lean()
+
+  const commentIds = comments.map((comment) => comment._id)
+  const user = req.auth.credentials && req.auth.credentials.uid
+  if (user) {
+    const votes = await Vote.find({
+      objRef: 'comments',
+      objId: { '$in': commentIds },
+      user
+    })
+    votes.forEach((vote) => {
+      const idx = comments.findIndex((comment) => comment._id.toString() === vote.objId.toString())
+      if (idx >= 0) {
+        comments[idx].userVote = vote.dir
+      }
+    })
+  }
 
   return h.response({
     comments: comments || [],

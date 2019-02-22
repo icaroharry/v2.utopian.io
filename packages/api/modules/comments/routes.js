@@ -18,7 +18,7 @@ routes.push([
     path: '/v1/comment/{objRef}/{objId}',
     handler: (req, h) => Handlers.getComments(req, h),
     options: {
-      auth: false,
+      auth: { mode: 'optional' },
       tags: ['comments'],
       validate: Validate.getComments
     }
