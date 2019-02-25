@@ -108,16 +108,16 @@ export default (cookies) => ([
         }]
       },
       {
-        path: 'search',
-        name: 'search',
+        path: 'search/articles',
+        name: 'search.articles',
         props: true,
-        component: () => import('src/pages/search/articles/search-articles'),
-        children: [{
-          path: 'articles',
-          name: 'search.articles',
-          props: true,
-          component: () => import('src/pages/search/articles/search-articles')
-        }]
+        component: () => import('src/pages/search/articles/search-articles')
+      },
+      {
+        path: 'search/bounties',
+        name: 'search.bounties',
+        props: true,
+        component: () => import('src/pages/search/bounties/search-bounties')
       }
     ]
   },

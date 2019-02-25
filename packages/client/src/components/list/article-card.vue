@@ -35,7 +35,7 @@ export default {
       router-link.link(:to="`/${$route.params.locale}/articles/${article.slug}`")
         div {{article.title}}
     q-card-main
-      div(v-html="article.body")
+      .article-body(v-html="article.body")
       .row
         .tags(v-for="tag in article.tags", :key="tag") {{tag}}
     q-card-actions.flex.justify-between.items-center(:class="!user ? 'reverse' : ''")
@@ -61,9 +61,10 @@ export default {
     position relative
     .edit-article
       position absolute
-      top 5px
-      right 5px
+      top 0
+      right 0
       padding 4px
+      font-size 10px
     .author
       img
         width 40px
@@ -75,6 +76,8 @@ export default {
       font-weight bold
       text-decoration none
       color #000
+    .article-body
+      white-space pre-wrap
     .tags
       border 1px solid gray
       border-radius 2px

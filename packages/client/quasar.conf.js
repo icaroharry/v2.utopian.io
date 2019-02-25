@@ -145,6 +145,7 @@ module.exports = function (ctx) {
         'QPopover',
         'QProgress',
         'QPullToRefresh',
+        'QRange',
         'QRouteTab',
         'QScrollArea',
         'QScrollObservable',

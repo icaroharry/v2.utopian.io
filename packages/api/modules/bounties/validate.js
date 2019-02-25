@@ -109,6 +109,13 @@ const updateProposal = {
   }
 }
 
+const searchSkills = {
+  payload: {
+    partial: Joi.string().trim().required().min(2).max(100),
+    skills: Joi.array().max(5).unique().items(Joi.string().regex(validation.articleTag).trim().min(1).max(100)).required()
+  }
+}
+
 module.exports = {
   createBounty,
   updateBounty,
@@ -118,5 +125,6 @@ module.exports = {
   createProposal,
   updateProposal,
   deleteProposal,
-  getProposals
+  getProposals,
+  searchSkills
 }

@@ -172,8 +172,14 @@ export default {
           position absolute
           right 0
           top 0
-          .social-share, .edit-project
+          .social-share
             padding 4px 8px
+          .edit-project
+            position absolute
+            font-size 12px
+            right -15px
+            top -23px
+            padding 0
       .bg
         position absolute
         left 0

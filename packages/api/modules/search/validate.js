@@ -14,6 +14,28 @@ const searchArticles = {
   }
 }
 
+const searchBounties = {
+  payload: {
+    title: Joi.string().trim().max(100).required(),
+    project: validation.id,
+    skills: Joi.array().max(5).unique().items(Joi.string().trim().min(2).max(100)),
+    categories: Joi.array().unique().items(Joi.string().trim().max(50)),
+    status: Joi.array().unique().items(Joi.string().trim().max(50)),
+    values: Joi.object().keys({ min: Joi.number(), max: Joi.number() }).allow(null),
+    currency: Joi.string().trim().max(3),
+    sortBy: Joi.object().keys({ createdAt: Joi.number().valid(-1, 1) }).required(),
+    limit: Joi.number().required().max(20),
+    skip: Joi.number().required()
+  }
+}
+const getBountiesValues = {
+  payload: {
+    currency: Joi.string().trim().max(3)
+  }
+}
+
 module.exports = {
-  searchArticles
+  searchArticles,
+  searchBounties,
+  getBountiesValues
 }

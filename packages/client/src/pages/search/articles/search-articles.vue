@@ -1,5 +1,5 @@
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { LanguagesMixin } from 'src/mixins/languages'
 import { maxLength } from 'vuelidate/lib/validators'
 import FormProject from 'src/components/form/project'
@@ -49,14 +49,15 @@ export default {
     searchForm: {
       project: {},
       categories: {},
-      tags: { maxLength: maxLength(5) },
-      languages: { maxLength: maxLength(5) }
+      tags: { maxLength: maxLength(30) },
+      languages: { maxLength: maxLength(30) }
     }
   },
   computed: {
     ...mapGetters('search', [
       'search',
-      'articles'
+      'articles',
+      'searchOccurrences'
     ]),
     ...mapGetters('utils', [
       'categories'
@@ -69,10 +70,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions('search', ['searchArticles']),
+    ...mapActions('search', [
+      'searchArticles',
+      'searchBounties'
+    ]),
     ...mapActions('utils', ['getCategories', 'setAppError']),
     ...mapActions('articles', ['searchTags']),
-
+    ...mapMutations('search', ['clearSearch']),
     duplicatedTags () {
       this.setAppError('search.tags.errors.duplicatedTags')
     },
@@ -131,10 +135,8 @@ export default {
         project: this.searchForm.project.value,
         sortBy: JSON.parse(this.searchForm.sortBy)
       }
-      if (search.title.length > 0) {
+      if (this.search.title) {
         await this.searchArticles(search)
-      } else {
-        this.setAppError('search.searchForm.title.errors.required')
       }
     },
     clearFilters () {
@@ -143,7 +145,7 @@ export default {
       this.searchForm.tags = []
       this.searchForm.languages = []
       this.resetFlags()
-      this.filterArticles()
+      this.clearSearch()
     },
     async loadMore () {
       this.searchForm.skip += this.searchForm.limit
@@ -164,14 +166,26 @@ export default {
       if (this.searchForm.project.label === '') {
         this.searchForm.project.value = undefined
       }
+    },
+    async goToSearchBounty () {
+      if (this.search.title) {
+        this.searchBounties({
+          title: this.search.title,
+          limit: 20,
+          skip: 0,
+          sortBy: {
+            createdAt: -1
+          }
+        })
+      }
+      this.$router.push({ path: `/${this.$route.params.locale}/search/bounties` })
     }
-
   }
 }
 </script>
 
 <template lang="pug">
-  .row
+  .search-articles.row
     .col-md-3.col-xs-12
       .q-mr-lg.q-mb-md
         q-input.full-width(
@@ -179,13 +193,22 @@ export default {
           :placeholder="$t('search.searchForm.title.placeholder')"
           @keyup.enter="() => {resetFlags();filterArticles()}"
         )
+        q-list.q-mt-lg.bg-white(link)
+          q-item.search-active
+            q-item-main {{$t('search.searchForm.articles.label')}}
+            q-item-side(right)
+              .search-occurrences(v-if="searchOccurrences.articles") {{searchOccurrences.articles}}
+          q-item(@click.native="goToSearchBounty()")
+            q-item-main {{$t('search.searchForm.bounties.label')}}
+            q-item-side(right)
+              .search-occurrences(v-if="searchOccurrences.bounties") {{searchOccurrences.bounties}}
         div(v-if="!$q.screen.xs || showFilters")
-          form-project(v-model="searchForm.project.label", field="project", :selected="selectProject", @input="() => {checkProject();resetFlags();filterArticles()}")
-          q-card
+          q-card.q-mt-lg
+            form-project(v-model="searchForm.project.label", field="project", :selected="selectProject", @input="() => {checkProject();resetFlags();filterArticles()}")
             q-field(:label="$t('search.searchForm.categories.label')")
             div(v-for="category in categories", :key="category.key")
               q-checkbox(v-model="searchForm.categories", :label="category.text", :val="category.key", @input="() => {resetFlags();filterArticles()}")
-            q-field(orientation="vertical", :label="$t('search.searchForm.tags.label')", :count="5")
+            q-field.q-mt-md(orientation="vertical", :label="$t('search.searchForm.tags.label')")
               q-chips-input(
                 v-model="searchForm.tags"
                 @duplicate="duplicatedTags"
@@ -193,11 +216,11 @@ export default {
                 :placeholder="searchForm.tags.length === 0 ? $t('search.searchForm.tags.placeholder') : ''"
               )
                 q-autocomplete(@search="tagsAutocomplete", :min-characters="2", :max-results="10")
-            q-field(orientation="vertical", :label="$t('search.searchForm.languages.label')", :count="5")
+            q-field(orientation="vertical", :label="$t('search.searchForm.languages.label')")
               q-select(multiple, filter, chips, v-model="searchForm.languages", :options="languages", :placeholder="$t('search.searchForm.languages.placeholder')", @input="languagesInputChange")
             .flex.justify-center
               q-card-actions
-                q-btn(color="primary", :label="$t('search.clearAll.label')", @click="clearFilters")
+                q-btn.q-mt-md(color="primary", :label="$t('search.clearAll.label')", @click="clearFilters")
         .flex.justify-center
           q-btn.q-mt-md(v-if="$q.screen.xs", color="primary", :label="showFilters ? $t('search.toggleFilters.hideFilters.label') : $t('search.toggleFilters.showFilters.label')", @click="() => {showFilters = !showFilters}")
     .col-md-9.col-xs-12
@@ -207,13 +230,27 @@ export default {
         article-card.q-mb-md(v-for="article in articles", :key="article._id", :article="article")
         .flex.justify-center
           q-btn(color="primary", :label="$t('search.loadMore.label')", @click="loadMore", v-if="!disableLoadMore && articles.length > 0")
-          div(v-if="articles.length === 0 && searchMessage") {{this.$t('search.message.label')}}
-          div(v-else="articles.length === 0 && searchMessage") {{this.$t('search.noResults.label')}}
+          div(v-if="articles.length === 0 && searchMessage") {{$t('search.articleMessage.label')}}
+          div(v-if="articles.length === 0 && !searchMessage") {{$t('search.noResults.label')}}
 </template>
 <style lang="stylus">
+@import "~variables"
+.search-articles
   .sort-by
     width 20%
   .q-card
     background-color #fff
     padding 20px
+  .search-active
+    border-left 3px solid $primary
+    font-weight 600
+    color $primary
+    .q-item-main
+      margin-left -3px
+  .search-occurrences
+    text-align center
+    background-color $primary
+    color #fff
+    padding 5px
+    font-weight 400
 </style>

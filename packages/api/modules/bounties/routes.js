@@ -86,6 +86,15 @@ routes.push([
       tags: ['proposals'],
       validate: Validate.deleteProposal
     }
+  },
+  {
+    method: 'POST',
+    path: '/v1/bounty/searchSkills',
+    handler: (req, h) => Handlers.searchSkills(req, h),
+    options: {
+      tags: ['bounties'],
+      validate: Validate.searchSkills
+    }
   }
 ])
 

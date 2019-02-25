@@ -1,4 +1,4 @@
-export const activity = ({ bounty }) => bounty.activity || []
+export const activity = ({ bounty }) => (bounty && bounty.activity) || []
 export const bounty = ({ bounty }) => bounty
 export const proposals = ({ proposals }) => proposals
 export const skip = ({ skip }) => skip

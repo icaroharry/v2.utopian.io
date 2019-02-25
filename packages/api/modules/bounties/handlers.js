@@ -385,6 +385,30 @@ const getProposals = async (req, h) => {
   })
 }
 
+/**
+ * Returns options for the autocomplete based on the user input
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ * @payload {object} req.payload.partial - contains the term to be searched
+ *
+ * @returns contains the matched skills
+ * @author Adriel Santos
+ */
+
+const searchSkills = async (req, h) => {
+  const skills = await Bounty.aggregate([
+    { '$unwind': '$skills' },
+    { '$match': { skills: { '$regex': `^${req.payload.partial}`, '$options': 'i', '$nin': req.payload.skills } } },
+    { '$group': { _id: '$skills', occurrences: { '$sum': 1 } } },
+    { '$limit': 10 },
+    { '$addFields': { name: '$_id' } },
+    { '$sort': { 'occurrences': -1, 'name': 1 } }
+  ])
+
+  return h.response(skills)
+}
+
 module.exports = {
   createBounty,
   updateBounty,
@@ -394,5 +418,6 @@ module.exports = {
   createProposal,
   updateProposal,
   deleteProposal,
-  getProposals
+  getProposals,
+  searchSkills
 }

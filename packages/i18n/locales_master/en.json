@@ -437,11 +437,11 @@
   },
   "search": {
     "searchForm": {
-      "title": {
-        "placeholder": "Type your search",
-        "errors": {
-          "required": "A title for the article is required"
-        }
+      "articles": {
+        "label": "Articles"
+      },
+      "bounties": {
+        "label": "Bounties"
       },
       "categories": {
         "label": "Categories"
@@ -453,6 +453,24 @@
           "maxItems": "You can add up to 5 languages"
         }
       },
+      "skills": {
+        "label": "Skills",
+        "placeholder": "Filter by skills",
+        "errors": {
+          "duplicatedTags": "This skill is already in the list",
+          "maxItems": "You are allowed to add up to 5 Skills"
+        }
+      },
+      "bountyStatus": {
+        "label": "Bounty status",
+        "status": {
+          "open": "Open",
+          "inProgress": "In progress",
+          "solved": "Completed",
+          "cancelled": "Cancelled",
+          "dispute": "Dispute"
+        }
+      },
       "tags": {
         "label": "Tags",
         "placeholder": "Filter by tags",
@@ -461,6 +479,15 @@
           "duplicatedTags": "This tag is already in the list",
           "maxItems": "You are allowed to add up to 5 tags"
         }
+      },
+      "title": {
+        "placeholder": "Type your search",
+        "errors": {
+          "required": "A title for the article is required"
+        }
+      },
+      "value": {
+        "label": "Bounty value ({currency})"
       }
     },
     "clearAll": {
@@ -483,8 +510,11 @@
     "noResults": {
       "label": "No results"
     },
-    "message": {
+    "articleMessage": {
       "label": "Look for articles by using the filters"
+    },
+    "bountyMessage": {
+      "label": "Look for bounties by using the filters"
     },
     "toggleFilters": {
       "showFilters": {

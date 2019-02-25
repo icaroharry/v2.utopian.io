@@ -2,5 +2,7 @@ export default () => ({
   search: {
     title: ''
   },
-  articles: []
+  articles: [],
+  bounties: [],
+  searchOccurrences: {}
 })
