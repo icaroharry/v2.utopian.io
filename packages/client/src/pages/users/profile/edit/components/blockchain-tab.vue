@@ -4,10 +4,12 @@ import { helpers, maxLength, minLength, required } from 'vuelidate/lib/validator
 import { mapActions } from 'vuex'
 import { debounce } from 'quasar'
 import { SecurityUtilsMixin } from 'src/mixins/security-utils'
+import { Steem } from 'src/mixins/steem'
+
 export default {
   name: 'page-profile-edit-blockchain-tab',
   props: ['pBlockchainAccounts'],
-  mixins: [SecurityUtilsMixin],
+  mixins: [SecurityUtilsMixin, Steem],
   data () {
     return {
       blockchainAccounts: [],
@@ -47,7 +49,7 @@ export default {
     ...mapActions('auth', ['setSteemStatus']),
     isSteemAddressValid: debounce(async function () {
       this.blockchainForm.addressValidatorStatus = 'checking'
-      this.blockchainForm.addressValidatorStatus = (await this.$steem.Client.database.getAccounts([this.blockchainForm.address])).some(u => u.name === this.blockchainForm.address)
+      this.blockchainForm.addressValidatorStatus = await this.isSteemAccountValid(this.blockchainForm.address)
       await this.isSteemPostingKeyValid()
       this.$v.blockchainForm.address.$touch()
     }, 500),
@@ -55,13 +57,7 @@ export default {
       const { address, postingKey } = this.blockchainForm
       if (!address || !postingKey) return
       this.blockchainForm.postingKeyValidatorStatus = 'checking'
-      const account = (await this.$steem.Client.database.getAccounts([address])).find(u => u.name === address)
-      try {
-        const privateKey = this.$steem.PrivateKey.fromString(postingKey)
-        this.blockchainForm.postingKeyValidatorStatus = privateKey.createPublic().toString() === account.posting.key_auths[0][0]
-      } catch {
-        this.blockchainForm.postingKeyValidatorStatus = false
-      }
+      this.blockchainForm.postingKeyValidatorStatus = await this.isSteemKeyValid(postingKey, 'posting', address)
       this.$v.blockchainForm.postingKey.$touch()
     }, 500),
     resetEncryptionKeyDialog () {
@@ -214,13 +210,7 @@ q-tab-pane(name="steem")
                 self="bottom middle"
                 :offset="[0, 10]"
               ) {{$t('users.profile.blockchainForm.address.errors.notSync')}}
-            q-btn(flat, round, dense, icon="mdi-dots-vertical")
-              q-popover
-                q-list(link)
-                  q-item(v-close-overlay, @click.native="() => editBlockchainAccountDialog(account.address)")
-                    q-item-main(label="Edit")
-                  q-item(v-close-overlay, @click.native="() => deleteBlockchainAccountDialog(account.address)")
-                    q-item-main(label="Delete")
+            q-btn(flat, round, dense, icon="mdi-pencil", @click.native="() => editBlockchainAccountDialog(account.address)")
   h3.q-mt-lg {{$t('users.profile.tabs.steemReset')}}
     .row.justify-center
       .column.col-lg-10.col-md-10.col-sm-12.col-xs-12.items-center

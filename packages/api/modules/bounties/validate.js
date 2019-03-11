@@ -3,6 +3,7 @@ const { validation } = require('../../utils/constants')
 
 const createBounty = {
   payload: {
+    amount: Joi.number().required().min(0.001).max(100000000),
     body: Joi.string().trim().max(250000).required(),
     category: Joi.string().trim().max(50).required(),
     deadline: Joi.date().required(),
@@ -15,6 +16,7 @@ const createBounty = {
 
 const updateBounty = {
   payload: {
+    amount: Joi.number().required().min(0.001).max(100000000),
     body: Joi.string().trim().max(250000).required(),
     category: Joi.string().trim().max(50).required(),
     deadline: Joi.date().required(),
@@ -116,6 +118,31 @@ const searchSkills = {
   }
 }
 
+const escrowAccounts = {
+  payload: {
+    id: validation.id.required()
+  }
+}
+
+const assignUser = {
+  payload: {
+    id: validation.id.required(),
+    escrowId: Joi.number().required(),
+    from: Joi.string().trim().required(),
+    to: Joi.string().trim().required(),
+    agent: Joi.string().trim().required(),
+    assignee: validation.id.required(),
+    transaction: Joi.object().required()
+  }
+}
+
+const acceptBounty = {
+  payload: {
+    id: validation.id.required(),
+    transaction: Joi.object().required()
+  }
+}
+
 module.exports = {
   createBounty,
   updateBounty,
@@ -126,5 +153,8 @@ module.exports = {
   updateProposal,
   deleteProposal,
   getProposals,
-  searchSkills
+  searchSkills,
+  escrowAccounts,
+  assignUser,
+  acceptBounty
 }

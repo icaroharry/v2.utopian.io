@@ -634,12 +634,13 @@ export default {
     z-index 6001
   .normalZ
     z-index 1000
-  .fullscreen
-    background $grey-12
-    .context-article
-      width calc(1200px - 25%)
-      margin 0 auto
-      padding 16px
+  .q-editor
+    &.fullscreen
+      background $grey-12
+      .context-article
+        width calc(1200px - 25%)
+        margin 0 auto
+        padding 16px
   .q-if-addon-left
     margin 5px 0 0 -2px
   .q-editor-content::selection, .q-editor-content *::selection

@@ -12,6 +12,7 @@
   },
   "scripts": {
     "dev": "nodemon --delay 2500ms --watch ./",
+    "debug": "nodemon --inspect=127.0.0.1:9231 --delay 2500ms --watch ./",
     "precommit": "lint-staged",
     "lint": "eslint --ext .js modules config test",
     "lintfix": "eslint --fix --ext .js modules config",
@@ -21,10 +22,10 @@
   },
   "dependencies": {
     "@sentry/node": "4.4.0",
+    "@steemit/steem-js": "0.7.4",
     "axios": "0.18.0",
     "boom": "7.3.0",
     "dotenv": "6.1.0",
-    "dsteem": "0.11.2",
     "franc": "4.0.0",
     "glob": "7.1.3",
     "glue": "5.0.0",

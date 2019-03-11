@@ -5,7 +5,9 @@
  * @param ssrContext
  */
 export default async ({ store, ssrContext }) => {
-  const request = ssrContext.req
-  const xFF = request.headers['x-forwarded-for']
-  await store.dispatch('utils/setSSRIp', xFF ? xFF.split(',')[0] : request.connection.remoteAddress)
+  if (ssrContext) {
+    const request = ssrContext.req
+    const xFF = request.headers['x-forwarded-for']
+    await store.dispatch('utils/setSSRIp', xFF ? xFF.split(',')[0] : request.connection.remoteAddress)
+  }
 }

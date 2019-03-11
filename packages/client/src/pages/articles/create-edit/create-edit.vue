@@ -4,11 +4,11 @@ import { maxLength, required } from 'vuelidate/lib/validators'
 import FormWysiwyg from 'src/components/form/wysiwyg'
 import FormCategories from 'src/components/form/categories'
 import FormProject from 'src/components/form/project'
-import { SteemAccountRequired, SteemPost } from 'src/mixins/steem'
+import { Steem } from 'src/mixins/steem'
 
 export default {
   name: 'page-articles-create-edit',
-  mixins: [SteemAccountRequired, SteemPost],
+  mixins: [Steem],
   components: {
     FormWysiwyg,
     FormCategories,
@@ -122,7 +122,7 @@ export default {
         if (!tags.includes('utopian-io')) tags.push('utopian-io')
         if (!tags.includes(result.category)) tags.push(result.category)
         const permlink = `${result.slug.split('/')[1]}-${Date.now()}`
-        const blockchainData = await this.post({
+        const blockchainData = await this.steemPost({
           url: `/${this.$route.params.locale}/articles/${result.slug}`,
           body: result.body,
           permlink,
@@ -264,7 +264,7 @@ div
       q-field.q-field-no-input(
         :label="`${$t('articles.createEdit.body.label')}*`"
         orientation="vertical"
-        :helper="$t('articles.createEdit.body.help')"
+        :helper="$t('articles.createEdit.body.helper')"
         :error="$v.article.body.$error"
       )
         form-wysiwyg(

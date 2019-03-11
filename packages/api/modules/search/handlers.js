@@ -4,9 +4,7 @@ const Bounty = require('../bounties/bounty.model')
 
 const { extractText } = require('../../utils/html-sanitizer')
 
-// TODO
-const USD_SBD = 1.0
-const SBD_USD = 1.0
+const SBDUSD = 0.98281782 // TODO dynamic service
 
 /**
  * Search the articles
@@ -100,8 +98,9 @@ const searchBounties = async (req, h) => {
   }
 
   if (values) {
-    const min = parseFloat((values.min * USD_SBD).toFixed(2))
-    const max = parseFloat((values.max * USD_SBD).toFixed(2))
+    const min = parseFloat((values.min / SBDUSD).toFixed(2))
+    const max = parseFloat((values.max / SBDUSD).toFixed(2))
+    console.log(min, max)
     optionalConditions.amount = { '$elemMatch': { amount: { '$gte': min, '$lte': max }, currency: 'sbd' } }
   }
 
@@ -119,8 +118,9 @@ const searchBounties = async (req, h) => {
 
   bounties.forEach((bounty) => {
     bounty.body = extractText(bounty.body).substr(0, 250)
-    bounty.USD_SBD = USD_SBD
-    bounty.SBD_USD = SBD_USD
+    bounty.quotes = {
+      SBDUSD
+    }
   })
 
   const searchOccurrences = await getOccurrences('bounties', title, optionalConditions)
@@ -171,7 +171,7 @@ const getBountiesValues = async (req, h) => {
     { $group: { _id: '$amount.amount' } }
   ])
 
-  bountiesValues = bountiesValues.map((value) => parseInt(value._id * SBD_USD))
+  bountiesValues = bountiesValues.map((value) => Math.ceil(value._id * SBDUSD))
   return h.response({
     min: (Math.min(...bountiesValues)),
     max: (Math.max(...bountiesValues))

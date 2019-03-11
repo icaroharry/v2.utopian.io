@@ -9,6 +9,7 @@
   "private": true,
   "scripts": {
     "dev": "quasar dev -m ssr -p 8081",
+    "debug": "node --inspect=127.0.0.1:9230 ./node_modules/quasar-cli/bin/quasar dev -t mat",
     "build": "quasar build -m ssr -t mat",
     "precommit": "lint-staged",
     "lint": "eslint --ext .js,.vue src",

@@ -47,10 +47,10 @@ export default {
 <template lang="pug">
 .vote-component.flex.items-center(:class="compact ? 'compact' : ''")
   q-btn(
-  color="white"
-  :text-color="userVote === 1 ? 'primary' : 'black'"
-  icon="mdi-thumb-up"
-  @click.native="castVote"
+    color="white"
+    :text-color="userVote === 1 ? 'primary' : 'black'"
+    icon="mdi-thumb-up"
+    @click.native="castVote"
   )
   q-btn.votes(
     v-if="voteCount > 0"

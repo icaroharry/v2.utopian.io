@@ -3,10 +3,6 @@ const Mongoose = require('mongoose')
 const Schema = Mongoose.Schema
 
 const bounties = new Schema({
-  assignees: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Users'
-  }],
   activity: [
     {
       _id: false,
@@ -18,6 +14,12 @@ const bounties = new Schema({
       createdAt: { type: Date, default: Date.now }
     }
   ],
+  amount: [{
+    _id: false,
+    amount: { type: Number, required: true },
+    currency: { type: String, required: true, enum: ['sbd'] }
+  }],
+  assignee: { type: Schema.Types.ObjectId, ref: 'Users' },
   author: { type: Schema.Types.ObjectId, ref: 'Users', required: true },
   blockchains: [{
     _id: false,
@@ -27,13 +29,20 @@ const bounties = new Schema({
   body: { type: String, required: true },
   category: { type: String, required: true },
   deadline: { type: Date, required: true },
+  escrow: {
+    escrowId: { type: Number },
+    from: { type: String },
+    to: { type: String },
+    agent: { type: String },
+    status: { type: String, enum: ['fromSigned', 'toSigned'] }
+  },
   issue: { type: String },
   lang: { type: String, required: true },
   project: { type: Schema.Types.ObjectId, ref: 'Projects' },
   skills: { type: Array, required: true },
   slug: { type: String, required: true, index: true },
   slugs: { type: Array, index: true },
-  status: { type: String, required: true, enum: ['open', 'cancelled', 'solved', 'dispute'], default: 'open' },
+  status: { type: String, required: true, enum: ['open', 'inProgress', 'cancelled', 'solved', 'dispute'], default: 'open' },
   title: { type: String, required: true, text: true },
   upVotes: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },

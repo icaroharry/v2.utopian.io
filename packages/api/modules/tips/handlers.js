@@ -1,5 +1,4 @@
 const Boom = require('boom')
-const DSteem = require('dsteem')
 const Article = require('../articles/article.model')
 const User = require('../users/user.model')
 const Tip = require('./tip.model')
@@ -78,19 +77,22 @@ const createTip = async (req, h) => {
         continue
       }
 
-      const client = new DSteem.Client(process.env.STEEM_API, {
-        addressPrefix: process.env.STEEM_ADDRESS_PREFIX
-      })
-      const transaction = await client.database.getTransaction(data)
-      const transfer = transaction.operations.find(
-        // eslint-disable-next-line no-loop-func
-        (op) => op[0] === 'transfer' &&
-          op[1].from === from &&
-          op[1].to === to &&
-          op[1].amount === `${amount} ${currency.toUpperCase()}`
-      )
-      // The transfer was found in the blockchain
-      if (transfer) {
+      const block = await req.steem.api.getBlockAsync(data.block)
+      if (!block) {
+        throw Boom.badData('general.documentDoesNotExist')
+      }
+
+      const blockchainTransaction = block.transactions.find((t) => t.transaction_id === data.id)
+      if (!blockchainTransaction) {
+        throw Boom.badData('general.documentDoesNotExist')
+      }
+
+      const operation = blockchainTransaction.operations[0][1]
+      if (
+        operation.from === from &&
+        operation.to === to &&
+        operation.amount === `${amount} ${currency.toUpperCase()}`
+      ) {
         const exists = await Tip.findOne({
           objRef: obj,
           objId: id,

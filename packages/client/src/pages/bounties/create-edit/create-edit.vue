@@ -1,14 +1,14 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { maxLength, required, url } from 'vuelidate/lib/validators'
+import { maxLength, maxValue, minValue, required, url } from 'vuelidate/lib/validators'
 import FormWysiwyg from 'src/components/form/wysiwyg'
 import FormCategories from 'src/components/form/categories'
 import FormProject from 'src/components/form/project'
-import { SteemAccountRequired, SteemPost } from 'src/mixins/steem'
+import { Steem } from 'src/mixins/steem'
 
 export default {
   name: 'page-bounties-create-edit',
-  mixins: [SteemAccountRequired, SteemPost],
+  mixins: [Steem],
   components: {
     FormWysiwyg,
     FormCategories,
@@ -18,6 +18,7 @@ export default {
     return {
       bounty: {
         _id: null,
+        amount: null,
         category: null,
         body: '',
         deadline: null,
@@ -29,6 +30,8 @@ export default {
         skills: [],
         title: ''
       },
+      status: 'open',
+      steemAccountFunds: null,
       blockchains: [],
       submitting: false,
       projectError: null
@@ -36,6 +39,14 @@ export default {
   },
   validations: {
     bounty: {
+      amount: {
+        required,
+        minValue: minValue(0.001),
+        maxValue: maxValue(100000000),
+        minAccount (value) {
+          return value <= parseFloat(this.steemAccountFunds && this.steemAccountFunds.sbd)
+        }
+      },
       body: {
         required,
         maxLength: maxLength(250000)
@@ -72,6 +83,7 @@ export default {
         this.$router.push({ path: `/${this.$route.params.locale}/notfound` })
       } else {
         this.bounty._id = result._id
+        this.bounty.amount = result.amount.length > 0 ? result.amount[0].amount : null
         this.bounty.body = result.body
         this.bounty.category = result.category
         this.bounty.deadline = result.deadline
@@ -80,10 +92,12 @@ export default {
           this.bounty.project = result.project
         }
         this.bounty.skills = result.skills || []
+        this.status = result.status
         this.bounty.title = result.title
         this.blockchains = result.blockchains
       }
     }
+    this.steemAccountFunds = await this.getSteemAccountFunds()
   },
   methods: {
     ...mapActions('utils', ['setAppSuccess', 'setAppError']),
@@ -96,6 +110,7 @@ export default {
       'updateBlockchainData'
     ]),
     async submit () {
+      if (this.status !== 'open' || this.submitting) return
       this.submitting = true
       this.$v.bounty.$touch()
       if (this.$v.bounty.$invalid) {
@@ -117,7 +132,7 @@ export default {
       if (result) {
         const tags = ['utopian-io', result.category].concat(result.skills)
         const permlink = `${result.slug.split('/')[1]}-${Date.now()}`
-        const blockchainData = await this.post({
+        const blockchainData = await this.steemPost({
           url: `/${this.$route.params.locale}/bounties/${result.slug}`,
           body: result.body,
           permlink,
@@ -189,7 +204,11 @@ export default {
 
 <template lang="pug">
 div
-  h3 {{$t('bounties.createEdit.formTitle')}}
+  .row.gutter-sm
+    .col-md-8.col-sm-12.col-xs-12
+      h3 {{$t('bounties.createEdit.formTitle')}}
+    .col-md-4.col-sm-12.col-xs-12.flex.justify-end
+      .bounty-status(:class="status") {{ $t(`search.searchForm.bountyStatus.status.${status}`) }}
   .row.gutter-sm.bounty-form-container
     .col-md-8.col-sm-12.col-xs-12
       q-field(
@@ -217,7 +236,7 @@ div
       q-field.q-field-no-input(
         :label="`${$t('bounties.createEdit.body.label')}*`"
         orientation="vertical"
-        :helper="$t('bounties.createEdit.body.help')"
+        :helper="$t('bounties.createEdit.body.helper')"
         :error="$v.bounty.body.$error"
       )
         form-wysiwyg(
@@ -243,7 +262,7 @@ div
       )
       q-field(
         :label="`${$t('bounties.createEdit.deadline.label')}*`"
-        :helper="$t('bounties.createEdit.deadline.help')"
+        :helper="$t('bounties.createEdit.deadline.helper')"
         orientation="vertical"
         :error="$v.bounty.deadline.$error"
       )
@@ -270,26 +289,63 @@ div
             :min-characters="2"
             :max-results="10"
           )
+      q-field(
+        :label="`${$t('bounties.createEdit.amount.label')}*`"
+        orientation="vertical"
+        :error="$v.bounty.amount.$error"
+        :helper="$t('bounties.createEdit.amount.helper', { amount: ((steemAccountFunds && parseFloat(steemAccountFunds.sbd)) || 0) })"
+      )
+        q-input(
+          v-model.trim="bounty.amount"
+          type="number"
+          :placeholder="$t('bounties.createEdit.amount.placeholder')"
+          @keyup.enter="submit"
+        )
       q-btn.full-width.q-mt-lg(
         color="primary"
         :label="$t(`bounties.createEdit.${bounty._id ? 'update' : 'save'}.label`)"
         @click="submit"
         :loading="submitting"
+        :disabled="status !== 'open'"
       )
+      .update-disabled(v-if="status !== 'open'") {{$t('bounties.createEdit.update.disabled')}}
       a.steemit-link(
         v-if="blockchains.some(b => b.name === 'steem')"
         :href="getSteemitUrl()"
         target="_blank"
       )
         | {{$t('bounties.createEdit.blockchains.steem.external')}}
+
 </template>
 
 <style lang="stylus">
-  .bounty-form-container
-    .steemit-link
-      display block
-      font-size 12px
-      text-decoration none
-      margin-top 5px
-      color #06D6A9
+@import "~variables"
+.bounty-status
+  padding 4px 8px
+  color #FFF
+  font-weight bold
+  font-size 16px
+  text-transform uppercase
+  line-height 30px
+  &.open
+    background-color $light-green-14
+  &.inProgress
+    background-color $primary
+  &.solved
+    background-color $green-10
+  &.cancelled
+    background-color $deep-orange
+  &.dispute
+    background-color $red
+.bounty-form-container
+  .steemit-link
+    display block
+    font-size 12px
+    text-decoration none
+    margin-top 5px
+    color #06D6A9
+  .update-disabled
+    margin-top 5px
+    font-style italic
+    font-size 12px
 </style>

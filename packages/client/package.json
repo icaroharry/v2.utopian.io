@@ -20,6 +20,7 @@
   "scripts": {
     "build": "quasar build -m ssr -t mat",
     "dev": "quasar dev -m ssr -t mat",
+    "debug": "node --inspect=127.0.0.1:9229 ./node_modules/quasar-cli/bin/quasar dev -t mat",
     "update:i18n": "node ../i18n/lib/index.js",
     "precommit": "lint-staged",
     "lint": "eslint --ext .js,.vue src",
@@ -36,13 +37,14 @@
     "audit:node_modules": "yarn audit --json > ./test/audits/node_modules_audit.json",
     "audit:licenses": "nlf --summary detail > ./test/audits/licenses.txt",
     "audit:lighthouse": "lighthouse http://localhost:3000 view --output-path=./test/lighthouse/reports/index.html --config-path=./test/lighthouse/configs/full-config.js",
-    "vue-devtools": "./node_modules/.bin/vue-devtools"
+    "vue-devtools": "./node_modules/.bin/vue-devtools",
+    "postinstall": "patch-package"
   },
   "devDependencies": {
     "@babel/plugin-syntax-dynamic-import": "7.0.0",
     "@octokit/rest": "15.18.0",
     "@sentry/browser": "4.4.0",
-    "@steemit/steem-js": "0.7.3",
+    "@steemit/steem-js": "0.7.4",
     "@utopian/i18n": "1.0.0",
     "@utopian/testing": "1.0.0",
     "aes-js": "3.1.2",
@@ -56,7 +58,6 @@
     "concurrently": "4.1.0",
     "css-loader": "1.0.1",
     "dotenv": "6.1.0",
-    "dsteem": "0.11.2",
     "eslint": "5.9.0",
     "eslint-config-standard": "12.0.0",
     "eslint-friendly-formatter": "4.0.1",
@@ -73,6 +74,8 @@
     "jsonwebtoken": "8.4.0",
     "lint-staged": "8.1.0",
     "marked": "0.5.2",
+    "patch-package": "6.0.5",
+    "postinstall-postinstall": "2.0.0",
     "pug": "2.0.3",
     "pug-plain-loader": "1.0.0",
     "quasar-cli": "0.17.22",

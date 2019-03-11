@@ -7,15 +7,22 @@ const { getUserInformation, getProviderToken } = require('../../utils/auth')
 
 const getToken = async (req, h) => {
   if (req.payload.grant_type === 'authorization_code') {
-    const providerToken = await getProviderToken(req.payload.provider, req.payload.code)
-    const providerUser = await getUserInformation(req.payload.provider, providerToken)
+    const { provider, code } = req.payload
+    const providerToken = await getProviderToken(provider, code)
+    const providerUser = await getUserInformation(provider, providerToken)
 
-    const user = await User.findOne({
-      '$or': [
-        { authProviders: { $elemMatch: { type: req.payload.provider, username: providerUser.id } } },
-        { '$and': [{ email: { '$exists': true } }, { email: providerUser.email }] }
-      ]
-    })
+    let findQuery
+    if (provider === 'github') {
+      findQuery = {
+        authProviders: { $elemMatch: { type: provider, username: providerUser.id } }
+      }
+    } else {
+      findQuery = {
+        email: providerUser.email
+      }
+    }
+
+    const user = await User.findOne(findQuery)
     // The user doesn't exist so will generate a temporary token that will only allow
     // him to create his account
     // The github token is passed in the token so we can store it in the database once the account is created
@@ -24,7 +31,7 @@ const getToken = async (req, h) => {
         scopes: ['createAccount'],
         expiresIn: 1,
         providerToken,
-        providerType: req.payload.provider
+        providerType: provider
       })
 
       return h.response({
@@ -40,7 +47,7 @@ const getToken = async (req, h) => {
     await User.updateOne(
       { _id: user._id },
       { $addToSet: { authProviders: {
-        type: req.payload.provider,
+        type: provider,
         username: providerUser.id
       } } }
     )
@@ -48,7 +55,7 @@ const getToken = async (req, h) => {
     // Requesting a login from github have to override the existing access token
     // Also sets the token of a new provider
     await User.updateOne(
-      { _id: user._id, 'authProviders.type': req.payload.provider },
+      { _id: user._id, 'authProviders.type': provider },
       { $set: { 'authProviders.$.token': providerToken } }
     )
 

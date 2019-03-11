@@ -14,6 +14,7 @@ export const setProposals = (state, { proposals, skip, limit, total }) => {
 export const addNewProposal = (state, newProposal) => {
   state.proposals.push(newProposal)
   state.total += 1
+  state.bounty.userProposal = true
 }
 
 export const clearProposals = (state) => {
@@ -27,6 +28,7 @@ export const deleteProposal = (state, id) => {
   const idx = state.proposals.findIndex((proposal) => proposal._id === id)
   state.proposals.splice(idx, 1)
   state.total -= 1
+  state.bounty.userProposal = false
 }
 
 export const updateProposal = (state, upToDateProposal) => {
@@ -40,4 +42,14 @@ export const updateProposal = (state, upToDateProposal) => {
 
 export const addNewActivity = (state, activity) => {
   state.bounty.activity.push(activity)
+}
+
+export const assignUser = (state, data) => {
+  state.bounty.status = data.status
+  state.bounty.assignee = data.assignee
+  state.bounty.escrow = data.escrow
+}
+
+export const updateEscrowStatus = (state, status) => {
+  state.bounty.escrow.status = status
 }

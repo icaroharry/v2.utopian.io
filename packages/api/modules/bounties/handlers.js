@@ -6,7 +6,10 @@ const { extractText, sanitizeHtml } = require('../../utils/html-sanitizer')
 const Bounty = require('./bounty.model')
 const Category = require('../categories/category.model')
 const Proposal = require('./proposal.model')
+const User = require('../users/user.model')
 const Vote = require('../votes/vote.model')
+
+const SBDUSD = 0.98281782 // TODO dynamic service
 
 /**
  * Creates the bounty
@@ -19,7 +22,7 @@ const Vote = require('../votes/vote.model')
 const createBounty = async (req, h) => {
   const author = req.auth.credentials.uid
   const username = req.auth.credentials.username
-  const { body, ...bounty } = req.payload
+  const { amount, body, ...bounty } = req.payload
   let slug = `${username}/${slugify(bounty.title)}`
   if (await Bounty.countDocuments({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }], author }) > 0) {
     slug += `-${Date.now()}`
@@ -28,11 +31,12 @@ const createBounty = async (req, h) => {
   const lang = Franc(extractText(body), {})
 
   const newBounty = new Bounty({
+    ...bounty,
+    amount: [{ amount, currency: 'sbd' }], // This will later allow multiple currencies bounty load
     author,
     body: sanitizeHtml(body),
     lang,
-    slug,
-    ...bounty
+    slug
   })
 
   // Does the category exists and is it available?
@@ -93,15 +97,17 @@ const updateBounty = async (req, h) => {
     throw Boom.badData('general.categoryNotAvailable')
   }
 
+  const { amount, body, ...bounty } = req.payload
   const response = await Bounty.findOneAndUpdate(
     { author, _id: req.params.id },
     {
-      body: sanitizeHtml(req.payload.body),
+      ...bounty,
+      body: sanitizeHtml(body),
       lang,
       slug,
       slugs,
-      updatedAt: Date.now(),
-      ...req.payload
+      amount: [{ amount, currency: 'sbd' }], // This will later allow multiple currencies bounty load
+      updatedAt: Date.now()
     },
     { new: true }
   )
@@ -135,9 +141,9 @@ const getBountyForEdit = async (req, h) => {
   const userId = req.auth.credentials.uid
   const slug = `${req.params.author}/${req.params.slug}`
   const bounty = await Bounty.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] })
-    .populate('assignees', 'username avatarUrl')
+    .populate('assignee', 'username avatarUrl')
     .populate('project', 'name')
-    .select('author assignees body category deadline issue project status title skills blockchains')
+    .select('amount author assignees body category deadline issue project status title skills blockchains')
   if (!bounty) return h.response({})
   if (bounty.author.toString() === userId) {
     return h.response(bounty)
@@ -163,10 +169,10 @@ const getBounty = async (req, h) => {
   // TODO view count todo => https://redditblog.com/2017/05/24/view-counting-at-reddit/
   const bounty = await Bounty.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }], deletedAt: null })
     .populate('author', 'username avatarUrl job reputation')
-    .populate('assignees', 'username avatarUrl')
+    .populate('assignee', 'username avatarUrl')
     .populate('activity.user', 'username avatarUrl')
     .populate('project', 'avatarUrl name slug')
-    .select('activity author assignees body category deadline issue project viewsIPs skills status title upVotes')
+    .select('amount activity author assignees body category createdAt deadline escrow issue project skills status title upVotes')
     .lean()
   if (!bounty) return h.response(null)
 
@@ -185,6 +191,11 @@ const getBounty = async (req, h) => {
     if (proposal > 0) {
       bounty.userProposal = true
     }
+  }
+
+  bounty.extract = extractText(bounty.body).substr(0, 250)
+  bounty.quotes = {
+    SBDUSD
   }
 
   return h.response(bounty)
@@ -306,8 +317,8 @@ const updateProposal = async (req, h) => {
     throw Boom.badData('general.documentDoesNotExist')
   }
 
-  const bountyDb = await Bounty.findOne({ _id: proposalDb.bounty }).select('assignees')
-  if (bountyDb.assignees && bountyDb.assignees.length > 0) {
+  const bountyDb = await Bounty.findOne({ _id: proposalDb.bounty }).select('assignee')
+  if (bountyDb.assignee) {
     throw Boom.badData('bounty.notAvailable')
   }
 
@@ -340,8 +351,8 @@ const deleteProposal = async (req, h) => {
     throw Boom.badData('general.documentDoesNotExist')
   }
 
-  const bountyDb = await Bounty.findOne({ _id: proposalDb.bounty }).select('assignees')
-  if (bountyDb.assignees && bountyDb.assignees.length > 0) {
+  const bountyDb = await Bounty.findOne({ _id: proposalDb.bounty }).select('assignee')
+  if (bountyDb.assignee) {
     throw Boom.badData('bounty.notAvailable')
   }
 
@@ -409,6 +420,179 @@ const searchSkills = async (req, h) => {
   return h.response(skills)
 }
 
+/**
+ * Return the steem username of the sender and recipient of the escrow
+ *
+ * @param {object} req - request
+ * @payload {object} req.payload.id - user id who made the proposal
+ * @param {object} h - response
+ *
+ * @author Grégory LATINIER
+ */
+const escrowAccounts = async (req, h) => {
+  const senderId = req.auth.credentials.uid
+  const receiverId = req.payload.id
+
+  const senderDb = await User.findOne({ _id: senderId }).select('blockchainAccounts')
+  const senderAccount = senderDb.blockchainAccounts.find((a) => a.blockchain === 'steem')
+  const sender = senderAccount && senderAccount.address
+  const receiverDb = await User.findOne({ _id: receiverId }).select('blockchainAccounts')
+  const receiverAccount = receiverDb.blockchainAccounts.find((a) => a.blockchain === 'steem')
+  const receiver = receiverAccount && receiverAccount.address
+
+  return h.response({
+    sender,
+    receiver
+  })
+}
+
+/**
+ * As a bounty author, assign a user after a proposal
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ *
+ * @author Grégory LATINIER
+ */
+const assignUser = async (req, h) => {
+  const author = req.auth.credentials.uid
+  const { id, escrowId, from, to, agent, assignee, transaction } = req.payload
+
+  const bounty = await Bounty.findOne({ _id: id, author })
+  if (!bounty) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  const block = await req.steem.api.getBlockAsync(transaction.block)
+  if (!block) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  const blockchainTransaction = block.transactions.find((t) => t.transaction_id === transaction.id)
+  if (!blockchainTransaction) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  const operation = blockchainTransaction.operations[0][1]
+  if (
+    operation.from !== from ||
+    operation.to !== to ||
+    operation.agent !== agent ||
+    operation.escrow_id !== parseInt(escrowId) ||
+    parseFloat(operation.sbd_amount).toFixed(3) !== parseFloat(bounty.amount[0].amount).toFixed(3) ||
+    parseFloat(operation.fee).toFixed(3) !== (parseFloat(bounty.amount[0].amount) * 5 / 100).toFixed(3)
+  ) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  const assignedUser = await User.findOne({ _id: assignee }).select('username avatarUrl')
+  const activity = {
+    user: author,
+    color: 'primary',
+    icon: 'mdi-clipboard-account',
+    key: 'assign',
+    data: {
+      assignee: assignedUser.username
+    },
+    createdAt: Date.now()
+  }
+  const escrow = { escrowId, from, to, agent, status: 'fromSigned' }
+  bounty.activity.push(bounty.activity.create(activity))
+  const response = await Bounty.findOneAndUpdate(
+    { _id: id, author },
+    {
+      activity: bounty.activity,
+      assignee,
+      status: 'inProgress',
+      escrow
+    },
+    { new: true }
+  )
+
+  if (response) {
+    activity.user = await User.findOne({ _id: author }).select('username avatarUrl')
+    return h.response({
+      activity,
+      assignee: assignedUser,
+      escrow,
+      status: 'inProgress'
+    })
+  }
+
+  return h.response(null)
+}
+
+/**
+ * As an assignee, accept the escrow related to the bounty
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ *
+ * @author Grégory LATINIER
+ */
+const acceptBounty = async (req, h) => {
+  const assignee = req.auth.credentials.uid
+  const { id, transaction } = req.payload
+
+  const bounty = await Bounty.findOne({ _id: id, assignee })
+  if (!bounty) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  const block = await req.steem.api.getBlockAsync(transaction.block)
+  if (!block) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  const blockchainTransaction = block.transactions.find((t) => t.transaction_id === transaction.id)
+  if (!blockchainTransaction) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  const operation = blockchainTransaction.operations[0][1]
+  if (
+    operation.from !== bounty.escrow.from ||
+    operation.to !== bounty.escrow.to ||
+    operation.agent !== bounty.escrow.agent ||
+    operation.who !== bounty.escrow.to ||
+    operation.escrow_id !== parseInt(bounty.escrow.escrowId) ||
+    !operation.approve
+  ) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  const activity = {
+    user: assignee,
+    color: 'primary',
+    icon: 'mdi-account-check',
+    key: 'accept',
+    data: {},
+    createdAt: Date.now()
+  }
+  bounty.activity.push(bounty.activity.create(activity))
+  const response = await Bounty.findOneAndUpdate(
+    { _id: id, assignee },
+    {
+      activity: bounty.activity,
+      escrow: {
+        ...bounty.escrow,
+        status: 'toSigned'
+      }
+    },
+    { new: true }
+  )
+
+  if (response) {
+    activity.user = await User.findOne({ _id: assignee }).select('username avatarUrl')
+    return h.response({
+      activity,
+      escrowStatus: 'toSigned'
+    })
+  }
+
+  return h.response(null)
+}
+
 module.exports = {
   createBounty,
   updateBounty,
@@ -419,5 +603,8 @@ module.exports = {
   updateProposal,
   deleteProposal,
   getProposals,
-  searchSkills
+  searchSkills,
+  escrowAccounts,
+  assignUser,
+  acceptBounty
 }

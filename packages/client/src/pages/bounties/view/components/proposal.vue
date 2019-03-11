@@ -21,7 +21,7 @@ export default {
       if (this.update) {
         await this.updateProposal({ body: this.proposalBody, id: this.id })
       } else {
-        await this.saveProposal({ body: this.proposalBody, bounty: this.$parent.$parent.id })
+        await this.saveProposal({ body: this.proposalBody, bounty: this.bounty._id })
         setScrollPosition(getScrollTarget(document.body), document.body.scrollHeight, 500)
       }
       this.$parent.$parent.createProposal = false
@@ -31,7 +31,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth', ['user'])
+    ...mapGetters('auth', ['user']),
+    ...mapGetters('bounties', ['bounty'])
   }
 }
 </script>

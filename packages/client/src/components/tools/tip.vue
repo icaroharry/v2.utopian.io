@@ -1,11 +1,11 @@
 <script>
 import { mapActions } from 'vuex'
 import { decimal, minValue, required, requiredUnless } from 'vuelidate/lib/validators'
-import { SteemTransfer } from 'src/mixins/steem'
+import { Steem } from 'src/mixins/steem'
 
 export default {
   name: 'tip',
-  mixins: [SteemTransfer],
+  mixins: [Steem],
   props: ['obj', 'id', 'url'],
   data () {
     return {
@@ -81,7 +81,7 @@ export default {
       this.currency = currency
       if (currency === 'steem') {
         this.$v.steemForm.$reset()
-        this.steemAccountFunds = await this.loadAccountFunds()
+        this.steemAccountFunds = await this.getSteemAccountFunds()
       }
       this.$refs.tipStepper.next()
     },
@@ -99,13 +99,17 @@ export default {
         if (this.$v.steemForm.$invalid) {
           return
         }
-        this.steemSenderUser = this.getSteemSenderUser()
+        if (!await this.isSteemKeyValid(this.steemForm.activeKey, 'active')) {
+          this.setAppError('bounties.view.assignModal.errors.invalidActiveKey')
+          return
+        }
+        this.steemSenderUser = this.getUserSteemAccount()
       } else if (this.step === 'confirmation') {
         this.submitting = true
         const tips = []
         let data = null
         if (this.currency === 'steem') {
-          data = await this.transfer({
+          data = await this.transferSteems({
             steem: this.steemForm.steem,
             sbd: this.steemForm.sbd,
             key: this.steemForm.activeKey,

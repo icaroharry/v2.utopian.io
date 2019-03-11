@@ -6,9 +6,10 @@ export default {
   props: ['bounty'],
   computed: {
     ...mapGetters('auth', ['user']),
+    // TODO init this on app load
     ...mapGetters('utils', ['categories']),
     category: function () {
-      return this.categories.find((category) => category.key === this.bounty.category)
+      return this.categories.find((category) => category.key === this.bounty.category) || {}
     },
     amount: function () {
       return this.bounty.amount.find((o) => o.currency === 'sbd')
@@ -44,13 +45,13 @@ export default {
           .category {{category.text}}
       router-link.link(:to="`/${$route.params.locale}/bounties/${bounty.slug}`")
         .title.q-mt-md {{bounty.title}}
-      .bounty-body.q-mt-md(v-html="bounty.body")
+      .bounty-body.q-mt-md(v-html="bounty.extract || bounty.body")
       .row
         .skills(v-for="skill in bounty.skills", :key="skill") {{skill}}
       .row.flex.justify-between.items-center.bounty-footer
         //- TODO
         .row.amount {{amount.amount}} SBD
-          .fiat (${{(amount.amount * bounty.SBD_USD).toFixed(2)}} USD)
+          .fiat (${{(amount.amount * bounty.quotes['SBDUSD']).toFixed(2)}} USD)
         .status(:class="bounty.status") {{$t(`search.searchForm.bountyStatus.status.${bounty.status}`)}}
 </template>
 

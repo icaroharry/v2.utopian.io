@@ -12,6 +12,7 @@
     "precommit": "lerna run --concurrency 1 --stream precommit",
     "lint:fix": "lerna run --no-bail lint:fix",
     "dev": "lerna run dev --stream",
+    "debug": "lerna run debug --stream",
     "test": "lerna run test --stream",
     "audit:snyk": "lerna run audit:snyk --stream",
     "audit:node_modules": "lerna run audit:node_modules --stream",

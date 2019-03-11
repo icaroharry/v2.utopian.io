@@ -30,7 +30,8 @@ module.exports = {
       { plugin: 'lout' },
       { plugin: './config/plugins/jwt-auth' },
       { plugin: './config/plugins/routes' },
-      { plugin: './config/plugins/logger' }
+      { plugin: './config/plugins/logger' },
+      { plugin: './config/plugins/steem' }
     ]
   }
 }

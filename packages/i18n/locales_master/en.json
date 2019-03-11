@@ -146,7 +146,7 @@
   },
   "mixins": {
     "steem": {
-      "memoTip": "You received a tip from a Utopian Colony user for this contribution: ",
+      "memoTip": "You received a tip from a Utopian Colony user for this contribution:",
       "postFooter": "Original content published on utopian.io",
       "errors": {
         "keys": "We couldn,t publish to the blockchain, your encryption was probably reset, please update your posting key.",
@@ -173,7 +173,7 @@
       },
       "body": {
         "label": "Content",
-        "help": "What do you want to share with us? (Hint: Type @@ to find a username)"
+        "helper": "What do you want to share with us? (Hint: Type @@ to find a username)"
       },
       "formTitle": "Write anything about a project",
       "project": {
@@ -215,10 +215,17 @@
   },
   "bounties": {
     "activity": {
+      "accept": "<strong>@{user}</strong> has accepted the assignment",
+      "assign": "<strong>@{user}</strong> has assigned <strong>@{assignee}</strong> to this bounty",
       "proposal": "<strong>@{user}</strong> has made a proposal",
       "solution": "<strong>@{user}</strong> has submitted a solution"
     },
     "createEdit": {
+      "amount": {
+        "label": "Amount",
+        "placeholder": "Ex: 100 SBD",
+        "helper": "No SBD are transferred for now. They will be held by utopian.escrow when you assign someone to the bounty. You currently have {amount} SBD on your Steem account."
+      },
       "blockchains": {
         "steem": {
           "external": "View it on Steemit.com"
@@ -226,11 +233,11 @@
       },
       "body": {
         "label": "Content",
-        "help": "What do you want to share with us? (Hint: Type @@ to find a username)"
+        "helper": "What do you want to share with us? (Hint: Type @@ to find a username)"
       },
       "deadline": {
         "label": "Deadline",
-        "help": "If no solution is submitted by the deadline, the bounty will be returned."
+        "helper": "If no solution is submitted by the deadline, the bounty will be returned."
       },
       "formTitle": "What do you need to be done?",
       "issue": {
@@ -256,11 +263,42 @@
       },
       "update": {
         "label": "Update my bounty",
-        "successMsg": "The bounty was updated!"
+        "successMsg": "The bounty was updated!",
+        "disabled": "You can only update a bounty that is not assigned"
       }
     },
     "view": {
+      "acceptAssignModal": {
+        "accept": "Accept",
+        "acceptAssignment": "Accept the assignment",
+        "activeKey": {
+          "label": "Steem active key",
+          "helper": "Your key will not be transmitted to our server."
+        },
+        "cancel": "Cancel",
+        "text": "You've been assigned to this task. By accepting it, you agree to provide the solution by <strong>{deadline}</strong>. You understand that by not providing a solution before the deadline or providing a low quality solution may incur your assignment to be removed.",
+        "title": "Accept this task"
+      },
+      "assignee": "Assignee",
+      "assignModal": {
+        "activeKey": {
+          "label": "Steem active key",
+          "helper": "Your key will not be transmitted to our server."
+        },
+        "assign": "Assign",
+        "cancel": "Cancel",
+        "faq": "Read the FAQ",
+        "text": "Choose wisely. Collaborating with the right talents is crucial for the success of your project. Funds will now move to a decentralized escrow service until this task is either completed or cancelled.",
+        "title": "Assign this task",
+        "errors": {
+          "escrow": "Couldn't create the escrow, please contact the support.",
+          "invalidActiveKey": "Your active key is invalid",
+          "notEnoughMoney": "Your account doesn't have enough money to create the escrow. Please transfer some funds to your account."
+        }
+      },
+      "deadline": "Deadline: {deadline}",
       "proposals": {
+        "assign": "Assign to the bounty",
         "delete": "Delete",
         "edit": "Edit",
         "loadMore": "Load more",
