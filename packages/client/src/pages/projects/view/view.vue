@@ -3,13 +3,15 @@ import { mapGetters } from 'vuex'
 import SocialShare from 'src/components/tools/social-share'
 import DetailsTab from './components/details-tab'
 import UpdatesTab from './components/updates-tab'
+import BountiesTab from './components/bounties-tab'
 
 export default {
   name: 'page-projects-view',
   components: {
     SocialShare,
     DetailsTab,
-    UpdatesTab
+    UpdatesTab,
+    BountiesTab
   },
   preFetch ({ store, currentRoute, redirect }) {
     return store.dispatch('projects/loadProject', {
@@ -138,6 +140,7 @@ export default {
         slot="title"
         name="bounties"
         :label="$t('projects.view.tabs.bounties')"
+        @select="() => this.initTab('bountiesTab')"
       )
       q-tab(
         slot="title"
@@ -146,6 +149,7 @@ export default {
       )
 
       updates-tab(ref="updatesTab")
+      bounties-tab(ref="bountiesTab")
       details-tab
 </template>
 
@@ -243,9 +247,11 @@ export default {
           @media (max-width $breakpoint-sm-max)
             width 100%
           .stat
+            width 33%
             text-align center
             padding 5px
             padding-top 10px
+            display inline-block
             .stat-title
               font-size 27px
               font-weight 600

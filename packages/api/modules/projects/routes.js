@@ -79,6 +79,16 @@ routes.push([
   },
   {
     method: 'POST',
+    path: '/v1/project/bounties',
+    handler: (req, h) => Handlers.getBounties(req, h),
+    options: {
+      auth: false,
+      tags: ['projects'],
+      validate: Validate.getBounties
+    }
+  },
+  {
+    method: 'POST',
     path: '/v1/project/updates',
     handler: (req, h) => Handlers.getUpdates(req, h),
     options: {

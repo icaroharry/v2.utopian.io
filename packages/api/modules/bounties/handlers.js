@@ -143,7 +143,7 @@ const getBountyForEdit = async (req, h) => {
   const bounty = await Bounty.findOne({ $or: [{ slugs: { $elemMatch: { $eq: slug } } }, { slug }] })
     .populate('assignee', 'username avatarUrl')
     .populate('project', 'name')
-    .select('amount author assignees body category deadline issue project status title skills blockchains')
+    .select('amount author assignees body category deadline issue project slug status title skills blockchains')
   if (!bounty) return h.response({})
   if (bounty.author.toString() === userId) {
     return h.response(bounty)

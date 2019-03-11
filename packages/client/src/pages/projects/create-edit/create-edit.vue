@@ -344,6 +344,7 @@ export default {
 <template lang="pug">
 div
   h3 {{$t('projects.createEdit.title')}}
+    q-btn(color="primary", icon="mdi-eye", flat, :to="`/${$route.params.locale}/projects/${project.slug}`")
   h4 {{$t('projects.createEdit.subtitle')}}
 
   .row.gutter-sm.project-form-container

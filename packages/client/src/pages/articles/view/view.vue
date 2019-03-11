@@ -153,6 +153,15 @@ export default {
       .q-card
         background #fff
         padding 0 10px
+        position relative
+        .edit-article
+          position absolute
+          font-size 12px
+          right -7px
+          top -7px
+          padding 0
+          .q-icon
+            font-size 1.4em
       .project
         font-weight 600
         font-size 15px

@@ -92,6 +92,16 @@ const getUpdates = {
   }
 }
 
+const getBounties = {
+  payload: {
+    title: Joi.string().trim().max(100).optional().allow(''),
+    project: validation.id.required(),
+    limit: Joi.number().required().max(20),
+    skip: Joi.number().required(),
+    sortBy: Joi.object().keys({ createdAt: Joi.number().valid(-1, 1) }).required()
+  }
+}
+
 module.exports = {
   createProject,
   updateProject,
@@ -101,5 +111,6 @@ module.exports = {
   getProjectView,
   searchProject,
   hasRole,
-  getUpdates
+  getUpdates,
+  getBounties
 }

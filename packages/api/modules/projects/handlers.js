@@ -8,6 +8,8 @@ const User = require('../users/user.model')
 const { getUserProjectPermission } = require('../../utils/github')
 const { sanitizeHtml, extractText } = require('../../utils/html-sanitizer')
 
+const SBDUSD = 0.98281782 // TODO dynamic service
+
 /**
  * Get a project with its populated fields for update
  *
@@ -375,8 +377,19 @@ const getProjectView = async (req, h) => {
 
   project.articlesCount = await Article.countDocuments({ project: project._id })
   project.bountiesCount = await Bounty.countDocuments({ project: project._id })
-  // TODO contributors count
-  project.contributorsCount = 0
+  const articlesContributors = await Article.aggregate([
+    { '$match': { project: project._id } },
+    { '$group': { _id: null, authors: { $addToSet: '$author' } } }
+  ])
+  const bountiesContributors = await Bounty.aggregate([
+    { '$match': { project: project._id } },
+    { '$group': { _id: null, authors: { $addToSet: '$author' } } }
+  ])
+  const authors = new Set([
+    ...((articlesContributors[0] && articlesContributors[0].authors) || []).map((a) => a.toString()),
+    ...((bountiesContributors[0] && bountiesContributors[0].authors) || []).map((a) => a.toString())]
+  )
+  project.contributorsCount = authors.size
 
   if (tab === 'updates') {
     project.updates = await Article.find({
@@ -388,23 +401,23 @@ const getProjectView = async (req, h) => {
 
   return h.response(project)
 }
+
 /**
  * Load the project updates
  *
  * @param {object} req - request
- * @param {object} req.params - request parameters
- * @param {string} req.params.project - the project to retrieve the information
- * @param {string} req.params.title - article title to be searched
- * @param {number} req.params.limit - max limit of documents
- * @param {number} req.params.skip - quantity of documents to be skipped
- * @param {object} req.params.sortBy - sort by object
- * @param {object} req.params.sortBy.createdAt - order by oldest or newest date
+ * @param {object} req.payload - request parameters
+ * @param {string} req.payload.project - the project to retrieve the information
+ * @param {string} req.payload.title - article title to be searched
+ * @param {number} req.payload.limit - max limit of documents
+ * @param {number} req.payload.skip - quantity of documents to be skipped
+ * @param {object} req.payload.sortBy - sort by object
+ * @param {object} req.payload.sortBy.createdAt - order by oldest or newest date
  * @param {object} h - response
  *
  * @returns project updates
  * @author Adriel Santos
  */
-
 const getUpdates = async (req, h) => {
   const { project, title, limit, skip, sortBy } = req.payload
   const optionalConditions = {}
@@ -424,6 +437,50 @@ const getUpdates = async (req, h) => {
     article.body = extractText(article.body).substr(0, 250)
   })
   return h.response(articles)
+}
+
+/**
+ * Load the project bounties
+ *
+ * @param {object} req - request
+ * @param {object} req.payload - request parameters
+ * @param {string} req.payload.project - the project to retrieve the information
+ * @param {string} req.payload.title - bounty title to be searched
+ * @param {number} req.payload.limit - max limit of documents
+ * @param {number} req.payload.skip - quantity of documents to be skipped
+ * @param {object} req.payload.sortBy - sort by object
+ * @param {object} req.payload.sortBy.createdAt - order by oldest or newest date
+ * @param {object} h - response
+ *
+ * @returns project bounties
+ * @author Grégory LATINIER
+ */
+const getBounties = async (req, h) => {
+  const { project, title, limit, skip, sortBy } = req.payload
+  const optionalConditions = {}
+  if (title) {
+    optionalConditions.title = { '$regex': title, '$options': 'i' }
+  }
+
+  const bounties = await Bounty.find({
+    project,
+    ...optionalConditions })
+    .sort(sortBy)
+    .limit(limit)
+    .skip(skip)
+    .populate('author', 'username avatarUrl')
+    .populate('assignee', 'username avatarUrl')
+    .populate('project', 'name avatarUrl slug')
+    .select('author body createdAt slug skills title category status amount')
+    .lean()
+
+  bounties.forEach((bounty) => {
+    bounty.body = extractText(bounty.body).substr(0, 250)
+    bounty.quotes = {
+      SBDUSD
+    }
+  })
+  return h.response(bounties)
 }
 
 /**
@@ -494,5 +551,6 @@ module.exports = {
   getProjectView,
   searchProject,
   hasRole,
-  getUpdates
+  getUpdates,
+  getBounties
 }

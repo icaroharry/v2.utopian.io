@@ -446,6 +446,28 @@
       "writeArticle": {
         "label": "Write an article"
       },
+      "bounties": {
+        "sortBy": {
+          "placeholder": "Sort by",
+          "options": {
+            "newestDate": {
+              "label": "Date (newest)"
+            },
+            "oldestDate": {
+              "label": "Date (oldest)"
+            }
+          }
+        },
+        "search": {
+          "placeholder": "Type your search"
+        },
+        "loadMore": {
+          "label": "Load more"
+        },
+        "noBounties": {
+          "label": "No bounties found"
+        }
+      },
       "updates": {
         "sortBy": {
           "placeholder": "Sort by",

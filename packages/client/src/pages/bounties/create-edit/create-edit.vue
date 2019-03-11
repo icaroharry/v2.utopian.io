@@ -16,6 +16,7 @@ export default {
   },
   data () {
     return {
+      slug: null,
       bounty: {
         _id: null,
         amount: null,
@@ -95,6 +96,7 @@ export default {
         this.status = result.status
         this.bounty.title = result.title
         this.blockchains = result.blockchains
+        this.slug = result.slug
       }
     }
     this.steemAccountFunds = await this.getSteemAccountFunds()
@@ -207,6 +209,7 @@ div
   .row.gutter-sm
     .col-md-8.col-sm-12.col-xs-12
       h3 {{$t('bounties.createEdit.formTitle')}}
+        q-btn(color="primary", icon="mdi-eye", flat, :to="`/${$route.params.locale}/bounties/${slug}`")
     .col-md-4.col-sm-12.col-xs-12.flex.justify-end
       .bounty-status(:class="status") {{ $t(`search.searchForm.bountyStatus.status.${status}`) }}
   .row.gutter-sm.bounty-form-container

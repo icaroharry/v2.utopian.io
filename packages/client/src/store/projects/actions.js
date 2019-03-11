@@ -80,3 +80,16 @@ export const hasRole = async (context, data) =>
     url: '/v1/projects/hasrole',
     data
   })
+
+export const getProjectBounties = async (context, data) => {
+  const bounties = await API.call({
+    context,
+    method: 'post',
+    url: `/v1/project/bounties`,
+    data
+  })
+  if (data.skip === 0) {
+    context.commit('deleteProjectBounties')
+  }
+  context.commit('setProjectBounties', bounties)
+}

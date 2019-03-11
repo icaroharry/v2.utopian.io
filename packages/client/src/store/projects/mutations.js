@@ -19,3 +19,17 @@ export const deleteProjectUpdates = (state) => {
     updates: []
   }
 }
+
+export const setProjectBounties = (state, bounties) => {
+  state.project = {
+    ...state.project,
+    bounties: state.project.bounties.concat(bounties)
+  }
+}
+
+export const deleteProjectBounties = (state) => {
+  state.project = {
+    ...state.project,
+    bounties: []
+  }
+}
