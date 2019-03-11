@@ -75,12 +75,6 @@ export default {
     }
   },
   validations: {
-    avatar: {
-      url: {
-        url,
-        required
-      }
-    },
     project: {
       name: {
         maxLength: maxLength(50),
