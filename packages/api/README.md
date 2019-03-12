@@ -1,4 +1,4 @@
-# Utopian.io Coloby Backend
+# Utopian.io Colony Backend
 <p align="center">
   <img src="https://cdn.steemitimages.com/DQmQpCiqJaNconfJ4aCbyDpD3qBMV5qA3KVDRfU2jkcoJvW/utopian-colony-fb.png" />
 </p>
