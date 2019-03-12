@@ -1,6 +1,6 @@
-# Utopian.io Backend v2
+# Utopian.io Coloby Backend
 <p align="center">
-  <img src="https://cdn.steemitimages.com/DQmVV3aEvdcwPR6RuJebHWLmibTBtwsLQoc3AnD7RQFE9DA/utopian-post-banner.png" />
+  <img src="https://cdn.steemitimages.com/DQmQpCiqJaNconfJ4aCbyDpD3qBMV5qA3KVDRfU2jkcoJvW/utopian-colony-fb.png" />
 </p>
 
 This repository is the home of the new Utopian.io backend. [Hapi JS](https://hapijs.com/) based.
