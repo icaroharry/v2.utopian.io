@@ -3,7 +3,7 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/utopian-io/v2.utopian.io.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/utopian-io/v2.utopian.io.svg?branch=develop)](https://travis-ci.org/utopian-io/v2.utopian.io)
 
-# Utopian.io v2
+# Utopian.io Colony
 
 <p align="center">
   <img src="https://cdn.steemitimages.com/DQmVV3aEvdcwPR6RuJebHWLmibTBtwsLQoc3AnD7RQFE9DA/utopian-post-banner.png" />
