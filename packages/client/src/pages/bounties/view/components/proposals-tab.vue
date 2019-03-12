@@ -75,17 +75,14 @@ export default {
         return
       }
       const steemAccounts = await this.getEscrowAccounts({ id: this.selectedProposal.author._id })
-      const { escrowId, transaction } = await this.steemEscrowTransfer({
+      const { escrow, transaction } = await this.steemEscrowTransfer({
         ...steemAccounts,
         bounty: this.bounty,
         key: this.activeKey
       })
       const result = await this.assignUser({
         id: this.bounty._id,
-        from: steemAccounts.sender,
-        to: steemAccounts.receiver,
-        agent: process.env.ESCROW_ACCOUNT,
-        escrowId,
+        escrow,
         transaction,
         assignee: this.selectedProposal.author._id
       })

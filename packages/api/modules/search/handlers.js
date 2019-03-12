@@ -113,7 +113,7 @@ const searchBounties = async (req, h) => {
     .populate('author', 'username avatarUrl')
     .populate('assignee', 'username avatarUrl')
     .populate('project', 'name avatarUrl slug')
-    .select('author body createdAt slug skills title category status amount')
+    .select('author assignee body createdAt slug skills title category status amount')
     .lean()
 
   bounties.forEach((bounty) => {

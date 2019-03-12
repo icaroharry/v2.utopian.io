@@ -172,7 +172,7 @@ const getBounty = async (req, h) => {
     .populate('assignee', 'username avatarUrl')
     .populate('activity.user', 'username avatarUrl')
     .populate('project', 'avatarUrl name slug')
-    .select('amount activity author assignees body category createdAt deadline escrow issue project skills status title upVotes')
+    .select('amount activity author assignees body category createdAt deadline escrow issue project skills slug status title upVotes')
     .lean()
   if (!bounty) return h.response(null)
 
@@ -456,7 +456,7 @@ const escrowAccounts = async (req, h) => {
  */
 const assignUser = async (req, h) => {
   const author = req.auth.credentials.uid
-  const { id, escrowId, from, to, agent, assignee, transaction } = req.payload
+  const { id, escrow, assignee, transaction } = req.payload
 
   const bounty = await Bounty.findOne({ _id: id, author })
   if (!bounty) {
@@ -475,13 +475,33 @@ const assignUser = async (req, h) => {
 
   const operation = blockchainTransaction.operations[0][1]
   if (
-    operation.from !== from ||
-    operation.to !== to ||
-    operation.agent !== agent ||
-    operation.escrow_id !== parseInt(escrowId) ||
+    operation.from !== escrow.from ||
+    operation.to !== escrow.to ||
+    operation.agent !== escrow.agent ||
+    operation.escrow_id !== parseInt(escrow.escrowId) ||
     parseFloat(operation.sbd_amount).toFixed(3) !== parseFloat(bounty.amount[0].amount).toFixed(3) ||
     parseFloat(operation.fee).toFixed(3) !== (parseFloat(bounty.amount[0].amount) * 5 / 100).toFixed(3)
   ) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  const operations = []
+  operations.push([
+    'escrow_approve',
+    {
+      from: escrow.from,
+      to: escrow.to,
+      agent: escrow.agent,
+      who: process.env.STEEM_ESCROW_AGENT,
+      escrow_id: escrow.escrowId,
+      approve: true
+    }
+  ])
+  const transactionAgent = await req.steem.broadcast.sendAsync({
+    extensions: [],
+    operations
+  }, [process.env.STEEM_ESCROW_AGENT_KEY])
+  if (!transactionAgent) {
     throw Boom.badData('general.documentDoesNotExist')
   }
 
@@ -496,7 +516,7 @@ const assignUser = async (req, h) => {
     },
     createdAt: Date.now()
   }
-  const escrow = { escrowId, from, to, agent, status: 'fromSigned' }
+  escrow.status = 'fromSigned'
   bounty.activity.push(bounty.activity.create(activity))
   const response = await Bounty.findOneAndUpdate(
     { _id: id, author },
@@ -593,6 +613,58 @@ const acceptBounty = async (req, h) => {
   return h.response(null)
 }
 
+/**
+ * As an assignee, cancel the escrow related to the bounty
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ *
+ * @author Grégory LATINIER
+ */
+const cancelBounty = async (req, h) => {
+  const assignee = req.auth.credentials.uid
+  const { id, reason } = req.payload
+
+  const bounty = await Bounty.findOne({ _id: id, assignee })
+  if (!bounty) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  const activity = {
+    user: assignee,
+    color: 'red',
+    icon: 'mdi-cancel',
+    key: 'cancel',
+    data: { reason },
+    createdAt: Date.now()
+  }
+  bounty.activity.push(bounty.activity.create(activity))
+  const response = await Bounty.findOneAndUpdate(
+    { _id: id, assignee },
+    {
+      activity: bounty.activity,
+      assignee: null,
+      escrow: {
+        ...bounty.escrow,
+        status: 'cancelled'
+      },
+      status: 'open'
+    },
+    { new: true }
+  )
+
+  if (response) {
+    activity.user = await User.findOne({ _id: assignee }).select('username avatarUrl')
+    return h.response({
+      activity,
+      escrowStatus: 'cancelled',
+      status: 'open'
+    })
+  }
+
+  return h.response(null)
+}
+
 module.exports = {
   createBounty,
   updateBounty,
@@ -606,5 +678,6 @@ module.exports = {
   searchSkills,
   escrowAccounts,
   assignUser,
-  acceptBounty
+  acceptBounty,
+  cancelBounty
 }

@@ -127,11 +127,8 @@ const escrowAccounts = {
 const assignUser = {
   payload: {
     id: validation.id.required(),
-    escrowId: Joi.number().required(),
-    from: Joi.string().trim().required(),
-    to: Joi.string().trim().required(),
-    agent: Joi.string().trim().required(),
     assignee: validation.id.required(),
+    escrow: Joi.object().required(),
     transaction: Joi.object().required()
   }
 }
@@ -139,6 +136,14 @@ const assignUser = {
 const acceptBounty = {
   payload: {
     id: validation.id.required(),
+    transaction: Joi.object().required()
+  }
+}
+
+const cancelBounty = {
+  payload: {
+    id: validation.id.required(),
+    reason: Joi.string().optional().allow(null),
     transaction: Joi.object().required()
   }
 }
@@ -156,5 +161,6 @@ module.exports = {
   searchSkills,
   escrowAccounts,
   assignUser,
-  acceptBounty
+  acceptBounty,
+  cancelBounty
 }

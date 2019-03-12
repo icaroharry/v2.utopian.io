@@ -52,7 +52,14 @@ export default {
         //- TODO
         .row.amount {{amount.amount}} SBD
           .fiat (${{(amount.amount * bounty.quotes['SBDUSD']).toFixed(2)}} USD)
-        .status(:class="bounty.status") {{$t(`search.searchForm.bountyStatus.status.${bounty.status}`)}}
+        .row
+          .assignee(v-if="bounty.assignee")
+            q-icon(
+              name="mdi-account-box"
+              size="25px"
+            )
+              q-tooltip(anchor="top middle", self="bottom middle", :offset="[0, 10]") {{$t('components.list.bountyCard.assignedTo', { user: bounty.assignee.username }) }}
+          .status(:class="bounty.status") {{$t(`search.searchForm.bountyStatus.status.${bounty.status}`)}}
 </template>
 
 <style lang="stylus">
@@ -123,6 +130,8 @@ export default {
     color #FFF
     font-weight bold
     font-size 12px
+  .assignee
+    font-size 14px
   .open
     background-color $light-green-14
   .inProgress

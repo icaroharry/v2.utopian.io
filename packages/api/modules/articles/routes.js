@@ -9,7 +9,6 @@ routes.push([
     path: '/v1/article',
     handler: (req, h) => Handlers.createArticle(req, h),
     options: {
-      auth: { access: { scope: ['user'] } },
       tags: ['articles'],
       validate: Validate.createArticle
     }
@@ -19,7 +18,6 @@ routes.push([
     path: '/v1/article/{id}',
     handler: (req, h) => Handlers.updateArticle(req, h),
     options: {
-      auth: { access: { scope: ['user'] } },
       tags: ['articles'],
       validate: Validate.updateArticle
     }
@@ -29,7 +27,6 @@ routes.push([
     path: '/v1/article/blockchains/{blockchain}/{id}',
     handler: (req, h) => Handlers.updateBlockchainData(req, h),
     options: {
-      auth: { access: { scope: ['user'] } },
       tags: ['articles'],
       validate: Validate.updateBlockchainData
     }

@@ -22,7 +22,7 @@ q-tab-pane.bounty-activity(name="activity")
       .q-timeline-title(slot="title")
         .flex.items-center.timeline-content
           img.timeline-avatar.q-mr-sm(:src="entry.user.avatarUrl")
-          div(v-html="$t(`bounties.activity.${entry.key}`, { ...entry.data, user: entry.user.username })")
+          .timeline-content-text(v-html="$t(`bounties.activity.${entry.key}`, { ...entry.data, user: entry.user.username })")
       .q-timeline-subtitle.activity-date(slot="subtitle") {{ $d(new Date(entry.createdAt), 'short') }}
 </template>
 
@@ -40,4 +40,8 @@ q-tab-pane.bounty-activity(name="activity")
     .timeline-content
       @media (min-width $breakpoint-sm-max)
         justify-content flex-end
+      .timeline-content-text
+        max-width 400px
+  .timeline-content
+    margin-top -6px
 </style>

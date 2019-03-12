@@ -7,12 +7,14 @@ import { TextUtilsMixin } from 'src/mixins/text-utils'
 import ActivityTab from './components/activity-tab'
 import ProposalsTab from './components/proposals-tab'
 import AcceptAssignmentModal from './components/accept-assignment-modal'
+import CancelAssignmentModal from './components/cancel-assignment-modal'
 
 export default {
   name: 'page-bounties-view',
   mixins: [TextUtilsMixin],
   components: {
     AcceptAssignmentModal,
+    CancelAssignmentModal,
     ActivityTab,
     Comments,
     ProposalsTab,
@@ -116,6 +118,13 @@ export default {
             img(:src="bounty.assignee.avatarUrl")
             | @{{ bounty.assignee.username }}
       accept-assignment-modal(:bounty="bounty")
+      cancel-assignment-modal(:bounty="bounty")
+      q-btn.full-width.q-mt-xs(
+        v-if="user && bounty.assignee && user.uid === bounty.assignee._id && bounty.escrow && bounty.escrow.status === 'toSigned'"
+        color="primary"
+        :label="$t('bounties.solution.submitSolution')"
+        :to="`/${$route.params.locale}/bounties/${bounty.slug}/solution/create`"
+      )
   q-tabs.q-mt-md(color="white", text-color="black", underline-color="primary")
     q-tab(
       default

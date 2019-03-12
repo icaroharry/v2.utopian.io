@@ -98,12 +98,10 @@ export default {
       'searchTags'
     ]),
     async submit () {
-      this.submitting = true
+      if (this.submitting) return
       this.$v.article.$touch()
-      if (this.$v.article.$invalid) {
-        this.submitting = false
-        return
-      }
+      if (this.$v.article.$invalid) return
+      this.submitting = true
       const { _id, beneficiaries, project, ...article } = this.article
       if (project) {
         article.project = project._id

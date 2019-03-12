@@ -34,7 +34,9 @@ const bounties = new Schema({
     from: { type: String },
     to: { type: String },
     agent: { type: String },
-    status: { type: String, enum: ['fromSigned', 'toSigned'] }
+    status: { type: String, enum: ['fromSigned', 'toSigned'] },
+    sbdAmount: { type: String },
+    steemAmount: { type: String }
   },
   issue: { type: String },
   lang: { type: String, required: true },

@@ -84,6 +84,9 @@
       }
     },
     "list": {
+      "bountyCard": {
+        "assignedTo": "Assigned to @{user}"
+      },
       "projectCard": {
         "contributions": "contributions",
         "previewDescription": "In a few words, what is your project about?",
@@ -217,6 +220,7 @@
     "activity": {
       "accept": "<strong>@{user}</strong> has accepted the assignment",
       "assign": "<strong>@{user}</strong> has assigned <strong>@{assignee}</strong> to this bounty",
+      "cancel": "<strong>@{user}</strong> has cancelled this task for the following reason: <i>{reason}</i>",
       "proposal": "<strong>@{user}</strong> has made a proposal",
       "solution": "<strong>@{user}</strong> has submitted a solution"
     },
@@ -267,6 +271,21 @@
         "disabled": "You can only update a bounty that is not assigned"
       }
     },
+    "solution": {
+      "createEdit": {
+        "mainTitle": "Submit your solution",
+        "subtitle": "You are about to submit a solution for the bounty. Make sure to provide all the necessary  information for the bounty host and the reviewers to verify the work done. Links to pull requests, commits, original and editable files, processes and details about the implemented solution are requested for proper review.",
+        "body": {
+          "helper": "Describe in detail the solution provided",
+          "label": "Text"
+        },
+        "title": {
+          "label": "Title",
+          "placeholder": "Add a title"
+        }
+      },
+      "submitSolution": "Submit your solution"
+    },
     "view": {
       "acceptAssignModal": {
         "accept": "Accept",
@@ -295,6 +314,22 @@
           "invalidActiveKey": "Your active key is invalid",
           "notEnoughMoney": "Your account doesn't have enough money to create the escrow. Please transfer some funds to your account."
         }
+      },
+      "cancelAssignModal": {
+        "cancelAssignment": "Cancel the assignment",
+        "activeKey": {
+          "label": "Steem active key",
+          "helper": "Your key will not be transmitted to our server."
+        },
+        "cancel": "Cancel",
+        "reason": {
+          "label": "Reason",
+          "helper": "The reason will be displayed in the activity tab.",
+          "placeholder": "You can tell the bounty host why"
+        },
+        "text": "Think twice! You are about to decline this task. The bounty host will be notified of your decision and the bounty value will be refunded. Declining a task after having accepted it will <strong>negatively impact your reputation on Utopian.</strong>",
+        "title": "Cancel this task",
+        "validate": "Validate"
       },
       "deadline": "Deadline: {deadline}",
       "proposals": {

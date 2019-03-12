@@ -53,3 +53,8 @@ export const assignUser = (state, data) => {
 export const updateEscrowStatus = (state, status) => {
   state.bounty.escrow.status = status
 }
+
+export const removeAssignee = (state, status) => {
+  state.bounty.status = status
+  state.bounty.assignee = null
+}

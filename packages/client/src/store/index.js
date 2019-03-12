@@ -7,6 +7,7 @@ import articles from './articles'
 import blockchainSteem from './blockchains/steem'
 import comments from './comments'
 import bounties from './bounties'
+import bountySolution from './bounty-solution'
 import github from './github'
 import projects from './projects'
 import search from './search'
@@ -22,6 +23,7 @@ const modules = {
   blockchainSteem,
   comments,
   bounties,
+  bountySolution,
   github,
   projects,
   search,

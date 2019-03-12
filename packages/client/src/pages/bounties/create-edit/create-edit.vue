@@ -113,12 +113,9 @@ export default {
     ]),
     async submit () {
       if (this.status !== 'open' || this.submitting) return
-      this.submitting = true
       this.$v.bounty.$touch()
-      if (this.$v.bounty.$invalid) {
-        this.submitting = false
-        return
-      }
+      if (this.$v.bounty.$invalid) return
+      this.submitting = true
       const { _id, project, ...bounty } = this.bounty
       if (project) {
         bounty.project = project._id

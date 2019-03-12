@@ -216,7 +216,14 @@ export const Steem = {
           operations
         }, [key])
         return {
-          escrowId,
+          escrow: {
+            from: sender,
+            to: receiver,
+            agent: process.env.ESCROW_ACCOUNT,
+            escrowId,
+            sbdAmount: `${parseFloat(bounty.amount[0].amount).toFixed(3)} SBD`,
+            steemAmount: '0.000 STEEM'
+          },
           transaction: {
             id: transaction.id,
             block: transaction.block_num
@@ -256,6 +263,40 @@ export const Steem = {
             }
           } else {
             this.setAppError(this.$t('mixins.steem.errors.escrow.ratificationExpired'))
+          }
+        } else {
+          this.setAppError(this.$t('mixins.steem.errors.escrow.unknown'))
+        }
+      } catch (e) {
+        // TODO display a more precise message for other cases, blockchain related
+        console.log(e)
+        this.setAppError(this.$t('mixins.steem.errors.unexpected'))
+      }
+    },
+    async steemEscrowCancel ({ key, bounty }) {
+      try {
+        if (bounty.escrow) {
+          const operations = []
+          operations.push([
+            'escrow_release',
+            {
+              from: bounty.escrow.from,
+              to: bounty.escrow.to,
+              agent: bounty.escrow.agent,
+              who: bounty.escrow.to,
+              receiver: bounty.escrow.from,
+              escrow_id: bounty.escrow.escrowId,
+              sbd_amount: bounty.escrow.sbdAmount,
+              steem_amount: bounty.escrow.steemAmount
+            }
+          ])
+          const transaction = await this.$steemjs.broadcast.sendAsync({
+            extensions: [],
+            operations
+          }, [key])
+          return {
+            id: transaction.id,
+            block: transaction.block_num
           }
         } else {
           this.setAppError(this.$t('mixins.steem.errors.escrow.unknown'))

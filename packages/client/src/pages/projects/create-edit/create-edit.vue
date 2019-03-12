@@ -296,10 +296,9 @@ export default {
       this.project.medias = this.project.medias.filter(m => m.src !== src)
     },
     async submit () {
+      if (this.submitting) return
       this.$v.project.$touch()
-      if (this.$v.project.$invalid) {
-        return
-      }
+      if (this.$v.project.$invalid) return
       this.submitting = true
       const { closedSource, _id, slug, ...project } = this.project
       if (project.docs === '') { delete project.docs }

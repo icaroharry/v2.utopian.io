@@ -132,3 +132,17 @@ export const acceptBounty = async (context, data) => {
   context.commit('updateEscrowStatus', payload.escrowStatus)
   return true
 }
+
+export const cancelBounty = async (context, data) => {
+  const payload = await API.call({
+    context,
+    method: 'post',
+    url: '/v1/bounty/cancelbounty',
+    data
+  })
+  if (!payload) return false
+  context.commit('addNewActivity', payload.activity)
+  context.commit('updateEscrowStatus', payload.escrowStatus)
+  context.commit('removeAssignee', payload.status)
+  return true
+}

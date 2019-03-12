@@ -75,6 +75,26 @@ export default (cookies) => ([
         meta: { auth: true }
       },
       {
+        path: 'bounties/:author/:slug/solution/create',
+        name: 'bounties.solution.create',
+        props: true,
+        component: () => import('src/pages/bounties/solution/create-edit/create-edit'),
+        meta: { auth: true }
+      },
+      {
+        path: 'bounties/:author/:slug/solution/:id/edit',
+        name: 'bounties.solution.edit',
+        props: true,
+        component: () => import('src/pages/bounties/solution/create-edit/create-edit'),
+        meta: { auth: true }
+      },
+      {
+        path: 'bounties/:author/:slug/solution/:id',
+        name: 'bounties.solution.view',
+        props: true,
+        component: () => import('src/pages/bounties/solution/view/view')
+      },
+      {
         path: 'bounties/:author/:slug',
         name: 'bounties.view',
         props: true,
