@@ -1,9 +1,7 @@
-# Utopian.io Frontend v2
+# Utopian.io Colony Frontend
 <p align="center">
-  <img src="https://cdn.steemitimages.com/DQmVV3aEvdcwPR6RuJebHWLmibTBtwsLQoc3AnD7RQFE9DA/utopian-post-banner.png" />
+  <img src="https://cdn.steemitimages.com/DQmQpCiqJaNconfJ4aCbyDpD3qBMV5qA3KVDRfU2jkcoJvW/utopian-colony-fb.png" />
 </p>
-
-This repository is the home of the new Utopian.io frontend. [Vue.JS](https://vuejs.org/) & [Quasar Framework](https://quasar-framework.org/) based.
 
 ### Install
 

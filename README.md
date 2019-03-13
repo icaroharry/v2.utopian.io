@@ -1,15 +1,14 @@
 [![Utopian channel on Discord](https://img.shields.io/badge/chat-discord-738bd7.svg)](https://discord.gg/CA9pqES)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
-[![Greenkeeper badge](https://badges.greenkeeper.io/utopian-io/v2.utopian.io.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/utopian-io/v2.utopian.io.svg?branch=develop)](https://travis-ci.org/utopian-io/v2.utopian.io)
 
-# Utopian.io v2
+# Utopian.io Colony
 
 <p align="center">
-  <img src="https://cdn.steemitimages.com/DQmVV3aEvdcwPR6RuJebHWLmibTBtwsLQoc3AnD7RQFE9DA/utopian-post-banner.png" />
+  <img src="https://cdn.steemitimages.com/DQmQpCiqJaNconfJ4aCbyDpD3qBMV5qA3KVDRfU2jkcoJvW/utopian-colony-fb.png" />
 </p>
 
-This repository is the home of the new Utopian.io.
+Utopian Colony is a platform for open source collaboration, home to all digital professionals with a passion for open source innovation. Utopian Colony gives everyone a voice and a place to contribute, reward and be rewarded.
 
 ### Install instructions
 
