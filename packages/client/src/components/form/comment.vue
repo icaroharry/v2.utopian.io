@@ -17,6 +17,7 @@ export default {
   methods: {
     ...mapActions('comments', ['saveComment', 'updateComment']),
     async save () {
+      if (this.saving) return
       this.saving = true
       if (this.update) {
         await this.updateComment({ body: this.commentBody, id: this.id })

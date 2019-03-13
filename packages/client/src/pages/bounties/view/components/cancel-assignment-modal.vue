@@ -72,7 +72,7 @@ div
     color="red"
     @click.native="modal = true"
     :label="$t('bounties.view.cancelAssignModal.cancelAssignment')"
-    v-if="user && bounty.assignee && user.uid === bounty.assignee._id && bounty.escrow && bounty.escrow.status === 'toSigned'"
+    v-if="bounty.status === 'inProgress' && user && bounty.assignee && user.uid === bounty.assignee._id && bounty.escrow && bounty.escrow.status === 'toSigned'"
   )
   q-modal(v-model="modal")
     q-modal-layout.cancel-assign-modal

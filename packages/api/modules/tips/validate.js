@@ -3,7 +3,7 @@ const { validation } = require('../../utils/constants')
 
 const getAuthorSteemUser = {
   params: {
-    obj: Joi.string().trim().required().allow('articles'),
+    obj: Joi.string().trim().required().allow('articles', 'bountySolutions'),
     id: validation.id.required()
   }
 }
@@ -14,7 +14,7 @@ const getAuthorSteemUser = {
  */
 const createTip = {
   payload: {
-    obj: Joi.string().trim().required().allow('articles'),
+    obj: Joi.string().trim().required().allow('articles', 'bountySolutions'),
     id: validation.id.required(),
     tips: Joi.array().max(2).items({
       currency: Joi.string().trim().required().allow('bitcoin', 'litecoin', 'ethereum', 'steem', 'sbd', 'steempower'),

@@ -279,9 +279,20 @@
           "helper": "Describe in detail the solution provided",
           "label": "Text"
         },
+        "inProgressOnly": "You can only submit a solution if the bounty is 'In progress'",
+        "response": "In response to the bounty",
+        "save": {
+          "successMsg": "The bounty solution was published!"
+        },
+        "solutionDelete": "Delete your solution",
+        "solutionSubmit": "Submit your solution",
+        "solutionUpdate": "Update your solution",
         "title": {
           "label": "Title",
           "placeholder": "Add a title"
+        },
+        "update": {
+          "successMsg": "The bounty solution was updated!"
         }
       },
       "submitSolution": "Submit your solution"

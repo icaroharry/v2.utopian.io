@@ -1,6 +1,7 @@
 const Vote = require('./vote.model')
 const Article = require('../articles/article.model')
 const Bounty = require('../bounties/bounty.model')
+const BountySolution = require('../bounty-solutions/bounty-solution.model')
 const Comment = require('../comments/comment.model')
 
 /**
@@ -56,6 +57,9 @@ const cast = async (req, h) => {
       break
     case 'bounties':
       entity = Bounty
+      break
+    case 'bountySolutions':
+      entity = BountySolution
       break
     case 'comments':
       entity = Comment

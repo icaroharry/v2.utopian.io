@@ -119,8 +119,8 @@ export default {
             | @{{ bounty.assignee.username }}
       accept-assignment-modal(:bounty="bounty")
       cancel-assignment-modal(:bounty="bounty")
-      q-btn.full-width.q-mt-xs(
-        v-if="user && bounty.assignee && user.uid === bounty.assignee._id && bounty.escrow && bounty.escrow.status === 'toSigned'"
+      q-btn.full-width.q-mt-sm(
+        v-if="bounty.status === 'inProgress' && user && bounty.assignee && user.uid === bounty.assignee._id && bounty.escrow && bounty.escrow.status === 'toSigned'"
         color="primary"
         :label="$t('bounties.solution.submitSolution')"
         :to="`/${$route.params.locale}/bounties/${bounty.slug}/solution/create`"

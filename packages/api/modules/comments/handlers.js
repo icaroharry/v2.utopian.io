@@ -5,6 +5,7 @@ const Article = require('../articles/article.model')
 const Vote = require('../votes/vote.model')
 const Bounty = require('../bounties/bounty.model')
 const Comment = require('./comment.model')
+const BountySolution = require('../bounty-solutions/bounty-solution.model')
 
 /**
  * Creates the comment
@@ -22,11 +23,14 @@ const createComment = async (req, h) => {
   let parentDocument
 
   switch (comment.objRef) {
-  case 'article':
+  case 'articles':
     parentDocument = await Article.findOne({ _id: comment.objId })
     break
-  case 'bounty':
+  case 'bounties':
     parentDocument = await Bounty.findOne({ _id: comment.objId })
+    break
+  case 'bountySolutions':
+    parentDocument = await BountySolution.findOne({ _id: comment.objId })
     break
   }
 

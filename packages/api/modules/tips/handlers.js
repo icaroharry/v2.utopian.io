@@ -1,5 +1,6 @@
 const Boom = require('boom')
 const Article = require('../articles/article.model')
+const BountySolutions = require('../bounty-solutions/bounty-solution.model')
 const User = require('../users/user.model')
 const Tip = require('./tip.model')
 
@@ -19,6 +20,8 @@ const getAuthorInfo = async (req, h) => {
   const { obj, id } = req.params
   if (obj === 'articles') {
     Object = Article
+  } else if (obj === 'bountySolutions') {
+    Object = BountySolutions
   }
 
   const entity = await Object.findOne({ _id: id })
@@ -49,6 +52,9 @@ const createTip = async (req, h) => {
   switch (obj) {
   case 'articles':
     Object = Article
+    break
+  case 'bountySolutions':
+    Object = BountySolutions
     break
   default:
     break

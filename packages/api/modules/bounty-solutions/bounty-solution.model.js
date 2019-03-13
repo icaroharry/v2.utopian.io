@@ -4,6 +4,11 @@ const Schema = Mongoose.Schema
 
 const bountySolutions = new Schema({
   author: { type: Schema.Types.ObjectId, ref: 'Users', required: true },
+  blockchains: [{
+    _id: false,
+    data: { type: Object, required: true },
+    name: { type: String, required: true }
+  }],
   bounty: { type: Schema.Types.ObjectId, ref: 'Bounty', required: true },
   body: { type: String, required: true },
   title: { type: String, required: true, text: true },

@@ -1,4 +1,4 @@
-/*
-export function someMutation (state) {
+export const setSolution = (state, solution) => {
+  console.log(solution)
+  state.solution = solution || {}
 }
-*/

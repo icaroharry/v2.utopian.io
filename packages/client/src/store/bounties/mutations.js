@@ -1,5 +1,5 @@
 export const setBounty = (state, bounty) => {
-  state.bounty = bounty || []
+  state.bounty = bounty || {}
 }
 
 export const setProposals = (state, { proposals, skip, limit, total }) => {

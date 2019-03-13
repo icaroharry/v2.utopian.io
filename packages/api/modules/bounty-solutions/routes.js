@@ -40,6 +40,15 @@ routes.push([
       tags: ['bounty-solutions'],
       validate: Validate.getSolution
     }
+  },
+  {
+    method: 'POST',
+    path: '/v1/bountysolutions/blockchains/{blockchain}/{id}',
+    handler: (req, h) => Handlers.updateBlockchainData(req, h),
+    options: {
+      tags: ['bounties'],
+      validate: Validate.updateBlockchainData
+    }
   }
 ])
 
