@@ -100,7 +100,6 @@ const searchBounties = async (req, h) => {
   if (values) {
     const min = parseFloat((values.min / SBDUSD).toFixed(2))
     const max = parseFloat((values.max / SBDUSD).toFixed(2))
-    console.log(min, max)
     optionalConditions.amount = { '$elemMatch': { amount: { '$gte': min, '$lte': max }, currency: 'sbd' } }
   }
 
