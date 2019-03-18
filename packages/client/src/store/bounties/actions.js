@@ -92,6 +92,16 @@ export const fetchProposals = async (context, { objId, skip = 0, limit = 10 }) =
   context.commit('setProposals', payload)
 }
 
+export const fetchSolutions = async (context, id) => {
+  const payload = await API.call({
+    context,
+    method: 'get',
+    url: `/v1/bounty/${id}/solutions`
+  })
+
+  context.commit('setSolutions', payload)
+}
+
 export const searchSkills = async (context, data) =>
   API.call({
     context,

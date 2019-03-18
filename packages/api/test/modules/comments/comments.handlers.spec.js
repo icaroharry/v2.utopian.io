@@ -1,3 +1,4 @@
+/*
 const chai = require('chai')
 
 const { assert, expect } = chai
@@ -34,3 +35,4 @@ describe('create a comment', () => {
     assert.equal(JSON.parse(payload).body, createCommentEndpoint.payload.body)
   })
 })
+*/

@@ -44,7 +44,7 @@ const bounties = new Schema({
   skills: { type: Array, required: true },
   slug: { type: String, required: true, index: true },
   slugs: { type: Array, index: true },
-  status: { type: String, required: true, enum: ['open', 'inProgress', 'cancelled', 'solved', 'dispute'], default: 'open' },
+  status: { type: String, required: true, enum: ['open', 'inProgress', 'cancelled', 'solved', 'dispute', 'completed'], default: 'open' },
   title: { type: String, required: true, text: true },
   upVotes: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },

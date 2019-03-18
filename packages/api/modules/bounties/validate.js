@@ -148,6 +148,12 @@ const cancelBounty = {
   }
 }
 
+const getSolutions = {
+  params: {
+    id: validation.id.required()
+  }
+}
+
 module.exports = {
   createBounty,
   updateBounty,
@@ -162,5 +168,6 @@ module.exports = {
   escrowAccounts,
   assignUser,
   acceptBounty,
-  cancelBounty
+  cancelBounty,
+  getSolutions
 }

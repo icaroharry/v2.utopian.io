@@ -6,6 +6,7 @@ import Vote from 'src/components/tools/vote'
 import { TextUtilsMixin } from 'src/mixins/text-utils'
 import ActivityTab from './components/activity-tab'
 import ProposalsTab from './components/proposals-tab'
+import SolutionsTab from './components/solutions-tab'
 import AcceptAssignmentModal from './components/accept-assignment-modal'
 import CancelAssignmentModal from './components/cancel-assignment-modal'
 
@@ -18,6 +19,7 @@ export default {
     ActivityTab,
     Comments,
     ProposalsTab,
+    SolutionsTab,
     SocialShare,
     Vote
   },
@@ -139,12 +141,18 @@ export default {
     )
     q-tab(
       slot="title"
+      name="solutions"
+      :label="$t('bounties.view.tabs.solutions')"
+    )
+    q-tab(
+      slot="title"
       name="activity"
       :label="$t('bounties.view.tabs.activity')"
     )
     q-tab-pane(name="discussion")
       comments(obj="bounty", :id="bounty._id")
     proposals-tab
+    solutions-tab
     activity-tab(:activity="bounty.activity")
 </template>
 
@@ -275,6 +283,8 @@ export default {
       &.inProgress
         background-color $primary
       &.solved
+        background-color $green-6
+      &.completed
         background-color $green-10
       &.cancelled
         background-color $deep-orange

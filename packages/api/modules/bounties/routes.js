@@ -88,6 +88,16 @@ routes.push([
     }
   },
   {
+    method: 'GET',
+    path: '/v1/bounty/{id}/solutions',
+    handler: (req, h) => Handlers.getSolutions(req, h),
+    options: {
+      auth: { mode: 'optional' },
+      tags: ['solutions'],
+      validate: Validate.getSolutions
+    }
+  },
+  {
     method: 'POST',
     path: '/v1/bounty/searchSkills',
     handler: (req, h) => Handlers.searchSkills(req, h),

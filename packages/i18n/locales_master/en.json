@@ -352,9 +352,10 @@
         "update": "Update"
       },
       "tabs": {
+        "activity": "Activity",
         "discussion": "Discussion",
         "proposals": "Proposals",
-        "activity": "Activity"
+        "solutions": "Solutions"
       }
     }
   },
@@ -572,7 +573,8 @@
         "status": {
           "open": "Open",
           "inProgress": "In progress",
-          "solved": "Completed",
+          "solved": "Solved",
+          "completed": "Completed",
           "cancelled": "Cancelled",
           "dispute": "Dispute"
         }

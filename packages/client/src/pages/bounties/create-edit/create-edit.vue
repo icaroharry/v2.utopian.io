@@ -332,6 +332,8 @@ div
   &.inProgress
     background-color $primary
   &.solved
+    background-color $green-6
+  &.completed
     background-color $green-10
   &.cancelled
     background-color $deep-orange

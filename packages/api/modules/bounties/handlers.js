@@ -4,6 +4,7 @@ const { slugify } = require('../../utils/slugify')
 const { extractText, sanitizeHtml } = require('../../utils/html-sanitizer')
 
 const Bounty = require('./bounty.model')
+const BountySolution = require('../bounty-solutions/bounty-solution.model')
 const Category = require('../categories/category.model')
 const Proposal = require('./proposal.model')
 const User = require('../users/user.model')
@@ -370,10 +371,9 @@ const deleteProposal = async (req, h) => {
  *
  * @param {object} req - request
  * @param {object} req.params - request parameters
- * @param {string} req.params.author - bounty author
- * @param {string} req.params.slug - bounty slug
+ * @param {string} req.params.id - bounty id
  *
- * @returns comments
+ * @returns proposals
  * @author Grégory LATINIER
  */
 const getProposals = async (req, h) => {
@@ -665,6 +665,45 @@ const cancelBounty = async (req, h) => {
   return h.response(null)
 }
 
+/**
+ * Returns an array of solutions of a given bounty
+ *
+ * @param {object} req - request
+ * @param {object} req.params - request parameters
+ * @param {object} req.params.id - bounty id
+ *
+ * @returns solutions
+ * @author Grégory LATINIER
+ */
+const getSolutions = async (req, h) => {
+  const solutions = await BountySolution.find({ bounty: req.params.id })
+    .populate('author', 'username avatarUrl')
+    .populate('bounty', 'slug')
+    .select('body title upVotes createdAt')
+    .sort({ createdAt: 'asc' })
+    .lean()
+
+  const user = req.auth.credentials && req.auth.credentials.uid
+  let votes
+  if (user) {
+    const ids = solutions.map((a) => a._id)
+    votes = await Vote.find({
+      objRef: 'bountySolutions',
+      objId: { $in: ids },
+      user
+    })
+  }
+
+  solutions.forEach((solution) => {
+    solution.body = extractText(solution.body).substr(0, 250)
+    if (votes) {
+      const vote = votes.find((v) => v.objId.toString() === solution._id.toString())
+      solution.userVote = vote && vote.dir
+    }
+  })
+  return h.response(solutions)
+}
+
 module.exports = {
   createBounty,
   updateBounty,
@@ -679,5 +718,6 @@ module.exports = {
   escrowAccounts,
   assignUser,
   acceptBounty,
-  cancelBounty
+  cancelBounty,
+  getSolutions
 }

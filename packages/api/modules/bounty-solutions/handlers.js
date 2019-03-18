@@ -22,6 +22,17 @@ const createSolution = async (req, h) => {
 
   const response = await newSolution.save()
 
+  const activity = {
+    user: author,
+    color: 'green',
+    icon: 'mdi-key',
+    key: 'solution',
+    data: {},
+    createdAt: Date.now()
+  }
+  bountyDb.activity.push(bountyDb.activity.create(activity))
+  await bountyDb.save()
+
   return h.response({
     _id: response._id,
     body: response.body,

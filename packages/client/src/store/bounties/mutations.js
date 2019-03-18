@@ -40,6 +40,14 @@ export const updateProposal = (state, upToDateProposal) => {
   ]
 }
 
+export const setSolutions = (state, solutions) => {
+  state.solutions = solutions || []
+}
+
+export const clearSolutions = (state) => {
+  state.solutions = []
+}
+
 export const addNewActivity = (state, activity) => {
   state.bounty.activity.push(activity)
 }
