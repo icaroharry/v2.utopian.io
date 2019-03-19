@@ -66,3 +66,8 @@ export const removeAssignee = (state, status) => {
   state.bounty.status = status
   state.bounty.assignee = null
 }
+
+export const setBountyAndEscrowStatus = (state, { bountyStatus, escrowStatus }) => {
+  state.bounty.status = bountyStatus
+  state.bounty.escrow.status = escrowStatus
+}

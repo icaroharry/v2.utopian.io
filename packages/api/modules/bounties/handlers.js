@@ -665,6 +665,55 @@ const cancelBounty = async (req, h) => {
   return h.response(null)
 }
 
+const acceptSolution = async (req, h) => {
+  const author = req.auth.credentials.uid
+  const { bounty, solution } = req.payload
+
+  const bountyDb = await Bounty.findOne({ _id: bounty, author })
+    .populate('assignee', 'username')
+  if (!bounty) {
+    throw Boom.badData('general.documentDoesNotExist')
+  }
+
+  await BountySolution.findOneAndUpdate(
+    { _id: solution, bounty },
+    { status: 'accepted' }
+  )
+
+  const activity = {
+    user: author,
+    color: 'green',
+    icon: 'mdi-check',
+    key: 'completed',
+    data: {
+      assignee: bountyDb.assignee.username
+    },
+    createdAt: Date.now()
+  }
+  bountyDb.activity.push(bountyDb.activity.create(activity))
+  const response = await Bounty.findOneAndUpdate(
+    { _id: bounty, author },
+    {
+      activity: bounty.activity,
+      escrow: {
+        ...bounty.escrow,
+        status: 'released'
+      },
+      status: 'completed'
+    },
+    { new: true }
+  )
+  if (response) {
+    return h.response({
+      solutionStatus: 'accepted',
+      escrowStatus: 'released',
+      bountyStatus: 'completed'
+    })
+  }
+
+  return h.response(null)
+}
+
 /**
  * Returns an array of solutions of a given bounty
  *
@@ -678,8 +727,8 @@ const cancelBounty = async (req, h) => {
 const getSolutions = async (req, h) => {
   const solutions = await BountySolution.find({ bounty: req.params.id })
     .populate('author', 'username avatarUrl')
-    .populate('bounty', 'slug')
-    .select('body title upVotes createdAt')
+    .populate('bounty', 'slug status')
+    .select('author body bounty status title upVotes createdAt')
     .sort({ createdAt: 'asc' })
     .lean()
 
@@ -719,5 +768,6 @@ module.exports = {
   assignUser,
   acceptBounty,
   cancelBounty,
+  acceptSolution,
   getSolutions
 }

@@ -156,3 +156,16 @@ export const cancelBounty = async (context, data) => {
   context.commit('removeAssignee', payload.status)
   return true
 }
+
+export const acceptSolution = async (context, data) => {
+  const payload = await API.call({
+    context,
+    method: 'post',
+    url: '/v1/bounty/acceptsolution',
+    data
+  })
+  if (!payload) return false
+  context.commit('setBountyAndEscrowStatus', payload)
+  context.commit('bountySolution/setStatus', payload.solutionStatus, { root: true })
+  return true
+}

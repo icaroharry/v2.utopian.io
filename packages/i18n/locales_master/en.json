@@ -272,6 +272,21 @@
       }
     },
     "solution": {
+      "accepted": "Accepted",
+      "acceptSolutionModal": {
+        "accept": "Accept this solution",
+        "activeKey": {
+          "label": "Steem active key",
+          "helper": "Your key will not be transmitted to our server."
+        },
+        "cancel": "Cancel",
+        "errors": {
+          "invalidActiveKey": "Your active key is invalid"
+        },
+        "faq": "Read the FAQ",
+        "text": "You're about to accept this solution and therefore release the bounty. This operation cannot be undone.",
+        "title": "Accept this solution"
+      },
       "createEdit": {
         "mainTitle": "Submit your solution",
         "subtitle": "You are about to submit a solution for the bounty. Make sure to provide all the necessary  information for the bounty host and the reviewers to verify the work done. Links to pull requests, commits, original and editable files, processes and details about the implemented solution are requested for proper review.",
@@ -279,7 +294,7 @@
           "helper": "Describe in detail the solution provided",
           "label": "Text"
         },
-        "inProgressOnly": "You can only submit a solution if the bounty is 'In progress'",
+        "inProgressOnly": "You can only submit or update your solution if the bounty is the 'In progress' or 'Solved' state",
         "response": "In response to the bounty",
         "save": {
           "successMsg": "The bounty solution was published!"

@@ -18,12 +18,18 @@ export default {
 
 <template lang="pug">
 q-card.solution-card
+  q-chip(
+    v-if="solution.status === 'accepted'"
+    floating
+    color="green"
+  )
+    | {{$t('bounties.solution.accepted')}}
   q-btn.edit-solution(
-  v-if="user && solution.author.username === user.username"
-  color="primary"
-  icon="mdi-pencil"
-  flat
-  :to="`/${$route.params.locale}/bounties/${solution.bounty.slug}/solution/${solution._id}/edit`"
+    v-if="user && solution.author.username === user.username && solution.bounty.status !== 'completed'"
+    color="primary"
+    icon="mdi-pencil"
+    flat
+    :to="`/${$route.params.locale}/bounties/${solution.bounty.slug}/solution/${solution._id}/edit`"
   )
   q-card-title
     .row.author.justify-between
@@ -53,6 +59,7 @@ q-card.solution-card
 </template>
 
 <style lang="stylus">
+@import "~variables"
 .solution-card
   padding 20px
   background-color #fff

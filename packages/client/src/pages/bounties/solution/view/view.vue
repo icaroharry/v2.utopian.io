@@ -6,11 +6,13 @@ import Vote from 'src/components/tools/vote'
 import Tip from 'src/components/tools/tip'
 import BountyCard from 'src/components/list/bounty-card'
 import { TextUtilsMixin } from 'src/mixins/text-utils'
+import AcceptSolutionModal from './components/accept-solution-modal'
 
 export default {
   name: 'page-bounties-solution-view',
   mixins: [TextUtilsMixin],
   components: {
+    AcceptSolutionModal,
     BountyCard,
     Comments,
     Tip,
@@ -75,13 +77,19 @@ export default {
     .row.gutter-md
       .col-md-8.solution-content
         q-card
+          q-chip(
+            v-if="solution.status === 'accepted'"
+            floating
+            color="green"
+          )
+            | {{$t('bounties.solution.accepted')}}
           q-card-title
             .actions(slot="right")
               social-share(:title="solution.title", :description="solution.body")
               q-btn.edit-solution(v-if="hasEditRights", color="primary", icon="mdi-pencil", flat, :to="`/${$route.params.locale}/bounties/${bounty.slug}/solution/${$route.params.id}/edit`")
           q-card-main
             .title {{solution.title}}
-            .date {{$d(solution.createdAt, 'long')}}
+            .date {{$d(new Date(solution.createdAt), 'long')}}
             .post-view(v-html="solution.body")
           q-card-actions.flex.justify-between.items-center
             tip(
@@ -97,6 +105,7 @@ export default {
             :initialUserVote="solution.userVote"
           )
       .col-md-4
+        accept-solution-modal.q-mb-sm(:bounty="bounty", :solution="solution")
         strong {{$t('bounties.solution.createEdit.response')}}
         bounty-card.q-mt-sm(
           v-if="bounty"

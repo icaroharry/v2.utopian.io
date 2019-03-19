@@ -141,6 +141,15 @@ routes.push([
       tags: ['bounties'],
       validate: Validate.cancelBounty
     }
+  },
+  {
+    method: 'POST',
+    path: '/v1/bounty/acceptsolution',
+    handler: (req, h) => Handlers.acceptSolution(req, h),
+    options: {
+      tags: ['bounties'],
+      validate: Validate.acceptSolution
+    }
   }
 ])
 

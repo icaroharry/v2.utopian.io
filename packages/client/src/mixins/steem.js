@@ -307,6 +307,40 @@ export const Steem = {
         this.setAppError(this.$t('mixins.steem.errors.unexpected'))
       }
     },
+    async steemEscrowRelease ({ key, bounty }) {
+      try {
+        if (bounty.escrow) {
+          const operations = []
+          operations.push([
+            'escrow_release',
+            {
+              from: bounty.escrow.from,
+              to: bounty.escrow.to,
+              agent: bounty.escrow.agent,
+              who: bounty.escrow.from,
+              receiver: bounty.escrow.to,
+              escrow_id: bounty.escrow.escrowId,
+              sbd_amount: bounty.escrow.sbdAmount,
+              steem_amount: bounty.escrow.steemAmount
+            }
+          ])
+          const transaction = await this.$steemjs.broadcast.sendAsync({
+            extensions: [],
+            operations
+          }, [key])
+          return {
+            id: transaction.id,
+            block: transaction.block_num
+          }
+        } else {
+          this.setAppError(this.$t('mixins.steem.errors.escrow.unknown'))
+        }
+      } catch (e) {
+        // TODO display a more precise message for other cases, blockchain related
+        console.log(e)
+        this.setAppError(this.$t('mixins.steem.errors.unexpected'))
+      }
+    },
     /**
      * Parse html to MD
      * Append a footer link to redirect users back to utopian

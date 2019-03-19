@@ -84,7 +84,7 @@ export default {
               q-btn.edit-article(v-if="hasEditRights", color="primary", icon="mdi-pencil", flat, :to="`/${$route.params.locale}/articles/${$route.params.author}/${$route.params.slug}/edit`")
           q-card-main
             .title {{article.title}}
-            .date {{$d(article.createdAt, 'long')}}
+            .date {{$d(new Date(article.createdAt), 'long')}}
             .post-view(v-html="article.body")
           q-card-actions.flex.justify-between.items-center
             ul.article-tags

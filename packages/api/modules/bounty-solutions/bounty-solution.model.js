@@ -11,6 +11,7 @@ const bountySolutions = new Schema({
   }],
   bounty: { type: Schema.Types.ObjectId, ref: 'Bounty', required: true },
   body: { type: String, required: true },
+  status: { type: String },
   title: { type: String, required: true, text: true },
   upVotes: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },

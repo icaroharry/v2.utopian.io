@@ -87,8 +87,8 @@ const getSolutionForEdit = async (req, h) => {
 const getSolution = async (req, h) => {
   const solution = await BountySolution.findOne({ _id: req.params.id, deletedAt: null })
     .populate('author', 'username avatarUrl job reputation')
-    .populate('bounty', 'body category status skills amount')
-    .select('author body title upVotes')
+    .populate('bounty', 'body category status skills amount status')
+    .select('author body bounty status title upVotes createdAt')
     .lean()
 
   if (!solution) return h.response(null)

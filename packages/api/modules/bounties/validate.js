@@ -154,6 +154,14 @@ const getSolutions = {
   }
 }
 
+const acceptSolution = {
+  payload: {
+    bounty: validation.id.required(),
+    solution: validation.id.required(),
+    transaction: Joi.object().required()
+  }
+}
+
 module.exports = {
   createBounty,
   updateBounty,
@@ -169,5 +177,6 @@ module.exports = {
   assignUser,
   acceptBounty,
   cancelBounty,
-  getSolutions
+  getSolutions,
+  acceptSolution
 }
