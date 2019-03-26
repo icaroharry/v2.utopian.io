@@ -192,10 +192,11 @@ export default {
           @keyup.enter="() => {resetFlags();filterBounties()}"
         )
         q-list.q-mt-lg.bg-white(link)
-          q-item(@click.native="goToSearchArticle()")
-            q-item-main {{$t('search.searchForm.articles.label')}}
-            q-item-side(right)
-              .search-occurrences(v-if="searchOccurrences.articles") {{searchOccurrences.articles}}
+          // -
+            q-item(@click.native="goToSearchArticle()")
+              q-item-main {{$t('search.searchForm.articles.label')}}
+              q-item-side(right)
+                .search-occurrences(v-if="searchOccurrences.articles") {{searchOccurrences.articles}}
           q-item.search-active
             q-item-main {{$t('search.searchForm.bounties.label')}}
             q-item-side(right)

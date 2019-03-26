@@ -40,6 +40,7 @@ export default (cookies) => ([
           component: () => import('src/pages/projects/view/view')
         }]
       },
+      /*
       {
         path: 'articles/create',
         name: 'articles.create',
@@ -60,6 +61,7 @@ export default (cookies) => ([
         props: true,
         component: () => import('src/pages/articles/view/view')
       },
+      */
       {
         path: 'bounties/create',
         name: 'bounties.create',
@@ -127,12 +129,14 @@ export default (cookies) => ([
           meta: { fullWidth: true }
         }]
       },
+      /*
       {
         path: 'search/articles',
         name: 'search.articles',
         props: true,
         component: () => import('src/pages/search/articles/search-articles')
       },
+      */
       {
         path: 'search/bounties',
         name: 'search.bounties',

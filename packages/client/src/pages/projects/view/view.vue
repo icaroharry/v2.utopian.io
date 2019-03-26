@@ -114,15 +114,17 @@ export default {
                 q-tooltip(anchor="top middle", self="bottom middle", :offset="[0, 10]") {{owner.username}}
           q-card-main
             .description {{project.description}}
-          q-card-actions.q-mb-md(align="around")
+          q-card-actions.q-mb-md(align="end")
             q-btn(:disabled="tooltipBounties !== null", size="md", color="primary", :label="$t('projects.view.addBounty.label')", to="/")
               q-tooltip(v-if="tooltipBounties !== null", :offset="[0, 10]") {{$t(tooltipBounties)}}
-            q-btn(:disabled="tooltipArticles !== null", size="md", color="white", text-color="black", :label="$t('projects.view.writeArticle.label')", :to="tooltipArticles === null ? `/${$route.params.locale}/articles/create?project=${project._id}` : ''")
-              q-tooltip(v-if="tooltipArticles !== null", :offset="[0, 10]") {{$t(tooltipArticles)}}
-        .row.inline.justify-around.stats.q-mt-sm
-          .stat
-            .stat-title {{project.articlesCount}}
-            .stat-subtitle {{$tc('projects.view.stats.articles', project.articlesCount)}}
+            // -
+              q-btn(:disabled="tooltipArticles !== null", size="md", color="white", text-color="black", :label="$t('projects.view.writeArticle.label')", :to="tooltipArticles === null ? `/${$route.params.locale}/articles/create?project=${project._id}` : ''")
+                q-tooltip(v-if="tooltipArticles !== null", :offset="[0, 10]") {{$t(tooltipArticles)}}
+        .row.inline.justify-start.stats.q-mt-sm
+          // -
+            .stat
+              .stat-title {{project.articlesCount}}
+              .stat-subtitle {{$tc('projects.view.stats.articles', project.articlesCount)}}
           .stat
             .stat-title {{project.bountiesCount}}
             .stat-subtitle {{$tc('projects.view.stats.bounties', project.bountiesCount)}}
@@ -130,12 +132,13 @@ export default {
             .stat-title {{project.contributorsCount}}
             .stat-subtitle {{$tc('projects.view.stats.contributors', project.contributorsCount)}}
     q-tabs(v-model="defaultTab", color="white", text-color="black", underline-color="primary")
-      q-tab(
-        slot="title"
-        name="updates"
-        :label="$t('projects.view.tabs.updates')"
-        @select="() => this.initTab('updatesTab')"
-      )
+      // -
+        q-tab(
+          slot="title"
+          name="updates"
+          :label="$t('projects.view.tabs.updates')"
+          @select="() => this.initTab('updatesTab')"
+        )
       q-tab(
         slot="title"
         name="bounties"
@@ -147,8 +150,8 @@ export default {
         name="details"
         :label="$t('projects.view.tabs.details')"
       )
-
-      updates-tab(ref="updatesTab")
+      // -
+        updates-tab(ref="updatesTab")
       bounties-tab(ref="bountiesTab")
       details-tab
 </template>

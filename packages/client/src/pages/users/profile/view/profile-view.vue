@@ -67,12 +67,12 @@ export default {
           :label="$t('users.profile.header.tabs.details')"
           @select="() => this.initTab('detailsTab')"
         )
-        q-tab(
-          name="blog"
-          slot="title"
-          :label="$t('users.profile.header.tabs.blog')"
-          @select="() => this.initTab('blogTab')"
-        )
+        // -q-tab(
+            name="blog"
+            slot="title"
+            :label="$t('users.profile.header.tabs.blog')"
+            @select="() => this.initTab('blogTab')"
+          )
         q-tab(
           name="projects"
           slot="title"

@@ -33,7 +33,7 @@ export default {
       'startGithubLogin'
     ]),
     ...mapActions('search', [
-      'searchArticles'
+      'searchBounties'
     ]),
     async logoutAndRedirect () {
       await this.logout()
@@ -46,7 +46,7 @@ export default {
       if (this.$v.searchText.$invalid) {
         return
       }
-      this.searchArticles({
+      this.searchBounties({
         title: this.searchText,
         limit: 20,
         skip: 0,
@@ -54,7 +54,7 @@ export default {
           createdAt: -1
         }
       })
-      this.$router.push({ path: `/${this.$route.params.locale}/search/articles` })
+      this.$router.push({ path: `/${this.$route.params.locale}/search/bounties` })
     }
   }
 }
@@ -96,7 +96,7 @@ export default {
                   q-item-main(:label="$t('components.layout.toolbar.linkSteem')")
                 q-item(:to="`/${$route.params.locale}/projects/create`")
                   q-item-main(:label="$t('components.layout.toolbar.addProject')")
-                q-item(v-if="steemEnabled", :to="`/${$route.params.locale}/articles/create`")
+                q-item(v-if="false && steemEnabled", :to="`/${$route.params.locale}/articles/create`")
                   q-item-main(:label="$t('components.layout.toolbar.writeArticle')")
                 q-item(v-if="steemEnabled", :to="`/${$route.params.locale}/bounties/create`")
                   q-item-main(:label="$t('components.layout.toolbar.createBounty')")
