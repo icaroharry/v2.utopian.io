@@ -10,7 +10,8 @@ export default {
   },
   data () {
     return {
-      searchText: ''
+      searchText: '',
+      menu: false
     }
   },
   validations: {
@@ -61,8 +62,16 @@ export default {
 </script>
 
 <template lang="pug">
+div
   q-toolbar.u-toolbar(color='tertiary', style="z-index: 1000000")
     .container.toolbar-container.row
+      q-btn(
+        flat
+        @click="menu = !menu"
+        round
+        dense
+        icon="mdi-menu"
+      )
       q-toolbar-title
         router-link(:to="{ name: 'home', params: 'locale' }")
           img.u-logo(v-if="$q.screen.lt.md", src="~assets/img/logo-icon.svg")
@@ -88,30 +97,72 @@ export default {
             inverted
             :debounce="100"
           )
-          .q-mt-sm.q-mr-lg
-            q-btn(color="primary", :label="$q.screen.lt.md ? '' : $t('components.layout.toolbar.contribute')", icon="mdi-plus" )
-            q-popover(self="top left", anchor="bottom left" style="z-index:500")
-              q-list(dense, :link="true", separator)
-                q-item(v-if="!steemEnabled", :to="`/${$route.params.locale}/profile/steem`")
-                  q-item-main(:label="$t('components.layout.toolbar.linkSteem')")
-                q-item(:to="`/${$route.params.locale}/projects/create`")
-                  q-item-main(:label="$t('components.layout.toolbar.addProject')")
-                q-item(v-if="false && steemEnabled", :to="`/${$route.params.locale}/articles/create`")
-                  q-item-main(:label="$t('components.layout.toolbar.writeArticle')")
-                q-item(v-if="steemEnabled", :to="`/${$route.params.locale}/bounties/create`")
-                  q-item-main(:label="$t('components.layout.toolbar.createBounty')")
+          // -
+            .q-mt-sm.q-mr-lg
+              q-btn(color="primary", :label="$q.screen.lt.md ? '' : $t('components.layout.toolbar.contribute')", icon="mdi-plus" )
+              q-popover(self="top left", anchor="bottom left" style="z-index:500")
+                q-list(dense, :link="true", separator)
+                  q-item(v-if="!steemEnabled", :to="`/${$route.params.locale}/profile/steem`")
+                    q-item-main(:label="$t('components.layout.toolbar.linkSteem')")
+                  q-item(:to="`/${$route.params.locale}/projects/create`")
+                    q-item-main(:label="$t('components.layout.toolbar.addProject')")
+                  q-item(v-if="false && steemEnabled", :to="`/${$route.params.locale}/articles/create`")
+                    q-item-main(:label="$t('components.layout.toolbar.writeArticle')")
+                  q-item(v-if="steemEnabled", :to="`/${$route.params.locale}/bounties/create`")
+                    q-item-main(:label="$t('components.layout.toolbar.createBounty')")
 
-          .q-ma-sm
-            img.avatar(:src="user.avatarUrl")
-            q-popover.user-menu(self="top right", anchor="bottom right", :offset="[ 0, 12 ]", style="z-index:500")
-              q-list(dense, :link="true", separator)
-                q-item(:to="`/${$route.params.locale}/@${user.username}`")
-                  q-item-side(icon="mdi-account")
-                  q-item-main(:label="$t('components.layout.toolbar.profile')")
-                q-item(@click.native="logoutAndRedirect")
-                  q-item-side(icon="mdi-logout")
-                  q-item-main(:label="$t('components.layout.toolbar.logOut')")
       // i18n-dropdown-switcher.float-right
+  q-layout-drawer(
+    v-model="menu"
+    :width="250"
+    :breakpoint="700"
+    show-if-above
+    overlay
+    content-class="bg-tertiary text-white text-center"
+  )
+    router-link(v-if="!guest", :to="`/${$route.params.locale}/@${user.username}`")
+      img.menu-avatar(:src="user.avatarUrl")
+    q-list(
+      dark
+      no-border
+    )
+      q-item-separator(v-if="!guest")
+      q-item(v-if="!steemEnabled", :to="`/${$route.params.locale}/profile/steem`")
+        q-item-side(icon="mdi-link")
+        q-item-main(:label="$t('components.layout.toolbar.linkSteem')")
+      q-item(v-if="!guest", :to="`/${$route.params.locale}/projects/create`")
+        q-item-side(icon="mdi-plus-circle")
+        q-item-main(:label="$t('components.layout.toolbar.addProject')")
+      q-item(v-if="false && steemEnabled", :to="`/${$route.params.locale}/articles/create`")
+        q-item-side(icon="mdi-file-document")
+        q-item-main(:label="$t('components.layout.toolbar.writeArticle')")
+      q-item(v-if="steemEnabled", :to="`/${$route.params.locale}/bounties/create`")
+        q-item-side(icon="mdi-cash-multiple")
+        q-item-main(:label="$t('components.layout.toolbar.createBounty')")
+      q-item-separator
+      q-item(
+        :to="{ path: `/${$route.params.locale}/search/projects` }"
+      )
+        q-item-side(icon="mdi-lightbulb-on")
+        q-item-main(label="Projects explorer")
+      q-item(
+      :to="{ path: `/${$route.params.locale}/search/users` }"
+      )
+        q-item-side(icon="mdi-account-group")
+        q-item-main(label="Talents explorer")
+      q-item(
+      :to="{ path: `/${$route.params.locale}/search/bounties` }"
+    )
+        q-item-side(icon="mdi-database-search")
+        q-item-main(label="Bounties explorer")
+      q-item-separator
+      q-item.cursor-pointer(
+        @click.native="logoutAndRedirect"
+        highlight
+      )
+        q-item-side(icon="mdi-logout")
+        q-item-main(:label="$t('components.layout.toolbar.logOut')")
+
 </template>
 
 <style lang="stylus">
@@ -138,4 +189,9 @@ export default {
     .q-mr-lg
       @media (max-width $breakpoint-sm-max)
         margin-right 12px
+  .menu-avatar
+    border-radius 50%
+    width 150px
+    height 150px
+    border 2px solid white
 </style>

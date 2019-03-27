@@ -6,15 +6,6 @@ export default {
   components: {
     Toolbar
   },
-  data () {
-    return {
-      transitionDuration: {
-        enter: 100,
-        leave: 100
-      },
-      controls: null
-    }
-  },
   meta () {
     return {
       title: this.$t('common.SEOTitle'),
