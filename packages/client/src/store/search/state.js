@@ -4,5 +4,6 @@ export default () => ({
   },
   articles: [],
   bounties: [],
+  projects: [],
   searchOccurrences: {}
 })

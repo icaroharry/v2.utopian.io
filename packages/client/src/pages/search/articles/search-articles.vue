@@ -12,10 +12,6 @@ export default {
     FormProject,
     ArticleCard
   },
-  async mounted () {
-    await this.getCategories(this.$route.params.locale)
-    this.disableLoadMore = this.articles.length < this.searchForm.limit
-  },
   data: function () {
     return {
       searchForm: {
@@ -53,21 +49,9 @@ export default {
       languages: { maxLength: maxLength(30) }
     }
   },
-  computed: {
-    ...mapGetters('search', [
-      'search',
-      'articles',
-      'searchOccurrences'
-    ]),
-    ...mapGetters('utils', [
-      'categories'
-    ])
-  },
-  watch: {
-    articles () {
-      this.disableLoadMore = this.articles.length < this.searchForm.limit
-      this.searchMessage = false
-    }
+  async mounted () {
+    await this.getCategories(this.$route.params.locale)
+    this.disableLoadMore = this.articles.length < this.searchForm.limit
   },
   methods: {
     ...mapActions('search', [
@@ -180,6 +164,22 @@ export default {
       }
       this.$router.push({ path: `/${this.$route.params.locale}/search/bounties` })
     }
+  },
+  computed: {
+    ...mapGetters('search', [
+      'search',
+      'articles',
+      'searchOccurrences'
+    ]),
+    ...mapGetters('utils', [
+      'categories'
+    ])
+  },
+  watch: {
+    articles () {
+      this.disableLoadMore = this.articles.length < this.searchForm.limit
+      this.searchMessage = false
+    }
   }
 }
 </script>
@@ -222,7 +222,7 @@ export default {
               q-card-actions
                 q-btn.q-mt-md(color="primary", :label="$t('search.clearAll.label')", @click="clearFilters")
         .flex.justify-center
-          q-btn.q-mt-md(v-if="$q.screen.xs", color="primary", :label="showFilters ? $t('search.toggleFilters.hideFilters.label') : $t('search.toggleFilters.showFilters.label')", @click="() => {showFilters = !showFilters}")
+          q-btn.q-mt-md(v-if="$q.screen.xs", color="primary", :label="showFilters ? $t('search.toggleFilters.hideFilters.label') : $t('search.toggleFilters.showFilters.label')", @click="showFilters = !showFilters")
     .col-md-9.col-xs-12
       .q-mr-lg
         .flex.justify-end.q-mb-md

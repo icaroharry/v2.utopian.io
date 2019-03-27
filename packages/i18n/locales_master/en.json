@@ -575,6 +575,9 @@
           "maxItems": "You can add up to 5 languages"
         }
       },
+      "projects": {
+        "label": "Projects"
+      },
       "skills": {
         "label": "Skills",
         "placeholder": "Filter by skills",
@@ -638,6 +641,9 @@
     },
     "bountyMessage": {
       "label": "Look for bounties by using the filters"
+    },
+    "projectMessage": {
+      "label": "Look for projects by using the filters"
     },
     "toggleFilters": {
       "showFilters": {

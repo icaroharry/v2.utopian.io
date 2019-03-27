@@ -26,6 +26,16 @@ routes.push([
   },
   {
     method: 'POST',
+    path: '/v1/search/projects',
+    handler: (req, h) => Handlers.searchProjects(req, h),
+    options: {
+      auth: { mode: 'optional' },
+      tags: ['search'],
+      validate: Validate.searchProjects
+    }
+  },
+  {
+    method: 'POST',
     path: '/v1/search/getBountiesValues',
     handler: (req, h) => Handlers.getBountiesValues(req, h),
     options: {

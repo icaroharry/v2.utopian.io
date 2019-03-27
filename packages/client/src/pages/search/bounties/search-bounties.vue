@@ -75,8 +75,9 @@ export default {
   },
   methods: {
     ...mapActions('search', [
-      'searchBounties',
       'searchArticles',
+      'searchBounties',
+      'searchProjects',
       'getBountiesValues'
     ]),
     ...mapActions('utils', ['getCategories', 'setAppError']),
@@ -165,7 +166,7 @@ export default {
       this.resetFlags()
       this.filterBounties()
     },
-    goToSearchArticle () {
+    goToSearchArticles () {
       if (this.search.title) {
         this.searchArticles({
           title: this.search.title,
@@ -177,6 +178,19 @@ export default {
         })
       }
       this.$router.push({ path: `/${this.$route.params.locale}/search/articles` })
+    },
+    goToSearchProjects () {
+      if (this.search.title) {
+        this.searchProjects({
+          title: this.search.title,
+          limit: 20,
+          skip: 0,
+          sortBy: {
+            createdAt: -1
+          }
+        })
+      }
+      this.$router.push({ path: `/${this.$route.params.locale}/search/projects` })
     }
   }
 }
@@ -197,6 +211,10 @@ export default {
               q-item-main {{$t('search.searchForm.articles.label')}}
               q-item-side(right)
                 .search-occurrences(v-if="searchOccurrences.articles") {{searchOccurrences.articles}}
+          q-item(@click.native="goToSearchProjects()")
+            q-item-main {{$t('search.searchForm.projects.label')}}
+            q-item-side(right)
+              .search-occurrences(v-if="searchOccurrences.projects") {{searchOccurrences.projects}}
           q-item.search-active
             q-item-main {{$t('search.searchForm.bounties.label')}}
             q-item-side(right)
@@ -266,7 +284,7 @@ export default {
             v-if="$q.screen.xs"
             color="primary"
             :label="showFilters ? $t('search.toggleFilters.hideFilters.label') : $t('search.toggleFilters.showFilters.label')"
-            @click="() => {showFilters = !showFilters}"
+            @click="showFilters = !showFilters"
           )
     .col-md-9.col-xs-12
       .q-mr-lg

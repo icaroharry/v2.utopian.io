@@ -316,7 +316,7 @@ const loadProfileProjects = async ({ user, title = '', limit = 20, skip = 0 }) =
     { '$match': { project: { '$in': projectsId } } },
     { '$group': { '_id': '$project', 'occurrences': { '$sum': 1 } } }
   ])
-  projects = projects.map((project, index) => {
+  projects = projects.map((project) => {
     const articleFromProject = articles.find((article) => article._id.toString() === project._id.toString())
     const bountiesFromProject = bounties.find((bounty) => bounty._id.toString() === project._id.toString())
     const articlesCount = articleFromProject ? articleFromProject.occurrences : 0

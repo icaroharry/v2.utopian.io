@@ -29,6 +29,22 @@ export const searchBounties = async (context, data) => {
   context.commit('setBountiesSearchResults', payload.bounties)
   context.commit('setSearchOccurrences', payload.searchOccurrences)
 }
+
+export const searchProjects = async (context, data) => {
+  const payload = await API.call({
+    context,
+    method: 'post',
+    url: '/v1/search/projects',
+    data
+  })
+  if (data.skip === 0) {
+    context.commit('deleteAllProjects', data)
+  }
+  context.commit('setSearch', data)
+  context.commit('setProjectsSearchResults', payload.projects)
+  context.commit('setSearchOccurrences', payload.searchOccurrences)
+}
+
 /**
  * Get values for range component - Bounty values
  *

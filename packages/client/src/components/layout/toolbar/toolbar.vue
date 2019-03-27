@@ -120,7 +120,11 @@ div
     overlay
     content-class="bg-tertiary text-white text-center"
   )
-    router-link(v-if="!guest", :to="`/${$route.params.locale}/@${user.username}`")
+    router-link(
+      v-if="!guest"
+      :to="`/${$route.params.locale}/@${user.username}`"
+      :style="{ display: 'block', marginTop : $q.screen.lt.md ? '60px' : '0'}"
+    )
       img.menu-avatar(:src="user.avatarUrl")
     q-list(
       dark

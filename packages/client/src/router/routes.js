@@ -142,6 +142,12 @@ export default (cookies) => ([
         name: 'search.bounties',
         props: true,
         component: () => import('src/pages/search/bounties/search-bounties')
+      },
+      {
+        path: 'search/projects',
+        name: 'search.projects',
+        props: true,
+        component: () => import('src/pages/search/projects/search-projects')
       }
     ]
   },

@@ -1,6 +1,7 @@
 const Article = require('../articles/article.model')
 const Vote = require('../votes/vote.model')
 const Bounty = require('../bounties/bounty.model')
+const Project = require('../projects/project.model')
 
 const { extractText } = require('../../utils/html-sanitizer')
 
@@ -127,6 +128,60 @@ const searchBounties = async (req, h) => {
 }
 
 /**
+ * Search the projects
+ *
+ * @param {object} req - request
+ * @param {object} h - response
+ * @payload {String} req.payload.search - string to search
+ *
+ * @returns Projects array matching the search
+ @author Grégory LATINIER
+ */
+const searchProjects = async (req, h) => {
+  const { tags, title, sortBy, limit, skip } = req.payload
+  const optionalConditions = {}
+
+  if (tags && tags.length > 0) {
+    optionalConditions.tags = { '$in': tags }
+  }
+
+  let projects = await Project.find({
+    name: { '$regex': title, '$options': 'i' },
+    ...optionalConditions })
+    .select('owners collaborators slug medias name description tags contributionsCount id')
+    .sort(sortBy)
+    .limit(limit)
+    .skip(skip)
+    .populate('owners', 'username avatarUrl')
+    .populate('collaborators.user', 'username avatarUrl')
+    .lean()
+
+  const projectsId = projects.map((project) => project._id)
+  const articles = await Article.aggregate([
+    { '$match': { project: { '$in': projectsId } } },
+    { '$group': { '_id': '$project', 'occurrences': { '$sum': 1 } } }
+  ])
+  const bounties = await Bounty.aggregate([
+    { '$match': { project: { '$in': projectsId } } },
+    { '$group': { '_id': '$project', 'occurrences': { '$sum': 1 } } }
+  ])
+
+  projects = projects.map((project) => {
+    const articleFromProject = articles.find((article) => article._id.toString() === project._id.toString())
+    const bountiesFromProject = bounties.find((bounty) => bounty._id.toString() === project._id.toString())
+    const articlesCount = articleFromProject ? articleFromProject.occurrences : 0
+    const bountiesCount = bountiesFromProject ? bountiesFromProject.occurrences : 0
+    return {
+      ...project,
+      contributionsCount: articlesCount + bountiesCount
+    }
+  })
+
+  const searchOccurrences = await getOccurrences('projects', title, optionalConditions)
+  return h.response({ projects, searchOccurrences })
+}
+
+/**
  * Get numbers of documents from bounties (with filters) and articles (based just on title filter)
  *
  * @param {String} page - the page where the filtered search happen
@@ -157,9 +212,20 @@ const getOccurrences = async (page, title, optionalConditions) => {
 
   const articles = await Article.countDocuments(articlesQuery)
 
+  let projectsQuery = { name: { '$regex': title, '$options': 'i' } }
+  if (page === 'projects') {
+    projectsQuery = {
+      ...projectsQuery,
+      ...optionalConditions
+    }
+  }
+
+  const projects = await Project.countDocuments(projectsQuery)
+
   return {
     bounties,
-    articles
+    articles,
+    projects
   }
 }
 
@@ -180,5 +246,6 @@ const getBountiesValues = async (req, h) => {
 module.exports = {
   searchArticles,
   searchBounties,
+  searchProjects,
   getBountiesValues
 }
