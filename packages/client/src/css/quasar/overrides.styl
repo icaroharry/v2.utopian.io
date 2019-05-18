@@ -1,0 +1,33 @@
+@import '~variables'
+
+.q-field
+  .q-field-label
+    color #181818
+    font-size 15px
+    font-weight 600
+
+.q-field-content
+  margin-bottom 15px
+
+.q-if
+  font-size 15px
+  background #fff
+  &:before
+    border 1px solid #e6e6e6
+    border-radius 3px
+
+.q-if-standard
+  padding 11px 16px
+
+.q-field-vertical:not(.q-field-no-label) .q-if-standard:not(.q-if-has-label)
+  padding-top 11px
+
+.q-field-bottom
+  color #939393
+
+.q-field-with-error
+  .q-field-icon, .q-field-label, .q-field-bottom
+    color $negative
+  .q-if
+    &:before
+      border 1px solid $negative

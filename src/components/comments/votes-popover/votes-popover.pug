@@ -1,6 +1,0 @@
-// component wrapper.
-q-popover.u-comments-votes-popover(@hide="hideVotes", v-model="showingVotes")
-  // scrollable are for the popover.
-  // q-scroll-area.vote-scroll-area(v-if="showingVotes === true")
-  q-list
-    u-comments-vote-item(v-for="vote in activeVotes", :vote="vote", :key="vote.voter", v-if="showingVotes === true")

@@ -1,0 +1,1 @@
+/* stub for detection of quasar */

@@ -1,0 +1,188 @@
+{
+  "lang": "en",
+  "langLabel": "en",
+  "languages": "Languages!",
+  "langNative": "English",
+  "interaction": "Interaction",
+  "debug": "Debug",
+  "GDPR": "GDPR Acceptance",
+  "articles": {
+    "createEdit": {
+      "body": {
+        "label": "Content",
+        "help": "What do you want to share with us? (Hint: Type @@ to find a username)"
+      },
+      "formTitle": "Write anything about a project",
+      "proReview": {
+        "label": "Pro Review",
+        "helper": "The Pro Review option gives you higher chances to get additional incentives and more exposure on Utopian.",
+        "helperImportant": "Enable the Pro Review option for only 15% of the total rewards."
+      },
+      "title": {
+        "label": "Article title",
+        "placeholder": "Add a title"
+      },
+      "save": "Publish my article",
+      "update": "Update my article"
+    }
+  },
+  "fileUpload": {
+    "error": {
+      "unexpected": "An error occurred while uploading your file."
+    }
+  },
+  "homepage": {
+    "by": "by",
+    "contributeToProject": "contribute to this project",
+    "featuredProjects": "Featured projects",
+    "newProjectTitle": "List your open source project on Utopian.",
+    "newProjectSubtitle": "Connect with thousands of open source contributors.",
+    "seeAllProjects": "See all projects",
+    "submitYourProject": "Submit your project"
+  },
+  "projects": {
+    "createEdit": {
+      "completed": "completed",
+      "documentationPage": {
+        "label": "Documentation page",
+        "placeholder": "https://quasar-framework.org/guide"
+      },
+      "images": {
+        "label": "Images",
+        "help": "This is the first thing that people will see when they come across your project. 2000x1130 ideal for hi-res. Select a maximum of 5 images."
+      },
+      "license": {
+        "label": "License",
+        "placeholder": "MIT"
+      },
+      "notOpensource": "The code of my project is closed",
+      "owners": {
+        "label": "Owners",
+        "placeholder": "Find your colleagues"
+      },
+      "projectDetails": {
+        "label": "Project details",
+        "help": "Write everything about your project...",
+        "error": {
+          "length": "You have exceeded the maximum length."
+        }
+      },
+      "projectName": {
+        "label": "Project name",
+        "placeholder": "Quasar framework",
+        "error": {
+          "exists": "You already have a project with this name."
+        }
+      },
+      "projectTags": {
+        "label": "Project tags",
+        "help": "Please provide between 3 and 5 tags",
+        "placeholder": "javascript vuejs material-design",
+        "error": {
+          "exists": "Please do not use the same tag twice",
+          "length": "This tag is too long."
+        }
+      },
+      "repositories": {
+        "label": "Repositories",
+        "placeholder": "quasarframework/quasar",
+        "error": {
+          "notProjectAdmin": "You must be an admin of the project."
+        }
+      },
+      "save": "Save",
+      "shortDescription": {
+        "label": "Short description",
+        "placeholder": "Give people a sense about your project..."
+      },
+      "subtitle": "Make a great first impression with all the project information filled and great images about your project.",
+      "title": "Bring your project to Utopian.io",
+      "update": "Update",
+      "webPage": {
+        "label": "Web page",
+        "placeholder": "https://quasar-framework.org"
+      },
+      "error": {
+        "project_exists": "You already have a project with this name."
+      }
+    }
+  },
+  "navbar": {
+    "contribute": "contribute",
+    "linkSteemAccount": "Link your Steem account",
+    "logOut": "Log out",
+    "settings": "Settings",
+    "signIn": "sign in"
+  },
+  "notFound": {
+    "goBack": "Go back",
+    "title": "Sorry, nothing here"
+  },
+  "users": {
+    "search": {
+      "notFound": "No users found"
+    }
+  },
+  "api": {
+    "errors": {
+      "general": {
+        "documentDoesNotExist": "The document does not exist.",
+        "documentUpdateUnauthorized": "You are not authorized to update this document.",
+        "unauthorized": "You are not authorized to do this action.",
+        "updateFail": "An error occurred while updating the data."
+      },
+      "github": {
+        "getUserData": "An error occurred while retrieving your GitHub information, please re log.",
+        "getUserPermission": "An error occurred while retrieving your GitHub information, please re log."
+      },
+      "projects": {
+        "exists": "You already have a project with this name.",
+        "noRepositories": "A project must have at least one repository."
+      },
+      "steem": {
+        "accountAlreadyLinked": "The Steem account is already linked."
+      },
+      "users": {
+        "badGrantType": "Bad grant type.",
+        "doesNotExist": "The user doesn't exist.",
+        "tokenDoesNotExist": "The token has already been revoked.",
+        "usernameExists": "The username is already taken.",
+        "wrongUserPassword": "Wrong user or password."
+      }
+    },
+    "messages": {
+      "deleteSuccess": "The information was successfully deleted."
+    }
+  },
+  "auth": {
+    "login": {
+      "github": "Login with GitHub"
+    }
+  },
+  "errors": {
+    "fileUpload": "An error occurred while uploading"
+  },
+  "formats": {
+    "dateTime": {
+      "short": {
+        "year": "numeric",
+        "month": "numeric",
+        "day": "numeric"
+      },
+      "long": {
+        "year": "numeric",
+        "month": "short",
+        "day": "numeric"
+      }
+    },
+    "number": {
+      "currency": {
+        "style": "currency",
+        "currency": "USD"
+      },
+      "percent": {
+        "style": "percent"
+      }
+    }
+  }
+}

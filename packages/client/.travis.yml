@@ -1,0 +1,18 @@
+# use NodeJS as language
+language: node_js
+
+# node version to use on builds (node vs iojs)
+node_js:
+  - node
+
+# enable caching of directories.
+cache:
+  directories:
+    - node_modules
+
+# build script
+script:
+  - if [ "$TRAVIS_BRANCH" = "develop" ];
+    then npm run build.dev;
+    else npm run build;
+    fi

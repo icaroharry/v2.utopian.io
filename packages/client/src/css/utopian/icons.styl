@@ -1,0 +1,22 @@
+@font-face {
+  font-family: 'utopicons';
+  src: url('~assets/fonts/utopicons.eot');
+  src: url('~assets/fonts/utopicons.eot?#iefix') format('embedded-opentype'),
+    url('~assets/fonts/utopicons.woff') format('woff'),
+    url('~assets/fonts/utopicons.ttf') format('truetype'),
+    url('~assets/fonts/utopicons.svg#utopicons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+[class*='ut-']:before{
+  display: inline-block;
+  font-family: 'utopicons';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale
+}
+
+.icon-ut-utopian:before{content:'\004e';}
+.icon-ut-steem:before{content:'\004f';}

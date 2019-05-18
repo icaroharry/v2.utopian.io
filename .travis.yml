@@ -1,36 +1,15 @@
-# use NodeJS as language
 language: node_js
-
-# node version to use on builds (node vs iojs)
 node_js:
-  - node
-
-# enable caching of directories.
+  - "node"
+os:
+  - linux
+sudo: false
+before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.12.3
+  - export PATH=$HOME/.yarn/bin:$PATH
 cache:
-  directories:
-    - node_modules
-
-# build script
-script:
-  - if [ "$TRAVIS_BRANCH" = "develop" ];
-    then npm run build.dev;
-    else npm run build;
-    fi
-
-## deployment stage.
-deploy:
-  # deploys to prod
-  provider: firebase
-  skip_cleanup: true
-  token: $FIREBASE_TOKEN
-  project: $FIREBASE_PROJECT_ID
-  on:
-    branch: master
-
-  # deploys to dev
-  provider: firebase
-  skip_cleanup: true
-  token: $FIREBASE_TOKEN
-  project: $FIREBASE_DEV_PROJECT_ID
-  on:
-    branch: develop
+  yarn: true
+install:
+  - yarn
+  - lerna link
+  - lerna bootstrap

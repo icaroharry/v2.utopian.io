@@ -1,0 +1,25 @@
+{
+  "name": "messenger",
+  "version": "0.0.0",
+  "description": "Notification system",
+  "keywords": [
+    "notification"
+  ],
+  "author": "Utopian Company SRLs",
+  "homepage": "https://utopian.io/packages/messenger",
+  "license": "GPL-3.0",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/utopian-io/colony.git"
+  },
+  "scripts": {
+    "test": "echo \"No test\" && exit 0"
+  },
+  "dependencies": {
+    "bluebird": "3.5.3",
+    "lodash": "4.17.11",
+    "mongoose": "5.3.16",
+    "socket.io": "2.2.0"
+  }
+}

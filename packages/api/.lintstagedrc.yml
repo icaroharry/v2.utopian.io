@@ -1,0 +1,5 @@
+linters:
+  modules/**/*.js:
+  - eslint
+  config/**/*.js:
+  - eslint

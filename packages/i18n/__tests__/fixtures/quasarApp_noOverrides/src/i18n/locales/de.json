@@ -1,0 +1,128 @@
+{
+  "lang": "de",
+  "langLabel": "de",
+  "languages": "Sprachen!",
+  "langNative": "Deutsch",
+  "interaction": "Interaktion",
+  "debug": "Debuggen",
+  "GDPR": "GDPR Zustimmung",
+  "loginWithGithub": "Mit Github einloggen",
+  "navbar": {
+    "contribute": "beitragen",
+    "linkSteemAccount": "Steem-Konto verbinden",
+    "logOut": "Ausloggen",
+    "settings": "Einstellungen",
+    "signIn": "Einloggen"
+  },
+  "common": {
+    "signIn": "Mit Github einloggen",
+    "back": "back",
+    "by": "by",
+    "contribution_s": "no contributions | one contribution | {count} contributions",
+    "contributeToProject": "contribute to this project",
+    "downvote": "downvote",
+    "goBack": "go back",
+    "language": "Language",
+    "listOnUtopianText": "List your Project on the Utopian open-source platform.",
+    "listOnUtopianSubtext": "Utopian.io will reward contributors for their hard work on your project.",
+    "moderator_s": "no moderator | one moderator | {count} moderators",
+    "nothingHere": "nichts hier",
+    "popularProjects": "popular projects",
+    "post": "post",
+    "project_s": "no projects | one project | {count} projects",
+    "recentContributions": "recent contributions",
+    "replied": "replied",
+    "reply": "reply",
+    "save": "Save",
+    "seeAllContributions": "See all contributions",
+    "seeAllProjects": "See all projects",
+    "sorry": "sorry",
+    "sponsor_s": "no sponsors | one sponsor | {count} sponsors",
+    "submitMyProject": "Submit my project",
+    "upvote": "upvote",
+    "wallet": "wallet"
+  },
+  "categories": {
+    "analysis": "analysis",
+    "blog": "blog",
+    "bugHunting": "bug-hunting",
+    "copywriting": "copywriting",
+    "development": "development",
+    "documentation": "documentation",
+    "graphics": "graphics",
+    "ideas": "ideas",
+    "social": "social",
+    "translations": "translations",
+    "tutorials": "tutorials",
+    "videoTutorials": "video-tutorials"
+  },
+  "projects": {
+    "createEdit": {
+      "completed": "completed",
+      "documentationPage": "Documentation page",
+      "images": "Images",
+      "imagesHelp": "This is the first thing that people will see when they come across your project. 2000x1130 ideal for hi-res. Select a maximum of 5 images.",
+      "license": "License",
+      "notOpensource": "The code of my project is closed",
+      "projectDetails": {
+        "label": "Project details",
+        "placeholder": "Write everything about your project...",
+        "error": {
+          "length": "You have exceeded the maximum length."
+        }
+      },
+      "projectName": "Project name",
+      "projectTags": {
+        "label": "Project tags",
+        "help": "Please provide between 3 and 5 tags",
+        "error": {
+          "exists": "Please do not use the same tag twice",
+          "length": "This tag is too long."
+        }
+      },
+      "repositories": "Repositories",
+      "shortDescription": {
+        "label": "Short description",
+        "help": "Give people a sense about your project..."
+      },
+      "subtitle": "Make a great first impression with all the project information filled and great images about your project.",
+      "title": "Bring your project to Utopian.io",
+      "webPage": "Web page",
+      "error": {
+        "not_project_admin": "You must be an admin of the project.",
+        "project_exists": "You already have a project with this name."
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "github": "Mit Github einloggen"
+    }
+  },
+  "errors": {
+    "fileUpload": "An error occurred while uploading"
+  },
+  "formats": {
+    "dateTime": {
+      "short": {
+        "year": "numeric",
+        "month": "numeric",
+        "day": "numeric"
+      },
+      "long": {
+        "year": "numeric",
+        "month": "short",
+        "day": "numeric"
+      }
+    },
+    "number": {
+      "currency": {
+        "style": "currency",
+        "currency": "USD"
+      },
+      "percent": {
+        "style": "percent"
+      }
+    }
+  }
+}

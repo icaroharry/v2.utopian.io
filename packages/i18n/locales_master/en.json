@@ -1,0 +1,971 @@
+{
+  "lang": "en",
+  "langLabel": "en",
+  "languages": "Languages",
+  "langNative": "English",
+  "interaction": "Interaction",
+  "debug": "Debug",
+  "GDPR": "GDPR Acceptance",
+  "common": {
+    "no": "No",
+    "SEOTitle": "Utopian.io",
+    "SEOTitleTemplate": "Utopian.io, empowering open source",
+    "yes": "Yes"
+  },
+  "components": {
+    "comments": {
+      "commentBox": {
+        "uploadImage": "Drag and drop an image to upload it",
+        "update": "Update",
+        "save": "Comment"
+      },
+      "commentCard": {
+        "actions": {
+          "delete": "Delete",
+          "edit": "Edit"
+        }
+      },
+      "loadMore": "Load more",
+      "title": "Discussion"
+    },
+    "form": {
+      "categories": {
+        "label": "Category",
+        "placeholder": "Select a category"
+      },
+      "imageUploader": {
+        "dragAndDrop": "Drag and drop here.",
+        "errors": {
+          "fileUpload": "An error occurred while uploading",
+          "fileTypeMismatch": "That file is of the wrong type",
+          "fileSizeExceed": "That file is too large"
+        }
+      },
+      "language": {
+        "label": "Language",
+        "placeholder": "Select a language"
+      },
+      "project": {
+        "label": "Project",
+        "placeholder": "Search for a project"
+      },
+      "wysiwyg": {
+        "userSearch": "Search for a user",
+        "userNotFound": "No users found",
+        "findGitIssue": "Insert a link to a Git issue",
+        "findUserName": "Insert a link to a User profile",
+        "uploadImage": "Insert an Image",
+        "markdownPreview": "Markdown Preview",
+        "showMarkdown": "Toggle Markdown View",
+        "showEditor": "Return to Editor",
+        "imageEditor": "Edit your Image",
+        "dragAndDrop": "Drag and drop here.",
+        "fileTypeNotSupported": "We only support uploading images.",
+        "gitComingSoon": "Git Repo Search Coming Soon!",
+        "pasteError": "Unable to paste your resource. Try again with the button.",
+        "notAvailableInFullScreen": "This feature not available in full-screen mode.",
+        "fileUpload": {
+          "error": {
+            "unexpected": "An error occurred while uploading your file."
+          }
+        }
+      }
+    },
+    "layout": {
+      "toolbar": {
+        "addProject": "Add my project",
+        "contribute": "contribute",
+        "createBounty": "Create a bounty",
+        "linkSteem": "Link my Steem account",
+        "logOut": "Log out",
+        "profile": "Profile",
+        "signIn": "sign in",
+        "writeArticle": "Write an article"
+      }
+    },
+    "list": {
+      "bountyCard": {
+        "assignedTo": "Assigned to @{user}"
+      },
+      "projectCard": {
+        "contributions": "contributions",
+        "previewDescription": "In a few words, what is your project about?",
+        "previewTitle": "Project preview card"
+      }
+    },
+    "tools": {
+      "socialShare": {
+        "copyToClipboard": {
+          "label": "Copy",
+          "success": "Url copied to clipboard"
+        }
+      },
+      "tip": {
+        "anonymous": "Tip anonymously",
+        "anonymousTooltip": "You will remain anonymous in Utopian only, not in the blockchain transactions",
+        "back": "Back",
+        "close": "Close",
+        "label": "Tip",
+        "next": "Next",
+        "steemAccountFunds": "Your account <strong>@{address}</strong> currently holds <strong>{steem}</strong>",
+        "steemDisabled": "Please link your Steem account before tipping in STEEM",
+        "steps": {
+          "1": {
+            "title": "Choose a currency"
+          },
+          "2": {
+            "activeKey": {
+              "label": "Steem active key",
+              "helper": "Your key will not be transmitted to our server."
+            },
+            "steem": {
+              "helper": "Cost free transaction, Utopian doesn't charge any fees.",
+              "label": "Steem",
+              "placeholder": "0.001 minimum"
+            },
+            "steemDollar": {
+              "helper": "Cost free transaction, Utopian doesn't charge any fees.",
+              "label": "Steem Dollar",
+              "placeholder": "0.001 minimum"
+            },
+            "title": "Tip"
+          },
+          "3": {
+            "steemInfo": "You will send <strong>{steem} STEEM</strong> as <strong>@{senderSteem}</strong> to <strong>{author}</strong>",
+            "title": "Confirmation",
+            "verify": "Please check the information before tipping the author."
+          },
+          "4": {
+            "others": "Check out the other <a href='/{locale}/@{username}/blog'>articles</a> or <a href='/{locale}/@{username}/projects'>projects</a> of {username}. You will probably find something interesting!",
+            "steemSuccess": "Your tip was successfully broadcast to the blockchain. You can verify the transaction using the link below.",
+            "title": "Transaction"
+          }
+        },
+        "subtitle": "Show your support by sending a tip with any of the coins listed below.",
+        "tip": "Tip",
+        "title": "Send a tip to <strong>{user}</strong>"
+      }
+    }
+  },
+  "mixins": {
+    "steem": {
+      "memoTip": "You received a tip from a Utopian Colony user for this contribution:",
+      "postFooter": "Original content published on utopian.io",
+      "errors": {
+        "keys": "We couldn,t publish to the blockchain, your encryption was probably reset, please update your posting key.",
+        "unexpected": "An unexpected error occurred, please check your Steem credential and the blockchain status and try again.",
+        "STEEM_MIN_ROOT_COMMENT_INTERVAL": "You can only publish every 5 minutes"
+      }
+    }
+  },
+  "articles": {
+    "createEdit": {
+      "beneficiaries": {
+        "helper": "You can share the rewards of this article with anyone you like. Beneficiaries can't be modified once the article has been published.",
+        "label": "Beneficiaries",
+        "placeholder": "Search for any users",
+        "authorShares": "You have <strong>{authorShares}%</strong> of the shares",
+        "errors": {
+          "weight": "The total beneficiaries percentage can't exceed 100%. Each percentages must be greater than 1."
+        }
+      },
+      "blockchains": {
+        "steem": {
+          "external": "View it on Steemit.com"
+        }
+      },
+      "body": {
+        "label": "Content",
+        "helper": "What do you want to share with us? (Hint: Type @@ to find a username)"
+      },
+      "formTitle": "Write anything about a project",
+      "project": {
+        "errors": {
+          "noPublicationRole": "You don't have the right to publish content for this project."
+        }
+      },
+      "proReview": {
+        "label": "Pro Review",
+        "helper": "The Pro Review option gives you higher chances to get additional incentives and more exposure on Utopian.",
+        "helperImportant": "Enable the Pro Review option for only 15% of the total rewards."
+      },
+      "title": {
+        "label": "Article title",
+        "placeholder": "Add a title"
+      },
+      "save": {
+        "label": "Publish my article",
+        "successMsg": "The article was published!"
+      },
+      "update": {
+        "label": "Update my article",
+        "successMsg": "The article was updated!"
+      },
+      "tags": {
+        "label": "Tags",
+        "placeholder": "Add up up to 5 tags",
+        "errors": {
+          "invalidCharacters": "A tag can only have lowercase alphanumeric characters, '-', '+', '.', and '#'",
+          "duplicatedTags": "This tag is already in the list",
+          "maxItems": "You are allowed to add up to 5 tags"
+        }
+      }
+    },
+    "view": {
+      "inCollaborationWith": "In collaboration with",
+      "views": "views | view | views"
+    }
+  },
+  "bounties": {
+    "activity": {
+      "accept": "<strong>@{user}</strong> has accepted the assignment",
+      "assign": "<strong>@{user}</strong> has assigned <strong>@{assignee}</strong> to this bounty",
+      "cancel": "<strong>@{user}</strong> has cancelled this task for the following reason: <i>{reason}</i>",
+      "proposal": "<strong>@{user}</strong> has made a proposal",
+      "solution": "<strong>@{user}</strong> has submitted a solution"
+    },
+    "createEdit": {
+      "amount": {
+        "label": "Amount",
+        "placeholder": "Ex: 100 SBD",
+        "helper": "No SBD are transferred for now. They will be held by utopian.escrow when you assign someone to the bounty. You currently have {amount} SBD on your Steem account."
+      },
+      "blockchains": {
+        "steem": {
+          "external": "View it on Steemit.com"
+        }
+      },
+      "body": {
+        "label": "Content",
+        "helper": "What do you want to share with us? (Hint: Type @@ to find a username)"
+      },
+      "deadline": {
+        "label": "Deadline",
+        "helper": "If no solution is submitted by the deadline, the bounty will be returned."
+      },
+      "formTitle": "What do you need to be done?",
+      "issue": {
+        "label": "Linked issue",
+        "placeholder": "Add the related issue"
+      },
+      "project": {
+        "errors": {
+          "noPublicationRole": "You don't have the right to create a bounty for this project."
+        }
+      },
+      "title": {
+        "label": "Bounty title",
+        "placeholder": "Add a title"
+      },
+      "save": {
+        "label": "Publish my bounty",
+        "successMsg": "The bounty was published!"
+      },
+      "skills": {
+        "label": "Skills",
+        "placeholder": "Search for the needed skills"
+      },
+      "update": {
+        "label": "Update my bounty",
+        "successMsg": "The bounty was updated!",
+        "disabled": "You can only update a bounty that is not assigned"
+      }
+    },
+    "solution": {
+      "accepted": "Accepted",
+      "acceptSolutionModal": {
+        "accept": "Accept this solution",
+        "activeKey": {
+          "label": "Steem active key",
+          "helper": "Your key will not be transmitted to our server."
+        },
+        "cancel": "Cancel",
+        "errors": {
+          "invalidActiveKey": "Your active key is invalid"
+        },
+        "faq": "Read the FAQ",
+        "text": "You're about to accept this solution and therefore release the bounty. This operation cannot be undone.",
+        "title": "Accept this solution"
+      },
+      "createEdit": {
+        "mainTitle": "Submit your solution",
+        "subtitle": "You are about to submit a solution for the bounty. Make sure to provide all the necessary  information for the bounty host and the reviewers to verify the work done. Links to pull requests, commits, original and editable files, processes and details about the implemented solution are requested for proper review.",
+        "body": {
+          "helper": "Describe in detail the solution provided",
+          "label": "Text"
+        },
+        "inProgressOnly": "You can only submit or update your solution if the bounty is the 'In progress' or 'Solved' state",
+        "response": "In response to the bounty",
+        "save": {
+          "successMsg": "The bounty solution was published!"
+        },
+        "solutionDelete": "Delete your solution",
+        "solutionSubmit": "Submit your solution",
+        "solutionUpdate": "Update your solution",
+        "title": {
+          "label": "Title",
+          "placeholder": "Add a title"
+        },
+        "update": {
+          "successMsg": "The bounty solution was updated!"
+        }
+      },
+      "submitSolution": "Submit your solution"
+    },
+    "view": {
+      "acceptAssignModal": {
+        "accept": "Accept",
+        "acceptAssignment": "Accept the assignment",
+        "activeKey": {
+          "label": "Steem active key",
+          "helper": "Your key will not be transmitted to our server."
+        },
+        "cancel": "Cancel",
+        "text": "You've been assigned to this task. By accepting it, you agree to provide the solution by <strong>{deadline}</strong>. You understand that by not providing a solution before the deadline or providing a low quality solution may incur your assignment to be removed.",
+        "title": "Accept this task"
+      },
+      "assignee": "Assignee",
+      "assignModal": {
+        "activeKey": {
+          "label": "Steem active key",
+          "helper": "Your key will not be transmitted to our server."
+        },
+        "assign": "Assign",
+        "cancel": "Cancel",
+        "faq": "Read the FAQ",
+        "text": "Choose wisely. Collaborating with the right talents is crucial for the success of your project. Funds will now move to a decentralized escrow service until this task is either completed or cancelled.",
+        "title": "Assign this task",
+        "errors": {
+          "escrow": "Couldn't create the escrow, please contact the support.",
+          "invalidActiveKey": "Your active key is invalid",
+          "notEnoughMoney": "Your account doesn't have enough money to create the escrow. Please transfer some funds to your account."
+        }
+      },
+      "cancelAssignModal": {
+        "cancelAssignment": "Cancel the assignment",
+        "activeKey": {
+          "label": "Steem active key",
+          "helper": "Your key will not be transmitted to our server."
+        },
+        "cancel": "Cancel",
+        "reason": {
+          "label": "Reason",
+          "helper": "The reason will be displayed in the activity tab.",
+          "placeholder": "You can tell the bounty host why"
+        },
+        "text": "Think twice! You are about to decline this task. The bounty host will be notified of your decision and the bounty value will be refunded. Declining a task after having accepted it will <strong>negatively impact your reputation on Utopian.</strong>",
+        "title": "Cancel this task",
+        "validate": "Validate"
+      },
+      "deadline": "Deadline: {deadline}",
+      "proposals": {
+        "assign": "Assign to the bounty",
+        "delete": "Delete",
+        "edit": "Edit",
+        "loadMore": "Load more",
+        "save": "Save",
+        "update": "Update"
+      },
+      "tabs": {
+        "activity": "Activity",
+        "discussion": "Discussion",
+        "proposals": "Proposals",
+        "solutions": "Solutions"
+      }
+    }
+  },
+  "homepage": {
+    "by": "by",
+    "contributeToProject" : "contribute to this project",
+    "featuredProjects": "Featured projects",
+    "newProjectTitle": "List your open source project on Utopian.",
+    "newProjectSubtitle": "Connect with thousands of open source contributors.",
+    "seeAllProjects": "See all projects",
+    "submitYourProject": "Submit your project"
+  },
+  "notFound": {
+    "goBack": "Go back",
+    "title": "Sorry, nothing here"
+  },
+  "projects": {
+    "createEdit": {
+      "allowExternals": {
+        "label": "Allow external contributions"
+      },
+      "collaborators": {
+        "label": "Collaborators",
+        "helper": "Add collaborators to this project and enable them to edit your project's details, write articles or bounties for the project.",
+        "placeholder": "Find your collaborators",
+        "roles": {
+          "articles": "Articles",
+          "bounties": "Bounties",
+          "project": "Project"
+        },
+        "errors": {
+          "owner": "An owner can't be a collaborator"
+        }
+      },
+      "completed": "completed",
+      "documentationPage": {
+        "label": "Documentation page",
+        "placeholder": "https://quasar-framework.org/guide"
+      },
+      "avatar": {
+        "label": "Project Avatar Image",
+        "placeholder": "Select an Image",
+        "helper": "Upload file, set URL or drag and drop."
+      },
+      "images": {
+        "label": "Images",
+        "helper": "This is the first thing that people will see when they come across your project. 1440x840 ideal for hi-res. Select a maximum of 6 images.",
+        "upload": "Upload",
+        "clear": "Clear"
+      },
+      "license": {
+        "label": "License",
+        "placeholder": "MIT"
+      },
+      "notOpensource": "The code of my project is closed",
+      "owners": {
+        "label": "Owners",
+        "placeholder": "Find your colleagues",
+        "errors": {
+          "collaborator": "A collaborator can't be an owner"
+        }
+      },
+      "projectDetails": {
+        "label": "Project details",
+        "helper": "Write everything about your project...",
+        "error": {
+          "length": "You have exceeded the maximum length."
+        }
+      },
+      "projectName": {
+        "label": "Project name",
+        "placeholder": "Quasar framework",
+        "error": {
+          "exists": "You already have a project with this name."
+        }
+      },
+      "projectTags": {
+        "label": "Project tags",
+        "helper": "Please provide between 3 and 5 tags",
+        "placeholder": "javascript vuejs material-design",
+        "error": {
+          "exists": "Please do not use the same tag twice",
+          "length": "This tag is too long."
+        }
+      },
+      "repositories": {
+        "label": "Repositories",
+        "placeholder": "quasarframework/quasar",
+        "error": {
+          "notProjectAdmin": "You must be an admin of the project."
+        }
+      },
+      "save": {
+        "label": "Save",
+        "successMsg": "The project was saved!"
+      },
+      "shortDescription": {
+        "label": "Short description",
+        "placeholder": "Give people a sense about your project..."
+      },
+      "subtitle": "Make a great first impression with all the project information filled and great images about your project.",
+      "title": "Bring your project to Utopian.io",
+      "update": {
+        "label": "Update",
+        "successMsg": "The project was updated!"
+      },
+      "webPage": {
+        "label": "Web page",
+        "placeholder": "https://quasar-framework.org"
+      },
+      "error": {
+        "project_exists": "You already have a project with this name."
+      }
+    },
+    "view": {
+      "addBounty": {
+        "label": "Add a bounty"
+      },
+      "createdBy": "Created by",
+      "noContributionsTooltip": {
+        "noExternals": "This project doesn't allow external contributions.",
+        "noRightsArticles": "You can't write articles for this project.",
+        "noRightsBounties": "You can't post bounties for this project."
+      },
+      "stats": {
+        "articles": "Articles | Article | Articles",
+        "bounties": "Bounties | Bounty | Bounties",
+        "contributors": "Contributors | Contributor | Contributors"
+      },
+      "tabs": {
+        "bounties": "Bounties",
+        "details": "Details",
+        "updates": "Updates"
+      },
+      "writeArticle": {
+        "label": "Write an article"
+      },
+      "bounties": {
+        "sortBy": {
+          "placeholder": "Sort by",
+          "options": {
+            "newestDate": {
+              "label": "Date (newest)"
+            },
+            "oldestDate": {
+              "label": "Date (oldest)"
+            }
+          }
+        },
+        "search": {
+          "placeholder": "Type your search"
+        },
+        "loadMore": {
+          "label": "Load more"
+        },
+        "noBounties": {
+          "label": "No bounties found"
+        }
+      },
+      "updates": {
+        "sortBy": {
+          "placeholder": "Sort by",
+          "options": {
+            "newestDate": {
+              "label": "Date (newest)"
+            },
+            "oldestDate": {
+              "label": "Date (oldest)"
+            }
+          }
+        },
+        "search": {
+          "placeholder": "Type your search"
+        },
+        "loadMore": {
+          "label": "Load more"
+        },
+        "noUpdates": {
+          "label": "No updates found"
+        }
+      }
+    },
+    "search": {
+      "notFound": "No projects found"
+    }
+  },
+  "search": {
+    "searchForm": {
+      "articles": {
+        "label": "Articles"
+      },
+      "bounties": {
+        "label": "Bounties"
+      },
+      "categories": {
+        "label": "Categories"
+      },
+      "languages": {
+        "label": "Languages",
+        "placeholder": "Languages filter",
+        "errors": {
+          "maxItems": "You can add up to 5 languages"
+        }
+      },
+      "projects": {
+        "label": "Projects"
+      },
+      "skills": {
+        "label": "Skills",
+        "placeholder": "Filter by skills",
+        "errors": {
+          "duplicatedTags": "This skill is already in the list",
+          "maxItems": "You are allowed to add up to 5 Skills"
+        }
+      },
+      "bountyStatus": {
+        "label": "Bounty status",
+        "status": {
+          "open": "Open",
+          "inProgress": "In progress",
+          "solved": "Solved",
+          "completed": "Completed",
+          "cancelled": "Cancelled",
+          "dispute": "Dispute"
+        }
+      },
+      "tags": {
+        "label": "Tags",
+        "placeholder": "Filter by tags",
+        "errors": {
+          "invalidCharacters": "A tag can only have lowercase alphanumeric characters, '-', '+', '.', and '#'",
+          "duplicatedTags": "This tag is already in the list",
+          "maxItems": "You are allowed to add up to 5 tags"
+        }
+      },
+      "title": {
+        "placeholder": "Type your search",
+        "errors": {
+          "required": "A title for the article is required"
+        }
+      },
+      "value": {
+        "label": "Bounty value ({currency})"
+      }
+    },
+    "clearAll": {
+      "label": "Clear all"
+    },
+    "sortBy": {
+      "placeholder": "Sort by",
+      "options": {
+        "newestDate": {
+          "label": "Date (newest)"
+        },
+        "oldestDate": {
+          "label": "Date (oldest)"
+        }
+      }
+    },
+    "loadMore": {
+      "label": "Load more"
+    },
+    "noResults": {
+      "label": "No results"
+    },
+    "articleMessage": {
+      "label": "Look for articles by using the filters"
+    },
+    "bountyMessage": {
+      "label": "Look for bounties by using the filters"
+    },
+    "projectMessage": {
+      "label": "Look for projects by using the filters"
+    },
+    "toggleFilters": {
+      "showFilters": {
+        "label": "Show filters"
+      },
+      "hideFilters": {
+        "label": "Hide filters"
+      }
+    }
+  },
+  "users": {
+    "profile": {
+      "aboutMe": "About me",
+      "availableForHire": {
+        "label": "Available for hire?",
+        "text": "You can hire me!"
+      },
+      "avatar": {
+        "label": "Avatar URL",
+        "helper": "Upload file, set URL or drag and drop.",
+        "placeholder": "Set URL",
+        "preview": "Preview"
+      },
+      "blockchainForm": {
+        "resetKey": {
+          "dialog": {
+            "title": "Reset your encryption key",
+            "message": "Are you sure you want to reset your encryption key? This operation can't be cancelled."
+          },
+          "label": "Reset your encryption key",
+          "helper": "Resetting your encryption key will unsync your Steem account on all your devices. You won't be able to perform any blockchain related operation like voting or posting until you type your posting key again. You will still be able to receive tips.",
+          "success": "Your encryption key has been reset."
+        },
+        "address": {
+          "label": "Steem account",
+          "placeholder": "steem.account",
+          "errors": {
+            "notSync": "Account not synced on this device, please type your posting key."
+          }
+        },
+        "expirationDate": {
+          "label": "Expiration date",
+          "helper": "Leave it empty if you don't want the key to expire on this device."
+        },
+        "postingKey": {
+          "helper": "Do not use any other key than the posting key. It will be used to post and vote. The key is stored only on this device.",
+          "label": "Posting Key",
+          "placeholder": "5JMGzu..."
+        },
+        "save": {
+          "label": "Save"
+        }
+      },
+      "cover": {
+        "label": "Cover URL",
+        "helper": "Upload file, set URL or drag and drop.",
+        "placeholder": "Set URL",
+        "preview": "Preview"
+      },
+      "education": {
+        "degree": "Degree",
+        "field": "Field",
+        "from": "From",
+        "label": "Education",
+        "school": "School",
+        "summary": "Summary",
+        "tellUs": "What did you do in school?",
+        "to": "To",
+        "save": {
+          "label": "Save"
+        },
+        "update": {
+          "label": "Update"
+        },
+        "cancel": {
+          "label": "Cancel"
+        },
+        "edit": {
+          "label": "Edit"
+        },
+        "delete": {
+          "label": "Delete",
+          "dialog": {
+            "title": "Remove this education",
+            "message": "Are you sure you want to remove this education?"
+          }
+        },
+        "errors": {
+          "invalidToYear": "The ending year should be after the starting year."
+        }
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "example@domain.com"
+      },
+      "header": {
+        "tabs": {
+          "blog": "Blog",
+          "details": "Details",
+          "projects": "Projects"
+        }
+      },
+      "job": {
+        "label": "Title",
+        "placeholder": "What is you current position?"
+      },
+      "joinedOn": "Joined on",
+      "location": {
+        "label": "Location",
+        "placeholder": "Paris, France"
+      },
+      "name": {
+        "label": "Name",
+        "placeholder": "Your real name"
+      },
+      "resume": {
+        "label": "Resume",
+        "placeholder": "A little bit about yourself"
+      },
+      "section": {
+        "account": "Account information",
+        "images": "Images",
+        "job": "Job",
+        "skills": "Skills"
+      },
+      "skills": {
+        "label": "Skills",
+        "placeholder": "Add your skills",
+        "errors": {
+          "duplicatedSkill": "This skill is already in the list",
+          "minSkillLength": "Skill must have at least 2 characters",
+          "maxItems": "You are allowed to add up to 30 skills"
+        }
+      },
+      "subtitle": "Make a great first impression with all the information about yourself and your career.",
+      "tabs": {
+        "main": "A few basic information",
+        "images": "Customize the look of your profile",
+        "school": "What did you do in school?",
+        "steem": "Manage your steem account",
+        "steemReset": "Reset your steem account",
+        "work": "Tell us about your career"
+      },
+      "title": "Let's update your profile",
+      "update": "Update",
+      "blog": {
+        "search": {
+          "placeholder": "Type your search"
+        },
+        "loadMore": {
+          "label": "Load more"
+        },
+        "sortBy": {
+          "placeholder": "Sort by",
+          "options": {
+            "newestDate": {
+              "label": "Date (newest)"
+            },
+            "oldestDate": {
+              "label": "Date (oldest)"
+            }
+          }
+        },
+        "noArticles": {
+          "label": "No articles found"
+        }
+      },
+      "projects": {
+        "search": {
+          "placeholder": "Type your search"
+        },
+        "loadMore": {
+          "label": "Load more"
+        },
+        "noProjects": {
+          "label": "No projects found"
+        }
+      },
+      "clear": "Clear",
+      "username": {
+        "label": "Utopian username"
+      },
+      "workExperience": {
+        "label": "Work Experiences",
+        "tellUs": "Tell us about your different jobs and projects",
+        "jobTitle": "Job Title",
+        "company": "Company",
+        "current": "Current",
+        "from": "From",
+        "to": "To",
+        "summary": "Summary",
+        "save": {
+          "label": "Save"
+        },
+        "update": {
+          "label": "Update"
+        },
+        "cancel": {
+          "label": "Cancel"
+        },
+        "edit": {
+          "label": "Edit"
+        },
+        "delete": {
+          "label": "Delete",
+          "dialog": {
+            "title": "Remove this work experience",
+            "message": "Are you sure you want to remove this experience?"
+          }
+        },
+        "errors": {
+          "invalidEndDate": "The end date should be after the start date."
+        }
+      }
+    },
+    "search": {
+      "notFound": "No users found"
+    }
+  },
+  "api": {
+    "errors": {
+      "articles": {
+        "beneficiariesWeight": "The total beneficiaries percentage can't exceed 100%. Each percentages must be greater than 1."
+      },
+      "general": {
+        "500": "An unexpected occurred, please contact the support at support@utopian.io",
+        "categoryNotAvailable": "The selected category is not available",
+        "documentDoesNotExist": "The document does not exist.",
+        "documentUpdateUnauthorized": "You are not authorized to update this document.",
+        "languageNotSupported": "This language is not currently supported",
+        "unauthorized": "You are not authorized to do this action.",
+        "updateFail": "An error occurred while updating the data."
+      },
+      "github": {
+        "getUserData": "An error occurred while retrieving your GitHub information, please re log.",
+        "getUserPermission": "An error occurred while retrieving your GitHub information, please re log."
+      },
+      "google": {
+        "getUserData": "An error occurred while retrieving your Google information, please re log.",
+        "getUserPermission": "An error occurred while retrieving your Google information, please re log."
+      },
+      "linkedin": {
+        "getUserData": "An error occurred while retrieving your Linkedin information, please re log.",
+        "getUserPermission": "An error occurred while retrieving your Linkedin information, please re log."
+      },
+      "profile": {
+        "encryptionKeyReset": "Your encryption key has been reset. Please update your posting key.",
+        "keyExpired": "Your posting key has expired. Please update it."
+      },
+      "projects": {
+        "exists": "You already have a project with this name.",
+        "noRepositories": "A project must have at least one repository."
+      },
+      "steem": {
+        "accountAlreadyLinked": "The Steem account is already linked."
+      },
+      "users": {
+        "badGrantType": "Bad grant type.",
+        "doesNotExist": "The user doesn't exist.",
+        "tokenDoesNotExist": "The token has already been revoked.",
+        "usernameExists": "The username is already taken.",
+        "wrongUserPassword": "Wrong user or password."
+      }
+    },
+    "messages": {
+      "deleteSuccess": "The information was successfully deleted.",
+      "updateSuccess": "The information was successfully updated."
+    }
+  },
+  "auth": {
+    "login": {
+      "github": "Sign in with GitHub",
+      "google": "Sign in with Google",
+      "linkedin": "Sign in with Linkedin",
+      "text": "Connect to Utopian using one of your social accounts.",
+      "smallerText": "Don't worry, we won't post anything on your behalf."
+    },
+    "signup": {
+      "text": "You're almost there!",
+      "smallerText": "Please create a unique username to be used in Utopian.",
+      "create": "Create",
+      "loading": "Creating new user..."
+    },
+    "steemConnect": {
+      "text": "You can connect a Steem account to receive SP rewards.",
+      "smallerText": "You can create a new one if you don't have any.",
+      "connect": "Connect",
+      "create": "I don't have a Steem account"
+    },
+    "steemCreate": {
+      "text": "Steem creation - WIP.",
+      "smallerText": "Steem creation - wip.",
+      "modal": {
+        "title": "Sorry :(",
+        "message": "You have already claimed a Steem account through Utopian.",
+        "ok": "Go back to app"
+      }
+    }
+  },
+  "formats": {
+    "dateTime": {
+      "short": {
+        "year": "numeric",
+        "month": "numeric",
+        "day": "numeric"
+      },
+      "long": {
+        "year": "numeric",
+        "month": "short",
+        "day": "numeric"
+      },
+      "inputShort": "M/D/YYYY"
+    },
+    "number": {
+      "currency": {
+        "style": "currency",
+        "currency": "USD",
+        "currencyDisplay": "symbol"
+      },
+      "percent": {
+        "style": "percent"
+      }
+    }
+  }
+}
